@@ -1,0 +1,322 @@
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine.min.js') ~ qcVer }}" defer></script>
+{% endblock %}
+
+{% block quince_intro %}
+    {# Jeden komunikat na stronę. Bez uwag mówi, co się tu ustawia; kiedy silnik
+       wykryje brak, zmienia rangę na ostrzeżenie i dopisuje listę. #}
+    <div class="qc-alert {{ providerMissing ? 'qc-alert-warning' : 'qc-alert-info' }}">
+        {{ icons.icon(providerMissing ? 'alertCircle' : 'info', 18, 'qc-alert-icon') }}
+        <div>
+            <div>{{ 'Set the logo, the search field and the customer actions shown in the header of every page.'|trans }}</div>
+
+            {% if providerMissing %}
+                <ul class="qc-alert-list">
+                    <li>{{ 'The chosen search module is not installed any more. The store is using the built-in search until you pick something else.'|trans }}</li>
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block quince_actions %}
+    <button type="submit" form="quince-header" class="qc-btn qc-btn-primary">
+        {{ icons.icon('check', 14) }} {{ 'Save changes'|trans }}
+    </button>
+{% endblock %}
+
+{% block quince_body %}
+<form id="quince-header" method="post" action="{{ path('quince_header_save') }}" class="qc-stack">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_header_save') }}">
+
+    {# ── Logo i zachowanie ── #}
+    <div class="qc-card" x-data="{ prepared: {{ prepared ? 'true' : 'false' }},
+                                   sticky: {{ settings.STICKY == '1' ? 'true' : 'false' }} }">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Logo and behaviour'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Set the logo size and how the header behaves while the customer scrolls.'|trans }}</div>
+            </div>
+        </div>
+
+        <div class="qc-card-body">
+            <div class="qc-form-grid qc-form-grid-2">
+                <div class="qc-field" x-data="{ v: {{ settings.LOGO_HEIGHT }} }">
+                    <label class="qc-label" for="q-logo">{{ 'Logo height'|trans }}</label>
+                    <div class="qc-slider-row">
+                        <input type="range" id="q-logo" class="qc-slider" min="24" max="72" step="2"
+                               name="LOGO_HEIGHT" x-model.number="v">
+                        <span class="qc-slider-val"><span x-text="v"></span> px</span>
+                    </div>
+                    <div class="qc-hint">{{ 'Width follows from the file. Below 24 px a logo with a name stops being readable.'|trans }}</div>
+                </div>
+
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Header while scrolling'|trans }}</label>
+                    {{ fields.toggle('STICKY', settings.STICKY == '1', 'Stays at the top of the screen'|trans, '', 'sticky') }}
+                    <div class="qc-hint">{{ 'Search and cart stay within reach on long listings. Costs a strip of screen on phones.'|trans }}</div>
+                </div>
+
+                {# Zwężenie dotyczy wyłącznie stanu przyklejonego, więc stoi przy nim,
+                   a nie przy podpisach akcji — tam decyzja dotyczy całego nagłówka. #}
+
+                {# Tło pasa: stopień skali, nie kod barwy — nagłówek idzie wtedy za
+                   paletą, kiedy zmieni się kolor marki. #}
+                <div class="qc-field" :class="!prepared && 'qc-zalezna'">
+                    <label class="qc-label">{{ 'Header background'|trans }}</label>
+                    {{ fields.colorpicker('BG', settings.BG, palette, {
+                        'neutral': 'Greys'|trans, 'primary': 'Brand'|trans,
+                        'secondary': 'Third colour'|trans, 'promo': 'Promotion'|trans
+                    }) }}
+                    <div class="qc-hint">{{ 'Text, links and the line under the header are matched to this background.'|trans }}</div>
+                </div>
+
+                {# Tło pasa: stopień skali, nie kod barwy — nagłówek idzie wtedy za
+                   paletą, kiedy zmieni się kolor marki. #}
+                <div class="qc-field" x-show="sticky" x-cloak :class="!prepared && 'qc-zalezna'">
+                    <label class="qc-label">{{ 'Background after scrolling'|trans }}</label>
+                    {{ fields.colorpicker('BG_STUCK', settings.BG_STUCK, palette, {
+                        'neutral': 'Greys'|trans, 'primary': 'Brand'|trans,
+                        'secondary': 'Third colour'|trans, 'promo': 'Promotion'|trans
+                    }) }}
+                    <div class="qc-hint">{{ 'The stuck header lies over the content. A different background sets it apart; the same one keeps it unchanged.'|trans }}</div>
+                </div>
+                <div class="qc-field" x-show="sticky" x-cloak>
+                    <label class="qc-label">{{ 'Logo after scrolling'|trans }}</label>
+                    <div class="qc-seg qc-seg-wrap" x-data="{ v: '{{ settings.LOGO_STUCK }}' }">
+                        {% for value, label in {'none': 'Unchanged'|trans, 'invert': 'Inverted'|trans,
+                                                'white': 'White'|trans, 'black': 'Black'|trans} %}
+                            <button type="button" class="qc-seg-btn" :class="v === '{{ value }}' && 'is-active'"
+                                    @click="v = '{{ value }}'">{{ label }}</button>
+                        {% endfor %}
+                        <input type="hidden" name="LOGO_STUCK" value="{{ settings.LOGO_STUCK }}" :value="v">
+                    </div>
+                    <div class="qc-hint">{{ 'For a dark bar under a dark logo. Inversion keeps the colours, the other two flatten the logo to one.'|trans }}</div>
+                </div>
+
+                <div class="qc-field" x-show="sticky" x-cloak>
+                    <label class="qc-label">{{ 'Actions after scrolling'|trans }}</label>
+                    {{ fields.toggle('SCROLL_ICONS', settings.SCROLL_ICONS == '1', 'Account and saved products as icons only'|trans) }}
+                    <div class="qc-hint">{{ 'The catalogue button takes room the header did not have before. The cart keeps its caption, because there the caption carries the amount.'|trans }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ── Wyszukiwanie ── #}
+    <div class="qc-card" x-data="{ on: {{ settings.SEARCH_ENABLED == '1' ? 'true' : 'false' }} }">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Search'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Choose the search engine, the icon and the text the customer sees in the empty field.'|trans }}</div>
+            </div>
+            <label class="qc-toggle">
+                <input type="hidden" name="SEARCH_ENABLED" value="0">
+                <input type="checkbox" name="SEARCH_ENABLED" value="1" x-model="on">
+                <span class="qc-toggle-track"></span>
+                <span class="qc-toggle-text">{{ 'Search shown'|trans }}</span>
+            </label>
+        </div>
+
+        <div class="qc-card-body qc-disabled-area" :class="!on && 'is-off'" :inert="!on">
+            <div class="qc-form-grid qc-form-grid-2">
+                <div class="qc-field">
+                    <label class="qc-label" for="q-provider">{{ 'Which search'|trans }}</label>
+                    <div class="qc-select-wrap">
+                        <select id="q-provider" name="SEARCH_PROVIDER" class="qc-field-base qc-select qc-focusable">
+                            {% for provider in providers %}
+                                <option value="{{ provider.id }}"
+                                        {{ provider.id == settings.SEARCH_PROVIDER ? 'selected' }}>
+                                    {{ provider.label|trans }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                    </div>
+                    <div class="qc-hint">
+                        {# Lista zawiera wyłącznie to, co jest zainstalowane — ustawienie
+                           nie może oferować wyboru, którego sklep nie obsłuży. #}
+                        {% if providers|length > 1 %}
+                            {{ 'Modules that are installed and running.'|trans }}
+                        {% else %}
+                            {{ 'Only the built-in search is available. Install a search module to get more.'|trans }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Search icon'|trans }}</label>
+                    {{ fields.iconpicker('SEARCH_ICON', settings.SEARCH_ICON, iconSvg.SEARCH_ICON, path('quince_icons_search'), 'end') }}
+                    <div class="qc-hint">{{ 'Stands in the button that runs the search.'|trans }}</div>
+                </div>
+
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Scope next to the field'|trans }}</label>
+                    {{ fields.toggle('SEARCH_SCOPE', settings.SEARCH_SCOPE == '1', 'Let customers narrow the search'|trans) }}
+                    <div class="qc-hint">{{ 'Needs a search module that provides scopes. Hidden on phones either way. It would eat half the field.'|trans }}</div>
+                </div>
+            </div>
+
+            <div style="margin-block-start:16px;max-inline-size:520px">
+                {{ fields.multilang(
+                    'SEARCH_PLACEHOLDER',
+                    'Text inside the empty field'|trans,
+                    languages,
+                    translations.SEARCH_PLACEHOLDER,
+                    'Search for a product, code or brand'|trans,
+                    'Say what can be searched for. “Search” alone tells the customer nothing.'|trans
+                ) }}
+            </div>
+        </div>
+    </div>
+
+    {# ── Akcje klienta ──
+       Jeden wiersz to jedna akcja: nazwa, podpis, ikona i to, czy w ogóle stoi
+       w nagłówku. Wybory ZACHOWANIA — czy konto rozwija listę i czy koszyk pokazuje
+       kwotę — stoją pod tabelą, a nie w wierszach: dwa przełączniki w jednym wierszu,
+       każdy o czymś innym, nie dają się odróżnić bez czytania podpisów. #}
+    <div class="qc-card"
+         x-data="{
+             labels: {{ settings.ICON_LABELS == '1' ? 'true' : 'false' }},
+             total: {{ settings.CART_TOTAL == '1' ? 'true' : 'false' }}
+         }">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Customer actions'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Choose which actions the header shows, how each of them is called and which icon stands for it.'|trans }}</div>
+            </div>
+        </div>
+
+        <div class="qc-card-body">
+            <table class="qc-vis-table">
+                <thead>
+                    <tr>
+                        <th>{{ 'Action'|trans }}</th>
+                        <th class="qc-vis-table__caption">{{ 'Caption'|trans }}</th>
+                        <th class="qc-vis-table__icon">{{ 'Icon'|trans }}</th>
+                        <th class="qc-vis-table__screen">{{ 'Shown'|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="qc-label">{{ 'Account'|trans }}</span></td>
+                        <td class="qc-vis-table__caption qc-disabled-area" :class="!labels && 'is-off'" :inert="!labels">
+                            {{ fields.multilang('ACCOUNT_LABEL', '', languages, translations.ACCOUNT_LABEL, 'Sign in'|trans) }}
+                        </td>
+                        <td class="qc-vis-table__icon">
+                            {{ fields.iconpicker('ACCOUNT_ICON', settings.ACCOUNT_ICON, iconSvg.ACCOUNT_ICON, path('quince_icons_search'), 'end') }}
+                        </td>
+                        <td class="qc-vis-table__screen">
+                            <span class="qc-vis-screen-label">{{ 'Shown'|trans }}</span>
+                            {{ fields.toggle('ACCOUNT_VISIBLE', settings.ACCOUNT_VISIBLE == '1') }}
+                        </td>
+                    </tr>
+
+                    {# Akcje z modułów: dziś powiadomienia, jutro cokolwiek, co zgłosi się
+                       do miejsca w nagłówku. Wiersz pojawia się dopiero z modułem —
+                       inaczej byłby przełącznikiem bez pokrycia. Treść i ikonę
+                       przynosi moduł, więc nie ma tu ani podpisu, ani selektora ikony. #}
+                    {% if moduleActionsAvailable %}
+                        <tr>
+                            <td>
+                                <span class="qc-label">{{ 'Notifications'|trans }}</span>
+                                <div class="qc-hint" style="margin-block-start:8px">
+                                    {{ 'Drawn by the notifications module in the space the header keeps for it.'|trans }}
+                                </div>
+                            </td>
+                            <td class="qc-vis-table__caption"></td>
+                            <td class="qc-vis-table__icon"></td>
+                            <td class="qc-vis-table__screen">
+                                <span class="qc-vis-screen-label">{{ 'Shown'|trans }}</span>
+                                {{ fields.toggle('MODULE_ACTIONS', settings.MODULE_ACTIONS == '1') }}
+                            </td>
+                        </tr>
+                    {% endif %}
+
+                    {# Bez modułu listy życzeń nie ma dokąd prowadzić ikony, więc wiersz
+                       zostaje wyłączony — ustawienie nie może obiecywać czegoś,
+                       czego sklep nie zrobi. #}
+                    <tr class="qc-disabled-area {{ wishlistAvailable ? '' : 'is-off' }}">
+                        <td>
+                            <span class="qc-label">{{ 'Saved products'|trans }}</span>
+                            {% if not wishlistAvailable %}
+                                <div class="qc-hint" style="margin-block-start:8px">
+                                    {{ 'Install a wishlist module to show this action.'|trans }}
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td class="qc-vis-table__caption qc-disabled-area" :class="!labels && 'is-off'" :inert="!labels">
+                            {{ fields.multilang('WISHLIST_LABEL', '', languages, translations.WISHLIST_LABEL, 'Saved products'|trans) }}
+                        </td>
+                        <td class="qc-vis-table__icon">
+                            {{ fields.iconpicker('WISHLIST_ICON', settings.WISHLIST_ICON, iconSvg.WISHLIST_ICON, path('quince_icons_search'), 'end') }}
+                        </td>
+                        <td class="qc-vis-table__screen">
+                            <span class="qc-vis-screen-label">{{ 'Shown'|trans }}</span>
+                            {{ fields.toggle('WISHLIST_VISIBLE', settings.WISHLIST_VISIBLE == '1') }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><span class="qc-label">{{ 'Cart'|trans }}</span></td>
+                        {# Pole zostaje edytowalne także wtedy, gdy koszyk pokazuje kwotę:
+                           wygaszone nie pozwalałoby przygotować podpisu na moment, w którym
+                           kwota zostanie wyłączona. Informacja wystarczy. #}
+                        <td class="qc-vis-table__caption qc-disabled-area" :class="!labels && 'is-off'" :inert="!labels">
+                            {{ fields.multilang('CART_LABEL', '', languages, translations.CART_LABEL, 'Cart'|trans) }}
+                        </td>
+                        <td class="qc-vis-table__icon">
+                            {{ fields.iconpicker('CART_ICON', settings.CART_ICON, iconSvg.CART_ICON, path('quince_icons_search'), 'end') }}
+                        </td>
+                        <td class="qc-vis-table__screen">
+                            <span class="qc-mod-state qc-mod-state--on">{{ 'Always'|trans }}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="qc-hint" style="margin-block-start:12px">
+                {{ 'Two captions are set by the store itself: the account shows the customer first name after signing in, and the cart shows the amount whenever it is set to.'|trans }}
+            </div>
+
+            <div class="qc-form-grid qc-form-grid-3" style="margin-block-start:20px">
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Captions next to icons'|trans }}</label>
+                    <label class="qc-toggle">
+                        <input type="hidden" name="ICON_LABELS" value="0">
+                        <input type="checkbox" name="ICON_LABELS" value="1" x-model="labels">
+                        <span class="qc-toggle-track"></span>
+                        <span class="qc-toggle-text">{{ 'Show on wide screens'|trans }}</span>
+                    </label>
+                    <div class="qc-hint">{{ 'Captions disappear first when the screen narrows. The space goes to the search field.'|trans }}</div>
+                </div>
+
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Clicking the account'|trans }}</label>
+                    {{ fields.toggle('ACCOUNT_DROPDOWN', settings.ACCOUNT_DROPDOWN == '1', 'Opens a panel instead of the login page'|trans) }}
+                    <div class="qc-hint">{{ 'The panel holds signing in, registration and order tracking in one place.'|trans }}</div>
+                </div>
+
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Cart caption'|trans }}</label>
+                    <label class="qc-toggle">
+                        <input type="hidden" name="CART_TOTAL" value="0">
+                        <input type="checkbox" name="CART_TOTAL" value="1" x-model="total">
+                        <span class="qc-toggle-track"></span>
+                        <span class="qc-toggle-text">{{ 'Show the amount instead of the caption'|trans }}</span>
+                    </label>
+                    <div class="qc-hint">{{ 'The amount tells the customer more than the word. But takes the widest space in the row.'|trans }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+{% endblock %}

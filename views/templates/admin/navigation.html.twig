@@ -1,0 +1,450 @@
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Wtyczka przeciągania musi wejść przed rdzeniem Alpine, inaczej rdzeń
+       wystartuje bez niej i lista odnośników nie da się przestawić. #}
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine-sort.min.js') ~ qcVer }}" defer></script>
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine.min.js') ~ qcVer }}" defer></script>
+{% endblock %}
+
+{% block quince_intro %}
+    {# Jeden komunikat na stronę, w tym samym miejscu i kształcie, co na pozostałych
+       ekranach panelu. Bez warunków i bez skryptu: uwaga o ciasnym pasku stoi przy
+       samym przełączniku, którego dotyczy, bo tam jest potrzebna. #}
+    <div class="qc-alert qc-alert-info">
+        {{ icons.icon('info', 18, 'qc-alert-icon') }}
+        <div>{{ 'Set how the catalogue is shown in the menu bar and which links stand next to it.'|trans }}</div>
+    </div>
+{% endblock %}
+
+{% block quince_actions %}
+    <button type="submit" form="quince-nav" class="qc-btn qc-btn-primary">
+        {{ icons.icon('check', 14) }} {{ 'Save changes'|trans }}
+    </button>
+{% endblock %}
+
+{% block quince_body %}
+<form id="quince-nav" method="post" action="{{ path('quince_navigation_save') }}" class="qc-stack"
+      x-data="quinceNav()">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_navigation_save') }}">
+
+    {# ── Pasek i kategorie ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Menu bar'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Set what the button opening the catalogue says and how it looks.'|trans }}</div>
+            </div>
+            <label class="qc-toggle">
+                <input type="hidden" name="ENABLED" value="0">
+                <input type="checkbox" name="ENABLED" value="1" x-model="enabled"
+                       {{ settings.ENABLED == '1' ? 'checked' }}>
+                <span class="qc-toggle-track"></span>
+                <span class="qc-toggle-text">{{ 'Bar shown'|trans }}</span>
+            </label>
+        </div>
+
+        <div class="qc-card-body qc-disabled-area" :class="!enabled && 'is-off'" :inert="!enabled">
+            {# Wyboru „które menu" tu nie ma: nawigacja jest częścią silnika, a nie
+               osobnym modułem, więc byłby to wybór z jednej pozycji. #}
+            <div class="qc-form-grid qc-form-grid-2">
+                {{ fields.multilang(
+                    'TRIGGER_TEXT',
+                    'Button label'|trans,
+                    languages,
+                    translations.TRIGGER_TEXT,
+                    'Categories'|trans
+                ) }}
+
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Button icon'|trans }}</label>
+                    {{ fields.iconpicker('TRIGGER_ICON', settings.TRIGGER_ICON, triggerIcon, path('quince_icons_search')) }}
+                </div>
+            </div>
+
+
+            {# Pas i przycisk mają osobne tła: przycisk jest wejściem do katalogu,
+               więc bywa w barwie marki na ciemnym pasie albo odwrotnie. Napis
+               i stan pod kursorem liczy silnik z wybranego tła. #}
+            <div class="qc-form-grid qc-form-grid-2" style="margin-block-start:16px">
+                <div class="qc-field" :class="!prepared && 'qc-zalezna'">
+                    <label class="qc-label">{{ 'Bar background'|trans }}</label>
+                    {{ fields.colorpicker('BG', settings.BG, palette, {
+                        'neutral': 'Greys'|trans, 'primary': 'Brand'|trans,
+                        'secondary': 'Third colour'|trans, 'promo': 'Promotion'|trans
+                    }) }}
+                    <div class="qc-hint">{{ 'Text, links and the line under the bar are matched to this background.'|trans }}</div>
+                </div>
+
+                <div class="qc-field" :class="!prepared && 'qc-zalezna'">
+                    <label class="qc-label">{{ 'Catalogue button background'|trans }}</label>
+                    {{ fields.colorpicker('TRIGGER_BG', settings.TRIGGER_BG, palette, {
+                        'neutral': 'Greys'|trans, 'primary': 'Brand'|trans,
+                        'secondary': 'Third colour'|trans, 'promo': 'Promotion'|trans
+                    }) }}
+                    <div class="qc-hint">{{ 'The button opening the categories. Its caption comes out black or white. Whichever reads better.'|trans }}</div>
+                </div>
+            </div>
+
+            {# Ten sam przycisk w drugim miejscu: nagłówek zostaje na ekranie po
+               odjechaniu pasa menu i przejmuje dojście do katalogu. Miejsca ma tam
+               mniej, bo stoi obok wyszukiwarki i akcji klienta — stąd wybór. #}
+            <div class="qc-form-grid qc-form-grid-2" style="margin-block-start:16px">
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Button after scrolling'|trans }}</label>
+                    <div class="qc-seg qc-seg-wrap">
+                        {% for value, label in {'full': 'Icon and label'|trans, 'short': 'Icon and short label'|trans, 'icon': 'Icon only'|trans} %}
+                            <button type="button" class="qc-seg-btn" :class="scroll === '{{ value }}' && 'is-active'"
+                                    @click="scroll = '{{ value }}'">{{ label }}</button>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="SCROLL_BUTTON" value="{{ settings.SCROLL_BUTTON }}" :value="scroll">
+                    <div class="qc-hint">{{ 'Below 1200 px the button keeps the icon alone whatever is chosen here. The space goes to the search field.'|trans }}</div>
+                </div>
+
+                <div x-show="scroll === 'short'" x-cloak>
+                    {{ fields.multilang(
+                        'SCROLL_TEXT',
+                        'Short label'|trans,
+                        languages,
+                        translations.SCROLL_TEXT,
+                        'Catalogue'|trans,
+                        'Shown from 1200 px up. On narrower screens the button keeps the icon alone, whatever is set here.'|trans
+                    ) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ── Rozwinięcie ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'How the categories open'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Pick the shape of the dropdown and how deep it reaches into the tree.'|trans }}</div>
+            </div>
+        </div>
+
+        <div class="qc-card-body qc-disabled-area" :class="!enabled && 'is-off'" :inert="!enabled">
+            <div class="qc-field">
+                <div class="qc-seg qc-seg-wrap" role="group">
+                    <button type="button" class="qc-seg-btn" :class="panel === 'columns' && 'is-active'"
+                            @click="panel = 'columns'">{{ 'Column with subcategories'|trans }}</button>
+                    <button type="button" class="qc-seg-btn" :class="panel === 'tiles' && 'is-active'"
+                            @click="panel = 'tiles'">{{ 'Tiles with images'|trans }}</button>
+                    <button type="button" class="qc-seg-btn" :class="panel === 'cascade' && 'is-active'"
+                            @click="panel = 'cascade'">{{ 'Cascade to the right'|trans }}</button>
+                </div>
+                <input type="hidden" name="PANEL" value="{{ settings.PANEL }}" :value="panel">
+
+                <div class="qc-hint" x-show="panel === 'columns'">{{ 'The whole branch at once. Suits a store where customers browse rather than know what they want.'|trans }}</div>
+                <div class="qc-hint" x-show="panel === 'tiles'">{{ 'One level only. A tile with an image is a teaser of a category, not a node of a tree.'|trans }}</div>
+                <div class="qc-hint" x-show="panel === 'cascade'" x-cloak>{{ 'One narrow column, further levels slide out to the right. Suits a deep catalogue.'|trans }}</div>
+            </div>
+
+            <div class="qc-form-grid qc-form-grid-3" style="margin-block-start:18px">
+                <div class="qc-field" x-show="panel !== 'tiles'" x-data="{ v: {{ settings.DEPTH }} }">
+                    <label class="qc-label" for="q-depth">{{ 'How deep'|trans }}</label>
+                    <div class="qc-slider-row">
+                        <input type="range" id="q-depth" class="qc-slider" min="1" max="3" step="1"
+                               name="DEPTH" x-model.number="v">
+                        <span class="qc-slider-val"><span x-text="v"></span> {{ 'levels'|trans }}</span>
+                    </div>
+                    <div class="qc-hint">{{ 'At three levels the dropdown stops being a shortcut and becomes a second category page.'|trans }}</div>
+                </div>
+
+                <div class="qc-field" x-show="panel === 'columns'" x-data="{ v: {{ settings.COLUMNS }} }">
+                    <label class="qc-label" for="q-cols">{{ 'Columns of subcategories'|trans }}</label>
+                    <div class="qc-slider-row">
+                        <input type="range" id="q-cols" class="qc-slider" min="2" max="6" step="1"
+                               name="COLUMNS" x-model.number="v">
+                        <span class="qc-slider-val" x-text="v"></span>
+                    </div>
+                </div>
+
+                <div class="qc-field" x-show="panel === 'tiles'" x-data="{ v: {{ settings.TILE_COLUMNS }} }">
+                    <label class="qc-label" for="q-tiles">{{ 'Tiles in a row'|trans }}</label>
+                    <div class="qc-slider-row">
+                        <input type="range" id="q-tiles" class="qc-slider" min="2" max="8" step="1"
+                               name="TILE_COLUMNS" x-model.number="v">
+                        <span class="qc-slider-val" x-text="v"></span>
+                    </div>
+                </div>
+
+                <div class="qc-field" x-show="panel === 'tiles'" x-data="{ v: '{{ settings.TILE_MOBILE }}' }">
+                    <label class="qc-label">{{ 'Tiles on a phone'|trans }}</label>
+                    <div class="qc-seg qc-seg-wrap">
+                        {% for value, label in {'list': 'One column'|trans, 'grid': 'Two columns'|trans} %}
+                            <button type="button" class="qc-seg-btn" :class="v === '{{ value }}' && 'is-active'"
+                                    @click="v = '{{ value }}'">{{ label }}</button>
+                        {% endfor %}
+                        <input type="hidden" name="TILE_MOBILE" value="{{ settings.TILE_MOBILE }}" :value="v">
+                    </div>
+                    <div class="qc-hint">{{ 'One column puts the image beside the name and fits long names. Two columns show more at once, but break a long name onto two lines.'|trans }}</div>
+                </div>
+
+                <div class="qc-field" x-show="panel === 'tiles'">
+                    <label class="qc-label">{{ 'Category images as icons'|trans }}</label>
+                    {{ fields.toggle('TILE_ICON_MODE', settings.TILE_ICON_MODE == '1', 'Tint them to a single colour'|trans) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ── Kategorie ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Categories in the menu'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Choose which main categories the menu shows, in what order and with what icon. With nothing ticked the menu shows the whole catalogue.'|trans }}</div>
+            </div>
+        </div>
+
+        <div class="qc-card-body qc-disabled-area" :class="!enabled && 'is-off'" :inert="!enabled">
+            {# Wiersze przychodzą z serwera, bo lista kategorii głównych nie zmienia się
+               w formularzu — zmienia się tylko ich kolejność, zaznaczenie i ikona.
+               Dzięki temu selektor ikon jest ten sam, co wszędzie indziej, zamiast
+               własnej odmiany rysowanej w pętli po stronie przeglądarki.
+
+               Kolejność zapisuje się sama: PHP buduje tablicę w kolejności, w jakiej
+               pola przychodzą w żądaniu, a ta idzie za układem elementów na stronie. #}
+            <div class="qc-repeater">
+                {% for category in categories %}
+                    <div class="qc-rep-row">
+                        <div class="qc-rep-row-head">
+                            <input type="hidden" name="category[{{ loop.index0 }}][id]" value="{{ category.id }}">
+
+                            <span class="qc-rep-name">{{ category.name }}</span>
+
+                            <div class="qc-rep-actions">
+                                {{ fields.iconpicker(
+                                    'category[' ~ loop.index0 ~ '][icon]',
+                                    category.icon,
+                                    category.svg,
+                                    path('quince_icons_search'),
+                                    'end'
+                                ) }}
+
+                                <label class="qc-toggle qc-toggle-sm">
+                                    <input type="hidden" name="category[{{ loop.index0 }}][visible]" value="0">
+                                    <input type="checkbox" name="category[{{ loop.index0 }}][visible]" value="1"
+                                           {{ category.visible ? 'checked' }}>
+                                    <span class="qc-toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="qc-empty-text" style="padding:14px">{{ 'This store has no categories yet.'|trans }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="qc-hint">{{ 'Subcategories are taken automatically, down to the depth set above. The icon stands next to the category name in the menu.'|trans }}</div>
+        </div>
+    </div>
+
+    {# ── Odnośniki własne ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Links of your own'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Add the places that are not categories: news, sale, training, contact.'|trans }}</div>
+            </div>
+            <button type="button" class="qc-btn qc-btn-outline" @click="addLink()">
+                {{ icons.icon('plus', 14) }} {{ 'Add link'|trans }}
+            </button>
+        </div>
+
+        <div class="qc-card-body qc-disabled-area" :class="!enabled && 'is-off'" :inert="!enabled">
+            <div class="qc-repeater" x-sort="moveLink($item, $position)">
+                <template x-for="(link, index) in links" :key="link.uid">
+                    <div class="qc-rep-row" x-sort:item="link.uid">
+                        <div class="qc-rep-row-head">
+                            <span class="qc-rep-handle" x-sort:handle>{{ icons.icon('drag', 14) }}</span>
+
+                            <span class="qc-rep-name">
+                                <span x-text="linkLabel(link)"></span>
+                                <span class="qc-rep-sub" x-text="link.urls[link.lang] || ''"></span>
+                            </span>
+
+                            <div class="qc-rep-actions">
+                                <button type="button" class="qc-icon-btn" @click="link.open = !link.open">
+                                    <svg class="qc-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"
+                                         stroke="currentColor" stroke-width="2" aria-hidden="true"
+                                         :style="link.open && 'transform:rotate(180deg)'"><path d="m4 6 4 4 4-4"/></svg>
+                                </button>
+                                <button type="button" class="qc-icon-btn qc-danger" @click="removeLink(index)">
+                                    {{ icons.icon('trash', 14) }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="qc-rep-body" x-show="link.open" x-cloak>
+                            <div class="qc-form-grid qc-form-grid-3">
+                                <div class="qc-field">
+                                    <label class="qc-label">{{ 'Name'|trans }}</label>
+                                    <div class="qc-multilang-row">
+                                        <template x-for="lang in languages" :key="lang.id">
+                                            <input type="text" class="qc-field-base qc-focusable"
+                                                   :name="'link[' + index + '][labels][' + lang.id + ']'"
+                                                   x-show="link.lang === lang.id"
+                                                   x-model="link.labels[lang.id]">
+                                        </template>
+
+                                        <button type="button" class="qc-lang-toggle" @click="link.langOpen = !link.langOpen">
+                                            <span class="qc-lang-dot"
+                                                  :class="String(link.labels[link.lang] || '').trim() && 'qc-complete'"></span>
+                                            <span x-text="languages.find(l => l.id === link.lang).iso"></span>
+                                            <svg class="qc-icon" width="12" height="12" viewBox="0 0 16 16" fill="none"
+                                                 stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+                                        </button>
+
+                                        <div class="qc-lang-menu" x-show="link.langOpen" x-cloak
+                                             @click.outside="link.langOpen = false">
+                                            <template x-for="lang in languages" :key="lang.id">
+                                                <div class="qc-lang-row" :class="link.lang === lang.id && 'qc-current'"
+                                                     @click="link.lang = lang.id; link.langOpen = false">
+                                                    <span class="qc-lang-dot"
+                                                          :class="String(link.labels[lang.id] || '').trim() && 'qc-complete'"></span>
+                                                    <span class="qc-lang-row-name" x-text="lang.name"></span>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {# Adres jest wielojęzyczny tak samo jak nazwa: sklep w dwóch
+                                   językach ma dwie strony promocji i dwa blogi. Przełącznik
+                                   języka jest wspólny z nazwą — obie rzeczy wpisuje się
+                                   dla jednego języka naraz. #}
+                                <div class="qc-field">
+                                    <label class="qc-label">{{ 'Address'|trans }}</label>
+                                    <div class="qc-multilang-row">
+                                        <template x-for="language in languages" :key="'u' + language.id">
+                                            <input type="text" class="qc-field-base qc-focusable"
+                                                   x-show="link.lang === language.id"
+                                                   :name="'link[' + index + '][urls][' + language.id + ']'"
+                                                   x-model="link.urls[language.id]"
+                                                   placeholder="/nowosci">
+                                        </template>
+
+                                        <span class="qc-lang-toggle qc-lang-static">
+                                            <span class="qc-lang-dot"
+                                                  :class="String(link.urls[link.lang] || '').trim() && 'qc-complete'"></span>
+                                            <span x-text="languages.find(l => l.id === link.lang).iso"></span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="qc-field">
+                                    <label class="qc-label">{{ 'Weight'|trans }}</label>
+                                    <div class="qc-seg qc-seg-wrap" role="group">
+                                        <button type="button" class="qc-seg-btn" :class="link.style === 'normal' && 'is-active'"
+                                                @click="link.style = 'normal'">{{ 'Plain'|trans }}</button>
+                                        <button type="button" class="qc-seg-btn" :class="link.style === 'accent' && 'is-active'"
+                                                @click="link.style = 'accent'">{{ 'Highlighted'|trans }}</button>
+                                    </div>
+                                    <input type="hidden" :name="'link[' + index + '][style]'" :value="link.style">
+                                </div>
+
+                                {# Ikona zamiast dawnej kropki: kropka wyróżniała pozycję, ale nic
+                                   o niej nie mówiła. Ten sam selektor, co przy kategoriach — tylko
+                                   wiązany z wierszem, bo nazwa pola zawiera jego numer. #}
+                                <div class="qc-field">
+                                    <label class="qc-label">{{ 'Icon'|trans }}</label>
+                                    {{ fields.iconpicker(
+                                        '', '', '', path('quince_icons_search'), 'start',
+                                        "'link[' + index + '][icon]'", 'link.icon', 'link.iconSvg'
+                                    ) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="qc-empty" x-show="!links.length" x-cloak>
+                <div class="qc-empty-text">{{ 'No links yet. The bar will show categories only.'|trans }}</div>
+            </div>
+
+            <div class="qc-field-note">
+                {{ 'Highlight one link, two at most. When everything shouts, nothing is heard.'|trans }}
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<script>
+/* Stan paska nawigacji.
+   Kolejność wierszy jest kolejnością pól w formularzu, więc przeciągnięcie
+   zmienia nazwy pól i zapis dostaje właściwy porządek bez pola z pozycją. */
+function quinceNav() {
+    const LANGUAGES = {{ languages|map(l => {id: l.id_lang, name: l.name, iso: l.iso_code|upper})|json_encode|raw }};
+    const SAVED = {{ links|json_encode|raw }};
+
+    let counter = 0;
+
+    const build = (link) => ({
+        uid: 'link-' + (++counter),
+        labels: Object.assign({}, link.labels || {}),
+        urls: Object.assign({}, link.urls || {}),
+        icon: link.icon || '',
+        iconSvg: link.iconSvg || '',
+        iconOpen: false,
+        style: link.style || 'normal',
+        open: false,
+        lang: LANGUAGES[0].id,
+        langOpen: false,
+    });
+
+    return {
+        languages: LANGUAGES,
+        enabled: {{ settings.ENABLED == '1' ? 'true' : 'false' }},
+        prepared: {{ prepared ? 'true' : 'false' }},
+        {# |raw jest tu konieczne: wewnątrz <script> Twig zamienia cudzysłowy na
+           encje HTML i do przeglądarki trafia `&quot;trigger&quot;`, co wywala
+           cały blok skryptu — a z nim całą obsługę strony. W atrybutach (x-data)
+           jest odwrotnie: tam escapowanie jest właściwe i |raw byłoby błędem. #}
+        panel: {{ settings.PANEL|json_encode|raw }},
+        scroll: {{ settings.SCROLL_BUTTON|json_encode|raw }},
+        links: SAVED.map(build),
+
+        get warnings() {
+            const out = [];
+
+            {% if providerMissing %}out.push('provider');{% endif %}
+
+            return out;
+        },
+
+        linkLabel(link) {
+            return link.labels[link.lang] || Object.values(link.labels).find(v => String(v).trim()) || '{{ 'New link'|trans }}';
+        },
+
+        addLink() {
+            const link = build({});
+            link.open = true;
+            this.links.push(link);
+        },
+
+        removeLink(index) {
+            this.links.splice(index, 1);
+        },
+
+        moveLink(uid, position) {
+            const from = this.links.findIndex(l => l.uid === uid);
+
+            if (from === -1) { return; }
+
+            this.links.splice(position, 0, this.links.splice(from, 1)[0]);
+        },
+    };
+}
+</script>
+{% endblock %}

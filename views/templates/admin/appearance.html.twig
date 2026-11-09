@@ -1,0 +1,642 @@
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine-sort.min.js') ~ qcVer }}" defer></script>
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine.min.js') ~ qcVer }}" defer></script>
+{% endblock %}
+
+
+
+{% block quince_actions %}
+    <button type="submit" form="quince-appearance" class="qc-btn qc-btn-primary">
+        {{ icons.icon('check', 14) }} {{ 'Save changes'|trans }}
+    </button>
+{% endblock %}
+
+{% block quince_body %}
+{# Układ odwzorowuje prototyp: docs/delivery3/Quince Panel - Ustawienia ogolne.dc.html
+   Każda decyzja stoi obok tego, co z niej wynika, podglądu i wyliczonych ról. #}
+
+<script type="application/json" id="quince-appearance-data">
+    {{ {
+        palette: palette,
+        computed: computed,
+        overrides: overrides,
+        settings: settings,
+        diagnostics: diagnostics
+    }|json_encode|raw }}
+</script>
+
+<form id="quince-appearance" method="post" action="{{ path('quince_appearance_save') }}"
+      class="qc-stack" x-data="quinceAppearance()">
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_appearance_save') }}">
+    <input type="hidden" name="COLOR_OVERRIDES" value="{{ overrides|json_encode }}" :value="JSON.stringify(overrides)">
+
+    {# Jeden komunikat na stronę, nie dwa. Bez uwag jest informacją o tym, co się
+       tu ustawia; kiedy silnik coś wykryje, zmienia rangę na ostrzeżenie i dopisuje
+       listę. Dwa osobne paski jeden pod drugim czytały się jak to samo powiedziane
+       dwa razy, a różnią się tym, czy trzeba coś zrobić.
+
+       Blok siedzi wewnątrz formularza, bo lista uwag zmienia się po każdej zmianie
+       koloru, poza zasięgiem stanu strony byłaby nieaktualna do przeładowania. #}
+    <div class="qc-alert {{ diagnostics.warnings|length ? 'qc-alert-warning' : 'qc-alert-info' }}"
+         :class="warnings.length ? 'qc-alert-warning' : 'qc-alert-info'">
+        <span x-show="!warnings.length"{% if diagnostics.warnings|length %} style="display:none"{% endif %}>{{ icons.icon('info', 18, 'qc-alert-icon') }}</span>
+        <span x-show="warnings.length"{% if not diagnostics.warnings|length %} style="display:none"{% endif %}>{{ icons.icon('alertCircle', 18, 'qc-alert-icon') }}</span>
+
+        <div>
+            <div>{{ 'Set the brand colours, typography, shape and grid. The engine derives the full palette and the remaining theme values from these settings.'|trans }}</div>
+
+            <ul class="qc-alert-list" x-show="warnings.length"{% if not diagnostics.warnings|length %} style="display:none"{% endif %}>
+                <template x-for="w in warnings" :key="w">
+                    <li x-text="warningText(w)"></li>
+                </template>
+            </ul>
+        </div>
+    </div>
+
+    {# ── 1. Kolory znaczące ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Shop colours'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Give us your brand colours. We will pick the remaining shades (backgrounds, borders and text) so that everything stays legible.'|trans }}</div>
+            </div>
+        </div>
+        <div class="qc-card-body">
+            <div class="qc-form-grid qc-form-grid-4">
+                <div class="qc-field">
+                    <label class="qc-label" for="q-primary">{{ 'Brand'|trans }}</label>
+                    <div class="qc-color-field">
+                        <input type="color" class="qc-color-swatch" x-model="primary" aria-label="{{ 'Brand'|trans }}">
+                        <input type="text" id="q-primary" name="PRIMARY" class="qc-color-hex" x-model="primary">
+                    </div>
+                    <div class="qc-field-note">{{ 'The „Add to cart" button, badges, the promotion timer and highlighted bars.'|trans }}</div>
+                </div>
+                <div class="qc-field">
+                    <label class="qc-label" for="q-dark">{{ 'Ink'|trans }}</label>
+                    <div class="qc-color-field">
+                        <input type="color" class="qc-color-swatch" x-model="dark" aria-label="{{ 'Ink'|trans }}">
+                        <input type="text" id="q-dark" name="DARK" class="qc-color-hex" x-model="dark">
+                    </div>
+                    <div class="qc-field-note">{{ 'Text, headings and prices. Dark surfaces (the secondary button and toasts) are derived from it as well.'|trans }}</div>
+                </div>
+                <div class="qc-field">
+                    <label class="qc-label" for="q-secondary">{{ 'Third colour'|trans }}</label>
+                    <div class="qc-color-field">
+                        <input type="color" class="qc-color-swatch" x-model="secondary" aria-label="{{ 'Third colour'|trans }}">
+                        <input type="text" id="q-secondary" name="SECONDARY" class="qc-color-hex" x-model="secondary">
+                        <button type="button" class="qc-chip-btn" @click="secondary = ''" x-show="secondary" x-cloak title="{{ 'Clear'|trans }}">{{ icons.icon('x', 13) }}</button>
+                    </div>
+                    <div class="qc-field-note">{{ 'The secondary button, outlines and text on them.'|trans }}</div>
+                </div>
+                <div class="qc-field">
+                    <label class="qc-label" for="q-promo">{{ 'Promotion'|trans }}</label>
+                    <div class="qc-color-field">
+                        <input type="color" class="qc-color-swatch" x-model="promo" aria-label="{{ 'Promotion'|trans }}">
+                        <input type="text" id="q-promo" name="PROMO" class="qc-color-hex" x-model="promo">
+                    </div>
+                    <div class="qc-field-note">{{ 'The reduced price and the discount badge. The price before the reduction stays grey and struck through.'|trans }}</div>
+                </div>
+            </div>
+
+            <div class="qc-field">
+                <label class="qc-label">{{ 'Greys'|trans }}</label>
+                <div class="qc-seg qc-seg-wrap">
+                    {% for value, label in {'pure': 'Pure greys'|trans, 'warm': 'Warm greys'|trans, 'cool': 'Cool greys'|trans} %}
+                        <button type="button" class="qc-seg-btn" :class="neutralTint === '{{ value }}' && 'is-active'"
+                                @click="neutralTint = '{{ value }}'">{{ label }}</button>
+                    {% endfor %}
+                </div>
+                <input type="hidden" name="NEUTRAL_TINT" value="{{ settings.NEUTRAL_TINT }}" :value="neutralTint">
+                <div class="qc-field-note">{{ 'Backgrounds, lines and muted text. Warm pulls toward beige, cool toward blue.'|trans }}</div>
+            </div>
+        </div>
+    </div>
+
+    {# ── 2. Statusy ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Status colours'|trans }}</div>
+                <div class="qc-card-desc">{{ 'The colours of the messages your customer sees after clicking: confirmation, warning, error. We make sure they cannot be mistaken for your brand colour.'|trans }}</div>
+            </div>
+        </div>
+        <div class="qc-card-body">
+            <div class="qc-chip-row">
+                {% for chip in [
+                    {role: 'fill-success', name: 'Success'|trans},
+                    {role: 'fill-warning', name: 'Warning'|trans},
+                    {role: 'fill-danger',  name: 'Error'|trans},
+                    {role: 'fill-info',    name: 'Information'|trans}
+                ] %}
+                    <div class="qc-chip">
+                        <div class="qc-chip-swatch" :style="`background:${c('{{ chip.role }}')}`"></div>
+                        <div class="qc-chip-name">
+                            {{ chip.name }}
+                            <span class="qc-pin" x-show="isPinned('{{ chip.role }}')" x-cloak>{{ 'customised'|trans }}</span>
+                        </div>
+                        <div class="qc-chip-hex"><span x-text="c('{{ chip.role }}')"></span></div>
+                        <div class="qc-chip-actions">
+                            <label class="qc-chip-btn" :title="'{{ 'Customise'|trans }}'">
+                                {{ icons.icon('edit', 13) }}
+                                <input type="color" class="qc-chip-color" :value="c('{{ chip.role }}')"
+                                       @input="pin('{{ chip.role }}', $event.target.value)">
+                            </label>
+                            <button type="button" class="qc-chip-btn" x-show="isPinned('{{ chip.role }}')" x-cloak
+                                    @click="unpin('{{ chip.role }}')" title="{{ 'Reset to computed'|trans }}">
+                                {{ icons.icon('x', 13) }}
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="qc-field-note">
+                {{ 'Each colour can be changed.'|trans }}
+            </div>
+        </div>
+    </div>
+
+    {# ── 3. Plakietki handlowe ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Commercial badges'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Labels on product photos: new, bestseller, discount. They have their own colours, separate from the message colours above.'|trans }}</div>
+            </div>
+        </div>
+        <div class="qc-card-body">
+            <div class="qc-chip-row">
+                {% for chip in [
+                    {role: 'badge-new',        name: 'New'|trans},
+                    {role: 'badge-bestseller', name: 'Bestseller'|trans},
+                    {role: 'badge-promo',      name: 'Promotion'|trans},
+                    {role: 'badge-pack',       name: 'Pack'|trans},
+                    {role: 'badge-sale',       name: 'Sale'|trans}
+                ] %}
+                    <div class="qc-chip">
+                        <div class="qc-chip-swatch" :style="`background:${c('{{ chip.role }}')}`"></div>
+                        <div class="qc-chip-name">
+                            {{ chip.name }}
+                            <span class="qc-pin" x-show="isPinned('{{ chip.role }}')" x-cloak>{{ 'customised'|trans }}</span>
+                        </div>
+                        <div class="qc-chip-hex"><span x-text="c('{{ chip.role }}')"></span></div>
+                        <div class="qc-chip-actions">
+                            <label class="qc-chip-btn" :title="'{{ 'Customise'|trans }}'">
+                                {{ icons.icon('edit', 13) }}
+                                <input type="color" class="qc-chip-color" :value="c('{{ chip.role }}')"
+                                       @input="pin('{{ chip.role }}', $event.target.value)">
+                            </label>
+                            <button type="button" class="qc-chip-btn" x-show="isPinned('{{ chip.role }}')" x-cloak
+                                    @click="unpin('{{ chip.role }}')" title="{{ 'Reset to computed'|trans }}">
+                                {{ icons.icon('x', 13) }}
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="qc-field-note">
+                {{ 'Each badge can be set to a colour of your own.'|trans }}
+            </div>
+        </div>
+    </div>
+
+    {# ── 4. Przygotowanie palety ── #}
+    <div class="qc-generuj">
+        <div>
+            <div class="qc-generuj-tytul">{{ 'Prepare the colours'|trans }}</div>
+            <div class="qc-generuj-opis">{{ 'We will work out a full set of shades for the whole shop. You will pick from them on the remaining screens. The header, the footer, the product card and the cart.'|trans }}</div>
+        </div>
+        <button type="button" class="qc-btn qc-btn-primary" @click="prepare()"
+                x-text="stale ? '{{ 'Prepare the colours'|trans }}' : '{{ 'Prepare again'|trans }}'"></button>
+    </div>
+
+    {# ── 5. Skale ── #}
+    <div class="qc-card" :class="stale && 'qc-zalezna'">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Shades'|trans }}</div>
+                <div class="qc-card-desc">{{ 'The shades prepared for your shop. The lighter ones serve as backgrounds, the middle ones as borders and fills, the darkest as text.'|trans }}</div>
+            </div>
+        </div>
+        <div class="qc-card-body">
+            {% for scale in ['neutral', 'primary', 'secondary', 'promo'] %}
+                <div class="qc-skala-wiersz">
+                    <span>{{ scale }}</span>
+                    <div class="qc-scale-strip">
+                        <template x-for="n in 12" :key="n">
+                            <div class="qc-scale-step" :style="`background:${c('{{ scale }}-' + n)}`">
+                                <span class="qc-scale-num" x-text="n"></span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {# ── 6. Powierzchnie ── #}
+    <div class="qc-card" :class="stale && 'qc-zalezna'">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Surfaces'|trans }}</div>
+                <div class="qc-card-desc">{{ 'The page background and the background of product cards. Point at a shade from the ones prepared above.'|trans }}</div>
+            </div>
+        </div>
+        <div class="qc-card-body">
+            {# Wybór powierzchni to NUMER STOPNIA skali neutralnej, nie kod barwy —
+               powierzchnia ma należeć do palety, a nie stać obok niej. Stopień idzie
+               za skalą: zmiana atramentu przemalowuje tło bez wracania na ten ekran. #}
+            {% for surface in [
+                {pole: 'SURFACE_PAGE', stan: 'surfacePage', name: 'Page background'|trans, note: ''},
+                {pole: 'SURFACE_CARD', stan: 'surfaceCard', name: 'Card surface'|trans,    note: 'Product cards, panels and forms.'|trans}
+            ] %}
+                <div class="qc-field">
+                    <label class="qc-label">{{ surface.name }}</label>
+                    <div class="qc-scale-strip qc-scale-wybor">
+                        <template x-for="n in 12" :key="n">
+                            <div class="qc-scale-step" :style="`background:${c('neutral-' + n)}`"
+                                 :class="{{ surface.stan }} === n && 'jest'"
+                                 :title="'{{ 'Step'|trans }} ' + n + ': ' + c('neutral-' + n).toUpperCase()"
+                                 @click="{{ surface.stan }} = n">
+                                <span class="qc-scale-num" x-text="n"></span>
+                            </div>
+                        </template>
+                    </div>
+                    <input type="hidden" name="{{ surface.pole }}" value="{{ settings[surface.pole] }}" :value="{{ surface.stan }}">
+                    <div class="qc-field-note">
+                        {{ surface.note }}
+                        <span x-text="'{{ 'Chosen shade:'|trans }} ' + c('neutral-' + {{ surface.stan }}).toUpperCase()"></span>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="qc-field">
+                <label class="qc-label">{{ 'Notifications'|trans }}</label>
+                <div class="qc-seg qc-seg-wrap">
+                    {% for value, label in {'dark': 'Dark'|trans, 'light': 'Light'|trans, 'brand': 'Brand colour'|trans} %}
+                        <button type="button" class="qc-seg-btn" :class="toast === '{{ value }}' && 'is-active'"
+                                @click="toast = '{{ value }}'">{{ label }}</button>
+                    {% endfor %}
+                </div>
+                <input type="hidden" name="TOAST" value="{{ settings.TOAST }}" :value="toast">
+                <div class="qc-field-note">
+                    {{ 'Background of the messages that appear in the top right corner after adding to cart or signing in. The engine picks the colours of success, warning and error so they stay visible on it.'|trans }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ── 6b. Obramowania ── #}
+    <div class="qc-card" :class="stale && 'qc-zalezna'">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Borders'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Lines around blocks, around form fields and in tables. Point at a shade for the card background above; what the engine keeps is the DISTANCE between the two, and it applies that distance to every block, whatever background the block has.'|trans }}</div>
+            </div>
+        </div>
+        <div class="qc-card-body">
+            {# Ten sam wybór co przy powierzchniach: numer stopnia skali, nie kod
+               barwy. Kreska ma zmieniać się razem z paletą, a sklep, który
+               przemalował markę albo przełączył szarości na ciepłe, nie ma tu
+               wracać. #}
+            {% for kreska in [
+                {pole: 'BORDER_CARD',  stan: 'borderCard',  name: 'Blocks and dividers'|trans, note: 'Card outline and the lines that separate content, for example under the key features. Counted from the card background in the same way.'|trans},
+                {pole: 'BORDER_FIELD', stan: 'borderField', name: 'Form fields'|trans,         note: 'Text fields, drop-down lists and text areas. What counts is the distance from the shade above: a block with its own darker background gets a line darker by the same number of steps, so the line stays visible everywhere.'|trans},
+                {pole: 'BORDER_TABLE', stan: 'borderTable', name: 'Tables'|trans,              note: 'The grid in tables, including the ones a shop puts in a product description.'|trans}
+            ] %}
+                <div class="qc-field">
+                    <label class="qc-label">{{ kreska.name }}</label>
+                    <div class="qc-scale-strip qc-scale-wybor">
+                        <template x-for="n in 12" :key="n">
+                            <div class="qc-scale-step" :style="`background:${c('neutral-' + n)}`"
+                                 :class="{{ kreska.stan }} === n && 'jest'"
+                                 :title="'{{ 'Step'|trans }} ' + n + ': ' + c('neutral-' + n).toUpperCase()"
+                                 @click="{{ kreska.stan }} = n">
+                                <span class="qc-scale-num" x-text="n"></span>
+                            </div>
+                        </template>
+                    </div>
+                    <input type="hidden" name="{{ kreska.pole }}" value="{{ settings[kreska.pole] }}" :value="{{ kreska.stan }}">
+                    <div class="qc-field-note">
+                        {{ kreska.note }}
+                        <span x-text="'{{ 'Chosen shade:'|trans }} ' + c('neutral-' + {{ kreska.stan }}).toUpperCase()"></span>
+                    </div>
+                </div>
+            {% endfor %}
+
+            {# Kreska spoczynkowa dzieli, kreska pod kursorem i przy ognisku
+               odpowiada klientowi. Stopnia się tu nie wskazuje: to wybór między
+               atramentem a barwą marki, więc wystarczy przełącznik. #}
+            <div class="qc-field">
+                <label class="qc-label">{{ 'Field under the cursor and in use'|trans }}</label>
+                <label class="qc-toggle">
+                    <input type="hidden" name="FIELD_ACCENT" value="ink">
+                    <input type="checkbox" name="FIELD_ACCENT" value="brand" x-model="fieldBrand">
+                    <span class="qc-toggle-track"></span>
+                    <span class="qc-toggle-text">{{ 'Use the brand colour'|trans }}</span>
+                </label>
+                <div class="qc-field-note">
+                    {{ 'A field the customer points at gets a darker line, and the field being typed into gets a thicker one. Off, both are ink; on, both take the brand colour, the same one that fills the buttons.'|trans }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ── 7. Kształt i siatka ── #}
+    <div class="qc-card" :class="stale && 'qc-zalezna'">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Shape and grid'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Corners, lines and shadows across the whole shop. The setting works everywhere at once, so the shop stays consistent.'|trans }}</div>
+            </div>
+        </div>
+        <div class="qc-card-body">
+            <div class="qc-form-grid qc-form-grid-2">
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Corner rounding'|trans }}</label>
+                    <div class="qc-seg qc-seg-wrap">
+                        {% for value, label in {'sharp': 'Sharp'|trans, 'round': 'Rounded'|trans} %}
+                            <button type="button" class="qc-seg-btn" :class="radius === '{{ value }}' && 'is-active'"
+                                    @click="radius = '{{ value }}'">{{ label }}</button>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="RADIUS" value="{{ settings.RADIUS }}" :value="radius">
+                </div>
+                <div class="qc-field">
+                    <label class="qc-label" for="q-radius-base">{{ 'Rounding amount'|trans }}</label>
+                    <div class="qc-range-row">
+                        <input type="range" class="qc-range" id="q-radius-base" min="2" max="16"
+                               x-model.number="radiusBase" :disabled="radius === 'sharp'">
+                        <span class="qc-range-value" x-text="radiusBase + ' px'"></span>
+                    </div>
+                    <input type="hidden" name="RADIUS_BASE" value="{{ settings.RADIUS_BASE }}" :value="radiusBase">
+                    <div class="qc-field-note">
+                        {{ 'The bigger the value, the rounder the corners. We scale buttons, cards and fields proportionally.'|trans }}
+                        <span x-show="radius !== 'sharp'" x-cloak
+                              x-text="'{{ 'It comes out as:'|trans }} {{ 'field'|trans }} ' + Math.round(radiusBase * 0.6)
+                                  + ' px, {{ 'button'|trans }} ' + radiusBase
+                                  + ' px, {{ 'card'|trans }} ' + Math.min(16, Math.round(radiusBase * 1.6)) + ' px'"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="qc-form-grid qc-form-grid-2" style="margin-top:18px">
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Block borders'|trans }}</label>
+                    <div class="qc-seg qc-seg-wrap">
+                        {% for value, label in {'on': 'Visible'|trans, 'off': 'None'|trans} %}
+                            <button type="button" class="qc-seg-btn" :class="borders === '{{ value }}' && 'is-active'"
+                                    @click="borders = '{{ value }}'">{{ label }}</button>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="BLOCK_BORDERS" value="{{ settings.BLOCK_BORDERS }}" :value="borders">
+                    <div class="qc-field-note">
+                        {{ 'Lines around product cards, tabs and panels.'|trans }}
+                    </div>
+                </div>
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Shadows'|trans }}</label>
+                    <div class="qc-seg qc-seg-wrap">
+                        {% for value, label in {'flat': 'No shadow'|trans, 'subtle': 'Soft shadow'|trans, 'strong': 'Strong shadow'|trans} %}
+                            <button type="button" class="qc-seg-btn" :class="shadow === '{{ value }}' && 'is-active'"
+                                    @click="shadow = '{{ value }}'">{{ label }}</button>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="SHADOW" value="{{ settings.SHADOW }}" :value="shadow">
+                    <div class="qc-hint">{{ 'Applies to product cards, dropdown lists and modal windows.'|trans }}</div>
+                </div>
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Section spacing'|trans }}</label>
+                    <div class="qc-seg qc-seg-wrap">
+                        {% for value, label in {'tight': 'Tight'|trans, 'normal': 'Normal'|trans, 'loose': 'Loose'|trans} %}
+                            <button type="button" class="qc-seg-btn" :class="spacing === '{{ value }}' && 'is-active'"
+                                    @click="spacing = '{{ value }}'">{{ label }}</button>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="SECTION_SPACING" value="{{ settings.SECTION_SPACING }}" :value="spacing">
+                </div>
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Products per row'|trans }}</label>
+                    <div class="qc-seg">
+                        {% for value in [3, 4, 5] %}
+                            <button type="button" class="qc-seg-btn" :class="gridColumns === {{ value }} && 'is-active'"
+                                    @click="gridColumns = {{ value }}">{{ value }}</button>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="GRID_COLUMNS" value="{{ settings.GRID_COLUMNS }}" :value="gridColumns">
+                    <div class="qc-hint">{{ 'Applies above 992 px. Below that the count follows the screen width, with the card never narrower than 220 px.'|trans }}</div>
+                </div>
+            </div>
+
+            <div class="qc-field qc-field-wide">
+                <label class="qc-label" for="q-width">{{ 'Container width'|trans }}</label>
+                <div class="qc-range-row">
+                    <input type="range" id="q-width" class="qc-range" min="960" max="1920" step="20"
+                           x-model.number="containerWidth">
+                    <span class="qc-range-value"><span x-text="containerWidth"></span>px</span>
+                </div>
+                <input type="hidden" name="CONTAINER_WIDTH" value="{{ settings.CONTAINER_WIDTH }}" :value="containerWidth">
+            </div>
+
+        </div>
+    </div>
+
+    {# ── 8. Typografia ── #}
+    <div class="qc-card" :class="stale && 'qc-zalezna'">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Typography'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Typefaces and text size in the shop.'|trans }}</div>
+            </div>
+        </div>
+        <div class="qc-card-body">
+            <div class="qc-form-grid qc-form-grid-2">
+                <div class="qc-field">
+                    <label class="qc-label" for="q-fh">{{ 'Heading font'|trans }}</label>
+                    <div class="qc-select-wrap">
+                        <select id="q-fh" name="FONT_HEADING" class="qc-field-base qc-select qc-focusable" x-model="fontHeading">
+                            {# Lista kończy się tam, gdzie kończą się pliki krojów w motywie:
+                               nazwa bez pliku znaczyłaby „niech przeglądarka weźmie, co ma u siebie",
+                               a wtedy sklep wygląda inaczej u każdego. Patrz assets/css/fonts.css. #}
+                            {% for font in ['Lexend', 'Nunito Sans', 'Inter'] %}
+                                <option value="{{ font }}">{{ font }}</option>
+                            {% endfor %}
+                        </select>
+                        {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                    </div>
+                </div>
+                <div class="qc-field">
+                    <label class="qc-label" for="q-fb">{{ 'Body font'|trans }}</label>
+                    <div class="qc-select-wrap">
+                        <select id="q-fb" name="FONT_BODY" class="qc-field-base qc-select qc-focusable" x-model="fontBody">
+                            {# Lista kończy się tam, gdzie kończą się pliki krojów w motywie:
+                               nazwa bez pliku znaczyłaby „niech przeglądarka weźmie, co ma u siebie",
+                               a wtedy sklep wygląda inaczej u każdego. Patrz assets/css/fonts.css. #}
+                            {% for font in ['Lexend', 'Nunito Sans', 'Inter'] %}
+                                <option value="{{ font }}">{{ font }}</option>
+                            {% endfor %}
+                        </select>
+                        {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                    </div>
+                </div>
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Base size'|trans }}</label>
+                    <div class="qc-seg">
+                        {% for value in [14, 15, 16] %}
+                            <button type="button" class="qc-seg-btn" :class="textBase === {{ value }} && 'is-active'"
+                                    @click="textBase = {{ value }}">{{ value }}px</button>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="TEXT_BASE" value="{{ settings.TEXT_BASE }}" :value="textBase">
+                </div>
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Heading scale'|trans }}</label>
+                    <div class="qc-seg qc-seg-wrap">
+                        {% for value, label in {'1.15': 'Compact'|trans, '1.2': 'Balanced'|trans, '1.25': 'Expressive'|trans} %}
+                            <button type="button" class="qc-seg-btn" :class="textScale === {{ value }} && 'is-active'"
+                                    @click="textScale = {{ value }}">{{ label }}</button>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="TEXT_SCALE" value="{{ settings.TEXT_SCALE }}" :value="textScale">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    
+</form>
+
+<script>
+/* Stan panelu wyglądu.
+   Paleta przychodzi z serwera i jest odświeżana po zmianie dowolnej decyzji kolorystycznej.
+   Matematyka żyje wyłącznie w PaletteGenerator (PHP), więc panel pokazuje dokładnie to,
+   co dostanie sklep, bez drugiej implementacji tych samych reguł w JavaScripcie. */
+const GENERATE_URL = {{ path('quince_appearance_preview')|json_encode|raw }};
+const GENERATE_ERROR = {{ 'Could not recompute the palette.'|trans|json_encode|raw }};
+const GENERATE_CSRF_TOKEN = {{ csrf_token('quince_appearance_preview')|json_encode|raw }};
+
+const WARNING_TEXT = {
+    primary_promo_similar: {{ 'The primary and promotion colours differ by less than 20 degrees of hue. A reduction will look like a regular brand accent.'|trans|json_encode|raw }},
+    promo_danger_similar:  {{ 'The promotion colour is too close to the error colour used in form validation.'|trans|json_encode|raw }},
+    secondary_too_light:   {{ 'The secondary colour is too light to reach the required contrast. The engine darkens it on save.'|trans|json_encode|raw }}
+};
+const ADJUSTED_TEXT = {{ 'darkened to reach the required contrast'|trans|json_encode|raw }};
+
+function quinceAppearance() {
+    const init = JSON.parse(document.getElementById('quince-appearance-data').textContent);
+    const s = init.settings;
+    const diag = init.diagnostics || {warnings: [], adjustments: {}};
+
+    return {
+        palette:   init.palette,
+        computed:  init.computed,
+        overrides: init.overrides,
+        warnings:  diag.warnings || [],
+        adjustments: diag.adjustments || {},
+
+        primary:     s.PRIMARY,
+        secondary:   s.SECONDARY,
+        dark:        s.DARK,
+        promo:       s.PROMO,
+        neutralTint: s.NEUTRAL_TINT,
+        fontHeading: s.FONT_HEADING,
+        fontBody:    s.FONT_BODY,
+        textBase:    Number(s.TEXT_BASE),
+        textScale:   Number(s.TEXT_SCALE),
+        radius:      s.RADIUS,
+        radiusBase:  Number(s.RADIUS_BASE),
+        borders:     s.BLOCK_BORDERS,
+        spacing:     s.SECTION_SPACING,
+        shadow:      s.SHADOW,
+        surfacePage: Number(s.SURFACE_PAGE),
+        surfaceCard: Number(s.SURFACE_CARD),
+        borderCard: Number(s.BORDER_CARD),
+        borderField: Number(s.BORDER_FIELD),
+        borderTable: Number(s.BORDER_TABLE),
+        fieldBrand: s.FIELD_ACCENT === 'brand',
+        gridColumns: Number(s.GRID_COLUMNS),
+        containerWidth: Number(s.CONTAINER_WIDTH),
+        toast:       s.TOAST,
+
+        stale: false,        // true = kolory zmienione, paleta wymaga przygotowania
+
+        init() {
+            // Paleta przelicza się NA ŻĄDANIE, nie po każdym drgnięciu próbnika.
+            // Dopóki nie przeliczysz, wybory oparte na skalach są wygaszone —
+            // inaczej dałoby się wskazać odcień, którego jeszcze nie ma.
+            ['primary', 'secondary', 'dark', 'promo', 'neutralTint'].forEach(
+                k => this.$watch(k, () => { this.stale = true; })
+            );
+        },
+
+        async prepare() {
+            await this.recompute();
+            this.stale = false;
+        },
+
+        c(role)        { return this.overrides[role] ?? this.palette[role] ?? 'transparent'; },
+        isPinned(role) { return role in this.overrides; },
+        pin(role, val) {
+            if (!/^#[0-9a-fA-F]{6}$/.test(val)) return;
+            if (val.toLowerCase() === (this.computed[role] || '').toLowerCase()) { this.unpin(role); return; }
+            this.overrides[role] = val.toLowerCase();
+        },
+        unpin(role) { delete this.overrides[role]; },
+
+        adjusted(key)     { return key in this.adjustments; },
+        adjustedText(key) {
+            const a = this.adjustments[key];
+            return a ? ADJUSTED_TEXT + ' ' + a.contrast + ':1' : '';
+        },
+        get contrastOn() {
+            const a = this.adjustments.primary;
+            return a ? a.contrast : null;
+        },
+        warningText(key) { return WARNING_TEXT[key] || key; },
+
+
+        get shadowCss() {
+            return ({
+                flat:   'none',
+                subtle: '0 1px 2px rgba(16,24,40,.06)',
+                strong: '0 4px 12px rgba(16,24,40,.12)',
+            })[this.shadow] || 'none';
+        },
+        size(step)     { return (this.textBase * Math.pow(this.textScale, step)).toFixed(1) + 'px'; },
+
+        async recompute() {
+            try {
+                const res = await fetch(GENERATE_URL, {
+                    method: 'POST',
+                    headers: {'X-Requested-With': 'XMLHttpRequest'},
+                    body: new URLSearchParams({
+                        PRIMARY: this.primary, SECONDARY: this.secondary, PROMO: this.promo,
+                        DARK: this.dark,
+                        SURFACE_PAGE: this.surfacePage, SURFACE_CARD: this.surfaceCard,
+                        NEUTRAL_TINT: this.neutralTint,
+                        _csrf_token: GENERATE_CSRF_TOKEN,
+                    }),
+                });
+                if (!res.ok) throw new Error(res.status);
+                const data = await res.json();
+                this.palette = data.palette;
+                this.computed = data.palette;
+                this.warnings = data.diagnostics.warnings || [];
+                this.adjustments = data.diagnostics.adjustments || {};
+            } catch (e) {
+                window.quinceToast && window.quinceToast(GENERATE_ERROR, 'danger');
+            }
+        },
+    };
+}
+</script>
+{% endblock %}

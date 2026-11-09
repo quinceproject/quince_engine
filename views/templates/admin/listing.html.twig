@@ -1,0 +1,290 @@
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/arrangement.html.twig' as uklad %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/surface.html.twig' as m %}
+
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{% block quince_actions %}
+    <button type="submit" form="quince-listing" class="qc-btn qc-btn-primary">
+        {{ icons.icon('check', 14) }} {{ 'Save changes'|trans }}
+    </button>
+{% endblock %}
+
+{% block quince_body %}
+{# Ekran odwzorowuje listing, zgodnie z makietą `quince/makiety/kategoria.html`
+   i inwentarzem z docs/25-strefy-i-elementy-listingu.md.
+
+   Jeden ekran na siedem stron: kategoria, marka, dostawca, wyszukiwarka,
+   nowości, promocje i bestsellery mają wspólny szablon i różnią się wyłącznie
+   nagłówkiem. #}
+
+<form id="quince-listing" method="post" action="{{ path('quince_listing_save') }}" x-data data-quince-uklad
+      data-napis-nazwa-hooka="{{ 'displayHookName'|trans }}"
+      data-napis-zatwierdz="{{ 'Add'|trans }}"
+      data-napis-poniechaj="{{ 'Cancel'|trans }}"
+      data-napis-usun="{{ 'Remove'|trans }}"
+      data-napis-dodaj-miejsce="{{ 'Add a hook next to this one'|trans }}">
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_listing_save') }}">
+    <input type="hidden" name="ARRANGEMENT" value="">
+    <input type="hidden" name="PLACEMENTS" value="">
+
+    <div class="qc-alert qc-alert-info">
+        {{ icons.icon('info', 18, 'qc-alert-icon') }}
+        <div>{{ 'These settings apply to every product list in the shop: the category, the brand, the supplier, search results, new products, promotions and best sellers. Switch elements on and off, drag them into order, add module hooks. A padlock means the element belongs to the theme: you can switch it off, but not remove it.'|trans }}</div>
+    </div>
+
+    {% if shopsWithOwnSettings|length %}
+        <div class="qc-alert qc-alert-warning">
+            {{ icons.icon('alertCircle', 18, 'qc-alert-icon') }}
+            <div>
+                <strong>{{ 'These shops show a different product list than this screen:'|trans }}</strong>
+                {{ shopsWithOwnSettings|join(', ') }}.
+                {{ 'They have their own settings. Choose the shop at the top of the panel to see them, or save here to give them what you see on this screen.'|trans }}
+            </div>
+        </div>
+    {% endif %}
+
+
+    {# ─────────── nagłówek listingu ─────────── #}
+    <div class="qc-sekcja">
+        <div class="qc-alert qc-alert-info">
+            {{ icons.icon('info', 18, 'qc-alert-icon') }}
+            <div><strong>{{ 'Above the list'|trans }}</strong> {{ 'The name of what the customer is looking at, its description and picture: the category, the brand, the supplier or the searched phrase.'|trans }}</div>
+        </div>
+        <div class="qc-karta">
+            <div class="qc-karta-cialo">
+                {{ uklad.obszar('header', zoneCatalogue.header.label|trans, zoneCatalogue.header.note|trans, areas.header|default([]), catalogue, optionLabels) }}
+            </div>
+        </div>
+    </div>
+
+    {# ─────────── filtry i belka ─────────── #}
+    <div class="qc-sekcja">
+        <div class="qc-karta">
+            <div class="qc-karta-cialo">
+                {# Zebatka wygladu idzie do naglowka strefy, ktorej dotyczy.
+
+                   Panel filtrow jest blokiem z wlasnym tlem TYLKO w kolumnie:
+                   w pasie siedzi w belce i ma sama kreske, a w szufladzie wyglad
+                   daje okno. Przy pozostalych wariantach zebatki nie ma. #}
+                {# Wszystko o filtrach w jednym bloku: gdzie stoja, jak wygladaja
+                   i czy panel jest wlaczony. #}
+                {% set polaFiltrow %}
+                    <div class="qc-uklad-pole qc-obszar-pola">
+                        <span class="qc-label">{{ 'Where the filters stand'|trans }}</span>
+                        <div class="qc-seg qc-seg-wrap">
+                            {% for wartosc, etykieta in filterPlacements %}
+                                <button type="button" class="qc-seg-btn{{ filters == wartosc ? ' is-active' }}"
+                                        data-filtry="{{ wartosc }}">{{ etykieta|trans }}</button>
+                            {% endfor %}
+                        </div>
+                        <input type="hidden" name="FILTERS" value="{{ filters }}">
+
+                        {# Skutek wyboru podany liczbami, a nie opisem: kolumna filtrow
+                           zabiera jedna kolumne siatki, wiec zajawek w rzedzie ubywa. #}
+                        <span class="qc-hint" data-skutek-kolumny{{ filters == 'column' ? '' : ' hidden' }}>
+                            {{ 'The filter column takes one grid column. This list will show %left% products per row instead of %all%, and the filters will get %px% px.'|trans({
+                                '%left%': listingColumns, '%all%': gridColumns, '%px%': filterWidth
+                            }) }}
+                        </span>
+                        <span class="qc-hint" data-skutek-pelny{{ filters == 'column' ? ' hidden' : '' }}>
+                            {{ 'The list keeps the full width, %all% products per row.'|trans({'%all%': gridColumns}) }}
+                        </span>
+                    </div>
+                {% endset %}
+
+                {{ uklad.obszar('filters', zoneCatalogue.filters.label|trans, zoneCatalogue.filters.note|trans, areas.filters|default([]), catalogue, optionLabels, true, true, 'filters', palette, surfaces['filters']|default({}), filters != 'column', polaFiltrow) }}
+
+                {{ uklad.obszar('toolbar', zoneCatalogue.toolbar.label|trans, zoneCatalogue.toolbar.note|trans, areas.toolbar|default([]), catalogue, optionLabels, false, false, 'toolbar', palette, surfaces['toolbar']|default({})) }}
+            </div>
+        </div>
+    </div>
+
+    {# ─────────── siatka ─────────── #}
+    <div class="qc-sekcja">
+        <div class="qc-karta">
+            <div class="qc-karta-cialo">
+                {# Widok listy nalezy do siatki zajawek: to on mowi, w jakiej
+                   postaci te zajawki stoja. #}
+                {% set polaWidoku %}
+    <div class="qc-uklad qc-obszar-pola">
+        <div class="qc-uklad-pole">
+            <span class="qc-label">{{ 'Product list view'|trans }}</span>
+            <div class="qc-seg qc-seg-wrap">
+                {% for wartosc, etykieta in viewModes %}
+                    <button type="button" class="qc-seg-btn{{ viewMode == wartosc ? ' is-active' }}"
+                            data-widok-tryb="{{ wartosc }}">{{ etykieta|trans }}</button>
+                {% endfor %}
+            </div>
+            <input type="hidden" name="VIEW_MODE" value="{{ viewMode }}">
+        </div>
+
+        {# Drugie pole w TYM SAMYM wierszu: `qc-uklad` to pas elastyczny, wiec
+           pola staja obok siebie i przechodza nizej same, gdy zabraknie miejsca.
+
+           Przy jednym widoku pole znika razem z podpowiedzia: nie ma wtedy czego
+           wybierac na wejsciu, a wybor klienta nie ma czego przykryc. #}
+        <div class="qc-uklad-pole" data-widok-domyslny{{ viewMode == 'both' ? '' : ' hidden' }}>
+            <span class="qc-label">{{ 'Default listing format'|trans }}</span>
+            <div class="qc-seg qc-seg-wrap">
+                {% for wartosc, etykieta in views %}
+                    <button type="button" class="qc-seg-btn{{ view == wartosc ? ' is-active' }}"
+                            data-widok="{{ wartosc }}">{{ etykieta|trans }}</button>
+                {% endfor %}
+            </div>
+            <input type="hidden" name="VIEW" value="{{ view }}">
+
+            <span class="qc-hint">
+                {{ "A customer who switches the view sees their own choice on the next visit."|trans }}
+            </span>
+        </div>
+    </div>
+                {% endset %}
+
+                {{ uklad.obszar('grid', zoneCatalogue.grid.label|trans, zoneCatalogue.grid.note|trans, areas.grid|default([]), catalogue, optionLabels, true, true, null, {}, {}, false, polaWidoku) }}
+            </div>
+        </div>
+
+        {# ─────────── miejsca promocyjne w siatce ─────────── #}
+        <div class="qc-karta" data-miejsca>
+            <div class="qc-karta-glowa">
+                <span class="qc-karta-nazwa">{{ 'Promotion slots in the grid'|trans }}</span>
+            </div>
+            <div class="qc-karta-cialo">
+                <div class="qc-alert qc-alert-info">
+                    {{ icons.icon('info', 18, 'qc-alert-icon') }}
+                    <div>{{ 'Wskaz, po której zajawce ma stanąć: zero znaczy przed pierwszą, dwa po drugiej. Miejsce, w którym moduł nic nie wyświetli, nie zostawia pustki.'|trans }}</div>
+                </div>
+
+                <table class="qc-table">
+                    <thead>
+                        <tr>
+                            <th>{{ 'After tile'|trans }}</th>
+                            <th>{{ 'Hook'|trans }}</th>
+                            <th>{{ 'Width'|trans }}</th>
+                            <th>{{ 'Shows'|trans }}</th>
+                            <th>{{ 'Format'|trans }}</th>
+                            <th>{{ 'On'|trans }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    {# Jeden pusty wiersz stoi zawsze: „Dodaj" robi następny z jego
+                       kopii, żeby pola wyboru niosły wartości z silnika zamiast
+                       przepisanych do skryptu. #}
+                    {% set wiersze = placements|length
+                        ? placements
+                        : [{'position': 0, 'hook': '', 'type': 'promo', 'scope': 'page', 'views': 'both', 'active': false}] %}
+                    <tbody data-miejsca-lista>
+                        {% for wpis in wiersze %}
+                            <tr data-miejsce>
+                                <td>
+                                    {# Pozycja, nie rzad: zero znaczy „przed pierwsza
+                                       zajawka", dwa „po drugiej", czyli miejsce staje
+                                       jako trzecia pozycja listy. #}
+                                    <input type="number" class="qc-field-base qc-focusable" data-pole="position"
+                                           style="inline-size:80px;text-align:center"
+                                           value="{{ wpis.position }}" min="0" max="999" step="1">
+                                </td>
+                                <td>
+                                    <input type="text" class="qc-field-base qc-focusable" data-pole="hook"
+                                           value="{{ wpis.hook }}" placeholder="{{ 'displayHookName'|trans }}">
+                                </td>
+                                <td>
+                                    <div class="qc-select-wrap">
+                                        <select class="qc-field-base qc-select qc-focusable" data-pole="type">
+                                            {% for wartosc, etykieta in placementTypes %}
+                                                <option value="{{ wartosc }}"{{ wpis.type == wartosc ? ' selected' : '' }}>{{ etykieta|trans }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="qc-select-wrap">
+                                        <select class="qc-field-base qc-select qc-focusable" data-pole="scope">
+                                            {% for wartosc, etykieta in placementScopes %}
+                                                <option value="{{ wartosc }}"{{ wpis.scope == wartosc ? ' selected' : '' }}>{{ etykieta|trans }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="qc-select-wrap">
+                                        <select class="qc-field-base qc-select qc-focusable" data-pole="views">
+                                            {% for wartosc, etykieta in placementViews %}
+                                                <option value="{{ wartosc }}"{{ wpis.views == wartosc ? ' selected' : '' }}>{{ etykieta|trans }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                                    </div>
+                                </td>
+                                {# Znacznik siedzi na opakowaniu, bo przełącznik
+                                   jest gotowym komponentem panelu i nie przyjmuje
+                                   własnych atrybutów. Pole bez nazwy nie trafia
+                                   do wysyłki: wiersze spisuje skrypt do
+                                   `PLACEMENTS`, tak samo jak rozstawienie. #}
+                                <td><span data-pole="active">{{ fields.toggle('', wpis.active) }}</span></td>
+                                <td>
+                                    <button type="button" class="qc-ikonka" data-usun-miejsce
+                                            title="{{ 'Remove'|trans }}">&times;</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="qc-dodaj">
+                    <button type="button" class="qc-btn" data-dodaj-miejsce-promo>{{ 'Add slot'|trans }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ─────────── pod listą ─────────── #}
+    <div class="qc-sekcja">
+        <div class="qc-alert qc-alert-info">
+            {{ icons.icon('info', 18, 'qc-alert-icon') }}
+            <div><strong>{{ 'Below the list'|trans }}</strong> {{ 'Pagination, the longer description and whatever modules add under the products.'|trans }}</div>
+        </div>
+        <div class="qc-karta">
+            <div class="qc-karta-cialo">
+                {# Rodzaj stronicowania nalezy do strefy pod lista: to on mowi,
+                   czym konczy sie lista produktow. #}
+                {% set polaStopki %}
+                    <div class="qc-uklad qc-obszar-pola">
+                        <div class="qc-uklad-pole">
+                            <span class="qc-label">{{ 'How the customer reaches further products'|trans }}</span>
+                            <div class="qc-seg qc-seg-wrap">
+                                {% for wartosc, etykieta in paginationModes %}
+                                    <button type="button" class="qc-seg-btn{{ pagination == wartosc ? ' is-active' }}"
+                                            data-stronicowanie="{{ wartosc }}">{{ etykieta|trans }}</button>
+                                {% endfor %}
+                            </div>
+                            <input type="hidden" name="PAGINATION" value="{{ pagination }}">
+
+                            <span class="qc-hint" data-skutek-doladowanie{{ pagination == 'more' ? '' : ' hidden' }}>
+                                {{ 'The list stays under one address, so the description shows always. The switch "only on the first page" stops working.'|trans }}
+                            </span>
+                        </div>
+                    </div>
+                {% endset %}
+
+                {{ uklad.obszar('footer', zoneCatalogue.footer.label|trans, zoneCatalogue.footer.note|trans, areas.footer|default([]), catalogue, optionLabels, false, false, null, {}, {}, false, polaStopki) }}
+            </div>
+        </div>
+    </div>
+
+</form>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine-sort.min.js') ~ qcVer }}" defer></script>
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine.min.js') ~ qcVer }}" defer></script>
+    <script src="{{ asset('../modules/quince_engine/views/js/arrangement.js') ~ qcVer }}" defer></script>
+    <script src="{{ asset('../modules/quince_engine/views/js/listing.js') ~ qcVer }}" defer></script>
+{% endblock %}

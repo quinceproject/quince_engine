@@ -1,0 +1,177 @@
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine.min.js') ~ qcVer }}" defer></script>
+{% endblock %}
+
+{% block quince_intro %}
+    <div class="qc-alert {{ prepared ? 'qc-alert-info' : 'qc-alert-warning' }}">
+        {{ icons.icon(prepared ? 'info' : 'alertCircle', 18, 'qc-alert-icon') }}
+        <div>
+            {% if prepared %}
+                {{ 'Set the contact details shown above the header and choose the screens they appear on.'|trans }}
+            {% else %}
+                {{ 'Prepare the shop colours in the global settings first. Only then will there be shades to choose the bar backgrounds from.'|trans }}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block quince_actions %}
+    <button type="submit" form="quince-topbar" class="qc-btn qc-btn-primary">
+        {{ icons.icon('check', 14) }} {{ 'Save changes'|trans }}
+    </button>
+{% endblock %}
+
+{% block quince_body %}
+
+{# Braki tłumaczeń pokazuje kropka przy selektorze języka w samym polu — nie ma
+   potrzeby dublować tego ostrzeżeniem na górze ekranu. #}
+
+<form id="quince-topbar" method="post" action="{{ path('quince_topbar_save') }}" class="qc-stack">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_topbar_save') }}">
+
+    {# ── Pas informacyjny ── #}
+    <div class="qc-card" x-data="{ on: {{ settings.ENABLED == '1' ? 'true' : 'false' }},
+                                   bg: '{{ settings.BG }}', prepared: {{ prepared ? 'true' : 'false' }} }">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Information bar'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Contact details and selectors above the header.'|trans }}</div>
+            </div>
+            <label class="qc-toggle">
+                <input type="hidden" name="ENABLED" value="0">
+                <input type="checkbox" name="ENABLED" value="1" x-model="on">
+                <span class="qc-toggle-track"></span>
+                <span class="qc-toggle-text">{{ 'Bar enabled'|trans }}</span>
+            </label>
+        </div>
+
+        {# Wyłączony pas wygasza treść karty i odcina ją od kliknięć — ustawienia
+           zostają widoczne, żeby dało się je przejrzeć, ale nie zapraszają
+           do zmian, dopóki pas nie działa. #}
+        <div class="qc-card-body qc-disabled-area" :class="!on && 'is-off'" :inert="!on">
+            <table class="qc-vis-table">
+                <thead>
+                    <tr>
+                        <th>{{ 'Content'|trans }}</th>
+                        <th class="qc-vis-table__screen">{{ 'Desktop'|trans }}</th>
+                        <th class="qc-vis-table__screen">{{ 'Mobile'|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            {{ fields.multilang('PHONE', 'Phone number'|trans, languages, translations.PHONE, '+48 22 000 00 00', '',
+                                fields.iconpicker('PHONE_ICON', settings.PHONE_ICON, iconSvg.PHONE_ICON, path('quince_icons_search'))) }}
+                        </td>
+                        <td class="qc-vis-table__screen"><span class="qc-vis-screen-label">{{ 'Desktop'|trans }}</span>{{ fields.toggle('PHONE_DESKTOP', settings.PHONE_DESKTOP == '1') }}</td>
+                        <td class="qc-vis-table__screen"><span class="qc-vis-screen-label">{{ 'Mobile'|trans }}</span>{{ fields.toggle('PHONE_MOBILE', settings.PHONE_MOBILE == '1') }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            {{ fields.multilang('EMAIL', 'E-mail address'|trans, languages, translations.EMAIL, 'sklep@example.com', '',
+                                fields.iconpicker('EMAIL_ICON', settings.EMAIL_ICON, iconSvg.EMAIL_ICON, path('quince_icons_search'))) }}
+                        </td>
+                        <td class="qc-vis-table__screen"><span class="qc-vis-screen-label">{{ 'Desktop'|trans }}</span>{{ fields.toggle('EMAIL_DESKTOP', settings.EMAIL_DESKTOP == '1') }}</td>
+                        <td class="qc-vis-table__screen"><span class="qc-vis-screen-label">{{ 'Mobile'|trans }}</span>{{ fields.toggle('EMAIL_MOBILE', settings.EMAIL_MOBILE == '1') }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            {{ fields.multilang('HOURS', 'Opening hours'|trans, languages, translations.HOURS, 'Pon-Pt 8:00-16:00', '',
+                                fields.iconpicker('HOURS_ICON', settings.HOURS_ICON, iconSvg.HOURS_ICON, path('quince_icons_search'))) }}
+                        </td>
+                        <td class="qc-vis-table__screen"><span class="qc-vis-screen-label">{{ 'Desktop'|trans }}</span>{{ fields.toggle('HOURS_DESKTOP', settings.HOURS_DESKTOP == '1') }}</td>
+                        <td class="qc-vis-table__screen"><span class="qc-vis-screen-label">{{ 'Mobile'|trans }}</span>{{ fields.toggle('HOURS_MOBILE', settings.HOURS_MOBILE == '1') }}</td>
+                    </tr>
+
+                    {% for picker in [
+                        {key: 'LANG',     label: 'Language selector'|trans},
+                        {key: 'CURRENCY', label: 'Currency selector'|trans}
+                    ] %}
+                        <tr>
+                            <td><span class="qc-label">{{ picker.label }}</span></td>
+                            <td class="qc-vis-table__screen">
+                                <span class="qc-vis-screen-label">{{ 'Desktop'|trans }}</span>
+                                {{ fields.toggle(picker.key ~ '_DESKTOP', attribute(settings, picker.key ~ '_DESKTOP') == '1') }}
+                            </td>
+                            <td class="qc-vis-table__screen">
+                                <span class="qc-vis-screen-label">{{ 'Mobile'|trans }}</span>
+                                {{ fields.toggle(picker.key ~ '_MOBILE', attribute(settings, picker.key ~ '_MOBILE') == '1') }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="qc-field-note">
+                {{ 'Tablets follow the desktop setting. What does not fit there is hidden by the theme. Today that is the opening hours.'|trans }}
+            </div>
+
+            {# Tło pasa: stopień skali, nie kod barwy. Wybór ze skal trzyma pas
+               w palecie sklepu — po zmianie koloru marki pas idzie za nią. #}
+            <div class="qc-field" style="margin-top:18px" :class="!prepared && 'qc-zalezna'">
+                <label class="qc-label">{{ 'Bar background'|trans }}</label>
+                {{ fields.colorpicker('BG', settings.BG, palette, {
+                    'neutral': 'Greys'|trans, 'primary': 'Brand'|trans,
+                    'secondary': 'Third colour'|trans, 'promo': 'Promotion'|trans
+                }) }}
+                <div class="qc-field-note">{{ 'Text, links and the line under the bar are matched to this background.'|trans }}</div>
+            </div>
+        </div>
+    </div>
+
+    {# ── Pasek komunikatu ── #}
+    <div class="qc-card" x-data="{ on: {{ settings.PROMO_ENABLED == '1' ? 'true' : 'false' }},
+                                   bg: '{{ settings.PROMO_BG }}', prepared: {{ prepared ? 'true' : 'false' }} }">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Message bar'|trans }}</div>
+                <div class="qc-card-desc">{{ 'A separate row above the information bar. Free delivery, dispatch time.'|trans }}</div>
+            </div>
+            <label class="qc-toggle">
+                <input type="hidden" name="PROMO_ENABLED" value="0">
+                <input type="checkbox" name="PROMO_ENABLED" value="1" x-model="on">
+                <span class="qc-toggle-track"></span>
+                <span class="qc-toggle-text">{{ 'Bar enabled'|trans }}</span>
+            </label>
+        </div>
+
+        <div class="qc-card-body qc-disabled-area" :class="!on && 'is-off'" :inert="!on">
+            {{ fields.multilang('PROMO_TEXT', 'Message'|trans, languages, translations.PROMO_TEXT, 'Darmowa dostawa od 200 zl') }}
+
+            <div class="qc-form-grid qc-form-grid-2" style="margin-top:16px">
+                <div class="qc-field">
+                    {{ fields.multilang('PROMO_LINK', 'Link'|trans, languages, translations.PROMO_LINK, '/dostawa',
+                                        'Optional. The message becomes clickable. Each language can point somewhere else.'|trans) }}
+                </div>
+
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Customer can close it'|trans }}</label>
+                    {{ fields.toggle('PROMO_DISMISSIBLE', settings.PROMO_DISMISSIBLE == '1', 'Show a close button'|trans) }}
+                    <div class="qc-hint">{{ 'Hidden for the rest of the visit, shown again next time.'|trans }}</div>
+                </div>
+            </div>
+
+            {# Tło pasa: stopień skali, nie kod barwy. Wybór ze skal trzyma pas
+               w palecie sklepu — po zmianie koloru marki pas idzie za nią. #}
+            <div class="qc-field" style="margin-top:18px" :class="!prepared && 'qc-zalezna'">
+                <label class="qc-label">{{ 'Bar background'|trans }}</label>
+                {{ fields.colorpicker('PROMO_BG', settings.PROMO_BG, palette, {
+                    'neutral': 'Greys'|trans, 'primary': 'Brand'|trans,
+                    'secondary': 'Third colour'|trans, 'promo': 'Promotion'|trans
+                }) }}
+                <div class="qc-field-note">{{ 'Text and the link are matched to this background.'|trans }}</div>
+            </div>
+        </div>
+    </div>
+
+</form>
+{% endblock %}

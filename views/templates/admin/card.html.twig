@@ -1,0 +1,81 @@
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{% block quince_actions %}
+    <button type="submit" form="quince-card" class="qc-btn qc-btn-primary">
+        {{ icons.icon('check', 14) }} {{ 'Save changes'|trans }}
+    </button>
+{% endblock %}
+
+{% block quince_body %}
+{# Dwa rodzaje zajawki obok siebie, a nie jeden pod drugim: sklep ustawia je
+   porównując, bo różnica między nimi jest właśnie tym, co tu się decyduje.
+
+   Kolejności elementów nie ma, bo nie jest ustawieniem. Zajawka to jeden wzór
+   powtórzony kilkanaście razy na ekranie i czytelność bierze się stąd, że cena
+   stoi zawsze w tym samym miejscu. #}
+
+<form id="quince-card" method="post" action="{{ path('quince_card_save') }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_card_save') }}">
+
+    <div class="qc-alert qc-alert-info">
+        {{ icons.icon('info', 18, 'qc-alert-icon') }}
+        <div>{{ 'The product card is everywhere the shop lists products: on listings, in search results and in module carousels. Two kinds, because they have different amounts of room. The tile is about 250 px wide; the row takes the full width of the list and fits a description, features and codes as well. A padlock means the element stays: without a photo, a name, a price and a way to buy there is no card.'|trans }}</div>
+    </div>
+
+    <div class="qc-mapa qc-mapa--rowne">
+        {% for variant, opis in variants %}
+            <div class="qc-karta">
+                <div class="qc-karta-glowa">
+                    <span class="qc-karta-nazwa">{{ opis.label|trans }}</span>
+                    <span class="qc-licznik">{{ opis.note|trans }}</span>
+                </div>
+
+                <div class="qc-karta-cialo">
+                    {% for id, element in catalogue %}
+                        {% if element.variants is empty or variant in element.variants %}
+                            <div class="qc-wiersz">
+                                <div class="qc-miejsca">
+                                    <div class="qc-miejsce">
+                                        {% if element.fixed|default(false) %}
+                                            <span class="qc-chwyt qc-chwyt--stale"
+                                                  title="{{ 'Without it there is no card. It cannot be switched off'|trans }}">&#128274;</span>
+                                        {% else %}
+                                            <span class="qc-chwyt qc-chwyt--stale">&nbsp;</span>
+                                        {% endif %}
+
+                                        <span class="qc-nazwa">{{ element.label|trans }}
+                                            {% if element.note is defined %}
+                                                <small>{{ element.note|trans }}</small>
+                                            {% endif %}
+                                        </span>
+
+                                        {% if element.number is defined %}
+                                            {# Liczba, nie przełącznik: zero znaczy „nie pokazuj cech wcale",
+                                               więc osobny włącznik obok byłby drugim zapisem tej samej decyzji. #}
+                                            <input type="number" class="qc-field-base qc-focusable"
+                                                   style="inline-size:88px;text-align:center"
+                                                   name="{{ variant }}[{{ id }}]"
+                                                   value="{{ values[variant][id]|default(element.number) }}"
+                                                   min="{{ element.range[0]|default(0) }}"
+                                                   max="{{ element.range[1]|default(99) }}" step="1">
+                                        {% elseif element.fixed|default(false) %}
+                                            {{ fields.toggle('', true) }}
+                                        {% else %}
+                                            {{ fields.toggle(variant ~ '[' ~ id ~ ']', values[variant][id]|default(false)) }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+</form>
+{% endblock %}

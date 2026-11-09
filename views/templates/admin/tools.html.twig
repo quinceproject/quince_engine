@@ -1,0 +1,76 @@
+{# System → Tools: czynności konserwacyjne silnika. Dziś tylko aktualizacja
+   paczki ikon — kolejne narzędzia dokładają tu swoją kartę `.qc-tool-card`. #}
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine.min.js') ~ qcVer }}" defer></script>
+{% endblock %}
+
+{% block quince_body %}
+<div class="qc-stack">
+
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Icon pack'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Bootstrap Icons, bundled with the shop — nothing is loaded from Google or anywhere else while a visitor browses.'|trans }}</div>
+            </div>
+        </div>
+
+        <div class="qc-card-body" style="display:flex; gap:32px; flex-wrap:wrap">
+            <div>
+                <div class="qc-card-desc">{{ 'Installed version'|trans }}</div>
+                <div class="qc-card-title">{{ iconVersion ?: '—' }}</div>
+            </div>
+            <div>
+                <div class="qc-card-desc">{{ 'Icons available'|trans }}</div>
+                <div class="qc-card-title">{{ iconCount }}</div>
+            </div>
+            <div>
+                <div class="qc-card-desc">{{ 'Last updated'|trans }}</div>
+                <div class="qc-card-title">{{ iconUpdatedAt ?: '—' }}</div>
+            </div>
+        </div>
+
+        <div class="qc-card-body" style="padding-top:0">
+            <div class="qc-tool-card" style="max-inline-size:420px">
+                <div class="qc-tool-card-icon">{{ icons.icon('upload', 18) }}</div>
+                <div class="qc-tool-card-title">{{ 'Update the icon pack'|trans }}</div>
+                <div class="qc-tool-card-desc">
+                    {{ 'Download a newer "bootstrap-icons" package from %link% and upload the .tgz file here. The whole set is replaced — an icon removed from the new version disappears from the picker as well.'|trans({'%link%': '<a href="https://www.npmjs.com/package/bootstrap-icons" target="_blank" rel="noopener noreferrer">npmjs.com</a>'})|raw }}
+                </div>
+
+                <form method="post" action="{{ path('quince_tools_icons_update') }}" enctype="multipart/form-data"
+                      x-data="{ nazwaPliku: '' }">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_tools_icons_update') }}">
+                    <div class="qc-upload">
+                        <span class="qc-upload-thumb">{{ icons.icon('upload', 18) }}</span>
+
+                        <div class="qc-upload-info">
+                            <div class="qc-upload-name" x-text="nazwaPliku || '{{ 'No file chosen'|trans }}'"></div>
+                            <div>{{ 'The .tgz file from the npm package, unchanged.'|trans }}</div>
+                        </div>
+
+                        <div class="qc-upload-actions">
+                            <button type="button" class="qc-btn qc-btn-outline" @click="$refs.paczka.click()">
+                                {{ icons.icon('upload', 14) }} {{ 'Choose a file'|trans }}
+                            </button>
+                            <button type="submit" class="qc-btn qc-btn-outline" x-show="nazwaPliku" x-cloak>
+                                {{ icons.icon('check', 14) }} {{ 'Update'|trans }}
+                            </button>
+                        </div>
+
+                        <input type="file" x-ref="paczka" hidden name="paczka" accept=".tgz,.tar.gz"
+                               @change="nazwaPliku = $event.target.files.length ? $event.target.files[0].name : ''">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

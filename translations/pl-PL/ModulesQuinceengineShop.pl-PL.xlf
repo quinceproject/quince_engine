@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" target-language="pl-PL" datatype="plaintext" original="translations">
+    <body>
+
+      <trans-unit id="quince.formularz.odrzucony">
+        <source>We could not accept this form. Please reload the page and try again.</source>
+        <target>Nie udało się przyjąć tego formularza. Odśwież stronę i spróbuj jeszcze raz.</target>
+      </trans-unit>
+
+      <!-- Zakup na firmę: przycisk „Pobierz dane” w polu NIP. -->
+      <trans-unit id="quince.checkout.pobierz">
+        <source>Fetch details</source>
+        <target>Pobierz dane</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.pobieram">
+        <source>Fetching…</source>
+        <target>Pobieram…</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.blad">
+        <source>We could not reach the register. Fill the details in by hand.</source>
+        <target>Nie udało się połączyć z rejestrem. Wpisz dane ręcznie.</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.cyfra">
+        <source>This VAT number has a wrong check digit. Look for a typo.</source>
+        <target>Ten numer NIP ma błędną cyfrę kontrolną. Sprawdź, czy nie ma literówki.</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.pelny">
+        <source>Enter the full VAT number.</source>
+        <target>Wpisz pełny numer NIP.</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.rejestr">
+        <source>The register did not answer. Fill the company details in by hand.</source>
+        <target>Rejestr nie odpowiedział. Wpisz dane firmy ręcznie.</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.brak">
+        <source>We could not find this number. Fill the company details in by hand.</source>
+        <target>Nie znaleźliśmy tego numeru. Wpisz dane firmy ręcznie.</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.znaleziony">
+        <source>Company name and registered address taken from VIES. Check them.</source>
+        <target>Nazwa firmy i adres siedziby pobrane z VIES. Sprawdź je.</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.niepoprawny">
+        <source>This VAT number is not correct. Check it for a typo.</source>
+        <target>Ten numer NIP jest niepoprawny. Sprawdź, czy nie ma literówki.</target>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>

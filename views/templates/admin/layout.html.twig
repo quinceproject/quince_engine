@@ -1,0 +1,149 @@
+{#
+  Layout bazowy paneli Quince.
+
+  Strona podrzędna dostarcza cztery bloki: quince_title, quince_description,
+  quince_actions i quince_body. Nawigacja i nagłówek są tutaj raz.
+
+  Językiem bazowym silnika jest angielski — wszystkie napisy przechodzą przez
+  filtr trans z domeną Modules.Quinceengine.Admin. Tłumaczenia leżą
+  w translations/pl-PL/.
+
+  Zmienne od kontrolera:
+    quinceRoute — nazwa bieżącej trasy, podświetla pozycję w nawigacji
+#}
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{#
+   Znacznik wersji przy każdym pliku. Bez niego przeglądarka trzyma poprzedni arkusz
+   i poprawki CSS/JS nie docierają do panelu mimo poprawnego pliku na dysku.
+   W trybie deweloperskim znacznik czasu — plik zmienia się kilkanaście razy dziennie.
+   Na produkcji wersja modułu, więc cache działa aż do aktualizacji.
+#}
+{% set qcVer = '?v=' ~ (app.debug ? 'now'|date('U') : qcVersion|default('0.1.0')) %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('../modules/quince_engine/views/css/tokens/base.css') ~ qcVer }}">
+    <link rel="stylesheet" href="{{ asset('../modules/quince_engine/views/css/tokens/colors.css') ~ qcVer }}">
+    <link rel="stylesheet" href="{{ asset('../modules/quince_engine/views/css/tokens/typography.css') ~ qcVer }}">
+    <link rel="stylesheet" href="{{ asset('../modules/quince_engine/views/css/tokens/spacing.css') ~ qcVer }}">
+    <link rel="stylesheet" href="{{ asset('../modules/quince_engine/views/css/tokens/components.css') ~ qcVer }}">
+    <link rel="stylesheet" href="{{ asset('../modules/quince_engine/views/css/panel.css') ~ qcVer }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Przechwytuje komunikaty PrestaShopa i pokazuje je jako toast. Wspólne dla
+       wszystkich widoków Quince, więc ładowane w layoucie, nie w podstronach. #}
+    <script src="{{ asset('../modules/quince_engine/views/js/panel.js') ~ qcVer }}" defer></script>
+{% endblock %}
+
+{% block content %}
+{#
+   Nawigacja przychodzi z PHP (Quince\Engine\Ui\PanelNavigation), bo pozycje
+   modulow zaleza od tego, co sklep ma zainstalowane. Ten sam layout rozszerzaja
+   strony ustawien naszych modulow — dzieki temu maja ten sam sidebar, pasek
+   zapisu i wyglad, zamiast odtwarzac je u siebie.
+
+   Pozycje bez klucza `route` sa zaplanowane, ale jeszcze niezbudowane —
+   pokazujemy je wyszarzone ze znacznikiem.
+#}
+{% set navSections = nav|default([]) %}
+
+<div class="qc-root">
+    <div class="qc-shell">
+
+        {# Na telefonie pasek z ikonami zabiera szerokość i nie mówi, dokąd prowadzą
+           pozostałe pozycje. Zastępuje go ten przycisk: nazwa bieżącej strony,
+           po dotknięciu pełna lista z nazwami. Na dużym ekranie jest ukryty. #}
+        {# Nazwa bierze się z listy nawigacji, a nie z tytułu strony — tam jest już
+           przetłumaczona, więc przycisk mówi to samo co pozycja, którą zastępuje. #}
+        {# Pozycję w sidebarze wskazuje quinceNavRoute, a nie quinceRoute: moduł
+           z kilkoma widokami ma jedną pozycję w menu, a bieżącą trasą jest ten
+           widok, który akurat oglądamy. Bez tego rozróżnienia wejście w drugą
+           zakładkę gasi pozycję modułu i menu wygląda, jakby nikt nie był nigdzie. #}
+        {% set navItems = navSections|reduce((carry, section) => carry|merge(section.items), []) %}
+        {% set navRoute = quinceNavRoute|default(quinceRoute|default('-')) %}
+        {% set navCurrent = navItems|filter(i => i.route|default('') == navRoute)|first %}
+
+        <button type="button" class="qc-nav-mobile" aria-expanded="false" aria-controls="qc-sidenav">
+            <span class="qc-nav-label">{{ navCurrent.label|default(layoutTitle|default('Quince'))|trans }}</span>
+            <svg class="qc-nav-mobile-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none"
+                 stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+        </button>
+
+        <nav class="qc-sidenav" id="qc-sidenav" aria-label="Quince">
+            {% for section in navSections %}
+                <div class="qc-sidenav-section">{{ section.label|trans }}</div>
+                {% for item in section.items %}
+                    {% if item.route is defined %}
+                        <a href="{{ path(item.route) }}"
+                           class="qc-nav-item{{ navRoute == item.route ? ' qc-active' : '' }}">
+                            {{ icons.icon(item.icon) }}
+                            <span class="qc-nav-label">{{ item.label|trans }}</span>
+                        </a>
+                    {% else %}
+                        <span class="qc-nav-item qc-disabled" aria-disabled="true">
+                            {{ icons.icon(item.icon) }}
+                            <span class="qc-nav-label">{{ item.label|trans }}</span>
+                            <span class="qc-nav-soon">{{ 'soon'|trans }}</span>
+                        </span>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </nav>
+
+        <div class="qc-content">
+            {# Tytuł strony rysuje PrestaShop (breadcrumb + nagłówek), więc go nie powtarzamy.
+               Zostaje krótka informacja, co da się na tym widoku ustawić. #}
+            {% block quince_intro %}{% endblock %}
+
+            {# Widoki jednego ekranu — moduł, który ma ich kilka, wypisuje tu pasek
+               zakładek. Każda zakładka prowadzi do własnej trasy, więc widok da się
+               otworzyć wprost z adresu, a filtry i stronicowanie mieszczą się
+               w adresie zamiast w stanie skryptu.
+
+               Pasek stoi w layoucie, a nie w szablonie modułu, żeby wszystkie
+               moduły miały go w jednym miejscu i w jednej postaci. #}
+            {% block quince_tabs %}
+                {% if quinceTabs|default([]) %}
+                    <nav class="qc-tabs">
+                        {% for tab in quinceTabs %}
+                            <a href="{{ path(tab.route) }}"
+                               class="qc-tab{{ quinceRoute|default('') == tab.route ? ' qc-active' : '' }}"
+                               {{ quinceRoute|default('') == tab.route ? 'aria-current="page"' : '' }}>{{ tab.label }}</a>
+                        {% endfor %}
+                    </nav>
+                {% endif %}
+            {% endblock %}
+
+            {% block quince_body %}{% endblock %}
+
+            {# Pasek akcji przy dolnej krawędzi. Zapis jest zawsze pod ręką, niezależnie
+               od długości formularza, i nie konkuruje o górną krawędź z paskiem PrestaShopa.
+
+               Dwie rzeczy naraz, bo dają co innego. Blok `quince_actionbar` pozwala
+               ekranowi świadomie zgasić pasek albo podmienić go na własny — tego
+               samego wzorca używa `quince_cmp`. Sprawdzenie pustki gwarantuje,
+               że pusty pasek nie wyjdzie nawet wtedy, gdy ktoś o bloku zapomni:
+               dziennik cen dostawał go przyklejonego do dna okna i wyglądało to
+               na niedokończony formularz. #}
+            {% block quince_actionbar %}
+                {% set qcAkcje %}{% block quince_actions %}{% endblock %}{% endset %}
+                {% set qcAkcjeInfo %}{% block quince_actions_info %}{% endblock %}{% endset %}
+
+                {% if qcAkcje|trim is not empty or qcAkcjeInfo|trim is not empty %}
+                    <div class="qc-actionbar">
+                        <div class="qc-actionbar-info">{{ qcAkcjeInfo }}</div>
+                        {{ qcAkcje }}
+                    </div>
+                {% endif %}
+            {% endblock %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

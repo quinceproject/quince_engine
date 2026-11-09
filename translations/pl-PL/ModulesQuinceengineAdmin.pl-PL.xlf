@@ -1,0 +1,2915 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" target-language="pl-PL" datatype="plaintext" original="ModulesQuinceengineAdmin">
+    <body>
+
+      <!-- Moduł -->
+      <trans-unit id="quince.module.name">
+        <source>Quince Engine</source>
+        <target>Quince Engine</target>
+      </trans-unit>
+      <trans-unit id="quince.module.description">
+        <source>Theme engine for the Quince theme. Appearance, layout and page composition.</source>
+        <target>Silnik motywu Quince. Wygląd, układ i kompozycja stron.</target>
+      </trans-unit>
+
+      <!-- Ekran: Checkout -->
+      <trans-unit id="quince.checkout.intro">
+        <source>This switches the checkout every visitor sees, store-wide. It does not change how the pages themselves look — both variants already carry the same design.</source>
+        <target>To przełącza kasę, którą widzi każdy odwiedzający, dla całego sklepu. Nie zmienia wyglądu samych stron — oba warianty mają już ten sam projekt.</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.variant">
+        <source>Checkout variant</source>
+        <target>Wariant kasy</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.step_by_step">
+        <source>Step by step</source>
+        <target>Krokowa</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.one_page">
+        <source>One page</source>
+        <target>Jednostronicowa</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.hint">
+        <source>Step by step: address, delivery and payment follow one another, one at a time. One page: all of it sits on a single screen, with sections unlocking in place as the customer fills them in.</source>
+        <target>Krokowa: adres, dostawa i płatność następują jedna po drugiej, po kolei. Jednostronicowa: wszystko stoi na jednym ekranie, a sekcje odblokowują się w miejscu w miarę wypełniania przez klienta.</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.order_confirmation">
+        <source>Order confirmation</source>
+        <target>Potwierdzenie zamówienia</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.hook_label">
+        <source>Hook under order details</source>
+        <target>Hook pod szczegółami zamówienia</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.hook_hint">
+        <source>A spot in the order confirmation column, right under "Order details" — the same free name you give a hook anywhere in the product page layout. Leave it empty and nothing shows there. A module (WiseBlock, or any other) registers to whatever name you type here.</source>
+        <target>Miejsce w kolumnie potwierdzenia zamówienia, zaraz pod „Szczegóły zamówienia" — ta sama dowolna nazwa, co przy hooku gdziekolwiek w układzie strony produktu. Zostaw puste i nic się tam nie pokaże. Moduł (WiseBlock albo dowolny inny) rejestruje się pod nazwą, którą tu wpiszesz.</target>
+      </trans-unit>
+
+      <!-- Ekran: Cart -->
+      <trans-unit id="quince.cart.trust_title">
+        <source>Trust block</source>
+        <target>Blok zaufania</target>
+      </trans-unit>
+      <trans-unit id="quince.cart.trust_toggle">
+        <source>Show on the cart page</source>
+        <target>Pokaż na stronie koszyka</target>
+      </trans-unit>
+      <trans-unit id="quince.cart.trust_hint">
+        <source>Secure payments, return policy, shipping time — the same block the module itself fills in. This only decides whether it shows up here, on the cart page.</source>
+        <target>Bezpieczne płatności, zasady zwrotu, czas wysyłki — ta sama treść, którą wypełnia sam moduł. Tu decydujemy tylko, czy ten blok pokazuje się na stronie koszyka.</target>
+      </trans-unit>
+      <trans-unit id="quince.cart.below_suggest_title">
+        <source>Below suggestions</source>
+        <target>Pod podpowiedziami</target>
+      </trans-unit>
+      <trans-unit id="quince.cart.below_suggest_label">
+        <source>Hook below "You might also need"</source>
+        <target>Hook pod „Może Ci się przydać"</target>
+      </trans-unit>
+      <trans-unit id="quince.cart.below_suggest_hint">
+        <source>A spot at the bottom of the cart column, under the suggested products — the same free name you give a hook anywhere in the product page layout. Leave it empty and nothing shows there. A module (WiseBlock, or any other) registers to whatever name you type here.</source>
+        <target>Miejsce na dole kolumny koszyka, pod podpowiedzianymi produktami — ta sama dowolna nazwa, co przy hooku gdziekolwiek w układzie strony produktu. Zostaw puste i nic się tam nie pokaże. Moduł (WiseBlock albo dowolny inny) rejestruje się pod nazwą, którą tu wpiszesz.</target>
+      </trans-unit>
+
+      <!-- Nawigacja: grupy -->
+      <trans-unit id="quince.nav.design">
+        <source>Design</source>
+        <target>Wygląd</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.sections">
+        <source>Sections</source>
+        <target>Sekcje</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.pages">
+        <source>Pages</source>
+        <target>Strony</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.modules">
+        <source>Modules</source>
+        <target>Moduły</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.system">
+        <source>System</source>
+        <target>System</target>
+      </trans-unit>
+
+      <!-- Nawigacja: pozycje -->
+      <trans-unit id="quince.nav.appearance">
+        <source>Colours and typography</source>
+        <target>Kolory i typografia</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.layout">
+        <source>Layout and grid</source>
+        <target>Układ i siatka</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.homepage">
+        <source>Home page</source>
+        <target>Strona główna</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.product">
+        <source>Product page</source>
+        <target>Strona produktu</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.category">
+        <source>Category listing</source>
+        <target>Listing kategorii</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.header">
+        <source>Header</source>
+        <target>Nagłówek</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.footer">
+        <source>Footer</source>
+        <target>Stopka</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.checkout">
+        <source>Checkout</source>
+        <target>Zamówienie</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.slider">
+        <source>Slider</source>
+        <target>Slider</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.megamenu">
+        <source>Mega menu</source>
+        <target>Mega menu</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.tools">
+        <source>Tools</source>
+        <target>Narzędzia</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.soon">
+        <source>soon</source>
+        <target>wkrótce</target>
+      </trans-unit>
+
+      <!-- Wspólne -->
+      <trans-unit id="quince.common.save">
+        <source>Save</source>
+        <target>Zapisz</target>
+      </trans-unit>
+      <trans-unit id="quince.common.preview">
+        <source>Preview</source>
+        <target>Podgląd</target>
+      </trans-unit>
+      <trans-unit id="quince.common.default">
+        <source>Default</source>
+        <target>Domyślny</target>
+      </trans-unit>
+
+      <!-- Strona: opis -->
+      <trans-unit id="quince.appearance.description">
+        <source>Set the brand colour, fonts and shape. Everything else (button text contrast, hover variants, greyscale and size steps) is derived from these values.</source>
+        <target>Ustaw kolor marki, fonty i kształt. Reszta (kontrast tekstu na przyciskach, warianty hover, skala szarości i rozmiarów) wyliczy się z tych wartości.</target>
+      </trans-unit>
+
+      <!-- Karta: marka -->
+      <trans-unit id="quince.card.brand.title">
+        <source>Brand</source>
+        <target>Marka</target>
+      </trans-unit>
+      <trans-unit id="quince.card.brand.desc">
+        <source>Colours of buttons, links and highlights.</source>
+        <target>Kolory przycisków, odnośników i wyróżnień.</target>
+      </trans-unit>
+
+      <!-- Karta: podstawa -->
+      <trans-unit id="quince.card.base.title">
+        <source>Base</source>
+        <target>Podstawa</target>
+      </trans-unit>
+      <trans-unit id="quince.card.base.desc">
+        <source>Backgrounds, text and borders are generated from these two choices.</source>
+        <target>Tła, teksty i obramowania wynikają z tych dwóch wyborów.</target>
+      </trans-unit>
+
+      <!-- Karta: komunikaty -->
+      <trans-unit id="quince.card.messages.title">
+        <source>Message colours</source>
+        <target>Kolory komunikatów</target>
+      </trans-unit>
+      <trans-unit id="quince.card.messages.desc">
+        <source>Confirmations, errors and warnings shown to the customer.</source>
+        <target>Potwierdzenia, błędy i ostrzeżenia pokazywane klientowi.</target>
+      </trans-unit>
+
+      <!-- Karta: sklep -->
+      <trans-unit id="quince.card.shop.title">
+        <source>Shop colours</source>
+        <target>Kolory znaczące</target>
+      </trans-unit>
+      <trans-unit id="quince.card.shop.desc">
+        <source>Badges and prices in listings and on the product page.</source>
+        <target>Plakietki i ceny na listingach oraz karcie produktu.</target>
+      </trans-unit>
+
+      <!-- Karta: kształt -->
+      <trans-unit id="quince.card.shape.title">
+        <source>Shape</source>
+        <target>Kształt</target>
+      </trans-unit>
+      <trans-unit id="quince.card.shape.desc">
+        <source>Corner rounding of buttons, cards and fields.</source>
+        <target>Zaokrąglenie narożników przycisków, kart i pól.</target>
+      </trans-unit>
+
+      <!-- Kontrola kontrastu -->
+      <trans-unit id="quince.contrast.ok">
+        <source>link readable</source>
+        <target>odnośnik czytelny</target>
+      </trans-unit>
+      <trans-unit id="quince.contrast.warn">
+        <source>link too light</source>
+        <target>odnośnik zbyt jasny</target>
+      </trans-unit>
+      <trans-unit id="quince.typography.desc.short">
+        <source>Set the base size and ratio. Individual sizes follow.</source>
+        <target>Ustaw rozmiar bazowy i współczynnik. Pozostałe rozmiary wynikną same.</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.brand.colour">
+        <source>Brand colour</source>
+        <target>Kolor marki</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.brand.hint">
+        <source>Buttons, active states and highlights.</source>
+        <target>Przyciski, stany aktywne i wyróżnienia.</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.accent">
+        <source>Accent colour</source>
+        <target>Kolor akcentu</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.accent.placeholder">
+        <source>Same as brand</source>
+        <target>Taki jak marka</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.accent.hint">
+        <source>Leave empty to reuse the brand colour.</source>
+        <target>Zostaw puste, aby użyć koloru marki.</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.scheme">
+        <source>Interface brightness</source>
+        <target>Jasność interfejsu</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.scheme.light">
+        <source>Light</source>
+        <target>Jasny</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.scheme.dark">
+        <source>Dark</source>
+        <target>Ciemny</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.scheme.auto">
+        <source>Follow system</source>
+        <target>Zgodnie z systemem</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.tint">
+        <source>Greys</source>
+        <target>Szarości</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.tint.pure">
+        <source>Pure greys</source>
+        <target>Czyste</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.tint.warm">
+        <source>Warm greys</source>
+        <target>Ciepłe</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.tint.cool">
+        <source>Cool greys</source>
+        <target>Chłodne</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.tint.hint">
+        <source>Backgrounds, lines and muted text. Warm pulls toward beige, cool toward blue.</source>
+        <target>Tła, kreski i wyciszony tekst. Ciepłe ciągną w stronę beżu, chłodne w stronę błękitu.</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.toast.hint">
+        <source>Background of the messages that appear in the top right corner after adding to cart or signing in. The engine picks the colours of success, warning and error so they stay visible on it.</source>
+        <target>Tło komunikatów wyskakujących w prawym górnym rogu po dodaniu do koszyka albo zalogowaniu. Kolory sukcesu, ostrzeżenia i błędu silnik dobiera sam, żeby były na nim widoczne.</target>
+      </trans-unit>
+
+      <!-- Podgląd -->
+      <trans-unit id="quince.preview.addtocart">
+        <source>Add to cart</source>
+        <target>Do koszyka</target>
+      </trans-unit>
+      <trans-unit id="quince.preview.readmore">
+        <source>Read more</source>
+        <target>Czytaj więcej</target>
+      </trans-unit>
+
+      <!-- Karta: typografia -->
+      <trans-unit id="quince.typography.title">
+        <source>Typography</source>
+        <target>Typografia</target>
+      </trans-unit>
+      <trans-unit id="quince.typography.desc">
+        <source>Sizes follow a modular scale. You set the base and the ratio, not every value.</source>
+        <target>Rozmiary tworzą skalę modularną. Ustawiasz bazę i współczynnik, nie każdą wartość z osobna.</target>
+      </trans-unit>
+      <trans-unit id="quince.typography.heading.font">
+        <source>Heading font</source>
+        <target>Font nagłówków</target>
+      </trans-unit>
+      <trans-unit id="quince.typography.body.font">
+        <source>Body font</source>
+        <target>Font treści</target>
+      </trans-unit>
+      <trans-unit id="quince.typography.base">
+        <source>Base size</source>
+        <target>Rozmiar bazowy</target>
+      </trans-unit>
+      <trans-unit id="quince.typography.scale">
+        <source>Scale</source>
+        <target>Skala</target>
+      </trans-unit>
+      <trans-unit id="quince.typography.scale.compact">
+        <source>Compact</source>
+        <target>Kompaktowa</target>
+      </trans-unit>
+      <trans-unit id="quince.typography.scale.balanced">
+        <source>Balanced</source>
+        <target>Zrównoważona</target>
+      </trans-unit>
+      <trans-unit id="quince.typography.scale.expressive">
+        <source>Expressive</source>
+        <target>Wyrazista</target>
+      </trans-unit>
+      <trans-unit id="quince.typography.scale.hint">
+        <source>Ratio between consecutive heading sizes.</source>
+        <target>Stosunek między kolejnymi rozmiarami nagłówków.</target>
+      </trans-unit>
+      <trans-unit id="quince.typography.weight">
+        <source>Heading weight</source>
+        <target>Grubość nagłówków</target>
+      </trans-unit>
+      <trans-unit id="quince.typography.weight.semibold">
+        <source>Semibold</source>
+        <target>Półgruba</target>
+      </trans-unit>
+      <trans-unit id="quince.typography.weight.bold">
+        <source>Bold</source>
+        <target>Gruba</target>
+      </trans-unit>
+      <trans-unit id="quince.typography.preview.h1">
+        <source>Heading level one</source>
+        <target>Nagłówek pierwszego stopnia</target>
+      </trans-unit>
+      <trans-unit id="quince.typography.preview.h3">
+        <source>Heading level three</source>
+        <target>Nagłówek trzeciego stopnia</target>
+      </trans-unit>
+      <trans-unit id="quince.typography.preview.body">
+        <source>Body text sets the rhythm of the whole store. Everything else is measured against it.</source>
+        <target>Tekst treści nadaje rytm całemu sklepowi. Wszystko inne mierzy się względem niego.</target>
+      </trans-unit>
+      <trans-unit id="quince.typography.preview.small">
+        <source>Small print, metadata, hints</source>
+        <target>Drobny druk, metadane, podpowiedzi</target>
+      </trans-unit>
+
+      <!-- Karta: kształt i zaawansowane -->
+      <trans-unit id="quince.shape.title">
+        <source>Shape and advanced</source>
+        <target>Kształt i zaawansowane</target>
+      </trans-unit>
+      <trans-unit id="quince.shape.desc">
+        <source>Corner rounding, status colours and shop-specific roles.</source>
+        <target>Zaokrąglenie narożników, kolory statusów i role sklepowe.</target>
+      </trans-unit>
+      <trans-unit id="quince.shape.radius">
+        <source>Corner rounding</source>
+        <target>Zaokrąglenie narożników</target>
+      </trans-unit>
+      <trans-unit id="quince.shape.radius.sharp">
+        <source>Sharp</source>
+        <target>Ostre</target>
+      </trans-unit>
+      <trans-unit id="quince.shape.radius.soft">
+        <source>Soft</source>
+        <target>Delikatne</target>
+      </trans-unit>
+      <trans-unit id="quince.shape.radius.round">
+        <source>Rounded</source>
+        <target>Zaokrąglone</target>
+      </trans-unit>
+      <trans-unit id="quince.shape.radius.pill">
+        <source>Pill</source>
+        <target>Pigułka</target>
+      </trans-unit>
+
+      <!-- Statusy -->
+      <trans-unit id="quince.status.success">
+        <source>Success</source>
+        <target>Sukces</target>
+      </trans-unit>
+      <trans-unit id="quince.status.error">
+        <source>Error</source>
+        <target>Błąd</target>
+      </trans-unit>
+      <trans-unit id="quince.status.warning">
+        <source>Warning</source>
+        <target>Ostrzeżenie</target>
+      </trans-unit>
+      <trans-unit id="quince.status.info">
+        <source>Information</source>
+        <target>Informacja</target>
+      </trans-unit>
+
+      <!-- Role sklepowe -->
+      <trans-unit id="quince.shop.sale">
+        <source>Sale badge</source>
+        <target>Plakietka promocji</target>
+      </trans-unit>
+      <trans-unit id="quince.shop.new">
+        <source>New badge</source>
+        <target>Plakietka nowości</target>
+      </trans-unit>
+      <trans-unit id="quince.shop.price">
+        <source>Price</source>
+        <target>Cena</target>
+      </trans-unit>
+
+
+      <trans-unit id="quince.global.title">
+        <source>Global settings</source>
+        <target>Ustawienia globalne</target>
+      </trans-unit>
+      <trans-unit id="quince.global.desc">
+        <source>Colours, typography and proportions shared by the whole store.</source>
+        <target>Kolory, typografia i proporcje wspólne dla całego sklepu.</target>
+      </trans-unit>
+      <trans-unit id="quince.card.brandcolours.title">
+        <source>Brand and colours</source>
+        <target>Marka i kolory</target>
+      </trans-unit>
+      <trans-unit id="quince.card.brandcolours.desc">
+        <source>Base colours and brightness mode.</source>
+        <target>Kolory bazowe i tryb jasności.</target>
+      </trans-unit>
+      <trans-unit id="quince.field.brand.hint">
+        <source>Buttons and accents</source>
+        <target>Przyciski i akcenty</target>
+      </trans-unit>
+      <trans-unit id="quince.field.dark">
+        <source>Secondary colour</source>
+        <target>Kolor dodatkowy</target>
+      </trans-unit>
+      <trans-unit id="quince.field.dark.hint">
+        <source>Dark surfaces</source>
+        <target>Ciemne powierzchnie</target>
+      </trans-unit>
+      <trans-unit id="quince.card.type.desc">
+        <source>Typefaces and size scale.</source>
+        <target>Kroje pisma i skala rozmiarów.</target>
+      </trans-unit>
+      <trans-unit id="quince.card.shape.title2">
+        <source>Shape and grid</source>
+        <target>Kształt i siatka</target>
+      </trans-unit>
+      <trans-unit id="quince.card.shape.desc2">
+        <source>Rounding, width and spacing.</source>
+        <target>Zaokrąglenia, szerokość i odstępy.</target>
+      </trans-unit>
+      <trans-unit id="quince.field.width">
+        <source>Container width</source>
+        <target>Szerokość kontenera</target>
+      </trans-unit>
+      <trans-unit id="quince.field.spacing">
+        <source>Section spacing</source>
+        <target>Odstęp między sekcjami</target>
+      </trans-unit>
+      <trans-unit id="quince.spacing.tight">
+        <source>Tight</source>
+        <target>Ciasny</target>
+      </trans-unit>
+      <trans-unit id="quince.spacing.normal">
+        <source>Normal</source>
+        <target>Normalny</target>
+      </trans-unit>
+      <trans-unit id="quince.spacing.loose">
+        <source>Loose</source>
+        <target>Luźny</target>
+      </trans-unit>
+      <trans-unit id="quince.card.result.title">
+        <source>Resulting colours</source>
+        <target>Kolory wynikowe</target>
+      </trans-unit>
+      <trans-unit id="quince.card.result.desc">
+        <source>Derived from the fields above.</source>
+        <target>Wyliczone z pól powyżej.</target>
+      </trans-unit>
+      <trans-unit id="quince.mode.label">
+        <source>Colour mode:</source>
+        <target>Tryb wyboru koloru:</target>
+      </trans-unit>
+      <trans-unit id="quince.mode.auto">
+        <source>Derived</source>
+        <target>Wyliczony</target>
+      </trans-unit>
+      <trans-unit id="quince.mode.manual">
+        <source>Manual</source>
+        <target>Manualny</target>
+      </trans-unit>
+      <trans-unit id="quince.state.overridden">
+        <source>overridden</source>
+        <target>nadpisane</target>
+      </trans-unit>
+      <trans-unit id="quince.state.overridden.count">
+        <source>overridden manually</source>
+        <target>nadpisanych ręcznie</target>
+      </trans-unit>
+      <trans-unit id="quince.state.restore">
+        <source>restore derived</source>
+        <target>przywróć wyliczony</target>
+      </trans-unit>
+      <trans-unit id="quince.unit.colours">
+        <source>colours</source>
+        <target>kolorów</target>
+      </trans-unit>
+      <trans-unit id="quince.role.action-bg">
+        <source>Button background</source>
+        <target>Tło przycisku</target>
+      </trans-unit>
+      <trans-unit id="quince.role.action-fg">
+        <source>Text on button</source>
+        <target>Tekst na przycisku</target>
+      </trans-unit>
+      <trans-unit id="quince.role.pressed">
+        <source>Pressed</source>
+        <target>Wciśnięty</target>
+      </trans-unit>
+      <trans-unit id="quince.role.action-hover">
+        <source>Button on hover</source>
+        <target>Przycisk po najechaniu</target>
+      </trans-unit>
+      <trans-unit id="quince.role.action-active">
+        <source>Button pressed</source>
+        <target>Przycisk wciśnięty</target>
+      </trans-unit>
+      <trans-unit id="quince.role.action-soft">
+        <source>Soft accent background</source>
+        <target>Delikatne tło akcentu</target>
+      </trans-unit>
+      <trans-unit id="quince.role.focus-ring">
+        <source>Focus ring</source>
+        <target>Obwódka zaznaczenia</target>
+      </trans-unit>
+      <trans-unit id="quince.role.link">
+        <source>Link</source>
+        <target>Odnośnik</target>
+      </trans-unit>
+      <trans-unit id="quince.role.link-hover">
+        <source>Link on hover</source>
+        <target>Odnośnik po najechaniu</target>
+      </trans-unit>
+      <trans-unit id="quince.role.inverse-bg">
+        <source>Dark background</source>
+        <target>Ciemne tło</target>
+      </trans-unit>
+      <trans-unit id="quince.role.inverse-bg-raised">
+        <source>Dark background, raised</source>
+        <target>Ciemne tło, warstwa wyżej</target>
+      </trans-unit>
+      <trans-unit id="quince.role.inverse-fg">
+        <source>Text on dark</source>
+        <target>Tekst na ciemnym</target>
+      </trans-unit>
+      <trans-unit id="quince.role.inverse-fg-muted">
+        <source>Muted text on dark</source>
+        <target>Tekst przygaszony na ciemnym</target>
+      </trans-unit>
+      <trans-unit id="quince.role.inverse-border">
+        <source>Line on dark</source>
+        <target>Linia na ciemnym</target>
+      </trans-unit>
+      <trans-unit id="quince.role.bg-page">
+        <source>Page background</source>
+        <target>Tło strony</target>
+      </trans-unit>
+      <trans-unit id="quince.role.bg-surface">
+        <source>Card background</source>
+        <target>Tło kart</target>
+      </trans-unit>
+      <trans-unit id="quince.role.bg-sunken">
+        <source>Field background</source>
+        <target>Tło pól</target>
+      </trans-unit>
+      <trans-unit id="quince.role.fg-heading">
+        <source>Headings</source>
+        <target>Nagłówki</target>
+      </trans-unit>
+      <trans-unit id="quince.role.fg-body">
+        <source>Body text</source>
+        <target>Tekst treści</target>
+      </trans-unit>
+      <trans-unit id="quince.role.fg-muted">
+        <source>Secondary text</source>
+        <target>Tekst drugorzędny</target>
+      </trans-unit>
+      <trans-unit id="quince.role.fg-subtle">
+        <source>Tertiary text</source>
+        <target>Tekst pomocniczy</target>
+      </trans-unit>
+      <trans-unit id="quince.role.border">
+        <source>Lines and borders</source>
+        <target>Linie i ramki</target>
+      </trans-unit>
+      <trans-unit id="quince.role.border-strong">
+        <source>Strong borders</source>
+        <target>Ramki wyraźne</target>
+      </trans-unit>
+      <trans-unit id="quince.role.success-soft">
+        <source>Success. Background</source>
+        <target>Sukces. Tło</target>
+      </trans-unit>
+      <trans-unit id="quince.role.danger-soft">
+        <source>Error. Background</source>
+        <target>Błąd. Tło</target>
+      </trans-unit>
+      <trans-unit id="quince.role.warning-soft">
+        <source>Warning. Background</source>
+        <target>Ostrzeżenie. Tło</target>
+      </trans-unit>
+      <trans-unit id="quince.role.info-soft">
+        <source>Information. Background</source>
+        <target>Informacja. Tło</target>
+      </trans-unit>
+      <trans-unit id="quince.group.buttons">
+        <source>Buttons and links</source>
+        <target>Przyciski i odnośniki</target>
+      </trans-unit>
+      <trans-unit id="quince.group.ondark">
+        <source>On dark background</source>
+        <target>Na ciemnym tle</target>
+      </trans-unit>
+      <trans-unit id="quince.group.surfaces">
+        <source>Backgrounds and text</source>
+        <target>Tła i teksty</target>
+      </trans-unit>
+      <trans-unit id="quince.group.messages">
+        <source>Messages</source>
+        <target>Komunikaty</target>
+      </trans-unit>
+      <trans-unit id="quince.flash.saved">
+        <source>Settings saved.</source>
+        <target>Ustawienia zapisane.</target>
+      </trans-unit>
+
+
+      <trans-unit id="quince.intro.settings">
+        <source>Settings shared by the whole store: brand colours, typefaces, corner rounding and container width.</source>
+        <target>Ustawienia wspólne dla całego sklepu: kolory marki, kroje pisma, zaokrąglenie narożników i szerokość kontenera.</target>
+      </trans-unit>
+      <trans-unit id="quince.intro.derived">
+        <source>The remaining colours are derived from these values</source>
+        <target>Pozostałe kolory wynikają z tych wartości</target>
+      </trans-unit>
+      <trans-unit id="quince.intro.derived2">
+        <source>button text contrast, hover states, greyscale and message colours.</source>
+        <target>kontrast tekstu na przyciskach, stany hover, skala szarości i kolory komunikatów.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.palette.generate">
+        <source>Generate palette</source>
+        <target>Wygeneruj paletę</target>
+      </trans-unit>
+      <trans-unit id="quince.palette.generating">
+        <source>Generating…</source>
+        <target>Generowanie…</target>
+      </trans-unit>
+      <trans-unit id="quince.palette.stale">
+        <source>Base colours have changed. Generate the palette to see the result.</source>
+        <target>Kolory bazowe się zmieniły. Wygeneruj paletę, żeby zobaczyć wynik.</target>
+      </trans-unit>
+      <trans-unit id="quince.palette.error">
+        <source>Could not generate the palette.</source>
+        <target>Nie udało się wygenerować palety.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.shape.field">
+        <source>Field</source>
+        <target>Pole</target>
+      </trans-unit>
+      <trans-unit id="quince.shape.button">
+        <source>Button</source>
+        <target>Przycisk</target>
+      </trans-unit>
+
+      <trans-unit id="quince.intro.sixteen">
+        <source>Sixteen decisions that shape the whole store.</source>
+        <target>Szesnaście decyzji, które kształtują cały sklep.</target>
+      </trans-unit>
+      <trans-unit id="quince.intro.computed">
+        <source>Everything else is computed</source>
+        <target>Cała reszta jest wyliczana</target>
+      </trans-unit>
+      <trans-unit id="quince.intro.computed2">
+        <source>button states, alert colours, text contrast, band colours.</source>
+        <target>stany przycisków, kolory komunikatów, kontrast tekstu, kolory pasów.</target>
+      </trans-unit>
+      <trans-unit id="quince.card.colours">
+        <source>Colours</source>
+        <target>Kolory</target>
+      </trans-unit>
+      <trans-unit id="quince.card.colours.desc">
+        <source>Four colours drive the whole store.</source>
+        <target>Cztery kolory sterują całym sklepem.</target>
+      </trans-unit>
+      <trans-unit id="quince.colour.primary">
+        <source>Primary colour</source>
+        <target>Kolor główny</target>
+      </trans-unit>
+      <trans-unit id="quince.colour.primary.hint">
+        <source>Buttons, links, active filters, cart counter</source>
+        <target>Przyciski, linki, aktywne filtry, licznik koszyka</target>
+      </trans-unit>
+      <trans-unit id="quince.colour.secondary.hint">
+        <source>Secondary button, wishlist icon</source>
+        <target>Przycisk drugorzędny, ikona ulubionych</target>
+      </trans-unit>
+      <trans-unit id="quince.colour.promo">
+        <source>Promotion colour</source>
+        <target>Kolor promocji</target>
+      </trans-unit>
+      <trans-unit id="quince.colour.promo.hint">
+        <source>Discount badge, reduced price, savings message</source>
+        <target>Plakietka rabatu, cena po obniżce, komunikat o oszczędności</target>
+      </trans-unit>
+      <trans-unit id="quince.colour.dark">
+        <source>Dark colour</source>
+        <target>Kolor ciemny</target>
+      </trans-unit>
+      <trans-unit id="quince.colour.dark.hint">
+        <source>Bands set to dark. Independent of the primary colour</source>
+        <target>Sekcje ustawione na ciemne. Niezależny od koloru głównego</target>
+      </trans-unit>
+      <trans-unit id="quince.colour.tint.hint">
+        <source>Backgrounds, text and borders</source>
+        <target>Tła, teksty i obramowania</target>
+      </trans-unit>
+      <trans-unit id="quince.card.bands">
+        <source>Page bands</source>
+        <target>Sekcje strony</target>
+      </trans-unit>
+      <trans-unit id="quince.card.bands.desc">
+        <source>One choice per band; six colours are computed from it.</source>
+        <target>Jeden wybór na pas; sześć kolorów wylicza silnik.</target>
+      </trans-unit>
+      <trans-unit id="quince.band.topbar">
+        <source>Top information bar</source>
+        <target>Górny pasek informacyjny</target>
+      </trans-unit>
+      <trans-unit id="quince.band.header">
+        <source>Header (logo, search)</source>
+        <target>Nagłówek (logo, wyszukiwarka)</target>
+      </trans-unit>
+      <trans-unit id="quince.band.nav">
+        <source>Main menu</source>
+        <target>Menu główne</target>
+      </trans-unit>
+      <trans-unit id="quince.preview.wishlist">
+        <source>Add to wishlist</source>
+        <target>Dodaj do ulubionych</target>
+      </trans-unit>
+      <trans-unit id="quince.preview.muted">
+        <source>Muted text</source>
+        <target>Tekst wygaszony</target>
+      </trans-unit>
+      <trans-unit id="quince.type.scale">
+        <source>Heading scale</source>
+        <target>Skala nagłówków</target>
+      </trans-unit>
+      <trans-unit id="quince.card.shape_rhythm">
+        <source>Shape and rhythm</source>
+        <target>Kształt i rytm</target>
+      </trans-unit>
+      <trans-unit id="quince.result.title">
+        <source>What the engine computed</source>
+        <target>Co wyliczył silnik</target>
+      </trans-unit>
+      <trans-unit id="quince.result.desc">
+        <source>Derived from the settings above.</source>
+        <target>Wynika z ustawień powyżej.</target>
+      </trans-unit>
+      <trans-unit id="quince.result.recompute">
+        <source>Recompute</source>
+        <target>Przelicz</target>
+      </trans-unit>
+      <trans-unit id="quince.result.stale">
+        <source>Settings have changed. Recompute to see the result.</source>
+        <target>Ustawienia się zmieniły. Przelicz, żeby zobaczyć wynik.</target>
+      </trans-unit>
+      <trans-unit id="quince.result.values">
+        <source>values</source>
+        <target>wartości</target>
+      </trans-unit>
+      <trans-unit id="quince.result.customised">
+        <source>customised</source>
+        <target>nadpisane</target>
+      </trans-unit>
+      <trans-unit id="quince.result.clear">
+        <source>clear all</source>
+        <target>wyczyść wszystkie</target>
+      </trans-unit>
+      <trans-unit id="quince.result.reset">
+        <source>reset to computed</source>
+        <target>przywróć wyliczony</target>
+      </trans-unit>
+      <trans-unit id="quince.adjusted">
+        <source>darkened automatically so its label reaches contrast</source>
+        <target>przyciemniony automatycznie, żeby napis osiągnął kontrast</target>
+      </trans-unit>
+      <trans-unit id="quince.error.recompute">
+        <source>Could not recompute the palette.</source>
+        <target>Nie udało się przeliczyć palety.</target>
+      </trans-unit>
+      <trans-unit id="quince.role.fill_primary">
+        <source>Button fill</source>
+        <target>Wypełnienie przycisku</target>
+      </trans-unit>
+      <trans-unit id="quince.role.fill_primary_hover">
+        <source>Button fill. Hover</source>
+        <target>Wypełnienie przycisku. Hover</target>
+      </trans-unit>
+      <trans-unit id="quince.role.surface_primary_active">
+        <source>Selected filter background</source>
+        <target>Tło wybranego filtra</target>
+      </trans-unit>
+      <trans-unit id="quince.role.text_primary">
+        <source>Accent text</source>
+        <target>Tekst akcentowy</target>
+      </trans-unit>
+      <trans-unit id="quince.role.fill_secondary">
+        <source>Secondary button fill</source>
+        <target>Wypełnienie przycisku drugorzędnego</target>
+      </trans-unit>
+      <trans-unit id="quince.role.fill_secondary_hover">
+        <source>Secondary button. Hover</source>
+        <target>Przycisk drugorzędny. Hover</target>
+      </trans-unit>
+      <trans-unit id="quince.role.on_fill_secondary">
+        <source>Text on secondary button</source>
+        <target>Tekst na przycisku drugorzędnym</target>
+      </trans-unit>
+      <trans-unit id="quince.role.border_secondary">
+        <source>Secondary button border</source>
+        <target>Obramowanie przycisku drugorzędnego</target>
+      </trans-unit>
+      <trans-unit id="quince.role.text_secondary">
+        <source>Secondary accent text</source>
+        <target>Tekst akcentu dodatkowego</target>
+      </trans-unit>
+      <trans-unit id="quince.role.fill_promo">
+        <source>Discount badge, reduced price</source>
+        <target>Plakietka rabatu, cena po obniżce</target>
+      </trans-unit>
+      <trans-unit id="quince.role.on_fill_promo">
+        <source>Text on discount badge</source>
+        <target>Tekst na plakietce rabatu</target>
+      </trans-unit>
+      <trans-unit id="quince.role.surface_sunken">
+        <source>Sunken background</source>
+        <target>Tło zagłębione</target>
+      </trans-unit>
+      <trans-unit id="quince.role.surface_hover">
+        <source>Row hover</source>
+        <target>Wiersz pod kursorem</target>
+      </trans-unit>
+      <trans-unit id="quince.role.surface_active">
+        <source>Selected row</source>
+        <target>Wiersz wybrany</target>
+      </trans-unit>
+      <trans-unit id="quince.role.text_disabled">
+        <source>Disabled text</source>
+        <target>Tekst nieaktywny</target>
+      </trans-unit>
+      <trans-unit id="quince.role.border_subtle">
+        <source>Divider</source>
+        <target>Separator</target>
+      </trans-unit>
+      <trans-unit id="quince.role.border_field">
+        <source>Form field border</source>
+        <target>Obramowanie pola formularza</target>
+      </trans-unit>
+      <trans-unit id="quince.role.border_hover">
+        <source>Border. Hover</source>
+        <target>Obramowanie. Hover</target>
+      </trans-unit>
+      <trans-unit id="quince.role.band_topbar_bg">
+        <source>Top bar. Background</source>
+        <target>Górny pasek. Tło</target>
+      </trans-unit>
+      <trans-unit id="quince.role.band_topbar_fg">
+        <source>Top bar. Text</source>
+        <target>Górny pasek. Tekst</target>
+      </trans-unit>
+      <trans-unit id="quince.role.band_topbar_link">
+        <source>Top bar. Link</source>
+        <target>Górny pasek. Odnośnik</target>
+      </trans-unit>
+      <trans-unit id="quince.role.band_header_bg">
+        <source>Header. Background</source>
+        <target>Nagłówek. Tło</target>
+      </trans-unit>
+      <trans-unit id="quince.role.band_header_fg">
+        <source>Header. Text</source>
+        <target>Nagłówek. Tekst</target>
+      </trans-unit>
+      <trans-unit id="quince.role.band_header_link">
+        <source>Header. Link</source>
+        <target>Nagłówek. Odnośnik</target>
+      </trans-unit>
+      <trans-unit id="quince.role.band_nav_bg">
+        <source>Navigation. Background</source>
+        <target>Nawigacja. Tło</target>
+      </trans-unit>
+      <trans-unit id="quince.role.band_nav_fg">
+        <source>Navigation. Text</source>
+        <target>Nawigacja. Tekst</target>
+      </trans-unit>
+      <trans-unit id="quince.role.band_nav_link">
+        <source>Navigation. Link</source>
+        <target>Nawigacja. Odnośnik</target>
+      </trans-unit>
+      <trans-unit id="quince.role.band_footer_bg">
+        <source>Footer. Background</source>
+        <target>Stopka. Tło</target>
+      </trans-unit>
+      <trans-unit id="quince.role.band_footer_fg">
+        <source>Footer. Text</source>
+        <target>Stopka. Tekst</target>
+      </trans-unit>
+      <trans-unit id="quince.role.band_footer_link">
+        <source>Footer. Link</source>
+        <target>Stopka. Odnośnik</target>
+      </trans-unit>
+      <trans-unit id="quince.group.prices">
+        <source>Prices and promotions</source>
+        <target>Ceny i promocje</target>
+      </trans-unit>
+
+      <trans-unit id="quince.group.secondary_actions">
+        <source>Secondary actions</source>
+        <target>Akcje drugorzędne</target>
+      </trans-unit>
+      <trans-unit id="quince.role.on_fill_success">
+        <source>Text on success fill</source>
+        <target>Tekst na wypełnieniu sukcesu</target>
+      </trans-unit>
+      <trans-unit id="quince.role.on_fill_warning">
+        <source>Text on warning fill</source>
+        <target>Tekst na wypełnieniu ostrzeżenia</target>
+      </trans-unit>
+      <trans-unit id="quince.role.on_fill_danger">
+        <source>Text on error fill</source>
+        <target>Tekst na wypełnieniu błędu</target>
+      </trans-unit>
+      <trans-unit id="quince.role.on_fill_info">
+        <source>Text on information fill</source>
+        <target>Tekst na wypełnieniu informacji</target>
+      </trans-unit>
+      <trans-unit id="quince.role.border_success">
+        <source>Success. Border</source>
+        <target>Sukces. Obramowanie</target>
+      </trans-unit>
+      <trans-unit id="quince.role.border_warning">
+        <source>Warning. Border</source>
+        <target>Ostrzeżenie. Obramowanie</target>
+      </trans-unit>
+      <trans-unit id="quince.role.border_danger">
+        <source>Error. Border</source>
+        <target>Błąd. Obramowanie</target>
+      </trans-unit>
+      <trans-unit id="quince.role.border_info">
+        <source>Information. Border</source>
+        <target>Informacja. Obramowanie</target>
+      </trans-unit>
+
+      <trans-unit id="quince.lede">
+        <source>Sixteen decisions that drive the whole store. Everything else is computed by the engine.</source>
+        <target>Szesnaście decyzji sterujących całym wyglądem sklepu. Reszta jest wyliczana przez silnik.</target>
+      </trans-unit>
+      <trans-unit id="quince.save_changes">
+        <source>Save changes</source>
+        <target>Zapisz zmiany</target>
+      </trans-unit>
+      <trans-unit id="quince.card.brand_colours">
+        <source>Brand colours</source>
+        <target>Kolory marki</target>
+      </trans-unit>
+      <trans-unit id="quince.preview.buttons">
+        <source>Preview. Buttons</source>
+        <target>Podgląd. Przyciski</target>
+      </trans-unit>
+      <trans-unit id="quince.chip.fill9">
+        <source>Fill · step 9</source>
+        <target>Wypełnienie · stopień 9</target>
+      </trans-unit>
+      <trans-unit id="quince.chip.hover10">
+        <source>Hover</source>
+        <target>Najechanie</target>
+      </trans-unit>
+      <trans-unit id="quince.chip.onfill">
+        <source>Text on fill</source>
+        <target>Tekst na wypełnieniu</target>
+      </trans-unit>
+      <trans-unit id="quince.chip.customise">
+        <source>Customise</source>
+        <target>Nadpisz</target>
+      </trans-unit>
+      <trans-unit id="quince.chip.reset">
+        <source>Reset to computed</source>
+        <target>Przywróć wyliczony</target>
+      </trans-unit>
+      <trans-unit id="quince.preview.price">
+        <source>Preview. Product price</source>
+        <target>Podgląd. Cena produktu</target>
+      </trans-unit>
+      <trans-unit id="quince.tint.pure">
+        <source>Pure</source>
+        <target>Czysty</target>
+      </trans-unit>
+      <trans-unit id="quince.demo.step1">
+        <source>Step 1. Page background</source>
+        <target>Stopień 1. Tło strony</target>
+      </trans-unit>
+      <trans-unit id="quince.demo.card">
+        <source>Product card. Background from step 3, border from step 7.</source>
+        <target>Karta produktu. Tło ze stopnia 3, obramowanie ze stopnia 7.</target>
+      </trans-unit>
+      <trans-unit id="quince.demo.muted">
+        <source>Muted text. Step 11.</source>
+        <target>Tekst wygaszony. Stopień 11.</target>
+      </trans-unit>
+      <trans-unit id="quince.card.bands2">
+        <source>Top bar, header, menu and footer</source>
+        <target>Górny pasek, nagłówek, menu i stopka</target>
+      </trans-unit>
+      <trans-unit id="quince.demo.freeship">
+        <source>Free delivery over €50</source>
+        <target>Darmowa dostawa od 200 zł</target>
+      </trans-unit>
+      <trans-unit id="quince.demo.terms">
+        <source>Terms</source>
+        <target>Regulamin</target>
+      </trans-unit>
+      <trans-unit id="quince.demo.shop">
+        <source>Quince Shop</source>
+        <target>Kwiaciarnia Ala</target>
+      </trans-unit>
+      <trans-unit id="quince.demo.bouquets">
+        <source>Bouquets</source>
+        <target>Bukiety</target>
+      </trans-unit>
+      <trans-unit id="quince.demo.sale">
+        <source>Sale</source>
+        <target>Wyprzedaż</target>
+      </trans-unit>
+      <trans-unit id="quince.demo.contact">
+        <source>Contact</source>
+        <target>Kontakt</target>
+      </trans-unit>
+
+      <trans-unit id="quince.shadows">
+        <source>Shadows</source>
+        <target>Cienie</target>
+      </trans-unit>
+      <trans-unit id="quince.shadow.flat">
+        <source>No shadow</source>
+        <target>Brak</target>
+      </trans-unit>
+      <trans-unit id="quince.shadow.subtle">
+        <source>Soft shadow</source>
+        <target>Lekki</target>
+      </trans-unit>
+      <trans-unit id="quince.shadow.strong">
+        <source>Strong shadow</source>
+        <target>Mocny</target>
+      </trans-unit>
+      <trans-unit id="quince.grid.columns">
+        <source>Products per row</source>
+        <target>Produktów w rzędzie</target>
+      </trans-unit>
+
+      <trans-unit id="quince.tab.topbar">
+        <source>Top bar</source>
+        <target>Topbar</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.infobar">
+        <source>Information bar</source>
+        <target>Sekcja informacyjna</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.infobar.desc">
+        <source>Contact details and selectors above the header.</source>
+        <target>Dane kontaktowe i selektory nad nagłówkiem.</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.enabled">
+        <source>Bar enabled</source>
+        <target>Sekcja włączona</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.content">
+        <source>Content</source>
+        <target>Treść</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.phone_screen">
+        <source>Phone</source>
+        <target>Telefon</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.phone">
+        <source>Phone number</source>
+        <target>Numer telefonu</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.email">
+        <source>E-mail address</source>
+        <target>Adres e-mail</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.hours">
+        <source>Opening hours</source>
+        <target>Godziny pracy</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.hours_ph">
+        <source>Mon–Fri 8:00–16:00</source>
+        <target>Pon–Pt 8:00–16:00</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.lang_sel">
+        <source>Language selector</source>
+        <target>Wybór języka</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.curr_sel">
+        <source>Currency selector</source>
+        <target>Wybór waluty</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.country_sel">
+        <source>Delivery country selector</source>
+        <target>Wybór kraju dostawy</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.msgbar">
+        <source>Message bar</source>
+        <target>Sekcja z komunikatem</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.msgbar.desc">
+        <source>A separate row above the information bar. Free delivery, dispatch time.</source>
+        <target>Osobny wiersz nad pasem informacyjnym. Darmowa dostawa, termin wysyłki.</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.message">
+        <source>Message</source>
+        <target>Komunikat</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.message_ph">
+        <source>Free delivery over 200 zł</source>
+        <target>Darmowa dostawa od 200 zł</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.dismiss">
+        <source>Customer can close it</source>
+        <target>Klient może go zamknąć</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.dismiss_btn">
+        <source>Show a close button</source>
+        <target>Pokaż przycisk zamknięcia</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.dismiss_hint">
+        <source>Hidden for the rest of the visit, shown again next time.</source>
+        <target>Ukryty do końca wizyty, przy kolejnej pojawia się ponownie.</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.miss_promo">
+        <source>The message bar is on, but has no text in:</source>
+        <target>Sekcja z komunikatem jest włączona, ale nie ma treści w językach:</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.miss_hours">
+        <source>Opening hours are shown, but have no text in:</source>
+        <target>Godziny pracy są pokazywane, ale nie mają treści w językach:</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.miss_note">
+        <source>The bar will fall back to another language there.</source>
+        <target>Sekcja pokaże tam treść z innego języka.</target>
+      </trans-unit>
+      <trans-unit id="quince.close_message">
+        <source>Close message</source>
+        <target>Zamknij komunikat</target>
+      </trans-unit>
+
+      <trans-unit id="quince.no_translation">
+        <source>no translation</source>
+        <target>brak tłumaczenia</target>
+      </trans-unit>
+
+      <trans-unit id="quince.desktop">
+        <source>Desktop</source>
+        <target>Desktop</target>
+      </trans-unit>
+      <trans-unit id="quince.mobile">
+        <source>Mobile</source>
+        <target>Mobile</target>
+      </trans-unit>
+      <trans-unit id="quince.tablets_note">
+        <source>Tablets follow the desktop setting. What does not fit there is hidden by the theme. Today that is the opening hours.</source>
+        <target>Tablety dziedziczą ustawienie desktopu. To, co się na nich nie mieści, chowa motyw. Dziś są to godziny pracy.</target>
+      </trans-unit>
+      <trans-unit id="quince.icon">
+        <source>Icon</source>
+        <target>Ikona</target>
+      </trans-unit>
+      <trans-unit id="quince.no_icon">
+        <source>No icon</source>
+        <target>Bez ikony</target>
+      </trans-unit>
+
+      <trans-unit id="quince.search_icons">
+        <source>Search icons</source>
+        <target>Szukaj ikony</target>
+      </trans-unit>
+      <trans-unit id="quince.no_icons_match">
+        <source>No icons match that word.</source>
+        <target>Żadna ikona nie pasuje do tego słowa.</target>
+      </trans-unit>
+
+
+      <trans-unit id="quince.nav.cart">
+        <source>Cart</source>
+        <target>Koszyk</target>
+      </trans-unit>
+
+      <trans-unit id="quince.promo_link_hint">
+        <source>Optional. The message becomes clickable. Each language can point somewhere else.</source>
+        <target>Opcjonalny. Komunikat staje się odnośnikiem. Każdy język może prowadzić gdzie indziej.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.mod.page">
+        <source>Quince modules</source>
+        <target>Moduły Quince</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.intro">
+        <source>Modules built for this engine. Each one adds a section to the menu on the left once it is running.</source>
+        <target>Moduły napisane pod ten silnik. Każdy dokłada pozycję w menu po lewej, kiedy zacznie działać.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.running">
+        <source>Running</source>
+        <target>Działa</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.off">
+        <source>Installed, switched off</source>
+        <target>Zainstalowany, wyłączony</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.on_disk">
+        <source>On disk, not installed</source>
+        <target>Wgrany, niezainstalowany</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.absent">
+        <source>Not installed</source>
+        <target>Nie zainstalowany</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.open">
+        <source>Open settings</source>
+        <target>Otwórz ustawienia</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.no_settings">
+        <source>This module has no settings of its own.</source>
+        <target>Ten moduł nie ma własnych ustawień.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.switch_on">
+        <source>Switch it on in Module Manager to use it.</source>
+        <target>Włącz go w menedżerze modułów, żeby zaczął działać.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.unavailable">
+        <source>Not available in this store yet.</source>
+        <target>Jeszcze go nie ma w tym sklepie.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.search">
+        <source>Search</source>
+        <target>Wyszukiwarka</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.search_desc">
+        <source>Search with a scope filter and product suggestions.</source>
+        <target>Wyszukiwarka z filtrem zakresu i podpowiedziami produktów.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.megamenu_desc">
+        <source>Main menu with multi-column dropdowns and promo blocks.</source>
+        <target>Menu główne z wielokolumnowymi rozwinięciami i blokami promocyjnymi.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.slider_desc">
+        <source>Home page carousel with three slide types.</source>
+        <target>Karuzela na stronie głównej z trzema rodzajami slajdów.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.wishlist">
+        <source>Wishlist</source>
+        <target>Lista życzeń</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.wishlist_desc">
+        <source>Wishlist for logged-in customers and guests.</source>
+        <target>Lista życzeń dla zalogowanych i dla gości.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.hdr.missing">
+        <source>The chosen search module is not installed any more. The store is using the built-in search until you pick something else.</source>
+        <target>Wybrany moduł wyszukiwania nie jest już zainstalowany. Sklep korzysta z wyszukiwarki wbudowanej, dopóki nie wybierzesz czegoś innego.</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.logo_card">
+        <source>Logo and behaviour</source>
+        <target>Logo i zachowanie</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.logo_height">
+        <source>Logo height</source>
+        <target>Wysokość logo</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.logo_hint">
+        <source>Width follows from the file. Below 24 px a logo with a name stops being readable.</source>
+        <target>Szerokość wynika z pliku. Poniżej 24 px logo z nazwą przestaje być czytelne.</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.sticky">
+        <source>Header while scrolling</source>
+        <target>Nagłówek przy przewijaniu</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.sticky_on">
+        <source>Stays at the top of the screen</source>
+        <target>Zostaje na górze ekranu</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.sticky_hint">
+        <source>Search and cart stay within reach on long listings. Costs a strip of screen on phones.</source>
+        <target>Wyszukiwarka i koszyk są pod ręką na długich listach. Kosztuje pasek ekranu na telefonie.</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.search_on">
+        <source>Search shown</source>
+        <target>Wyszukiwarka pokazywana</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.which">
+        <source>Which search</source>
+        <target>Która wyszukiwarka</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.installed">
+        <source>Modules that are installed and running.</source>
+        <target>Moduły zainstalowane i działające.</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.only_builtin">
+        <source>Only the built-in search is available. Install a search module to get more.</source>
+        <target>Dostępna jest tylko wyszukiwarka wbudowana. Zainstaluj moduł wyszukiwania, żeby mieć więcej.</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.scope">
+        <source>Scope next to the field</source>
+        <target>Zakres obok pola</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.scope_on">
+        <source>Let customers narrow the search</source>
+        <target>Pozwól klientom zawęzić wyszukiwanie</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.scope_hint">
+        <source>Needs a search module that provides scopes. Hidden on phones either way. It would eat half the field.</source>
+        <target>Wymaga modułu wyszukiwania z zakresami. Na telefonie i tak się nie pokazuje. Zjadłby połowę pola.</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.placeholder">
+        <source>Text inside the empty field</source>
+        <target>Tekst w pustym polu</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.placeholder_ex">
+        <source>Search for a product, code or brand</source>
+        <target>Szukaj produktu, kodu lub marki</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.placeholder_hint">
+        <source>Say what can be searched for. “Search” alone tells the customer nothing.</source>
+        <target>Napisz, czego można szukać. Samo “Szukaj” nic klientowi nie mówi.</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.actions">
+        <source>Customer actions</source>
+        <target>Akcje klienta</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.action">
+        <source>Action</source>
+        <target>Akcja</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.account">
+        <source>Account</source>
+        <target>Konto</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.account_dropdown">
+        <source>Opens a list instead of the login page</source>
+        <target>Rozwija listę zamiast prowadzić na stronę logowania</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.saved">
+        <source>Saved products</source>
+        <target>Zapisane produkty</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.cart_total">
+        <source>Show the amount next to the count</source>
+        <target>Pokaż kwotę obok liczby sztuk</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.always">
+        <source>Always</source>
+        <target>Zawsze</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.captions">
+        <source>Captions next to icons</source>
+        <target>Podpisy przy ikonach</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.captions_on">
+        <source>Show on wide screens</source>
+        <target>Pokazuj na szerokich ekranach</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.captions_hint">
+        <source>Captions disappear first when the screen narrows. The space goes to the search field.</source>
+        <target>Podpisy znikają pierwsze przy zwężaniu. Miejsce idzie do pola wyszukiwania.</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.builtin_search">
+        <source>Built-in search</source>
+        <target>Wyszukiwarka wbudowana</target>
+      </trans-unit>
+
+      <trans-unit id="quince.hdr.shown">
+        <source>Shown</source>
+        <target>Pokazywana</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.logo_desc2">
+        <source>Set the logo size and how the header behaves while the customer scrolls.</source>
+        <target>Ustaw wielkość logo i zachowanie nagłówka przy przewijaniu strony.</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.search_desc2">
+        <source>Choose the search engine, the icon and the text the customer sees in the empty field.</source>
+        <target>Wybierz wyszukiwarkę, ikonę i tekst, który klient widzi w pustym polu.</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.actions_desc2">
+        <source>Choose which actions the header shows and which icon stands for each of them.</source>
+        <target>Wybierz, które akcje pokazuje nagłówek i jaka ikona odpowiada każdej z nich.</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.search_icon">
+        <source>Search icon</source>
+        <target>Ikona wyszukiwania</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.search_icon_hint">
+        <source>Shown on phones, where the field hides behind it.</source>
+        <target>Widoczna na telefonie, gdzie pole chowa się pod nią.</target>
+      </trans-unit>
+      <trans-unit id="quince.top.intro2">
+        <source>Set the contact details shown above the header and choose the screens they appear on.</source>
+        <target>Ustaw dane kontaktowe pokazywane nad nagłówkiem i wybierz ekrany, na których mają być widoczne.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.hdr.intro2">
+        <source>Set the logo, the search field and the customer actions shown in the header of every page.</source>
+        <target>Ustaw logo, wyszukiwarkę i akcje klienta pokazywane w nagłówku każdej strony.</target>
+      </trans-unit>
+      <trans-unit id="quince.app.copy0">
+        <source>Set the brand colours, typography, shape and grid. The engine derives the full palette and the remaining theme values from these settings.</source>
+        <target>Ustaw kolory marki, typografię, kształt i siatkę. Silnik wylicza z nich pełną paletę i pozostałe wartości motywu.</target>
+      </trans-unit>
+      <trans-unit id="quince.app.copy1">
+        <source>Three colours from the brand identity. The engine derives a 12-step scale of backgrounds, borders, fills and text from them, keeping the contrast required by WCAG.</source>
+        <target>Trzy kolory z identyfikacji marki. Silnik wylicza z nich 12-stopniową skalę tła, obramowań, wypełnień i tekstu, zachowując kontrast wymagany przez WCAG.</target>
+      </trans-unit>
+      <trans-unit id="quince.app.copy2">
+        <source>Primary: buttons, links, active filters, cart counter. Secondary: secondary button, wishlist icon. Dark: sections set to the dark mode.</source>
+        <target>Główny: przyciski, odnośniki, aktywne filtry, licznik koszyka. Dodatkowy: przycisk drugorzędny, ikona ulubionych. Ciemny: sekcje ustawione na tryb ciemny.</target>
+      </trans-unit>
+      <trans-unit id="quince.app.copy3">
+        <source>Roles derived from the primary colour</source>
+        <target>Role wyliczone z koloru głównego</target>
+      </trans-unit>
+      <trans-unit id="quince.app.copy4">
+        <source>Full 12-step scale. Backgrounds, borders and text. States of the button are not taken from it: hover and pressed are computed from the fill itself, so that the change is visible and the caption stays readable whatever colour you pick.</source>
+        <target>Pełna skala dwunastu stopni. Tła, obramowania i teksty. Stany przycisku nie pochodzą z niej: najechanie i wciśnięcie liczone są od samego wypełnienia, żeby zmianę było widać, a podpis pozostał czytelny przy każdym kolorze.</target>
+      </trans-unit>
+      <trans-unit id="quince.app.copy5">
+        <source>Marks reductions only. Not used for regular brand accents.</source>
+        <target>Oznacza wyłącznie obniżki. Nie jest używany do zwykłych akcentów marki.</target>
+      </trans-unit>
+      <trans-unit id="quince.app.copy6">
+        <source>Used by the discount badge, the reduced price and the savings message. The struck-through price stays grey from the neutral scale.</source>
+        <target>Używany przez znacznik rabatu, cenę promocyjną i informację o oszczędności. Cena przekreślona zostaje szara ze skali neutralnej.</target>
+      </trans-unit>
+      <trans-unit id="quince.app.copy7">
+        <source>A badge and a price have no hover state and no background of their own, so the remaining roles are not derived for this colour.</source>
+        <target>Znacznik i cena nie mają stanu najechania ani własnego tła, więc pozostałe role nie są dla tego koloru wyliczane.</target>
+      </trans-unit>
+      <trans-unit id="quince.app.copy8">
+        <source>Used by the page background, card and section backgrounds, borders and helper text.</source>
+        <target>Używany przez tło strony, tła kart i sekcji, obramowania oraz tekst pomocniczy.</target>
+      </trans-unit>
+      <trans-unit id="quince.app.copy9">
+        <source>Choose light, dark or brand for each of the four sections. The engine matches the text, links and borders to the chosen background.</source>
+        <target>Wybierz jasny, ciemny lub w kolorze marki dla każdej z czterech sekcji. Silnik dobiera tekst, odnośniki i obramowania do wybranego tła.</target>
+      </trans-unit>
+      <trans-unit id="quince.app.copy10">
+        <source>Applies to product cards, dropdown lists and modal windows.</source>
+        <target>Dotyczy kart produktu, list rozwijanych i okien modalnych.</target>
+      </trans-unit>
+      <trans-unit id="quince.app.copy11">
+        <source>Applies above 992 px. Below that the count follows the screen width, with the card never narrower than 220 px.</source>
+        <target>Dotyczy szerokości powyżej 992 px. Poniżej liczba kolumn wynika z szerokości ekranu, a karta nie schodzi poniżej 220 px.</target>
+      </trans-unit>
+      <trans-unit id="quince.app.copy12">
+        <source>The primary and promotion colours differ by less than 20 degrees of hue. A reduction will look like a regular brand accent.</source>
+        <target>Kolor główny i kolor promocji różnią się o mniej niż 20 stopni odcienia. Obniżka będzie wyglądać jak zwykły akcent marki.</target>
+      </trans-unit>
+      <trans-unit id="quince.app.copy13">
+        <source>The promotion colour is too close to the error colour used in form validation.</source>
+        <target>Kolor promocji jest zbyt zbliżony do koloru błędu używanego przy walidacji formularzy.</target>
+      </trans-unit>
+      <trans-unit id="quince.app.copy14">
+        <source>The secondary colour is too light to reach the required contrast. The engine darkens it on save.</source>
+        <target>Kolor dodatkowy jest zbyt jasny, żeby osiągnąć wymagany kontrast. Silnik przyciemni go przy zapisie.</target>
+      </trans-unit>
+      <trans-unit id="quince.app.copy15">
+        <source>darkened to reach the required contrast</source>
+        <target>przyciemniony do wymaganego kontrastu</target>
+      </trans-unit>
+
+      <trans-unit id="quince.nav.intro">
+        <source>Set how the catalogue is shown in the menu bar and which links stand next to it.</source>
+        <target>Ustaw sposób pokazania katalogu w pasku menu i odnośniki, które stoją obok.</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.missing">
+        <source>The chosen menu module is not installed any more. The store is using the built-in menu until you pick something else.</source>
+        <target>Wybrany moduł menu nie jest już zainstalowany. Sklep korzysta z menu wbudowanego, dopóki nie wybierzesz czegoś innego.</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.bar">
+        <source>Menu bar</source>
+        <target>Pasek menu</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.bar_desc">
+        <source>Set what the button opening the catalogue says and how it looks.</source>
+        <target>Ustaw, co mówi przycisk otwierający katalog i jak wygląda.</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.scroll">
+        <source>Button after scrolling</source>
+        <target>Przycisk po przewinięciu</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.scroll_full">
+        <source>Icon and label</source>
+        <target>Ikona i nazwa</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.scroll_short">
+        <source>Icon and short label</source>
+        <target>Ikona i krótka nazwa</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.scroll_icon">
+        <source>Icon only</source>
+        <target>Sama ikona</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.scroll_hint">
+        <source>Below 1200 px the button keeps the icon alone whatever is chosen here. The space goes to the search field.</source>
+        <target>Poniżej 1200 px zostaje sama ikona, cokolwiek tu wybierzesz. Miejsce idzie na pole wyszukiwania.</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.short_label">
+        <source>Short label</source>
+        <target>Krótka nazwa</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.catalogue">
+        <source>Catalogue</source>
+        <target>Katalog</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.scroll_icons">
+        <source>Actions after scrolling</source>
+        <target>Akcje po przewinięciu</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.scroll_icons_on">
+        <source>Account and saved products as icons only</source>
+        <target>Konto i ulubione jako same ikony</target>
+      </trans-unit>
+      <trans-unit id="quince.hdr.scroll_icons_hint">
+        <source>The catalogue button takes room the header did not have before. The cart keeps its caption, because there the caption carries the amount.</source>
+        <target>Przycisk katalogu zajmuje miejsce, którego nagłówek wcześniej nie oddawał. Koszyk zachowuje podpis, bo tam podpis niesie kwotę.</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.bar_on">
+        <source>Bar shown</source>
+        <target>Pasek pokazywany</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.which">
+        <source>Which menu</source>
+        <target>Które menu</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.builtin_menu">
+        <source>Built-in menu</source>
+        <target>Menu wbudowane</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.btn_label">
+        <source>Button label</source>
+        <target>Napis na przycisku</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.categories_word">
+        <source>Categories</source>
+        <target>Kategorie</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.btn_icon">
+        <source>Button icon</source>
+        <target>Ikona przycisku</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.how_open">
+        <source>How the categories open</source>
+        <target>Jak rozwijają się kategorie</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.how_open_desc">
+        <source>Pick the shape of the dropdown and how deep it reaches into the tree.</source>
+        <target>Wybierz kształt rozwinięcia i głębokość, do której sięga w drzewo.</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.columns_mode">
+        <source>Column with subcategories</source>
+        <target>Kolumna z podkategoriami</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.tiles_mode">
+        <source>Tiles with images</source>
+        <target>Kafelki ze zdjęciami</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.cascade_mode">
+        <source>Cascade to the right</source>
+        <target>Kaskada w prawo</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.columns_hint">
+        <source>The whole branch at once. Suits a store where customers browse rather than know what they want.</source>
+        <target>Cała gałąź naraz. Pasuje do sklepu, w którym klient przegląda, zamiast wiedzieć, czego szuka.</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.tiles_hint">
+        <source>One level only. A tile with an image is a teaser of a category, not a node of a tree.</source>
+        <target>Tylko jeden poziom. Kafelek ze zdjęciem jest zajawką kategorii, a nie węzłem drzewa.</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.cascade_hint">
+        <source>One narrow column, further levels slide out to the right. Suits a deep catalogue.</source>
+        <target>Jedna wąska kolumna, kolejne poziomy wysuwają się w prawo. Pasuje do głębokiego katalogu.</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.depth">
+        <source>How deep</source>
+        <target>Jak głęboko</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.levels">
+        <source>levels</source>
+        <target>poziomy</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.depth_hint">
+        <source>At three levels the dropdown stops being a shortcut and becomes a second category page.</source>
+        <target>Przy trzech poziomach rozwinięcie przestaje być skrótem i staje się drugą stroną kategorii.</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.cols">
+        <source>Columns of subcategories</source>
+        <target>Kolumny podkategorii</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.tiles_row">
+        <source>Tiles in a row</source>
+        <target>Kafelków w rzędzie</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.cats">
+        <source>Categories in the menu</source>
+        <target>Kategorie w menu</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.cats_desc">
+        <source>Tick the main categories to show. With nothing ticked the menu shows all of them.</source>
+        <target>Zaznacz kategorie główne do pokazania. Bez zaznaczenia menu pokazuje wszystkie.</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.cats_hint">
+        <source>Order follows the catalogue. Subcategories are taken automatically, down to the depth set above.</source>
+        <target>Kolejność wynika z katalogu. Podkategorie wchodzą same, do głębokości ustawionej wyżej.</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.links">
+        <source>Links of your own</source>
+        <target>Odnośniki własne</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.links_desc">
+        <source>Add the places that are not categories: news, sale, training, contact.</source>
+        <target>Dodaj miejsca, które nie są kategoriami: nowości, wyprzedaż, szkolenia, kontakt.</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.add_link">
+        <source>Add link</source>
+        <target>Dodaj odnośnik</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.new_link">
+        <source>New link</source>
+        <target>Nowy odnośnik</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.name">
+        <source>Name</source>
+        <target>Nazwa</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.address">
+        <source>Address</source>
+        <target>Adres</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.weight">
+        <source>Weight</source>
+        <target>Wyróżnienie</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.plain">
+        <source>Plain</source>
+        <target>Zwykły</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.highlighted">
+        <source>Highlighted</source>
+        <target>Wyróżniony</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.no_links">
+        <source>No links yet. The bar will show categories only.</source>
+        <target>Brak odnośników. Pasek pokaże same kategorie.</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.links_note">
+        <source>Highlight one link, two at most. When everything shouts, nothing is heard.</source>
+        <target>Wyróżnij jeden odnośnik, najwyżej dwa. Kiedy wszystko krzyczy, nie słychać niczego.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.nav.cats_icons">
+        <source>Category images as icons</source>
+        <target>Zdjęcia kategorii jako ikony</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.tint">
+        <source>Tint them to a single colour</source>
+        <target>Zabarw je na jeden kolor</target>
+      </trans-unit>
+      <trans-unit id="quince.nav.no_cats">
+        <source>This store has no categories yet.</source>
+        <target>Ten sklep nie ma jeszcze kategorii.</target>
+      </trans-unit>
+
+      <!-- Nagłówek i menu — dopisane 2026-08-14 -->
+      <trans-unit id="nav.caption">
+        <source>Caption</source>
+        <target>Podpis</target>
+      </trans-unit>
+      <trans-unit id="nav.cart_caption">
+        <source>Cart caption</source>
+        <target>Podpis koszyka</target>
+      </trans-unit>
+      <trans-unit id="header.actions_desc">
+        <source>Choose which actions the header shows, how each of them is called and which icon stands for it.</source>
+        <target>Wybierz, które akcje pokazuje nagłówek, jak się nazywają i jaka ikona im odpowiada.</target>
+      </trans-unit>
+      <trans-unit id="nav.categories_desc">
+        <source>Choose which main categories the menu shows, in what order and with what icon. With nothing ticked the menu shows the whole catalogue.</source>
+        <target>Wybierz, które kategorie główne pokazuje menu, w jakiej kolejności i z jaką ikoną. Bez zaznaczenia menu pokazuje cały katalog.</target>
+      </trans-unit>
+      <trans-unit id="header.account_click">
+        <source>Clicking the account</source>
+        <target>Kliknięcie w konto</target>
+      </trans-unit>
+      <trans-unit id="header.wishlist_missing">
+        <source>Install a wishlist module to show this action.</source>
+        <target>Zainstaluj moduł listy życzeń, żeby pokazać tę akcję.</target>
+      </trans-unit>
+      <trans-unit id="header.account_panel">
+        <source>Opens a panel instead of the login page</source>
+        <target>Rozwija panel zamiast prowadzić na stronę logowania</target>
+      </trans-unit>
+      <trans-unit id="header.cart_amount">
+        <source>Show the amount instead of the caption</source>
+        <target>Pokazuj kwotę zamiast podpisu</target>
+      </trans-unit>
+      <trans-unit id="header.sign_in">
+        <source>Sign in</source>
+        <target>Zaloguj się</target>
+      </trans-unit>
+      <trans-unit id="header.search_icon_hint">
+        <source>Stands in the button that runs the search.</source>
+        <target>Stoi w przycisku uruchamiającym wyszukiwanie.</target>
+      </trans-unit>
+      <trans-unit id="nav.categories_hint">
+        <source>Subcategories are taken automatically, down to the depth set above. The icon stands next to the category name in the menu.</source>
+        <target>Podkategorie wchodzą same, do głębokości ustawionej wyżej. Ikona stoi przy nazwie kategorii w menu.</target>
+      </trans-unit>
+      <trans-unit id="header.cart_amount_hint">
+        <source>The amount tells the customer more than the word. But takes the widest space in the row.</source>
+        <target>Kwota mówi klientowi więcej niż słowo. Ale zajmuje w wierszu najwięcej miejsca.</target>
+      </trans-unit>
+      <trans-unit id="header.account_panel_hint">
+        <source>The panel holds signing in, registration and order tracking in one place.</source>
+        <target>Panel mieści logowanie, rejestrację i śledzenie zamówienia w jednym miejscu.</target>
+      </trans-unit>
+      <trans-unit id="header.captions_note">
+        <source>Two captions are set by the store itself: the account shows the customer first name after signing in, and the cart shows the amount whenever it is set to.</source>
+        <target>Dwa podpisy ustawia sam sklep: konto pokazuje imię klienta po zalogowaniu, a koszyk kwotę, kiedy jest tak ustawiony.</target>
+      </trans-unit>
+
+      <!-- Ustawienia podstawowe: kolory, odcienie, powierzchnie, kształt -->
+      <trans-unit id="quince.podstawy.kolory.opis">
+        <source>Give us your brand colours. We will pick the remaining shades (backgrounds, borders and text) so that everything stays legible.</source>
+        <target>Podaj kolory swojej marki. Resztę odcieni (tła, kresek i tekstu) dobierzemy tak, żeby wszystko było czytelne.</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.marka.uwaga">
+        <source>The „Add to cart" button, badges, the promotion timer and highlighted bars.</source>
+        <target>Przycisk „Do koszyka”, plakietki, licznik promocji, paski wyróżnione.</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.atrament">
+        <source>Ink</source>
+        <target>Atrament</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.atrament.uwaga">
+        <source>Text, headings and prices. Dark surfaces (the secondary button and toasts) are derived from it as well.</source>
+        <target>Tekst, nagłówki i ceny. Powstają z niego także ciemne tła. Przycisk drugorzędny i komunikaty.</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.trzeci">
+        <source>Third colour</source>
+        <target>Trzeci kolor</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.wyczysc">
+        <source>Clear</source>
+        <target>Wyczyść</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.trzeci.uwaga">
+        <source>The secondary button, outlines and text on them.</source>
+        <target>Przycisk drugorzędny, obrysy i tekst na nich.</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.promocja">
+        <source>Promotion</source>
+        <target>Promocja</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.promocja.uwaga">
+        <source>The reduced price and the discount badge. The price before the reduction stays grey and struck through.</source>
+        <target>Cena po obniżce i plakietka z procentem. Cena przed obniżką zostaje szara i przekreślona.</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.szarosci">
+        <source>Greys</source>
+        <target>Szarości</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.szarosci.uwaga">
+        <source>Backgrounds, borders and muted text. Warm leans towards beige, cool towards blue.</source>
+        <target>Tła, kreski i tekst drugoplanowy. Ciepłe ciągną w stronę beżu, chłodne w stronę błękitu.</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.statusy">
+        <source>Status colours</source>
+        <target>Statusy</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.statusy.opis">
+        <source>The colours of the messages your customer sees after clicking: confirmation, warning, error. We make sure they cannot be mistaken for your brand colour.</source>
+        <target>Kolory komunikatów, które klient zobaczy po kliknięciu: potwierdzenie, ostrzeżenie, błąd. Pilnujemy, żeby nie myliły się z kolorem marki.</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.statusy.uwaga">
+        <source>Each colour can be changed.</source>
+        <target>Każdy kolor możesz zmienić.</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.plakietki">
+        <source>Commercial badges</source>
+        <target>Plakietki</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.plakietki.opis">
+        <source>Labels on product photos: new, bestseller, discount. They have their own colours, separate from the message colours above.</source>
+        <target>Etykiety na zdjęciach produktów: nowość, bestseller, rabat. Mają własne kolory, niezależne od kolorów komunikatów powyżej.</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.plakietka.nowosc">
+        <source>New</source>
+        <target>Nowość</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.plakietka.bestseller">
+        <source>Bestseller</source>
+        <target>Bestseller</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.plakietka.pakiet">
+        <source>Pack</source>
+        <target>Pakiet</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.plakietki.uwaga">
+        <source>Each badge can be set to a colour of your own.</source>
+        <target>Każdą plakietkę możesz przestawić na własny kolor.</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.przygotuj">
+        <source>Prepare the colours</source>
+        <target>Przygotuj kolory</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.przygotuj.opis">
+        <source>We will work out a full set of shades for the whole shop. You will pick from them on the remaining screens. The header, the footer, the product card and the cart.</source>
+        <target>Przygotujemy komplet odcieni dla całego sklepu. Z nich będziesz wybierać kolory na pozostałych ekranach. Nagłówka, stopki, karty produktu i koszyka.</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.przygotuj.ponownie">
+        <source>Prepare again</source>
+        <target>Przygotuj na nowo</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.skale">
+        <source>Shades</source>
+        <target>Odcienie</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.skale.opis">
+        <source>The shades prepared for your shop. The lighter ones serve as backgrounds, the middle ones as borders and fills, the darkest as text.</source>
+        <target>Odcienie przygotowane dla twojego sklepu. Jaśniejsze służą za tła, środkowe za kreski i wypełnienia, najciemniejsze za tekst.</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.powierzchnie">
+        <source>Surfaces</source>
+        <target>Powierzchnie</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.powierzchnie.opis">
+        <source>The page background and the background of product cards. Point at a shade from the ones prepared above.</source>
+        <target>Tło strony i tło kart z produktami. Wskaż odcień z przygotowanych powyżej.</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.powierzchnia.karta">
+        <source>Card surface</source>
+        <target>Tło kart</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.powierzchnia.karta.uwaga">
+        <source>Product cards, panels and forms.</source>
+        <target>Karty produktów, panele i formularze.</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.powierzchnia.wybrany">
+        <source>Chosen shade:</source>
+        <target>Wybrany odcień:</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.ksztalt.opis">
+        <source>Corners, lines and shadows across the whole shop. The setting works everywhere at once, so the shop stays consistent.</source>
+        <target>Rogi, kreski i cienie w całym sklepie. Ustawienie działa wszędzie naraz, żeby sklep wyglądał spójnie.</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.promien.wartosc">
+        <source>Rounding amount</source>
+        <target>Wartość zaokrąglenia</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.promien.uwaga">
+        <source>The bigger the value, the rounder the corners. We scale buttons, cards and fields proportionally.</source>
+        <target>Im większa wartość, tym bardziej zaokrąglone rogi. Przyciski, karty i pola dobierzemy proporcjonalnie.</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.promien.wyjdzie">
+        <source>It comes out as:</source>
+        <target>Wyjdzie z tego:</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.promien.pole">
+        <source>field</source>
+        <target>pole</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.promien.przycisk">
+        <source>button</source>
+        <target>przycisk</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.promien.karta">
+        <source>card</source>
+        <target>karta</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.obramowania">
+        <source>Block borders</source>
+        <target>Obramowania bloków</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.obramowania.widoczne">
+        <source>Visible</source>
+        <target>Widoczne</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.obramowania.brak">
+        <source>None</source>
+        <target>Brak</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.obramowania.uwaga">
+        <source>Lines around product cards, tabs and panels.</source>
+        <target>Kreski wokół kart produktów, zakładek i paneli.</target>
+      </trans-unit>
+      <trans-unit id="quince.podstawy.typografia.opis">
+        <source>Typefaces and text size in the shop.</source>
+        <target>Kroje pisma i wielkość tekstu w sklepie.</target>
+      </trans-unit>
+
+      <!-- Topbar: kolor pasów -->
+      <trans-unit id="quince.topbar.tlo">
+        <source>Bar background</source>
+        <target>Tło paska</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.tlo.info.uwaga">
+        <source>Text, links and the line under the bar are matched to this background.</source>
+        <target>Tekst, odnośniki i kreskę pod paskiem dobierzemy do tego tła.</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.tlo.promo.uwaga">
+        <source>Text and the link are matched to this background.</source>
+        <target>Tekst i odnośnik dobierzemy do tego tła.</target>
+      </trans-unit>
+      <trans-unit id="quince.topbar.brak.palety">
+        <source>Prepare the shop colours in the global settings first. Only then will there be shades to choose the bar backgrounds from.</source>
+        <target>Najpierw przygotuj kolory sklepu w ustawieniach globalnych. Dopiero wtedy będzie z czego wybierać tło pasków.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.selektor.skala">
+        <source>Shade from a scale…</source>
+        <target>Odcień ze skali…</target>
+      </trans-unit>
+      <trans-unit id="quince.selektor.wlasny">
+        <source>Custom colour…</source>
+        <target>Własny kolor…</target>
+      </trans-unit>
+
+      <trans-unit id="quince.selektor.wlasny.tytul">
+        <source>Custom colour</source>
+        <target>Własny kolor</target>
+      </trans-unit>
+
+      <!-- Nagłówek: tło pasa -->
+      <trans-unit id="quince.naglowek.tlo">
+        <source>Header background</source>
+        <target>Tło nagłówka</target>
+      </trans-unit>
+      <trans-unit id="quince.naglowek.tlo.uwaga">
+        <source>Text, links and the line under the header are matched to this background.</source>
+        <target>Tekst, odnośniki i kreskę pod nagłówkiem dobierzemy do tego tła.</target>
+      </trans-unit>
+      <trans-unit id="quince.naglowek.tlo.przewiniety">
+        <source>Background after scrolling</source>
+        <target>Tło po przewinięciu</target>
+      </trans-unit>
+      <trans-unit id="quince.naglowek.tlo.przewiniety.uwaga">
+        <source>The stuck header lies over the content. A different background sets it apart; the same one keeps it unchanged.</source>
+        <target>Przyklejony nagłówek leży na treści. Inne tło go od niej odcina; to samo zostawia go bez zmian.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.naglowek.logo.przewiniete">
+        <source>Logo after scrolling</source>
+        <target>Logo po przewinięciu</target>
+      </trans-unit>
+      <trans-unit id="quince.naglowek.logo.bez">
+        <source>Unchanged</source>
+        <target>Bez zmian</target>
+      </trans-unit>
+      <trans-unit id="quince.naglowek.logo.odwrocone">
+        <source>Inverted</source>
+        <target>Odwrócone</target>
+      </trans-unit>
+      <trans-unit id="quince.naglowek.logo.biale">
+        <source>White</source>
+        <target>Na biało</target>
+      </trans-unit>
+      <trans-unit id="quince.naglowek.logo.czarne">
+        <source>Black</source>
+        <target>Na czarno</target>
+      </trans-unit>
+      <trans-unit id="quince.naglowek.logo.uwaga">
+        <source>For a dark bar under a dark logo. Inversion keeps the colours, the other two flatten the logo to one.</source>
+        <target>Na ciemny pas pod ciemnym logo. Odwrócenie zostawia barwy, dwa pozostałe spłaszczają logo do jednej.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.menu.kafelki.telefon">
+        <source>Tiles on a phone</source>
+        <target>Kafelki na telefonie</target>
+      </trans-unit>
+      <trans-unit id="quince.menu.kafelki.jedna">
+        <source>One column</source>
+        <target>Jedna kolumna</target>
+      </trans-unit>
+      <trans-unit id="quince.menu.kafelki.dwie">
+        <source>Two columns</source>
+        <target>Dwie kolumny</target>
+      </trans-unit>
+      <trans-unit id="quince.menu.kafelki.uwaga">
+        <source>One column puts the image beside the name and fits long names. Two columns show more at once, but break a long name onto two lines.</source>
+        <target>Jedna kolumna stawia obrazek obok nazwy i mieści długie nazwy. Dwie kolumny pokazują więcej naraz, ale dłuższą nazwę łamią na dwa wiersze.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.menu.tlo.przycisk">
+        <source>Catalogue button background</source>
+        <target>Tło przycisku katalogu</target>
+      </trans-unit>
+      <trans-unit id="quince.menu.tlo.przycisk.uwaga">
+        <source>The button opening the categories. Its caption comes out black or white. Whichever reads better.</source>
+        <target>Przycisk otwierający kategorie. Napis na nim wychodzi czarny albo biały. Ten, który lepiej się czyta.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.menu.krotka.uwaga">
+        <source>Shown from 1200 px up. On narrower screens the button keeps the icon alone, whatever is set here.</source>
+        <target>Widoczna od 1200 px w górę. Na węższych ekranach przycisk zostaje samą ikoną, cokolwiek tu ustawisz.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.naglowek.powiadomienia">
+        <source>Notifications</source>
+        <target>Powiadomienia</target>
+      </trans-unit>
+      <trans-unit id="quince.naglowek.powiadomienia.uwaga">
+        <source>Drawn by the notifications module in the space the header keeps for it.</source>
+        <target>Rysuje je moduł powiadomień w miejscu, które nagłówek dla niego trzyma.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.stopka.firma">
+        <source>Your company</source>
+        <target>Twoja firma</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.naglowek">
+        <source>Heading</source>
+        <target>Nagłówek</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.opis">
+        <source>A few words about the shop</source>
+        <target>Kilka słów o sklepie</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.kolumny">
+        <source>Columns</source>
+        <target>Kolumny</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.kolumny.dodaj">
+        <source>Add column</source>
+        <target>Dodaj kolumnę</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.kolumny.pusto">
+        <source>No columns. The footer will show only your company data.</source>
+        <target>Brak kolumn. Stopka pokaże same dane twojej firmy.</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.kolumna.nazwa">
+        <source>Column name</source>
+        <target>Nazwa kolumny</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.kolumna.bez_nazwy">
+        <source>Column without a name</source>
+        <target>Kolumna bez nazwy</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.kolumna.hooki">
+        <source>Hooks in this column</source>
+        <target>Hooki w tej kolumnie</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.spolecznosci">
+        <source>Social links</source>
+        <target>Odnośniki społecznościowe</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.spolecznosci.pusto">
+        <source>No links yet. The footer will not show the social icons until you add one.</source>
+        <target>Jeszcze nie ma odnośników. Stopka nie pokaże ikon społecznościowych, dopóki nie dodasz pierwszego.</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.pas">
+        <source>Bottom bar</source>
+        <target>Pas dolny</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.pas.copyright">
+        <source>Copyright line</source>
+        <target>Linia praw autorskich</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.pas.copyright.uwaga">
+        <source>Left empty, the shop shows the year and its name.</source>
+        <target>Zostawiona pusta. Sklep pokaże rok i swoją nazwę.</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.pas.platnosci">
+        <source>Ways to pay</source>
+        <target>Sposoby płatności</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.pas.platnosci.uwaga">
+        <source>Names separated by commas. They stand in the bottom bar as captions, not logos.</source>
+        <target>Nazwy oddzielone przecinkami. W pasie dolnym staną jako podpisy, nie logotypy.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.stopka.tla">
+        <source>Backgrounds</source>
+        <target>Tła</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.tla.opis">
+        <source>Text, links and the line under the columns are matched to the background they stand on: white on a dark one, dark on a light one.</source>
+        <target>Tekst, odnośniki i kreska pod kolumnami dobierają się do tła, na którym stoją: białe na ciemnym, ciemne na jasnym.</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.tlo.kolumny">
+        <source>Columns background</source>
+        <target>Tło kolumn</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.tlo.pas">
+        <source>Bottom bar background</source>
+        <target>Tło pasa dolnego</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.tlo.pas.uwaga">
+        <source>The same colour as the columns keeps the footer in one piece; a different one sets the bottom strip apart.</source>
+        <target>Ta sama barwa co kolumny trzyma stopkę w jednym kawałku, inna wydziela dolny pasek.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.stopka.firma.opis">
+        <source>The first column of the footer: name, description and contact details.</source>
+        <target>Pierwsza kolumna stopki: nazwa, opis i dane kontaktowe.</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.kolumny.opis">
+        <source>Columns with links, next to your company details. An empty column does not show up in the shop.</source>
+        <target>Kolumny z odnośnikami, obok danych twojej firmy. Pusta kolumna nie pokazuje się w sklepie.</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.kolumna.nazwa.uwaga">
+        <source>Left empty, the column shows the heading the module gives it.</source>
+        <target>Zostawiona pusta. Kolumna pokaże nagłówek, który daje moduł.</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.kolumna.hooki.uwaga">
+        <source>Modules show their blocks on hooks. Add a hook here and its block stands in this column.</source>
+        <target>Moduły pokazują swoje bloki na hookach. Dodaj tu hook, a jego blok stanie w tej kolumnie.</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.spolecznosci.opis">
+        <source>Icons under your company details, each opening the profile you point it at.</source>
+        <target>Ikony pod danymi firmy. Każda otwiera profil, który jej wskażesz.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.stopka.pas.opis">
+        <source>The strip under the columns: the copyright line, the links next to it and the ways to pay.</source>
+        <target>Pasek pod kolumnami: linia praw autorskich, odnośniki obok niej i sposoby płatności.</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.pas.odnosniki.pusto">
+        <source>No links. The bottom bar shows the copyright line alone.</source>
+        <target>Brak odnośników. Pas dolny pokaże samą linię praw autorskich.</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.pas.odnosnik.nazwa">
+        <source>Terms and conditions</source>
+        <target>Regulamin</target>
+      </trans-unit>
+
+      <trans-unit id="quince.stopka.pasek">
+        <source>Strip above the footer</source>
+        <target>Pasek nad stopką</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.pasek.opis">
+        <source>A place for a module to say something right before the footer: a banner, a newsletter sign-up, a row of guarantees. Empty, it does not show up in the shop.</source>
+        <target>Miejsce dla modułu, który ma coś powiedzieć tuż przed stopką: baner, zapis do newslettera, pas gwarancji. Pusty nie pokazuje się w sklepie.</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.pasek.hooki">
+        <source>Hooks in the strip</source>
+        <target>Hooki w pasku</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.pasek.hooki.uwaga">
+        <source>Modules show their blocks on hooks. Add a hook here and its block stands in the strip.</source>
+        <target>Moduły pokazują swoje bloki na hookach. Dodaj tu hook, a jego blok stanie w pasku.</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.pasek.szerokosc">
+        <source>Width</source>
+        <target>Szerokość</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.pasek.szerokosc.kontener">
+        <source>Within the page width</source>
+        <target>Na szerokość strony</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.pasek.szerokosc.pelna">
+        <source>Edge to edge</source>
+        <target>Od krawędzi do krawędzi</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.pasek.szerokosc.uwaga">
+        <source>Edge to edge, the background runs across the whole screen; within the page width it lines up with the columns above.</source>
+        <target>Od krawędzi do krawędzi tło idzie przez cały ekran; na szerokość strony kończy się tam, gdzie kolumny pod nim.</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.pasek.tlo">
+        <source>Strip background</source>
+        <target>Tło paska</target>
+      </trans-unit>
+
+      <trans-unit id="quince.stopka.powrot">
+        <source>Back to top</source>
+        <target>Powrót na górę</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.powrot.opis">
+        <source>A round button in the corner of the screen, shown once the customer scrolls down. It takes them back to the top of the page.</source>
+        <target>Okrągły przycisk w rogu ekranu, pokazywany po przewinięciu strony. Klient wraca nim na jej początek.</target>
+      </trans-unit>
+      <trans-unit id="quince.stopka.powrot.przelacznik">
+        <source>Show the button</source>
+        <target>Pokazuj przycisk</target>
+      </trans-unit>
+
+      <trans-unit id="quince.moduly.kontakty">
+        <source>Contacts</source>
+        <target>Kontakty</target>
+      </trans-unit>
+      <trans-unit id="quince.moduly.kontakty.opis">
+        <source>The people behind the shop: photo, job title and phone, next to the products they know.</source>
+        <target>Ludzie ze sklepu: zdjęcie, stanowisko i telefon, przy produktach z ich działu.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.zdarzenia">
+        <source>Outgoing events</source>
+        <target>Zdarzenia wychodzące</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.dokad">
+        <source>Where the shop sends what happens</source>
+        <target>Dokąd sklep wysyła to, co się u niego dzieje</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.dokad.opis">
+        <source>Every enquiry from a shop form goes to this address as soon as it arrives. On the other side you can put a flow that opens a case in your CRM, writes on the team chat or adds a row to a spreadsheet.</source>
+        <target>Każde zapytanie z formularza sklepu idzie pod ten adres od razu, gdy przyjdzie. Po drugiej stronie możesz postawić przepływ, który zakłada sprawę w CRM-ie, pisze na czacie zespołu albo dopisuje wiersz w arkuszu.</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.wlacz">
+        <source>Send events</source>
+        <target>Wysyłaj zdarzenia</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.adres.uwaga">
+        <source>The webhook address given to you by n8n, Windmill or whatever waits on the other side.</source>
+        <target>Adres webhooka, który podał ci n8n, Windmill albo cokolwiek czeka po drugiej stronie.</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.sekret">
+        <source>Shared secret</source>
+        <target>Wspólny sekret</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.sekret.uwaga">
+        <source>The shop signs every message with it and the receiving side checks the signature. Anyone who does not know it cannot pretend to be your shop.</source>
+        <target>Sklep podpisuje nim każdą wiadomość, a odbiorca sprawdza podpis. Kto go nie zna, nie podszyje się pod twój sklep.</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.sekret.jest">
+        <source>Saved. Leave empty to keep it</source>
+        <target>Zapisany. Zostaw puste, żeby go nie zmieniać</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.sekret.brak">
+        <source>Not set yet</source>
+        <target>Jeszcze nie ustawiony</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.sekret.pytanie">
+        <source>Do not have one?</source>
+        <target>Nie masz go?</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.sekret.generuj">
+        <source>Generate a secret</source>
+        <target>Wygeneruj sekret</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.sekret.generuj.uwaga">
+        <source>It is shown once, right after generating. Copy it into the receiving flow.</source>
+        <target>Pokaże się raz, zaraz po wygenerowaniu. Skopiuj go do przepływu po drugiej stronie.</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.sekret.nowy">
+        <source>New secret: %secret%. Copy it into the receiving flow now, it will not be shown again.</source>
+        <target>Nowy sekret: %secret%. Skopiuj go teraz do przepływu po drugiej stronie, nie pokaże się ponownie.</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.sprawdz">
+        <source>Check the connection</source>
+        <target>Sprawdź połączenie</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.sprawdz.opis">
+        <source>Sends one test message and tells you what came back.</source>
+        <target>Wysyła jedną próbną wiadomość i mówi, co wróciło.</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.sprawdz.przycisk">
+        <source>Send a test event</source>
+        <target>Wyślij próbne zdarzenie</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.sprawdz.naglowki">
+        <source>The message goes as JSON. Three headers travel with it:</source>
+        <target>Wiadomość idzie jako JSON. Towarzyszą jej trzy nagłówki:</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.sprawdz.podpis">
+        <source>The signature is sha256=&lt;HMAC of the whole body, keyed with the secret&gt;.</source>
+        <target>Podpis to sha256=&lt;skrót HMAC całej treści, liczony sekretem&gt;.</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.sprawdz.brak">
+        <source>Fill in the address and the secret first.</source>
+        <target>Najpierw wpisz adres i sekret.</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.sprawdz.ok">
+        <source>The receiving flow accepted the test event.</source>
+        <target>Przepływ po drugiej stronie przyjął próbne zdarzenie.</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.sprawdz.blad">
+        <source>The test event was not accepted. It waits in the queue. The reason is in the list below.</source>
+        <target>Próbne zdarzenie nie zostało przyjęte. Czeka w kolejce. Powód jest na liście poniżej.</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.lista">
+        <source>What has been sent</source>
+        <target>Co poszło</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.lista.pusto">
+        <source>Nothing has gone out yet.</source>
+        <target>Nic jeszcze nie wyszło.</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.stan.czeka">
+        <source>Waiting</source>
+        <target>Czeka</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.stan.dostarczone">
+        <source>Delivered</source>
+        <target>Dostarczone</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.stan.poddane">
+        <source>Given up</source>
+        <target>Poddane</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.kiedy">
+        <source>When</source>
+        <target>Kiedy</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.rodzaj">
+        <source>Event</source>
+        <target>Zdarzenie</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.stan">
+        <source>State</source>
+        <target>Stan</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.proby">
+        <source>Attempts</source>
+        <target>Próby</target>
+      </trans-unit>
+      <trans-unit id="quince.zdarzenia.odpowiedz">
+        <source>Last answer</source>
+        <target>Ostatnia odpowiedź</target>
+      </trans-unit>
+
+
+      <!-- Ekran: listing -->
+      <trans-unit id="quince.listing.nav">
+        <source>Category listing</source>
+        <target>Listing kategorii</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.intro">
+        <source>Ustawienia z tego ekranu działają na każdą listę produktów w sklepie: kategorię, markę, dostawcę, wyniki wyszukiwania, nowości, promocje i bestsellery. Włączaj i wyłączaj elementy, przeciąganiem ustawiaj ich kolejność, dokładaj hooki modułów. Kłódka znaczy, że element należy do motywu: można go wyłączyć, ale nie usunąć.</source>
+        <target>Ustawienia z tego ekranu działają na każdą listę produktów w sklepie: kategorię, markę, dostawcę, wyniki wyszukiwania, nowości, promocje i bestsellery. Włączaj i wyłączaj elementy, przeciąganiem ustawiaj ich kolejność, dokładaj hooki modułów. Kłódka znaczy, że element należy do motywu: można go wyłączyć, ale nie usunąć.</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.shops_differ">
+        <source>These shops show a different product list than this screen:</source>
+        <target>Te sklepy pokazują inną listę produktów niż ten ekran:</target>
+      </trans-unit>
+
+      <!-- Listing: gdzie stoja filtry -->
+      <trans-unit id="quince.listing.filters_where">
+        <source>Where the filters stand</source>
+        <target>Gdzie stoją filtry</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.filters_drawer">
+        <source>Drawer</source>
+        <target>Szuflada</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.filters_column">
+        <source>Column beside the list</source>
+        <target>Kolumna obok listy</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.filters_bar">
+        <source>Bar above the list</source>
+        <target>Pas nad listą</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.filters_effect_column">
+        <source>The filter column takes one grid column. This list will show %left% products per row instead of %all%, and the filters will get %px% px.</source>
+        <target>Kolumna filtrów zabiera jedną kolumnę siatki. Zajawek w rzędzie: %left% zamiast %all%. Filtry dostaną %px% px.</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.filters_effect_full">
+        <source>The list keeps the full width, %all% products per row.</source>
+        <target>Lista bierze całą szerokość. Zajawek w rzędzie: %all%.</target>
+      </trans-unit>
+
+      <!-- Listing: strefy -->
+      <trans-unit id="quince.listing.zone_header_note">
+        <source>Full width above the list and the filters.</source>
+        <target>Przez całą szerokość, nad listą i filtrami.</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.zone_filters">
+        <source>Filters</source>
+        <target>Filtry</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.zone_filters_note">
+        <source>Where the shopper narrows the list down.</source>
+        <target>Miejsce, w którym klient zawęża listę.</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.zone_toolbar">
+        <source>Toolbar</source>
+        <target>Belka narzędzi</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.zone_toolbar_note">
+        <source>The row above the list: how many products, how they are sorted, what is narrowed down.</source>
+        <target>Wiersz nad listą: ile produktów, jak są posortowane, co zostało zawężone.</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.zone_grid">
+        <source>Product grid</source>
+        <target>Siatka zajawek</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.zone_grid_note">
+        <source>The list itself.</source>
+        <target>Sama lista.</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.zone_footer">
+        <source>Below the list</source>
+        <target>Pod listą</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.zone_footer_note">
+        <source>Full width under the list.</source>
+        <target>Przez całą szerokość, pod listą.</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.section_header_note">
+        <source>The category name, its description, the picture and the subcategories. On the other lists the brand name, the supplier name or the searched phrase stands here instead.</source>
+        <target>Nazwa kategorii, jej opis, zdjęcie i podkategorie. Na pozostałych listingach stoi tu nazwa marki, nazwa dostawcy albo szukana fraza.</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.section_footer_note">
+        <source>Pagination, the longer description and whatever modules add under the products.</source>
+        <target>Stronicowanie, dłuższy opis i to, co moduły dokładają pod produktami.</target>
+      </trans-unit>
+
+      <!-- Listing: elementy -->
+      <trans-unit id="quince.listing.el_breadcrumb">
+        <source>Breadcrumbs</source>
+        <target>Okruszki (breadcrumb)</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.zone_header">
+        <source>Above the list</source>
+        <target>Nad listą</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.el_title">
+        <source>Listing title</source>
+        <target>Tytuł listingu</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.el_description">
+        <source>Description</source>
+        <target>Opis</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.el_cover">
+        <source>Category image</source>
+        <target>Zdjęcie kategorii</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.el_subcategories">
+        <source>Subcategories</source>
+        <target>Podkategorie</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.view_mode">
+        <source>Product list view</source>
+        <target>Widok listy produktów</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.view_both">
+        <source>Tiles and rows, the customer chooses</source>
+        <target>Kafelki i rzędy, klient wybiera</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.view_grid_only">
+        <source>Tiles only</source>
+        <target>Tylko kafelki</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.view_list_only">
+        <source>Rows only</source>
+        <target>Tylko rzędy</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.slot_format">
+        <source>Format</source>
+        <target>Format</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.slot_views_both">
+        <source>Tiles and rows</source>
+        <target>Kafelki i rzędy</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.view_tiles">
+        <source>Tiles</source>
+        <target>Kafelki</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.view_rows">
+        <source>Rows</source>
+        <target>Rzędy</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.view_first">
+        <source>Default listing format</source>
+        <target>Domyślny format listingu</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.view_remembered">
+        <source>A customer who switches the view sees their own choice on the next visit.</source>
+        <target>Klient, który sam przełączy widok, zobaczy swój wybór przy kolejnym wejściu.</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.el_hook_header">
+        <source>Modules above the list (displayHeaderCategory)</source>
+        <target>Moduły nad listą (displayHeaderCategory)</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.el_filters_button">
+        <source>Filters button</source>
+        <target>Przycisk filtrów</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.el_count">
+        <source>Product count</source>
+        <target>Liczba produktów</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.el_sort">
+        <source>Sorting</source>
+        <target>Sortowanie</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.el_view_switch">
+        <source>Grid and list view switch</source>
+        <target>Przełącznik siatki i listy</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.el_active_filters">
+        <source>Active filters</source>
+        <target>Aktywne zawężenia</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.el_products">
+        <source>Products</source>
+        <target>Produkty</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.el_empty">
+        <source>No results message</source>
+        <target>Komunikat o braku wyników</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.el_pagination">
+        <source>Pagination</source>
+        <target>Stronicowanie</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.el_additional_description">
+        <source>Additional description</source>
+        <target>Opis dodatkowy</target>
+      </trans-unit>
+
+      <!-- Listing: wlaczniki szczegolow -->
+      <trans-unit id="quince.listing.el_hook_footer">
+        <source>Modules below the list (displayFooterCategory)</source>
+        <target>Moduły pod listą (displayFooterCategory)</target>
+      </trans-unit>
+
+      <trans-unit id="quince.listing.opt_first_page">
+        <source>Only on the first page</source>
+        <target>Tylko na pierwszej stronie</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.opt_images">
+        <source>With images</source>
+        <target>Ze zdjęciami</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.opt_icons">
+        <source>Images as icons in the theme colour</source>
+        <target>Zdjęcia jako ikony w kolorze motywu</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.opt_hover">
+        <source>Border lights up on hover</source>
+        <target>Obramowanie zapala się po najechaniu</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.opt_features">
+        <source>How many features the list view shows</source>
+        <target>Ile cech pokazuje widok listy</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.opt_count">
+        <source>With the number of narrowed-down filters</source>
+        <target>Z liczbą zawężeń</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.opt_clear_all">
+        <source>With &quot;Clear all&quot;</source>
+        <target>Z „Wyczyść wszystko”</target>
+      </trans-unit>
+
+      <!-- Listing: miejsca promocyjne -->
+      <trans-unit id="quince.listing.slots">
+        <source>Promotion slots in the grid</source>
+        <target>Miejsca promocyjne w siatce</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.slots_note">
+        <source>Wskaz, po której zajawce ma stanąć: zero znaczy przed pierwszą, dwa po drugiej. Miejsce, w którym moduł nic nie wyświetli, nie zostawia pustki.</source>
+        <target>Wskaż, po której zajawce ma stanąć: zero znaczy przed pierwszą, dwa po drugiej. Miejsce, w którym moduł nic nie wyświetli, nie zostawia pustki.</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.slot_after_row">
+        <source>After tile</source>
+        <target>Po zajawce</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.slot_hook">
+        <source>Hook</source>
+        <target>Hook</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.slot_shows">
+        <source>Shows</source>
+        <target>Pokazuje się</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.slot_on">
+        <source>On</source>
+        <target>Włączone</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.slot_add">
+        <source>Add slot</source>
+        <target>Dodaj miejsce</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.slot_type_promo">
+        <source>One tile</source>
+        <target>Jedna komórka</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.slot_type_banner">
+        <source>Full width</source>
+        <target>Cały rząd</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.slot_scope_page">
+        <source>On every page</source>
+        <target>Na każdej stronie</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.slot_scope_list">
+        <source>Once in the whole list</source>
+        <target>Raz na całej liście</target>
+      </trans-unit>
+
+      <!-- Wspolne dla ekranow z rozstawieniem elementow -->
+      <trans-unit id="quince.uklad.remove">
+        <source>Remove</source>
+        <target>Usuń</target>
+      </trans-unit>
+      <trans-unit id="quince.uklad.add_row">
+        <source>Add row</source>
+        <target>Dodaj wiersz</target>
+      </trans-unit>
+      <trans-unit id="quince.uklad.hook_placeholder">
+        <source>displayHookName</source>
+        <target>displayNazwaHooka</target>
+      </trans-unit>
+      <trans-unit id="quince.uklad.add">
+        <source>Add</source>
+        <target>Dodaj</target>
+      </trans-unit>
+      <trans-unit id="quince.uklad.cancel">
+        <source>Cancel</source>
+        <target>Poniechaj</target>
+      </trans-unit>
+      <trans-unit id="quince.uklad.add_hook_beside">
+        <source>Add a hook next to this one</source>
+        <target>Dodaj hook obok tego</target>
+      </trans-unit>
+      <trans-unit id="quince.uklad.details">
+        <source>Details</source>
+        <target>Szczegóły</target>
+      </trans-unit>
+      <trans-unit id="quince.uklad.side_by_side">
+        <source>they stand side by side on the page</source>
+        <target>stoją obok siebie na stronie</target>
+      </trans-unit>
+      <trans-unit id="quince.uklad.fixed_place">
+        <source>Its place comes from the design. You can switch it off, but not move it</source>
+        <target>Miejsce wynika z projektu. Można wyłączyć, ale nie przestawić</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.new1">
+        <source>These settings apply to every product list in the shop: the category, the brand, the supplier, search results, new products, promotions and best sellers. Switch elements on and off, drag them into order, add module hooks. A padlock means the element belongs to the theme: you can switch it off, but not remove it.</source>
+        <target>Ustawienia z tego ekranu działają na każdą listę produktów w sklepie: kategorię, markę, dostawcę, wyniki wyszukiwania, nowości, promocje i bestsellery. Włączaj i wyłączaj elementy, przeciąganiem ustawiaj ich kolejność, dokładaj hooki modułów. Kłódka znaczy, że element należy do motywu: można go wyłączyć, ale nie usunąć.</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.new2">
+        <source>They have their own settings. Choose the shop at the top of the panel to see them, or save here to give them what you set on this screen.</source>
+        <target>Mają własne ustawienia. Wybierz sklep u góry panelu, żeby je zobaczyć, albo zapisz tutaj, żeby dostały to, co ustawiasz na tym ekranie.</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.new3">
+        <source>The name of what the customer is looking at, its description and picture: the category, the brand, the supplier or the searched phrase.</source>
+        <target>Nazwa tego, co klient ogląda, opis i zdjęcie: kategoria, marka, dostawca albo szukana fraza.</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.new4">
+        <source>How the customer reaches further products</source>
+        <target>Jak klient dociera do dalszych produktów</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.new5">
+        <source>The list stays under one address, so the description shows always. The switch "only on the first page" stops working.</source>
+        <target>Lista zostaje pod jednym adresem, więc opis pokazuje się zawsze. Przełącznik „tylko na pierwszej stronie” przestaje działać.</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.new6">
+        <source>Modules above every list (displayHeaderCategory)</source>
+        <target>Moduły nad każdą listą (displayHeaderCategory)</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.new7">
+        <source>Modules below every list (displayFooterCategory)</source>
+        <target>Moduły pod każdą listą (displayFooterCategory)</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.new8">
+        <source>Recommended products</source>
+        <target>Polecane produkty</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.new9">
+        <source>Product card</source>
+        <target>Karta produktu</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.new10">
+        <source>Product lists</source>
+        <target>Listy produktów</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.new11">
+        <source>Numbered pages</source>
+        <target>Ponumerowane strony</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.new12">
+        <source>Load more button</source>
+        <target>Przycisk doładowania</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.new13">
+        <source>The product card is everywhere the shop lists products: on listings, in search results and in module carousels. Two kinds of card, one set of settings.</source>
+        <target>Karta produktu stoi wszędzie tam, gdzie sklep wylicza produkty: na listach, w wynikach wyszukiwania i w karuzelach modułów. Dwa rodzaje karty, jeden komplet ustawień.</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.new14">
+        <source>Without it there is no card. It cannot be switched off</source>
+        <target>Bez niego nie ma karty. Nie da się go wyłączyć</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new1">
+        <source>Tile</source>
+        <target>Kafelek</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new2">
+        <source>Row</source>
+        <target>Wiersz</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new3">
+        <source>In the grid: listings, search results and module carousels.</source>
+        <target>W siatce: na listach, w wynikach wyszukiwania i w karuzelach modułów.</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new4">
+        <source>Full width, one product per line. Only in the list view on listings.</source>
+        <target>Przez całą szerokość, jeden produkt w wierszu. Tylko w widoku listy na listach produktów.</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new5">
+        <source>Photo</source>
+        <target>Zdjęcie</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new6">
+        <source>Badges on the photo</source>
+        <target>Znaczki na zdjęciu</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new7">
+        <source>Discount, new, bestseller. In the row they move above the name.</source>
+        <target>Rabat, nowość, bestseller. W wierszu przechodzą nad nazwę.</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new8">
+        <source>Quick view</source>
+        <target>Szybki podgląd</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new9">
+        <source>A button on the photo that opens the product without leaving the list.</source>
+        <target>Przycisk na zdjęciu, który otwiera produkt bez wychodzenia z listy.</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new10">
+        <source>Favourites</source>
+        <target>Ulubione</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new11">
+        <source>A heart on the photo. Needs a favourites module.</source>
+        <target>Serce na zdjęciu. Wymaga modułu ulubionych.</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new12">
+        <source>Promotion countdown</source>
+        <target>Odliczanie promocji</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new13">
+        <source>Only when the discount has an end date and that date is near.</source>
+        <target>Tylko wtedy, gdy rabat ma datę końca i ta data jest blisko.</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new14">
+        <source>Product name</source>
+        <target>Nazwa produktu</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new15">
+        <source>Rating</source>
+        <target>Ocena</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new16">
+        <source>Stars and the number of reviews. Needs a reviews module.</source>
+        <target>Gwiazdki i liczba opinii. Wymaga modułu opinii.</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new17">
+        <source>Short description</source>
+        <target>Krótki opis</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new18">
+        <source>Cut to three lines.</source>
+        <target>Przycięty do trzech wierszy.</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new19">
+        <source>Features</source>
+        <target>Cechy</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new20">
+        <source>How many to show, counted from the most telling one. The order comes from the feature ranking.</source>
+        <target>Ile pokazać, licząc od najbardziej mówiącej. Kolejność bierze się z rankingu cech.</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new21">
+        <source>Reference</source>
+        <target>Indeks</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new22">
+        <source>EAN</source>
+        <target>EAN</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new23">
+        <source>MPN</source>
+        <target>MPN</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new24">
+        <source>Lowest price note</source>
+        <target>Informacja o najniższej cenie</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new25">
+        <source>The lowest price of the last 30 days. Needs a price history module.</source>
+        <target>Najniższa cena z ostatnich 30 dni. Wymaga modułu historii cen.</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new26">
+        <source>Availability</source>
+        <target>Dostępność</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new27">
+        <source>Shipping time</source>
+        <target>Czas wysyłki</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new28">
+        <source>Buy button</source>
+        <target>Przycisk zakupu</target>
+      </trans-unit>
+      <trans-unit id="quince.card.new29">
+        <source>Product sections</source>
+        <target>Sekcje produktowe</target>
+      </trans-unit>
+      <trans-unit id="quince.surface.new1">
+        <source>Appearance</source>
+        <target>Wygląd</target>
+      </trans-unit>
+      <trans-unit id="quince.surface.new2">
+        <source>Background</source>
+        <target>Tło</target>
+      </trans-unit>
+      <trans-unit id="quince.surface.new3">
+        <source>Border</source>
+        <target>Ramka</target>
+      </trans-unit>
+      <trans-unit id="quince.surface.new4">
+        <source>Shadow</source>
+        <target>Cień</target>
+      </trans-unit>
+      <trans-unit id="quince.surface.new5">
+        <source>Rounding</source>
+        <target>Zaokrąglenie</target>
+      </trans-unit>
+      <trans-unit id="quince.surface.new6">
+        <source>Inherit</source>
+        <target>Jak na stronie</target>
+      </trans-unit>
+      <trans-unit id="quince.surface.new7">
+        <source>Show</source>
+        <target>Widoczna</target>
+      </trans-unit>
+      <trans-unit id="quince.surface.new8">
+        <source>Hide</source>
+        <target>Bez ramki</target>
+      </trans-unit>
+
+      <!-- Zamówienie: zakup na firmę. -->
+      <trans-unit id="quince.checkout.vies.tytul">
+        <source>Company details from the VAT number</source>
+        <target>Dane firmy z numeru NIP</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.vies.opis">
+        <source>A "Fetch details" button in the VAT number field. The customer types the number and the company name and registered address come from the EU VIES register.</source>
+        <target>Przycisk „Pobierz dane” w polu NIP. Klient wpisuje numer, a nazwa firmy i adres siedziby przychodzą z unijnego rejestru VIES.</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.vies.przelacznik">
+        <source>Show the "Fetch details" button</source>
+        <target>Pokazuj przycisk „Pobierz dane”</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.vies.wylaczony">
+        <source>Turned off, the button disappears and the customer types the company details by hand.</source>
+        <target>Po wyłączeniu przycisk znika, a klient wpisuje dane firmy ręcznie.</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.nip.tytul">
+        <source>VAT number check</source>
+        <target>Sprawdzanie numeru NIP</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.nip.opis">
+        <source>Before an address is saved, the shop checks the VAT number. For Poland it checks the NIP check digit, for other countries the length of the number.</source>
+        <target>Przed zapisaniem adresu sklep sprawdza numer NIP. Dla Polski sprawdza cyfrę kontrolną, dla pozostałych krajów długość numeru.</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.nip.przelacznik">
+        <source>Reject a wrong VAT number</source>
+        <target>Odrzucaj błędny numer NIP</target>
+      </trans-unit>
+      <trans-unit id="quince.checkout.nip.wylaczony">
+        <source>Turned off, the shop accepts whatever the customer types, and a mistyped number goes onto the invoice.</source>
+        <target>Po wyłączeniu sklep przyjmuje wszystko, co wpisze klient, a numer z literówką trafia na fakturę.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

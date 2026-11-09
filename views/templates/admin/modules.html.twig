@@ -1,0 +1,61 @@
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{% block quince_intro %}
+    <div class="qc-alert qc-alert-info">
+        {{ icons.icon('info', 18, 'qc-alert-icon') }}
+        <div>
+            {{ 'Modules built for this engine. Each one adds a section to the menu on the left once it is running.'|trans }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block quince_body %}
+<div class="qc-stack">
+    {% for module in modules %}
+        <div class="qc-card">
+            <div class="qc-card-head">
+                <div class="qc-mod-head">
+                    <span class="qc-mod-icon">{{ icons.icon(module.icon, 18) }}</span>
+                    <div>
+                        <div class="qc-card-title">
+                            {{ module.label|trans }}
+                            {% if module.version %}<span class="qc-mod-version">{{ module.version }}</span>{% endif %}
+                        </div>
+                        <div class="qc-card-desc">{{ module.description|trans }}</div>
+                    </div>
+                </div>
+
+                {# Trzy stany, nie dwa: moduł bywa wgrany na dysk, ale niezainstalowany,
+                   i zainstalowany, ale wyłączony. Sprzedawca, który wyłączył moduł
+                   i zapomniał, szuka potem błędu w ustawieniach. #}
+                {% if module.active %}
+                    <span class="qc-mod-state qc-mod-state--on">{{ 'Running'|trans }}</span>
+                {% elseif module.installed %}
+                    <span class="qc-mod-state qc-mod-state--off">{{ 'Installed, switched off'|trans }}</span>
+                {% elseif module.present %}
+                    <span class="qc-mod-state qc-mod-state--off">{{ 'On disk, not installed'|trans }}</span>
+                {% else %}
+                    <span class="qc-mod-state">{{ 'Not installed'|trans }}</span>
+                {% endif %}
+            </div>
+
+            <div class="qc-card-body qc-mod-body">
+                {% if module.active and module.route %}
+                    <a class="qc-btn qc-btn-outline" href="{{ path(module.route) }}">
+                        {{ 'Open settings'|trans }}
+                    </a>
+                {% elseif module.active %}
+                    <div class="qc-hint">{{ 'This module has no settings of its own.'|trans }}</div>
+                {% elseif module.installed %}
+                    <div class="qc-hint">{{ 'Switch it on in Module Manager to use it.'|trans }}</div>
+                {% else %}
+                    <div class="qc-hint">{{ 'Not available in this store yet.'|trans }}</div>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

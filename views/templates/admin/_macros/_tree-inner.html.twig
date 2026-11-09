@@ -1,0 +1,55 @@
+{#
+ # Wnętrze drzewa kategorii: wyszukiwarka, licznik i lista gałęzi.
+ #
+ # Osobny plik włączany przez `include`, a nie makro obok: Twig 3 nie daje makrom
+ # dostępu do sąsiadów w tym samym pliku, a `import _self` gryzie się z nazwą,
+ # pod którą ekran importuje ten plik u siebie.
+ #
+ # Parametry: `wiele` — czy zaznaczanie wielu, `nazwaPola` — nazwa pola formularza.
+ #}
+    <div class="qc-tree-search">
+        <input type="search" class="qc-field-base qc-focusable"
+               placeholder="{{ 'Search categories'|trans({}, 'Modules.Quinceengine.Admin') }}" x-model="szukaj">
+    </div>
+
+    <div class="qc-tree-count" style="display:flex;align-items:center;gap:10px">
+        <span x-text="podpisLiczby"></span>
+        <a href="#" @click.prevent="rozwinWszystko()">{{ 'Expand'|trans({}, 'Modules.Quinceengine.Admin') }}</a>
+        <a href="#" @click.prevent="zwinWszystko()">{{ 'Collapse'|trans({}, 'Modules.Quinceengine.Admin') }}</a>
+        {% if wiele %}
+            <a href="#" @click.prevent="zaznaczWidoczne()">{{ 'Select visible'|trans({}, 'Modules.Quinceengine.Admin') }}</a>
+            <a href="#" @click.prevent="odznaczWszystkie()">{{ 'Clear'|trans({}, 'Modules.Quinceengine.Admin') }}</a>
+            <span x-show="zaznaczone.length" x-text="'· ' + zaznaczone.length"></span>
+        {% endif %}
+    </div>
+
+    <div class="qc-tree-list">
+        <template x-for="k in kategorie" :key="k.id">
+            <div class="qc-tree-node" x-show="widoczna(k)"
+                 :style="`padding-inline-start:${6 + k.depth * 16}px`">
+                {# Strzałka zwija gałąź, nazwa wybiera kategorię — dwie różne akcje
+                   w jednym wierszu, więc dwa osobne elementy. #}
+                <span class="qc-tree-toggle" x-show="k.dzieci" @click="przelacz(k.id)"
+                      x-text="rozwiniete.includes(k.id) ? '⌄' : '›'"></span>
+                <span x-show="!k.dzieci" style="inline-size:14px;flex:none"></span>
+
+                {% if wiele %}
+                    <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+                        <input class="qc-checkbox" type="checkbox" name="{{ nazwaPola }}[]"
+                               :value="k.id" :checked="zaznaczone.includes(k.id)"
+                               @change="przelaczZaznaczenie(k.id)">
+                        <span x-text="k.name"></span>
+                    </label>
+                {% elseif model is defined and model %}
+                    {# Odmiana „do pola": klik zapisuje wybór w zmiennej nadrzędnego
+                       komponentu i zamyka drzewo, zamiast prowadzić pod adres. #}
+                    <a href="#" x-text="k.name"
+                       @click.prevent="{{ model }} = k.id; otwarte = false"
+                       :style="k.id === Number({{ model }}) ? 'font-weight:600' : ''"></a>
+                {% else %}
+                    <a :href="k.url" x-text="k.name"
+                       :style="k.id === wybranaId ? 'font-weight:600' : ''"></a>
+                {% endif %}
+            </div>
+        </template>
+    </div>

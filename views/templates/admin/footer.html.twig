@@ -1,0 +1,543 @@
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine-sort.min.js') ~ qcVer }}" defer></script>
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine.min.js') ~ qcVer }}" defer></script>
+{% endblock %}
+
+{% block quince_actions %}
+    <button type="submit" form="quince-footer" class="qc-btn qc-btn-primary">
+        {{ icons.icon('check', 14) }} {{ 'Save changes'|trans }}
+    </button>
+{% endblock %}
+
+{% block quince_body %}
+
+<form id="quince-footer" method="post" action="{{ path('quince_footer_save') }}"
+      class="qc-stack" x-data="quinceFooter()">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_footer_save') }}">
+
+    {# ── Pasek nad stopką ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Strip above the footer'|trans }}</div>
+                <div class="qc-card-desc">{{ 'A place for a module to say something right before the footer: a banner, a newsletter sign-up, a row of guarantees. Empty, it does not show up in the shop.'|trans }}</div>
+            </div>
+        </div>
+
+        <div class="qc-card-body">
+            <div class="qc-form-grid qc-form-grid-2">
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Hooks in the strip'|trans }}</label>
+
+                    <div class="qc-chip-row" style="margin-block-end:10px" x-show="stripHooks.length" x-cloak>
+                        <template x-for="(hook, hi) in stripHooks" :key="hook + hi">
+                            <span class="qc-chip">
+                                <span class="qc-chip-name" x-text="hook"></span>
+                                <input type="hidden" name="strip_hook[]" :value="hook">
+                                <div class="qc-chip-actions">
+                                    <button type="button" class="qc-chip-btn" @click="stripHooks.splice(hi, 1)">
+                                        {{ icons.icon('x', 13) }}
+                                    </button>
+                                </div>
+                            </span>
+                        </template>
+                    </div>
+
+                    <div style="display:flex; gap:8px">
+                        <input type="text" class="qc-field-base qc-focusable" spellcheck="false"
+                               placeholder="displayWrapperBottom"
+                               x-model="stripNowy"
+                               @keydown.enter.prevent="addStripHook()">
+                        <button type="button" class="qc-btn qc-btn-outline" @click="addStripHook()">
+                            {{ icons.icon('plus', 14) }}
+                        </button>
+                    </div>
+                    <div class="qc-hint">{{ 'Modules show their blocks on hooks. Add a hook here and its block stands in the strip.'|trans }}</div>
+                </div>
+
+                <div class="qc-field">
+                    <label class="qc-label">{{ 'Width'|trans }}</label>
+                    <div class="qc-seg qc-seg-wrap" role="group">
+                        <button type="button" class="qc-seg-btn" :class="stripWidth === 'container' && 'is-active'"
+                                @click="stripWidth = 'container'">{{ 'Within the page width'|trans }}</button>
+                        <button type="button" class="qc-seg-btn" :class="stripWidth === 'full' && 'is-active'"
+                                @click="stripWidth = 'full'">{{ 'Edge to edge'|trans }}</button>
+                    </div>
+                    <input type="hidden" name="STRIP_WIDTH" :value="stripWidth">
+                    <div class="qc-hint">{{ 'Edge to edge, the background runs across the whole screen; within the page width it lines up with the columns above.'|trans }}</div>
+                </div>
+            </div>
+
+            <div class="qc-field" style="margin-block-start:16px" :class="!prepared && 'qc-zalezna'">
+                <label class="qc-label">{{ 'Strip background'|trans }}</label>
+                {{ fields.colorpicker('STRIP_BG', settings.STRIP_BG, palette, {
+                    'neutral': 'Greys'|trans, 'primary': 'Brand'|trans,
+                    'secondary': 'Third colour'|trans, 'promo': 'Promotion'|trans
+                }) }}
+            </div>
+        </div>
+    </div>
+
+    {# ── 1. Firma ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Your company'|trans }}</div>
+                <div class="qc-card-desc">{{ 'The first column of the footer: name, description and contact details.'|trans }}</div>
+            </div>
+        </div>
+
+        <div class="qc-card-body">
+            {{ fields.multilang('COMPANY_TITLE', 'Heading'|trans, languages, translations.COMPANY_TITLE, shopName) }}
+
+            <div style="margin-block-start:16px">
+                {{ fields.multilangArea('COMPANY_TEXT', 'A few words about the shop'|trans, languages, translations.COMPANY_TEXT, '', '', 3) }}
+            </div>
+
+            {# Wiersze kontaktu: tekst i ikona obok niego, tak samo jak w pasie
+               informacyjnym. Stopka ma własne wpisy — nie zawsze pokazuje ten
+               sam numer co pas nad nagłówkiem. #}
+            <div class="qc-form-grid qc-form-grid-2" style="margin-block-start:16px">
+                {{ fields.multilang('ADDRESS', 'Address'|trans, languages, translations.ADDRESS, 'ul. Przykładowa 1, 00-001 Warszawa', '',
+                    fields.iconpicker('ADDRESS_ICON', settings.ADDRESS_ICON, iconSvg.ADDRESS_ICON, path(iconsRoute))) }}
+
+                {{ fields.multilang('PHONE', 'Phone number'|trans, languages, translations.PHONE, '+48 22 000 00 00', '',
+                    fields.iconpicker('PHONE_ICON', settings.PHONE_ICON, iconSvg.PHONE_ICON, path(iconsRoute))) }}
+
+                {{ fields.multilang('EMAIL', 'E-mail address'|trans, languages, translations.EMAIL, 'sklep@example.com', '',
+                    fields.iconpicker('EMAIL_ICON', settings.EMAIL_ICON, iconSvg.EMAIL_ICON, path(iconsRoute))) }}
+
+                {{ fields.multilang('HOURS', 'Opening hours'|trans, languages, translations.HOURS, 'Pon-Pt 8:00-16:00', '',
+                    fields.iconpicker('HOURS_ICON', settings.HOURS_ICON, iconSvg.HOURS_ICON, path(iconsRoute))) }}
+            </div>
+        </div>
+    </div>
+
+    {# ── Kolumny ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Columns'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Columns with links, next to your company details. An empty column does not show up in the shop.'|trans }}</div>
+            </div>
+            <button type="button" class="qc-btn qc-btn-outline" @click="addColumn()">
+                {{ icons.icon('plus', 14) }} {{ 'Add column'|trans }}
+            </button>
+        </div>
+
+        <div class="qc-card-body">
+            <div class="qc-empty" x-show="!columns.length" x-cloak>
+                <div class="qc-empty-text" style="padding:14px">
+                    {{ 'No columns. The footer will show only your company data.'|trans }}
+                </div>
+            </div>
+
+            <div class="qc-repeater" x-sort="moveColumn($item, $position)">
+                <template x-for="(column, index) in columns" :key="column.uid">
+                    <div class="qc-rep-row" x-sort:item="column.uid">
+                        <div class="qc-rep-row-head">
+                            <span class="qc-rep-handle" x-sort:handle>{{ icons.icon('drag', 14) }}</span>
+
+                            <span class="qc-rep-name">
+                                <span x-text="columnLabel(column)"></span>
+                                <span class="qc-rep-sub" x-text="column.hooks.join(' · ')"></span>
+                            </span>
+
+                            <div class="qc-rep-actions">
+                                <button type="button" class="qc-icon-btn" @click="column.open = !column.open">
+                                    <svg class="qc-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"
+                                         stroke="currentColor" stroke-width="2" aria-hidden="true"
+                                         :style="column.open && 'transform:rotate(180deg)'"><path d="m4 6 4 4 4-4"/></svg>
+                                </button>
+                                <button type="button" class="qc-icon-btn qc-danger" @click="columns.splice(index, 1)">
+                                    {{ icons.icon('trash', 14) }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="qc-rep-body" x-show="column.open" x-cloak>
+                            <div class="qc-form-grid qc-form-grid-2">
+                                <div class="qc-field">
+                                    <label class="qc-label">{{ 'Column name'|trans }}</label>
+                                    <div class="qc-multilang-row">
+                                        <template x-for="lang in languages" :key="lang.id">
+                                            <input type="text" class="qc-field-base qc-focusable"
+                                                   :name="'column[' + index + '][labels][' + lang.id + ']'"
+                                                   x-show="column.lang === lang.id"
+                                                   x-model="column.labels[lang.id]">
+                                        </template>
+
+                                        <button type="button" class="qc-lang-toggle" @click="column.langOpen = !column.langOpen">
+                                            <span class="qc-lang-dot"
+                                                  :class="String(column.labels[column.lang] || '').trim() && 'qc-complete'"></span>
+                                            <span x-text="languages.find(l => l.id === column.lang).iso"></span>
+                                            <svg class="qc-icon" width="12" height="12" viewBox="0 0 16 16" fill="none"
+                                                 stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+                                        </button>
+
+                                        <div class="qc-lang-menu" x-show="column.langOpen" x-cloak
+                                             @click.outside="column.langOpen = false">
+                                            <template x-for="lang in languages" :key="lang.id">
+                                                <div class="qc-lang-row" :class="column.lang === lang.id && 'qc-current'"
+                                                     @click="column.lang = lang.id; column.langOpen = false">
+                                                    <span class="qc-lang-dot"
+                                                          :class="String(column.labels[lang.id] || '').trim() && 'qc-complete'"></span>
+                                                    <span class="qc-lang-row-name" x-text="lang.name"></span>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                    <div class="qc-hint">{{ 'Left empty, the column shows the heading the module gives it.'|trans }}</div>
+                                </div>
+
+                                <div class="qc-field">
+                                    <label class="qc-label">{{ 'Hooks in this column'|trans }}</label>
+
+                                    <div class="qc-chip-row" style="margin-block-end:10px">
+                                        <template x-for="(hook, hi) in column.hooks" :key="hook + hi">
+                                            <span class="qc-chip">
+                                                <span class="qc-chip-name" x-text="hook"></span>
+                                                <input type="hidden" :name="'column[' + index + '][hooks][]'" :value="hook">
+                                                <div class="qc-chip-actions">
+                                                    <button type="button" class="qc-chip-btn" @click="column.hooks.splice(hi, 1)">
+                                                        {{ icons.icon('x', 13) }}
+                                                    </button>
+                                                </div>
+                                            </span>
+                                        </template>
+                                    </div>
+
+                                    <div style="display:flex; gap:8px">
+                                        <input type="text" class="qc-field-base qc-focusable" spellcheck="false"
+                                               placeholder="displayFooterCustomer"
+                                               x-model="column.nowy"
+                                               @keydown.enter.prevent="addHook(column)">
+                                        <button type="button" class="qc-btn qc-btn-outline" @click="addHook(column)">
+                                            {{ icons.icon('plus', 14) }}
+                                        </button>
+                                    </div>
+                                    <div class="qc-hint">{{ 'Modules show their blocks on hooks. Add a hook here and its block stands in this column.'|trans }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    {# ── 3. Ikony społecznościowe ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Social links'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Icons under your company details, each opening the profile you point it at.'|trans }}</div>
+            </div>
+            <button type="button" class="qc-btn qc-btn-outline" @click="addSocial()">
+                {{ icons.icon('plus', 14) }} {{ 'Add link'|trans }}
+            </button>
+        </div>
+
+        <div class="qc-card-body">
+            <div class="qc-empty" x-show="!socials.length" x-cloak>
+                <div class="qc-empty-text" style="padding:14px">
+                    {{ 'No links yet. The footer will not show the social icons until you add one.'|trans }}
+                </div>
+            </div>
+
+            <div class="qc-repeater" x-sort="moveSocial($item, $position)">
+                <template x-for="(social, index) in socials" :key="social.uid">
+                    <div class="qc-rep-row" x-sort:item="social.uid">
+                        <div class="qc-rep-row-head">
+                            <span class="qc-rep-handle" x-sort:handle>{{ icons.icon('drag', 14) }}</span>
+
+                            <span class="qc-rep-name">
+                                <span x-text="social.icon || '{{ 'No icon'|trans }}'"></span>
+                                <span class="qc-rep-sub" x-text="social.url"></span>
+                            </span>
+
+                            <div class="qc-rep-actions">
+                                <button type="button" class="qc-icon-btn qc-danger" @click="socials.splice(index, 1)">
+                                    {{ icons.icon('trash', 14) }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="qc-rep-body">
+                            <div class="qc-form-grid" style="grid-template-columns:auto minmax(0,1fr)">
+                                <div class="qc-field">
+                                    <label class="qc-label">{{ 'Icon'|trans }}</label>
+                                    {{ fields.iconpicker('', '', '', path(iconsRoute), 'start',
+                                        "'social[' + index + '][icon]'", 'social.icon', 'social.iconSvg') }}
+                                </div>
+
+                                <div class="qc-field">
+                                    <label class="qc-label">{{ 'Address'|trans }}</label>
+                                    <input type="text" class="qc-field-base qc-focusable" spellcheck="false"
+                                           placeholder="https://facebook.com/twojsklep"
+                                           :name="'social[' + index + '][url]'" x-model="social.url">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    {# ── 4. Pas dolny ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Bottom bar'|trans }}</div>
+                <div class="qc-card-desc">{{ 'The strip under the columns: the copyright line, the links next to it and the ways to pay.'|trans }}</div>
+            </div>
+            <button type="button" class="qc-btn qc-btn-outline" @click="addBarLink()">
+                {{ icons.icon('plus', 14) }} {{ 'Add link'|trans }}
+            </button>
+        </div>
+
+        <div class="qc-card-body">
+            <div class="qc-form-grid qc-form-grid-2">
+                {{ fields.multilang('COPYRIGHT', 'Copyright line'|trans, languages, translations.COPYRIGHT,
+                                    '© ' ~ 'now'|date('Y') ~ ' ' ~ shopName,
+                                    'Left empty, the shop shows the year and its name.'|trans) }}
+
+                <div class="qc-field">
+                    <label class="qc-label" for="q-payments">{{ 'Ways to pay'|trans }}</label>
+                    <input type="text" class="qc-field-base qc-focusable" id="q-payments" name="PAYMENTS"
+                           value="{{ payments|join(', ') }}" placeholder="Visa, Mastercard, BLIK">
+                    <div class="qc-hint">{{ 'Names separated by commas. They stand in the bottom bar as captions, not logos.'|trans }}</div>
+                </div>
+            </div>
+
+            <div class="qc-empty" x-show="!barLinks.length" x-cloak>
+                <div class="qc-empty-text" style="padding:14px">
+                    {{ 'No links. The bottom bar shows the copyright line alone.'|trans }}
+                </div>
+            </div>
+
+            <div class="qc-repeater" x-show="barLinks.length" x-cloak
+                 x-sort="moveBarLink($item, $position)" style="margin-block-start:16px">
+                <template x-for="(barlink, index) in barLinks" :key="barlink.uid">
+                    <div class="qc-rep-row" x-sort:item="barlink.uid">
+                        <div class="qc-rep-row-head">
+                            <span class="qc-rep-handle" x-sort:handle>{{ icons.icon('drag', 14) }}</span>
+
+                            <div class="qc-form-grid" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto; flex:1">
+                                <input type="text" class="qc-field-base qc-focusable"
+                                       :name="'barlink[' + index + '][labels][' + barlink.lang + ']'"
+                                       x-model="barlink.labels[barlink.lang]"
+                                       :placeholder="'{{ 'Terms and conditions'|trans }}'">
+
+                                <input type="text" class="qc-field-base qc-focusable" spellcheck="false"
+                                       :name="'barlink[' + index + '][urls][' + barlink.lang + ']'"
+                                       x-model="barlink.urls[barlink.lang]"
+                                       placeholder="/regulamin">
+
+                                <div class="qc-multilang-row" style="width:auto">
+                                    <button type="button" class="qc-lang-toggle" @click="barlink.langOpen = !barlink.langOpen">
+                                        <span class="qc-lang-dot"
+                                              :class="String(barlink.labels[barlink.lang] || '').trim() && String(barlink.urls[barlink.lang] || '').trim() && 'qc-complete'"></span>
+                                        <span x-text="languages.find(l => l.id === barlink.lang).iso"></span>
+                                        <svg class="qc-icon" width="12" height="12" viewBox="0 0 16 16" fill="none"
+                                             stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+                                    </button>
+
+                                    <div class="qc-lang-menu" x-show="barlink.langOpen" x-cloak
+                                         @click.outside="barlink.langOpen = false">
+                                        <template x-for="lang in languages" :key="lang.id">
+                                            <div class="qc-lang-row" :class="barlink.lang === lang.id && 'qc-current'"
+                                                 @click="barlink.lang = lang.id; barlink.langOpen = false">
+                                                <span class="qc-lang-dot"
+                                                      :class="String(barlink.labels[lang.id] || '').trim() && 'qc-complete'"></span>
+                                                <span class="qc-lang-row-name" x-text="lang.name"></span>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {# Pola nieaktywnych języków jadą razem z wierszem, żeby zapis nie
+                               kasował tłumaczenia wpisanego przy poprzednim przełączeniu. #}
+                            <template x-for="lang in languages" :key="'h' + lang.id">
+                                <template x-if="lang.id !== barlink.lang">
+                                    <span>
+                                        <input type="hidden" :name="'barlink[' + index + '][labels][' + lang.id + ']'"
+                                               :value="barlink.labels[lang.id] || ''">
+                                        <input type="hidden" :name="'barlink[' + index + '][urls][' + lang.id + ']'"
+                                               :value="barlink.urls[lang.id] || ''">
+                                    </span>
+                                </template>
+                            </template>
+
+                            <div class="qc-rep-actions">
+                                <button type="button" class="qc-icon-btn qc-danger" @click="barLinks.splice(index, 1)">
+                                    {{ icons.icon('trash', 14) }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    {# ── Powrót na górę ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Back to top'|trans }}</div>
+                <div class="qc-card-desc">{{ 'A round button in the corner of the screen, shown once the customer scrolls down. It takes them back to the top of the page.'|trans }}</div>
+            </div>
+        </div>
+
+        <div class="qc-card-body">
+            {{ fields.toggle('TOTOP', settings.TOTOP == '1', 'Show the button'|trans) }}
+        </div>
+    </div>
+
+    {# ── 5. Tło ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Backgrounds'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Text, links and the line under the columns are matched to the background they stand on: white on a dark one, dark on a light one.'|trans }}</div>
+            </div>
+        </div>
+
+        <div class="qc-card-body">
+            <div class="qc-form-grid qc-form-grid-2">
+                {# Tło pasa: stopień skali, nie kod barwy — stopka idzie wtedy za
+                   paletą, kiedy zmieni się kolor marki. #}
+                <div class="qc-field" :class="!prepared && 'qc-zalezna'">
+                    <label class="qc-label">{{ 'Columns background'|trans }}</label>
+                    {{ fields.colorpicker('BG', settings.BG, palette, {
+                        'neutral': 'Greys'|trans, 'primary': 'Brand'|trans,
+                        'secondary': 'Third colour'|trans, 'promo': 'Promotion'|trans
+                    }) }}
+                </div>
+
+                <div class="qc-field" :class="!prepared && 'qc-zalezna'">
+                    <label class="qc-label">{{ 'Bottom bar background'|trans }}</label>
+                    {{ fields.colorpicker('BAR_BG', settings.BAR_BG, palette, {
+                        'neutral': 'Greys'|trans, 'primary': 'Brand'|trans,
+                        'secondary': 'Third colour'|trans, 'promo': 'Promotion'|trans
+                    }) }}
+                    <div class="qc-hint">{{ 'The same colour as the columns keeps the footer in one piece; a different one sets the bottom strip apart.'|trans }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<script>
+function quinceFooter() {
+    const LANGUAGES = {{ languages|map(l => {id: l.id_lang, name: l.name, iso: l.iso_code|upper, default: l.default})|json_encode|raw }};
+    const COLUMNS = {{ columns|json_encode|raw }};
+    const SOCIALS = {{ socials|json_encode|raw }};
+    const BAR_LINKS = {{ barLinks|json_encode|raw }};
+    const STRIP_HOOKS = {{ stripHooks|json_encode|raw }};
+
+    const DEFAULT_LANG = (LANGUAGES.find(l => l.default) || LANGUAGES[0]).id;
+
+    let counter = 0;
+    const uid = () => 'q-' + (++counter);
+
+    return {
+        languages: LANGUAGES,
+        prepared: {{ prepared ? 'true' : 'false' }},
+
+        stripHooks: STRIP_HOOKS.slice(),
+        stripNowy: '',
+        stripWidth: {{ settings.STRIP_WIDTH|json_encode|raw }},
+
+        columns: COLUMNS.map(c => ({
+            uid: uid(),
+            open: false,
+            lang: DEFAULT_LANG,
+            langOpen: false,
+            nowy: '',
+            labels: Object.assign({}, c.labels || {}),
+            hooks: (c.hooks || []).slice()
+        })),
+
+        socials: SOCIALS.map(s => ({ uid: uid(), icon: s.icon || '', iconSvg: s.iconSvg || '', url: s.url || '' })),
+
+        barLinks: BAR_LINKS.map(l => ({
+            uid: uid(),
+            lang: DEFAULT_LANG,
+            langOpen: false,
+            labels: Object.assign({}, l.labels || {}),
+            urls: Object.assign({}, l.urls || {})
+        })),
+
+        columnLabel(column) {
+            return String(column.labels[column.lang] || column.labels[DEFAULT_LANG] || '').trim()
+                || {{ 'Column without a name'|trans|json_encode|raw }};
+        },
+
+        addColumn() {
+            this.columns.push({
+                uid: uid(), open: true, lang: DEFAULT_LANG, langOpen: false,
+                nowy: '', labels: {}, hooks: []
+            });
+        },
+
+        /* Ten sam hook w dwóch kolumnach wyświetliłby tę samą treść dwa razy —
+           a to zawsze pomyłka, nie zamiar. */
+        addHook(column) {
+            const nazwa = String(column.nowy || '').trim();
+
+            if (!nazwa) { return; }
+
+            const zajety = this.columns.some(c => c.hooks.includes(nazwa));
+
+            if (!zajety) { column.hooks.push(nazwa); }
+
+            column.nowy = '';
+        },
+
+        addSocial() { this.socials.push({ uid: uid(), icon: '', iconSvg: '', url: '' }); },
+
+        /* Ten sam hook dwa razy w pasku wyświetliłby tę samą treść podwójnie. */
+        addStripHook() {
+            const nazwa = String(this.stripNowy || '').trim();
+
+            if (nazwa && !this.stripHooks.includes(nazwa)) {
+                this.stripHooks.push(nazwa);
+            }
+
+            this.stripNowy = '';
+        },
+
+        addBarLink() {
+            this.barLinks.push({ uid: uid(), lang: DEFAULT_LANG, langOpen: false, labels: {}, urls: {} });
+        },
+
+        moveColumn(uid, position) {
+            const from = this.columns.findIndex(c => c.uid === uid);
+            this.columns.splice(position, 0, this.columns.splice(from, 1)[0]);
+        },
+
+        moveBarLink(uid, position) {
+            const from = this.barLinks.findIndex(l => l.uid === uid);
+            this.barLinks.splice(position, 0, this.barLinks.splice(from, 1)[0]);
+        },
+
+        moveSocial(uid, position) {
+            const from = this.socials.findIndex(s => s.uid === uid);
+            this.socials.splice(position, 0, this.socials.splice(from, 1)[0]);
+        }
+    };
+}
+</script>
+{% endblock %}

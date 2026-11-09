@@ -1,0 +1,51 @@
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine.min.js') ~ qcVer }}" defer></script>
+{% endblock %}
+
+{% block quince_actions %}
+    <button type="submit" form="quince-cart" class="qc-btn qc-btn-primary">
+        {{ icons.icon('check', 14) }} {{ 'Save changes'|trans }}
+    </button>
+{% endblock %}
+
+{% block quince_body %}
+<form id="quince-cart" method="post" action="{{ path('quince_cart_save') }}" class="qc-stack">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_cart_save') }}">
+
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div class="qc-card-title">{{ 'Trust block'|trans }}</div>
+        </div>
+
+        <div class="qc-card-body">
+            {{ fields.toggle('SHOW_REASSURANCE', showReassurance, 'Show on the cart page'|trans) }}
+            <div class="qc-hint">{{ 'Secure payments, return policy, shipping time — the same block the module itself fills in. This only decides whether it shows up here, on the cart page.'|trans }}</div>
+        </div>
+    </div>
+
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div class="qc-card-title">{{ 'Below suggestions'|trans }}</div>
+        </div>
+
+        <div class="qc-card-body">
+            <div class="qc-field">
+                <label class="qc-label" for="quince-cart-hook">{{ 'Hook below "You might also need"'|trans }}</label>
+                <input type="text" id="quince-cart-hook" name="BELOW_SUGGEST_HOOK"
+                       class="qc-field-base qc-focusable" spellcheck="false"
+                       placeholder="displayWiseBlockCart"
+                       value="{{ belowSuggestHook }}">
+                <div class="qc-hint">{{ 'A spot at the bottom of the cart column, under the suggested products — the same free name you give a hook anywhere in the product page layout. Leave it empty and nothing shows there. A module (WiseBlock, or any other) registers to whatever name you type here.'|trans }}</div>
+            </div>
+        </div>
+    </div>
+
+</form>
+{% endblock %}

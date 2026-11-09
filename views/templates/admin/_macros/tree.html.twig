@@ -1,0 +1,214 @@
+{#
+ # Drzewo kategorii — jedno na cały panel.
+ #
+ # Dwie odmiany: `picker()` wybiera jedną kategorię i przechodzi pod jej adres,
+ # `checks()` zaznacza wiele i wysyła je z formularzem. Obie stoją na tym samym
+ # `qc-tree` i na `views/js/drzewo.js`.
+ #
+ # Ekran, który tego używa, musi wczytać Alpine i `drzewo.js` — patrz `assets()`.
+ #
+ # Kategorie podajemy jako tablicę z `id`, `name`, `depth`, `parent`, `sciezka`
+ # i `dzieci`. Dla `picker()` dochodzi `url`, bo adres niesie token panelu i musi
+ # powstać w Twigu, nie w JavaScripcie.
+ #}
+
+{# Wersję zasobów podaje ekran: makro nie widzi zmiennych szablonu, który je
+   wywołał, więc `qcVer` musi wejść parametrem. #}
+{% macro assets(qcVer) %}
+    {# Bez `defer`: Alpine bywa uruchomiony, zanim odroczony plik zdąży się wykonać,
+       i wtedy `x-data` woła funkcję, której jeszcze nie ma. Plik jest mały, więc
+       wczytanie go od razu nic nie kosztuje. #}
+    <script src="{{ asset('../modules/quince_engine/views/js/drzewo.js') ~ qcVer }}"></script>
+{% endmacro %}
+
+{#
+ # Dane drzewa jako zmienna JavaScriptu, a NIE w atrybucie `x-data`: JSON ma
+ # w środku cudzysłowy, a atrybut HTML jest nimi ograniczony — kategoria z calem
+ # w nazwie („Klucze 1/2\"") rozrywa znacznik i komponent w ogóle nie powstaje.
+ #}
+{% macro dane(zmienna, kategorie, trasa) %}
+    <script>
+        var {{ zmienna }} = [
+        {%- for k in kategorie %}
+            {"id": {{ k.id }},
+             "name": {{ k.name|json_encode|raw }},
+             "depth": {{ k.depth }},
+             "parent": {{ k.parent|default(0) }},
+             "sciezka": {{ (k.sciezka|default([]))|json_encode|raw }},
+             "dzieci": {{ k.dzieci|default(false) ? 'true' : 'false' }}
+             {%- if trasa %},
+             "url": "{{ path(trasa, {'id_category': k.id})|raw }}"
+             {%- endif %}
+            }{{ loop.last ? '' : ',' }}
+        {%- endfor %}
+        ];
+    </script>
+{% endmacro %}
+
+{#
+ # Wybór jednej kategorii.
+ #
+ # `zmienna` — nazwa zmiennej z danymi, `wybrana` — id bieżącej, `etykieta` — co
+ # to za pole, `szerokosc` — szerokość panelu drzewa.
+ #}
+{% macro picker(zmienna, wybrana, etykieta, szerokosc) %}
+    <div class="qc-field" style="margin:0;position:relative;min-inline-size:{{ szerokosc|default('320px') }}"
+         x-data="quinceDrzewo({{ zmienna }}, {{ wybrana|default(0) }})">
+        <label class="qc-label">{{ etykieta }}</label>
+
+        <div class="qc-select-wrap">
+            <button type="button" class="qc-field-base qc-select qc-focusable"
+                    style="text-align:start;cursor:pointer;inline-size:100%"
+                    @click="otwarte = !otwarte" :aria-expanded="otwarte">
+                <span x-text="nazwaWybranej"></span>
+            </button>
+        {# Znak listy rozwijanej. Bez niego przycisk z nazwa kategorii wyglada
+           jak pole tekstowe i nic nie mowi, ze cokolwiek sie po nim otworzy. #}
+        <svg class="qc-icon qc-select-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"
+             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
+        </div>
+
+        <div class="qc-tree" x-show="otwarte" x-cloak @click.outside="otwarte = false"
+             style="position:absolute;z-index:20;inline-size:100%;margin-block-start:4px">
+            {% include '@Modules/quince_engine/views/templates/admin/_macros/_tree-inner.html.twig' with {'wiele': false} only %}
+        </div>
+    </div>
+{% endmacro %}
+
+{#
+ # Wybór jednej kategorii do pola formularza.
+ #
+ # `model` to wyrażenie Alpine wskazujące zmienną, w której ma wylądować wybór
+ # (np. `link.id_category`), a `nazwaPola` — wyrażenie budujące atrybut `name`.
+ # Oba przychodzą jako tekst, bo w powtarzalniku zależą od indeksu wiersza.
+ #}
+{% macro pickerField(zmienna, model, nazwaPola, etykieta, pusty) %}
+    <div class="qc-field" style="position:relative"
+         x-data="quinceDrzewoPole({{ zmienna }})">
+        <label class="qc-label">{{ etykieta }}</label>
+
+        {# Wartość idzie polem ukrytym: drzewo nie jest kontrolką formularza,
+           więc bez tego wybór nie dotarłby do zapisu. #}
+        <input type="hidden" :name="{{ nazwaPola }}" :value="{{ model }}">
+
+        <div class="qc-select-wrap">
+            <button type="button" class="qc-field-base qc-select qc-focusable"
+                    style="text-align:start;cursor:pointer;inline-size:100%"
+                    @click="otwarte = !otwarte; if (otwarte) pokazSciezke({{ model }})"
+                    :aria-expanded="otwarte">
+                <span x-text="nazwaDla({{ model }}) || '{{ pusty|default('— choose —') }}'"></span>
+            </button>
+        {# Znak listy rozwijanej. Bez niego przycisk z nazwa kategorii wyglada
+           jak pole tekstowe i nic nie mowi, ze cokolwiek sie po nim otworzy. #}
+        <svg class="qc-icon qc-select-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none"
+             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
+        </div>
+
+        <div class="qc-tree" x-show="otwarte" x-cloak @click.outside="otwarte = false"
+             style="position:absolute;z-index:20;inline-size:100%;margin-block-start:4px">
+            {% include '@Modules/quince_engine/views/templates/admin/_macros/_tree-inner.html.twig'
+               with {'wiele': false, 'model': model} only %}
+        </div>
+    </div>
+{% endmacro %}
+
+{#
+ # Zaznaczanie wielu kategorii. Wartości lecą jako `nazwaPola[]`.
+ #
+ # Drzewo stoi otwarte, bez przycisku: to nie jest wybór jednej rzeczy, tylko
+ # lista do przejrzenia, a schowanie jej za przyciskiem kazałoby otwierać go po
+ # każdym zaznaczeniu, żeby sprawdzić, co się zaznaczyło.
+ #}
+{#
+ # Pole wyszukiwania kategorii — po nazwie albo po numerze.
+ #
+ # Odmiana dla miejsc, gdzie rozwinięte drzewo zabiera pół ekranu: wierszy
+ # powtarzalnika i list wykluczeń. `wiele` przełącza na zaznaczanie wielu,
+ # wtedy wybrane stoją pod polem i każde da się zdjąć.
+ #
+ # `nazwaPola` przy jednym wyborze to wyrażenie Alpine (nazwa zależy od indeksu
+ # wiersza), przy wielu — zwykły napis.
+ #}
+{#
+ # `wybraneWyr` — wyrażenie Alpine z początkowym wyborem, gdy przychodzi
+ # z powtarzalnika (np. `link.id_category`); wtedy `wybrane` się pomija.
+ # `dynamiczna` — nazwa pola jest wyrażeniem Alpine, nie napisem: w powtarzalniku
+ # zależy od indeksu wiersza, więc idzie przez `:name`, a nie `name`.
+ #}
+{% macro szukajka(zmienna, wybrane, nazwaPola, etykieta, wiele, pusty, dynamiczna, wybraneWyr) %}
+    <div class="qc-field" style="position:relative"
+         x-data="quinceSzukajkaKategorii({{ zmienna }}, {{ wybraneWyr|default('') ?: (wybrane|json_encode|raw) }}, {{ wiele ? 'true' : 'false' }})"
+         @click.outside="otwarte = false">
+        <label class="qc-label">{{ etykieta }}</label>
+
+        {# Wartości idą polami ukrytymi: żetony nie są kontrolką formularza,
+           a lista wybranych zmienia się bez przeładowania strony. #}
+        {% if wiele %}
+            {% if dynamiczna %}
+                <template x-for="id in wybrane" :key="id">
+                    <input type="hidden" :name="{{ nazwaPola }}" :value="id">
+                </template>
+            {% else %}
+                <input type="hidden" name="{{ nazwaPola }}_SUBMITTED" value="1">
+                <template x-for="id in wybrane" :key="id">
+                    <input type="hidden" name="{{ nazwaPola }}[]" :value="id">
+                </template>
+            {% endif %}
+        {% elseif dynamiczna %}
+            <input type="hidden" :name="{{ nazwaPola }}" :value="wybrane[0] || 0">
+        {% else %}
+            <input type="hidden" name="{{ nazwaPola }}" :value="wybrane[0] || 0">
+        {% endif %}
+
+        {# Żetony i pole tekstowe w jednym prostokącie: wybór stoi tam, gdzie się
+           go dokonuje. Klik w dowolne miejsce pojemnika ustawia ognisko w polu. #}
+        <div class="qc-tags" @click="$refs.wpis && $refs.wpis.focus()">
+            <template x-for="id in wybrane" :key="id">
+                <span class="qc-tag">
+                    {# Numer przy nazwie, bo dwie kategorie mogą nazywać się tak samo —
+                       „Mercedes" pod filtrami i pod olejami. Bez numeru żeton nie mówi,
+                       która z nich została wybrana. #}
+                    <span x-text="nazwaDla(id)"></span>
+                    <span class="qc-tag-id" x-text="id"></span>
+                    <button type="button" class="qc-tag-x" @click.stop="zdejmij(id)"
+                            :aria-label="'{{ 'Remove'|trans({}, 'Modules.Quinceengine.Admin') }} ' + nazwaDla(id)">×</button>
+                </span>
+            </template>
+
+            {# Przy wyborze POJEDYNCZYM pole wpisu znika, gdy kategoria jest już wskazana:
+               inaczej obok wybranej stoi zaproszenie „wybierz kategorię" i pole wygląda
+               jak lista, do której można dołożyć kolejne — a jeden odnośnik prowadzi
+               do jednej kategorii. Zdjęcie krzyżykiem wraca do pola wpisu. #}
+            <input type="search" class="qc-tags-input" x-ref="wpis" x-model="fraza"
+                   x-show="{{ wiele ? 'true' : '!wybrane.length' }}"
+                   @focus="otworz($el)"
+                   placeholder="{{ pusty|default('Choose a category…'|trans({}, 'Modules.Quinceengine.Admin')) }}">
+        </div>
+
+        <div class="qc-tags-menu" x-show="trafienia.length" x-cloak>
+            <template x-for="k in trafienia" :key="k.id">
+                <div class="qc-tags-option" @click="dodaj(k.id)">
+                    <span class="qc-tags-name" x-text="k.name"></span>
+                    <span class="qc-tags-path" x-show="sciezkaDla(k)" x-text="sciezkaDla(k)"></span>
+                    <span class="qc-tags-id" x-text="'#' + k.id"></span>
+                </div>
+            </template>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro checks(zmienna, zaznaczone, nazwaPola, etykieta) %}
+    <div class="qc-field" x-data="quinceDrzewoWiele({{ zmienna }}, {{ zaznaczone|json_encode|raw }})">
+        <label class="qc-label">{{ etykieta }}</label>
+
+        {# Pole wysyłane zawsze, także puste: bez niego odznaczenie wszystkiego
+           nie dotarłoby do zapisu i stare zaznaczenia zostałyby na stałe. #}
+        <input type="hidden" name="{{ nazwaPola }}_SUBMITTED" value="1">
+
+        <div class="qc-tree">
+            {% include '@Modules/quince_engine/views/templates/admin/_macros/_tree-inner.html.twig' with {'wiele': true, 'nazwaPola': nazwaPola} only %}
+        </div>
+    </div>
+{% endmacro %}

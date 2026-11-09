@@ -1,0 +1,58 @@
+{# Zebatka wygladu bloku: tlo, ramka, cien i zaokraglenie jednej powierzchni.
+
+   Jedno makro na wszystkie ekrany silnika. Strona produktu i listing opisuja
+   nim te same cztery ustawienia, wiec „miekki cien" ma na obu znaczyc to samo
+   i wygladac tak samo. Powierzchnie i przedrostek tokenow podaje wywolujacy.
+
+   Sterowniki sa te same, ktorych panel uzywa wszedzie indziej: probnik barwy
+   z palety sklepu i pola wyboru w oprawie `qc-select`. #}
+
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+
+{% macro powierzchnia(nazwa, palette, wyglad, align = 'start', ukryta = false) %}
+    {% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+    {% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+
+    <button type="button" class="qc-zebatka" data-wyglad-strefy="{{ nazwa }}"
+            aria-expanded="false"{{ ukryta ? ' hidden' : '' }}
+            title="{{ 'Appearance'|trans }}" aria-label="{{ 'Appearance'|trans }}">
+        {{ icons.icon('settings', 15) }}
+    </button>
+
+    {# Wyglad karty opisuja te same sterowniki, ktorych panel uzywa wszedzie
+       indziej: probnik barwy z palety sklepu i pola wyboru w oprawie `qc-select`.
+       Siatka `auto-fit` sprawia, ze pola przechodza do nastepnego wiersza same,
+       zamiast wystawac poza karte. #}
+    <div class="qc-wyglad" hidden>
+        <div class="qc-wyglad-pole">
+            <span class="qc-label">{{ 'Background'|trans }}</span>
+            {# Wartość z zapisu, nie wpisana tutaj: próbnik z wartością na sztywno
+               pokazywał zawsze pierwszy odcień palety i przy każdym zapisie
+               ekranu nadpisywał nim to, co sklep wybrał wcześniej. #}
+            {{ fields.colorpicker('wyglad[' ~ nazwa ~ '][bg]', wyglad.bg|default(''), palette, {
+                'neutral': 'Greys'|trans, 'primary': 'Brand'|trans,
+                'secondary': 'Third colour'|trans, 'promo': 'Promotion'|trans
+            }, align) }}
+        </div>
+
+        {% for pole, opcje in {
+            'border': {'': 'Inherit'|trans, 'on': 'Show'|trans, 'off': 'Hide'|trans},
+            'shadow': {'': 'Inherit'|trans, 'flat': 'No shadow'|trans, 'subtle': 'Soft shadow'|trans, 'strong': 'Strong shadow'|trans},
+            'radius': {'': 'Inherit'|trans, 'sharp': 'Sharp'|trans, 'round': 'Rounded'|trans}
+        } %}
+            <div class="qc-wyglad-pole">
+                <span class="qc-label">{{ {'border': 'Border'|trans, 'shadow': 'Shadow'|trans, 'radius': 'Rounding'|trans}[pole] }}</span>
+                <div class="qc-select-wrap">
+                    <select class="qc-field-base qc-select qc-focusable" name="wyglad[{{ nazwa }}][{{ pole }}]">
+                        {% for wartosc, etykieta in opcje %}
+                            <option value="{{ wartosc }}"
+                                    {{ (wyglad[pole]|default('')) == wartosc ? 'selected' : '' }}>{{ etykieta }}</option>
+                        {% endfor %}
+                    </select>
+                    {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endmacro %}

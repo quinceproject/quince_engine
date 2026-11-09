@@ -1,0 +1,397 @@
+{# Dane organizacji dla Schema.org, domyślne meta i llms.txt.
+
+   PS9 już wypisuje podstawowy Organization JSON-LD na każdej stronie
+   (nazwa, adres, logo z motywu) — ten ekran nie dubluje tego wpisu, tylko
+   go wzbogaca. Puste pole = zachowanie rdzenia.
+
+   Wyłącznie klasy z paczki silnika. #}
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine-sort.min.js') ~ qcVer }}" defer></script>
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine.min.js') ~ qcVer }}" defer></script>
+{% endblock %}
+
+{% block quince_actions %}
+    <button type="submit" form="quince-brand-schema" class="qc-btn qc-btn-primary">
+        {{ icons.icon('check', 14) }} {{ 'Save settings'|trans }}
+    </button>
+{% endblock %}
+
+{% block quince_intro %}
+    <div class="qc-alert qc-alert-info">
+        {{ icons.icon('info', 18, 'qc-alert-icon') }}
+        <div>
+            {{ 'PrestaShop already emits a basic Organization graph sitewide (name, logo). This screen enriches it with sameAs and a contact point when you fill these fields in — it does not add a second, separate graph.'|trans }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block quince_body %}
+<div class="qc-stack" x-data="quinceBrandSchema()">
+
+<form id="quince-brand-schema" method="post" action="{{ path('quince_brand_schema_save') }}" class="qc-stack">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_brand_schema_save') }}">
+
+    {# ── Organization (Schema.org) ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Organization (Schema.org)'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Only fill a field in if you want a different value than what the shop already uses. Empty fields keep the native PrestaShop behaviour.'|trans }}</div>
+            </div>
+        </div>
+
+        <div class="qc-card-body qc-stack">
+            <div class="qc-form-grid qc-form-grid-2">
+                <div class="qc-field">
+                    <label class="qc-label" for="q-org-name">{{ 'Name (override)'|trans }}</label>
+                    <input type="text" id="q-org-name" class="qc-field-base qc-focusable" spellcheck="false"
+                           name="org_name" value="{{ settings.ORG_NAME }}">
+                    <div class="qc-hint">{{ 'Only fill if you want a different brand name than the shop name.'|trans }}</div>
+                </div>
+
+                <div class="qc-field">
+                    <label class="qc-label" for="q-org-logo">{{ 'Logo URL or relative path (override)'|trans }}</label>
+                    <input type="text" id="q-org-logo" class="qc-field-base qc-focusable" spellcheck="false"
+                           name="org_logo" value="{{ settings.ORG_LOGO }}" placeholder="https://… or /img/logo.png">
+                    <div class="qc-hint">{{ 'Empty = use the shop logo.'|trans }}</div>
+                </div>
+
+                <div class="qc-field">
+                    <label class="qc-label" for="q-org-phone">{{ 'Phone'|trans }}</label>
+                    <input type="text" id="q-org-phone" class="qc-field-base qc-focusable" spellcheck="false"
+                           name="org_phone" value="{{ settings.ORG_PHONE }}">
+                </div>
+
+                <div class="qc-field">
+                    <label class="qc-label" for="q-org-email">{{ 'Email'|trans }}</label>
+                    <input type="email" id="q-org-email" class="qc-field-base qc-focusable" spellcheck="false"
+                           name="org_email" value="{{ settings.ORG_EMAIL }}">
+                </div>
+
+                <div class="qc-field">
+                    <label class="qc-label" for="q-org-contact-type">{{ 'Contact type'|trans }}</label>
+                    <div class="qc-select-wrap">
+                        <select id="q-org-contact-type" name="org_contact_type" class="qc-field-base qc-select qc-focusable">
+                            {# Słownictwo Schema.org (ContactPoint.contactType), nie fraza UI — bez |trans,
+                               tak samo jak wartości `default_robots` niżej. #}
+                            {% for value in ['customer service', 'sales', 'technical support', 'billing support', 'reservations'] %}
+                                <option value="{{ value }}" {{ value == settings.ORG_CONTACT_TYPE ? 'selected' }}>
+                                    {{ value }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                    </div>
+                    <div class="qc-hint">{{ 'Only used when phone or email above is filled in.'|trans }}</div>
+                </div>
+            </div>
+
+            <div class="qc-field">
+                <label class="qc-label">{{ 'Social profiles (sameAs)'|trans }}</label>
+
+                <div class="qc-empty" x-show="!sameAs.length" x-cloak>
+                    <div class="qc-empty-text" style="padding:14px">
+                        {{ 'No social profiles added.'|trans }}
+                    </div>
+                </div>
+
+                <div class="qc-repeater" x-show="sameAs.length" x-cloak x-sort="moveSameAs($item, $position)">
+                    <template x-for="(row, index) in sameAs" :key="row.uid">
+                        <div class="qc-rep-row" x-sort:item="row.uid">
+                            <div class="qc-rep-row-head">
+                                <span class="qc-rep-handle" x-sort:handle>{{ icons.icon('drag', 14) }}</span>
+                                <input type="text" class="qc-field-base qc-focusable" spellcheck="false"
+                                       style="flex:1" placeholder="https://facebook.com/youraccount"
+                                       :name="'org_sameas[' + index + ']'" x-model="row.url">
+                                <div class="qc-rep-actions">
+                                    <button type="button" class="qc-icon-btn qc-danger" @click="sameAs.splice(index, 1)">
+                                        {{ icons.icon('trash', 14) }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <button type="button" class="qc-btn qc-btn-outline" style="margin-block-start:10px" @click="addSameAs()">
+                    {{ icons.icon('plus', 14) }} {{ 'Add social URL'|trans }}
+                </button>
+            </div>
+
+            <div>
+                <button type="button" class="qc-btn qc-btn-outline" @click="showJsonld = !showJsonld">
+                    {{ icons.icon('eye', 14) }}
+                    <span x-text="showJsonld ? '{{ 'Hide preview'|trans|e('js') }}' : '{{ 'Preview JSON-LD'|trans|e('js') }}'"></span>
+                </button>
+
+                <div class="qc-preview-box" style="margin-block-start:10px" x-show="showJsonld" x-cloak>
+                    <span class="qc-var" style="white-space:pre-wrap;word-break:break-all">{{ jsonldPreview }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ── Default meta (fallback) ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Default meta (fallback)'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Site-wide fallbacks. Per-page tags from modules (blog, products, categories) take priority — these only apply where nothing else sets them.'|trans }}</div>
+            </div>
+        </div>
+
+        <div class="qc-card-body">
+            <div class="qc-form-grid qc-form-grid-2">
+                <div class="qc-field">
+                    <label class="qc-label" for="q-default-robots">{{ 'Default robots'|trans }}</label>
+                    <div class="qc-select-wrap">
+                        <select id="q-default-robots" name="default_robots" class="qc-field-base qc-select qc-focusable">
+                            <option value="" {{ settings.DEFAULT_ROBOTS == '' ? 'selected' }}>
+                                {{ '— do not emit (use PS9 default) —'|trans }}
+                            </option>
+                            {% for value in ['index,follow', 'index,nofollow', 'noindex,follow', 'noindex,nofollow'] %}
+                                <option value="{{ value }}" {{ value == settings.DEFAULT_ROBOTS ? 'selected' }}>{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                        {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                    </div>
+                </div>
+
+                <div class="qc-field">
+                    <label class="qc-label" for="q-default-og-image">{{ 'Default og:image'|trans }}</label>
+                    <input type="text" id="q-default-og-image" class="qc-field-base qc-focusable" spellcheck="false"
+                           name="default_og_image" value="{{ settings.DEFAULT_OG_IMAGE }}" placeholder="https://… or /img/og-default.jpg">
+                    <div class="qc-hint">{{ 'Used when a page does not provide its own social share image.'|trans }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ── llms.txt ── #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'llms.txt (AI manifest)'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Plain-text manifest at /llms.txt — consumed by some AI engines for fast site understanding. Low but growing adoption.'|trans }}</div>
+            </div>
+        </div>
+
+        <div class="qc-card-body qc-stack">
+            <div class="qc-alert qc-alert-info">
+                {{ icons.icon('info', 18, 'qc-alert-icon') }}
+                <div>
+                    {{ 'Served live at %url%, in the language of the visitor — nothing is written to disk, so it is correct for every shop and every language at once.'|trans({ '%url%': llmsUrl }) }}
+                </div>
+            </div>
+
+            <div class="qc-form-grid qc-form-grid-2">
+                {{ fields.multilang('LLMS_TITLE', 'Title'|trans, languages, translations.LLMS_TITLE, shopName) }}
+                {{ fields.multilangArea('LLMS_SUMMARY', 'Summary'|trans, languages, translations.LLMS_SUMMARY, '', '', 3) }}
+            </div>
+
+            <div class="qc-field">
+                <label class="qc-label">{{ 'Sections (key URLs grouped by topic)'|trans }}</label>
+
+                <div class="qc-empty" x-show="!sections.length" x-cloak>
+                    <div class="qc-empty-text" style="padding:14px">
+                        {{ 'No sections yet.'|trans }}
+                    </div>
+                </div>
+
+                <div class="qc-repeater" x-show="sections.length" x-cloak x-sort="moveSection($item, $position)">
+                    <template x-for="(section, si) in sections" :key="section.uid">
+                        <div class="qc-rep-row" x-sort:item="section.uid">
+                            <div class="qc-rep-row-head">
+                                <span class="qc-rep-handle" x-sort:handle>{{ icons.icon('drag', 14) }}</span>
+                                <span class="qc-badge" x-text="'{{ 'Section'|trans|e('js') }} #' + (si + 1)"></span>
+
+                                <div class="qc-multilang-row" style="flex:1">
+                                    <input type="text" class="qc-field-base qc-focusable" spellcheck="false"
+                                           :placeholder="'{{ 'Heading'|trans|e('js') }}'"
+                                           :name="'llms_section[' + si + '][heading][' + section.lang + ']'"
+                                           x-model="section.heading[section.lang]">
+
+                                    <button type="button" class="qc-lang-toggle" @click="section.langOpen = !section.langOpen">
+                                        <span class="qc-lang-dot" :class="String(section.heading[section.lang] || '').trim() && 'qc-complete'"></span>
+                                        <span x-text="languages.find(l => l.id === section.lang).iso"></span>
+                                        <svg class="qc-icon" width="12" height="12" viewBox="0 0 16 16" fill="none"
+                                             stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+                                    </button>
+
+                                    <div class="qc-lang-menu" x-show="section.langOpen" x-cloak
+                                         @click.outside="section.langOpen = false">
+                                        <template x-for="lang in languages" :key="lang.id">
+                                            <div class="qc-lang-row" :class="section.lang === lang.id && 'qc-current'"
+                                                 @click="section.lang = lang.id; section.langOpen = false">
+                                                <span class="qc-lang-dot" :class="String(section.heading[lang.id] || '').trim() && 'qc-complete'"></span>
+                                                <span class="qc-lang-row-name" x-text="lang.name"></span>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                {# Nagłówki nieaktywnych języków jadą ukryte, żeby zapis nie kasował
+                                   tłumaczenia wpisanego przy poprzednim przełączeniu. #}
+                                <template x-for="lang in languages" :key="'sh' + lang.id">
+                                    <template x-if="lang.id !== section.lang">
+                                        <input type="hidden" :name="'llms_section[' + si + '][heading][' + lang.id + ']'"
+                                               :value="section.heading[lang.id] || ''">
+                                    </template>
+                                </template>
+
+                                <div class="qc-rep-actions">
+                                    <button type="button" class="qc-icon-btn qc-danger" @click="sections.splice(si, 1)">
+                                        {{ icons.icon('trash', 14) }}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="qc-rep-body qc-stack">
+                                <template x-for="(item, ii) in section.items" :key="item.uid">
+                                    <div class="qc-form-grid" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) auto">
+                                        <input type="text" class="qc-field-base qc-focusable" spellcheck="false"
+                                               :placeholder="'{{ 'Title'|trans|e('js') }}'"
+                                               :name="'llms_section[' + si + '][items][' + ii + '][title][' + item.lang + ']'"
+                                               x-model="item.title[item.lang]">
+                                        <input type="text" class="qc-field-base qc-focusable" spellcheck="false"
+                                               placeholder="https://…"
+                                               :name="'llms_section[' + si + '][items][' + ii + '][url][' + item.lang + ']'"
+                                               x-model="item.url[item.lang]">
+                                        <input type="text" class="qc-field-base qc-focusable" spellcheck="false"
+                                               :placeholder="'{{ 'Note (optional)'|trans|e('js') }}'"
+                                               :name="'llms_section[' + si + '][items][' + ii + '][note][' + item.lang + ']'"
+                                               x-model="item.note[item.lang]">
+
+                                        <div style="display:flex; gap:6px">
+                                            <div class="qc-multilang-row" style="width:auto">
+                                                <button type="button" class="qc-lang-toggle" @click="item.langOpen = !item.langOpen">
+                                                    <span class="qc-lang-dot"
+                                                          :class="String(item.title[item.lang] || '').trim() && String(item.url[item.lang] || '').trim() && 'qc-complete'"></span>
+                                                    <span x-text="languages.find(l => l.id === item.lang).iso"></span>
+                                                    <svg class="qc-icon" width="12" height="12" viewBox="0 0 16 16" fill="none"
+                                                         stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+                                                </button>
+
+                                                <div class="qc-lang-menu" x-show="item.langOpen" x-cloak
+                                                     @click.outside="item.langOpen = false">
+                                                    <template x-for="lang in languages" :key="lang.id">
+                                                        <div class="qc-lang-row" :class="item.lang === lang.id && 'qc-current'"
+                                                             @click="item.lang = lang.id; item.langOpen = false">
+                                                            <span class="qc-lang-dot"
+                                                                  :class="String(item.title[lang.id] || '').trim() && 'qc-complete'"></span>
+                                                            <span class="qc-lang-row-name" x-text="lang.name"></span>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+
+                                            <button type="button" class="qc-icon-btn qc-danger" @click="section.items.splice(ii, 1)">
+                                                {{ icons.icon('x', 14) }}
+                                            </button>
+                                        </div>
+
+                                        <template x-for="lang in languages" :key="'i' + lang.id">
+                                            <template x-if="lang.id !== item.lang">
+                                                <span>
+                                                    <input type="hidden" :name="'llms_section[' + si + '][items][' + ii + '][title][' + lang.id + ']'" :value="item.title[lang.id] || ''">
+                                                    <input type="hidden" :name="'llms_section[' + si + '][items][' + ii + '][url][' + lang.id + ']'" :value="item.url[lang.id] || ''">
+                                                    <input type="hidden" :name="'llms_section[' + si + '][items][' + ii + '][note][' + lang.id + ']'" :value="item.note[lang.id] || ''">
+                                                </span>
+                                            </template>
+                                        </template>
+                                    </div>
+                                </template>
+
+                                <button type="button" class="qc-btn qc-btn-outline qc-btn-sm" @click="addItem(section)">
+                                    {{ icons.icon('plus', 13) }} {{ 'Add link'|trans }}
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <button type="button" class="qc-btn qc-btn-outline" style="margin-block-start:10px" @click="addSection()">
+                    {{ icons.icon('plus', 14) }} {{ 'Add section'|trans }}
+                </button>
+            </div>
+
+            <div>
+                <button type="button" class="qc-btn qc-btn-outline" @click="showLlms = !showLlms">
+                    {{ icons.icon('eye', 14) }}
+                    <span x-text="showLlms ? '{{ 'Hide preview'|trans|e('js') }}' : '{{ 'Preview llms.txt'|trans|e('js') }}'"></span>
+                </button>
+
+                <div class="qc-preview-box" style="margin-block-start:10px" x-show="showLlms" x-cloak>
+                    <span class="qc-var" style="white-space:pre-wrap;word-break:break-all">{{ llmsPreview }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+</div>
+
+<script>
+function quinceBrandSchema() {
+    const LANGUAGES = {{ languages|map(l => {id: l.id_lang, name: l.name, iso: l.iso_code|upper, default: l.default})|json_encode|raw }};
+    const SAME_AS = {{ sameAs|json_encode|raw }};
+    const SECTIONS = {{ llmsSections|json_encode|raw }};
+
+    const DEFAULT_LANG = (LANGUAGES.find(l => l.default) || LANGUAGES[0]).id;
+
+    let counter = 0;
+    const uid = () => 'q-' + (++counter);
+
+    return {
+        languages: LANGUAGES,
+        showJsonld: false,
+        showLlms: false,
+
+        sameAs: SAME_AS.map(url => ({ uid: uid(), url })),
+
+        sections: SECTIONS.map(section => ({
+            uid: uid(),
+            lang: DEFAULT_LANG,
+            langOpen: false,
+            heading: Object.assign({}, section.heading || {}),
+            items: (section.items || []).map(item => ({
+                uid: uid(),
+                lang: DEFAULT_LANG,
+                langOpen: false,
+                title: Object.assign({}, item.title || {}),
+                url: Object.assign({}, item.url || {}),
+                note: Object.assign({}, item.note || {})
+            }))
+        })),
+
+        addSameAs() { this.sameAs.push({ uid: uid(), url: '' }); },
+
+        moveSameAs(uid, position) {
+            const from = this.sameAs.findIndex(s => s.uid === uid);
+            this.sameAs.splice(position, 0, this.sameAs.splice(from, 1)[0]);
+        },
+
+        addSection() {
+            this.sections.push({ uid: uid(), lang: DEFAULT_LANG, langOpen: false, heading: {}, items: [] });
+        },
+
+        addItem(section) {
+            section.items.push({ uid: uid(), lang: DEFAULT_LANG, langOpen: false, title: {}, url: {}, note: {} });
+        },
+
+        moveSection(uid, position) {
+            const from = this.sections.findIndex(s => s.uid === uid);
+            this.sections.splice(position, 0, this.sections.splice(from, 1)[0]);
+        }
+    };
+}
+</script>
+{% endblock %}

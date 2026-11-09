@@ -1,0 +1,158 @@
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/homepage.html.twig' as strona %}
+
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{% block quince_actions %}
+    <button type="submit" form="quince-homepage" class="qc-btn qc-btn-primary">
+        {{ icons.icon('check', 14) }} {{ 'Save changes'|trans }}
+    </button>
+{% endblock %}
+
+{% block quince_body %}
+{# Strona główna to lista sekcji, jedna pod drugą. Wiersz mówi, co sekcja
+   pokazuje; ustawienia otwierają się pod strzałką i prowadzą krok po kroku.
+
+   Całość jedzie do serwera jednym polem ukrytym jako JSON — liczba sekcji
+   i kolumn zmienia się przy każdym przestawieniu, więc nie da się jej opisać
+   nazwanymi polami formularza. Tak samo działają miejsca promocyjne na
+   listingu.
+
+   Projekt ekranu: `quince/widoki/panel-strona-glowna.html`. #}
+
+{% set slowniki = {
+    'modes': modes,
+    'widths': widths,
+    'skins': skins,
+    'columnTypes': columnTypes,
+    'sources': sources,
+    'displays': displays,
+    'tileImages': tileImages,
+    'iconColours': iconColours,
+    'tileDirections': tileDirections,
+    'productImages': productImages,
+    'percentSteps': percentSteps,
+    'maxColumns': maxColumns,
+    'extraStyles': extraStyles,
+    'maxExtras': maxExtras,
+    'iconsRoute': iconsRoute
+} %}
+
+<form id="quince-homepage" method="post" action="{{ path('quince_homepage_save') }}" x-data
+      data-quince-homepage
+      data-siatka="{{ gridColumns }}"
+      data-min-procent="{{ minPercent }}"
+      data-max-zapewnien="{{ maxExtras }}"
+      data-languages="{{ languages|map(l => l.id_lang)|json_encode|e('html_attr') }}"
+      data-kategorie="{{ categories|json_encode|e('html_attr') }}"
+      data-napisy="{{ {
+          visibleGrid: 'As many as the column is wide.'|trans,
+          visiblePercent: 'That is how many whole grid fields fit in this width.'|trans,
+          restCarousel: 'The rest scrolls sideways.'|trans,
+          restRows: 'Further rows below.'|trans,
+          restNone: 'They all fit in one row.'|trans,
+          modeGrid: 'Tiles line up with product lists.'|trans,
+          modePercent: 'Free of the grid. For big tiles and module blocks.'|trans,
+          leftover: 'The width that is left.'|trans,
+          gridFields: 'grid fields'|trans,
+          percentWidth: 'percent of the width'|trans,
+          oneColumn: 'One column across the whole section.'|trans,
+          manyColumns: 'columns, each with its own content.'|trans,
+          headerOn: 'It stands above the whole section.'|trans,
+          headerOff: 'Without a heading the content speaks for itself.'|trans,
+          tilePhoto: 'The photo comes from the category in the catalogue.'|trans,
+          tileIcon: 'The icon takes its colour from the shop palette.'|trans,
+          addCategory: 'add a category'|trans,
+          removeCategory: 'Remove the category'|trans,
+          iconPlaceholder: 'icon name'|trans,
+          tiles: 'tiles'|trans,
+          visible: 'visible'|trans,
+          noHook: 'hook not set'|trans,
+          noProduct: 'product not picked'|trans,
+          categoriesWord: 'categories'|trans,
+          bigTile: 'big tile'|trans,
+          claims: 'claims'|trans,
+          open: 'Settings'|trans,
+          close: 'Close'|trans,
+          linesOne: 'line'|trans,
+          linesMany: 'lines'|trans,
+          linesMax: 'the most you can add'|trans,
+          extrasPills: 'One line each, for example „5 years warranty”.'|trans,
+          extrasBlocks: 'A highlight and a line under it, for example „42” over „connectors in the set”.'|trans,
+          background: 'background'|trans,
+          widthFull: 'full width'|trans,
+          widthBoxed: 'page width'|trans
+      }|json_encode|e('html_attr') }}">
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_homepage_save') }}">
+    <input type="hidden" name="SECTIONS" value="">
+
+    <div class="qc-alert qc-alert-info">
+        {{ icons.icon('info', 18, 'qc-alert-icon') }}
+        <div>{{ 'The home page is a list of sections, one below another. A section splits into columns and every column gets its own content. Drag a section by its handle to move it.'|trans }}</div>
+    </div>
+
+    {% if shopsWithOwnSettings|length %}
+        <div class="qc-alert qc-alert-warning">
+            {{ icons.icon('alertCircle', 18, 'qc-alert-icon') }}
+            <div>
+                <strong>{{ 'These shops show a different home page than this screen:'|trans }}</strong>
+                {{ shopsWithOwnSettings|join(', ') }}.
+                {{ 'They have their own settings. Choose the shop at the top of the panel to see them, or save here to give them what you see on this screen.'|trans }}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Sections'|trans }}</div>
+            </div>
+            <button type="button" class="qc-btn qc-btn-outline" data-dodaj-sekcje>
+                {{ icons.icon('plus', 14) }} {{ 'Add a section'|trans }}
+            </button>
+        </div>
+
+        <div class="qc-card-body">
+            <div class="qc-empty" data-pusto hidden>
+                <div class="qc-empty-text" style="padding:14px">{{ 'No sections yet.'|trans }}</div>
+            </div>
+
+            <div class="qc-repeater" x-sort x-sort:group="sekcje" data-sekcje>
+                {% for sekcja in sections %}
+                    {{ strona.sekcja(sekcja, slowniki, languages, categories, gridColumns, loop.index) }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    {# Wzór nowej sekcji. Rysuje go to samo makro, co sekcje zapisane w sklepie,
+       więc pola wyboru niosą wartości z silnika, a skrypt nie przepisuje
+       u siebie ani jednego znacznika. #}
+    <template data-wzor-sekcji>
+        {{ strona.sekcja({
+            'id': '',
+            'active': true,
+            'mode': 'grid',
+            'parts': [gridColumns],
+            'skin': 'none',
+            'width': 'full',
+            'header': true,
+            'title': {},
+            'link': '',
+            'link_label': {},
+            'columns': []
+        }, slowniki, languages, categories, gridColumns, 0) }}
+    </template>
+</form>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Paczka sortowania idzie PRZED Alpine: wtyczka musi się zarejestrować,
+       zanim Alpine ruszy, inaczej `x-sort` zostaje martwym atrybutem. #}
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine-sort.min.js') ~ qcVer }}" defer></script>
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine.min.js') ~ qcVer }}" defer></script>
+    <script src="{{ asset('../modules/quince_engine/views/js/homepage.js') ~ qcVer }}" defer></script>
+{% endblock %}

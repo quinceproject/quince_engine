@@ -1,0 +1,496 @@
+{# Domena tłumaczeń musi stać TUTAJ. Plik z makrami nie dziedziczy jej po
+   szablonie, który go importuje. #}
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{# Sekcje strony głównej.
+
+   Wiersz mówi, co sekcja pokazuje; ustawienia otwierają się dopiero pod
+   strzałką i prowadzą krok po kroku: podział, treść kolumn, nagłówek, oprawa.
+   Każdy krok odsłania tylko to, co wynika z poprzedniego — pola bez znaczenia
+   dla wybranego podziału albo rodzaju treści są schowane, a nie wyszarzone.
+
+   Wszystkie odmiany stoją w znaczniku od razu, a skrypt je pokazuje i gasi.
+   Dzięki temu każdy napis przechodzi przez tłumacza, a lista wartości pochodzi
+   z silnika, nie z przepisanej tablicy w skrypcie.
+
+   Projekt ekranu: `quince/widoki/panel-strona-glowna.html`. #}
+
+
+{# Kolumna sekcji: skąd bierze się treść i jak wygląda. #}
+{% macro zapewnienie(zapewnienie, numer, postac, languages) %}
+    {% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+    {% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+
+    <div class="qc-rep-row" data-zapewnienie>
+        <div class="qc-uklad" style="margin:0;border:0;box-shadow:none;background:none;padding:var(--space-2)">
+            <div data-pole="extra-lead" data-gdy-postac="blocks"{{ postac == 'blocks' ? '' : ' hidden' }}>
+                {{ fields.multilang('', 'Highlight'|trans, languages, zapewnienie.lead|default({})) }}
+            </div>
+
+            <div data-pole="extra-text">
+                {{ fields.multilang('', 'Text'|trans, languages, zapewnienie.text|default({})) }}
+            </div>
+
+            <button type="button" class="qc-icon-btn qc-danger" data-usun-zapewnienie
+                    style="align-self:end;margin-block-end:4px" title="{{ 'Remove'|trans }}">
+                {{ icons.icon('trash', 14) }}
+            </button>
+        </div>
+    </div>
+{% endmacro %}
+
+
+{% macro kolumna(kolumna, numer, slowniki, kategorie, languages) %}
+    {% import _self as _self %}
+    {% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+    {% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+
+    {% set rodzaj = kolumna.type|default('products') %}
+    {% set zrodlo = kolumna.source|default('newest') %}
+
+    <div class="qc-rep-row" data-kolumna>
+        <div class="qc-rep-row-head">
+            <span class="qc-rep-name">
+                {{ 'Column'|trans }} {{ numer }}
+                <span class="qc-rep-sub" data-udzial></span>
+            </span>
+        </div>
+
+        <div class="qc-rep-body">
+
+        <div class="qc-seg qc-seg-wrap" data-pole="type">
+            {% for wartosc, etykieta in slowniki.columnTypes %}
+                <button type="button" class="qc-seg-btn{{ rodzaj == wartosc ? ' is-active' }}"
+                        data-wartosc="{{ wartosc }}">{{ etykieta|trans }}</button>
+            {% endfor %}
+        </div>
+
+        {# ── blok z modułu ── #}
+        <div class="qc-uklad qc-obszar-pola" data-gdy="hook"{{ rodzaj == 'hook' ? '' : ' hidden' }}>
+            <div class="qc-uklad-pole">
+                {# Nazwa hooka zostaje po angielsku: to identyfikator, nie napis. #}
+                <span class="qc-label">{{ 'Hook name'|trans }}</span>
+                <input type="text" class="qc-field-base qc-focusable" data-pole="hook"
+                       style="inline-size:280px" value="{{ kolumna.hook|default('') }}"
+                       placeholder="{{ 'displayHookName'|trans }}">
+                <span class="qc-hint">{{ 'A WiseBlock block, the configurator, any module. The column disappears when the module shows nothing.'|trans }}</span>
+            </div>
+        </div>
+
+        {# ── zajawki produktów ── #}
+        <div class="qc-uklad qc-obszar-pola" data-gdy="products"{{ rodzaj == 'products' ? '' : ' hidden' }}>
+            <div class="qc-uklad-pole">
+                <span class="qc-label">{{ 'Products'|trans }}</span>
+                <div class="qc-select-wrap">
+                    <select class="qc-field-base qc-select qc-focusable" data-pole="source">
+                        {% for wartosc, etykieta in slowniki.sources %}
+                            <option value="{{ wartosc }}"{{ zrodlo == wartosc ? ' selected' : '' }}>{{ etykieta|trans }}</option>
+                        {% endfor %}
+                    </select>
+                    {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                </div>
+            </div>
+
+            <div class="qc-uklad-pole" data-gdy-zrodla="category"{{ zrodlo == 'category' ? '' : ' hidden' }}>
+                <span class="qc-label">{{ 'Category'|trans }}</span>
+                <div class="qc-select-wrap">
+                    <select class="qc-field-base qc-select qc-focusable" data-pole="category">
+                        {% for kat in kategorie %}
+                            <option value="{{ kat.id }}"{{ kolumna.category|default(0) == kat.id ? ' selected' : '' }}>{{ kat.name }}</option>
+                        {% endfor %}
+                    </select>
+                    {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                </div>
+            </div>
+
+            <div class="qc-uklad-pole" data-gdy-zrodla="manual"{{ zrodlo == 'manual' ? '' : ' hidden' }}>
+                <span class="qc-label">{{ 'Product ids'|trans }}</span>
+                <input type="text" class="qc-field-base qc-focusable" data-pole="manual"
+                       style="inline-size:240px" value="{{ kolumna.manual|default([])|join(', ') }}"
+                       placeholder="{{ '12, 34, 56'|trans }}">
+            </div>
+
+            <div class="qc-uklad-pole">
+                <span class="qc-label">{{ 'How many tiles'|trans }}</span>
+                <input type="number" class="qc-field-base qc-focusable" data-pole="count"
+                       style="inline-size:88px;text-align:center"
+                       value="{{ kolumna.count|default(8) }}" min="1" max="24" step="1">
+            </div>
+
+            {# Ile zajawek widać naraz, nie jest ustawieniem: wynika z szerokości
+               kolumny, a ta z siatki sklepu. #}
+            <div class="qc-uklad-pole">
+                <span class="qc-label">{{ 'Visible at once'|trans }}</span>
+                <span class="qc-wyliczone" data-widoczne></span>
+                <span class="qc-hint" data-widoczne-opis></span>
+            </div>
+
+            <div class="qc-uklad-pole">
+                <span class="qc-label">{{ 'The rest'|trans }}</span>
+                <div class="qc-seg qc-seg-wrap" data-pole="display">
+                    {% for wartosc, etykieta in slowniki.displays %}
+                        <button type="button" class="qc-seg-btn{{ kolumna.display|default('carousel') == wartosc ? ' is-active' }}"
+                                data-wartosc="{{ wartosc }}">{{ etykieta|trans }}</button>
+                    {% endfor %}
+                </div>
+                <span class="qc-hint" data-reszta-opis></span>
+            </div>
+        </div>
+
+        {# ── duża zajawka jednego produktu ── #}
+        <div class="qc-uklad qc-obszar-pola" data-gdy="product"{{ rodzaj == 'product' ? '' : ' hidden' }}>
+            <div class="qc-uklad-pole">
+                <span class="qc-label">{{ 'Product id'|trans }}</span>
+                <input type="number" class="qc-field-base qc-focusable" data-pole="product"
+                       style="inline-size:120px" value="{{ kolumna.product|default(0) }}" min="0" step="1">
+            </div>
+
+            <div class="qc-uklad-pole">
+                <span class="qc-label">{{ 'Photo'|trans }}</span>
+                <div class="qc-seg qc-seg-wrap" data-pole="image">
+                    {% for wartosc, etykieta in slowniki.productImages %}
+                        <button type="button" class="qc-seg-btn{{ kolumna.image|default('above') == wartosc ? ' is-active' }}"
+                                data-wartosc="{{ wartosc }}">{{ etykieta|trans }}</button>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {# Krótkie zapewnienia obok nazwy. Wpisywane, a nie brane z cech:
+               cecha przychodzi jako para nazwa i wartość, więc dałaby
+               „Gwarancja: 5 lat” zamiast „5 lat gwarancji”, a część tych
+               napisów dotyczy sklepu, nie produktu. #}
+            <div class="qc-uklad-pole">
+                <span class="qc-label">{{ 'Extras'|trans }}</span>
+                <div class="qc-seg qc-seg-wrap" data-pole="extraStyle">
+                    {% for wartosc, etykieta in slowniki.extraStyles %}
+                        <button type="button" class="qc-seg-btn{{ kolumna.extra_style|default('pills') == wartosc ? ' is-active' }}"
+                                data-wartosc="{{ wartosc }}">{{ etykieta|trans }}</button>
+                    {% endfor %}
+                </div>
+                <span class="qc-hint" data-zapewnienia-opis></span>
+            </div>
+
+            {# Pozycje dokłada się po jednej. Stała liczba miejsc kazałaby
+               patrzeć na puste pola przy zajawce, która ma jedno zapewnienie. #}
+            <div class="qc-uklad-pole" style="flex:1 1 100%">
+                <div class="qc-repeater" data-zapewnienia>
+                    {% for zapewnienie in kolumna.extras|default([]) %}
+                        {{ _self.zapewnienie(zapewnienie, loop.index, kolumna.extra_style|default('pills'), languages) }}
+                    {% endfor %}
+                </div>
+
+                <div class="qc-dodaj">
+                    <span class="qc-dodaj-napis" data-zapewnienia-licznik></span>
+                    <button type="button" class="qc-btn qc-btn-outline" data-dodaj-zapewnienie>{{ 'Add a line'|trans }}</button>
+                </div>
+            </div>
+
+            {# Wzór nowej pozycji: ten sam znacznik co pozycje zapisane. #}
+            <template data-wzor-zapewnienia>
+                {{ _self.zapewnienie({}, 0, kolumna.extra_style|default('pills'), languages) }}
+            </template>
+        </div>
+
+        {# ── kafle kategorii ── #}
+        <div class="qc-uklad qc-obszar-pola" data-gdy="categories"{{ rodzaj == 'categories' ? '' : ' hidden' }}>
+            {# Kafle stoją w kolejności wyboru, więc każdą kategorię da się zdjąć
+               osobno. Listę rysuje skrypt, bo zmienia się w trakcie pracy. #}
+            <div class="qc-uklad-pole" style="flex:1 1 100%">
+                <span class="qc-label">{{ 'Categories'|trans }}</span>
+                {# Wybrane kategorie i ich ikony jadą na pojemniku, bo listę rysuje
+                   skrypt i musi przetrwać każde przerysowanie. #}
+                <div class="qc-tags" data-pole="categories"
+                     data-wybrane="{{ kolumna.categories|default([])|json_encode|e('html_attr') }}"
+                     data-ikony="{{ kolumna.icons|default({})|json_encode|e('html_attr') }}"></div>
+                <span class="qc-hint">{{ 'Tiles stand in the order you pick them.'|trans }}</span>
+            </div>
+
+            <div class="qc-uklad-pole">
+                <span class="qc-label">{{ 'On the tile'|trans }}</span>
+                <div class="qc-seg qc-seg-wrap" data-pole="tileImage">
+                    {% for wartosc, etykieta in slowniki.tileImages %}
+                        <button type="button" class="qc-seg-btn{{ kolumna.image|default('photo') == wartosc ? ' is-active' }}"
+                                data-wartosc="{{ wartosc }}">{{ etykieta|trans }}</button>
+                    {% endfor %}
+                </div>
+                <span class="qc-hint" data-kafel-opis></span>
+            </div>
+
+            <div class="qc-uklad-pole" data-gdy-kafel="icon"{{ kolumna.image|default('photo') == 'icon' ? '' : ' hidden' }}>
+                <span class="qc-label">{{ 'Icon colour'|trans }}</span>
+                <div class="qc-select-wrap">
+                    <select class="qc-field-base qc-select qc-focusable" data-pole="colour">
+                        {% for wartosc, etykieta in slowniki.iconColours %}
+                            <option value="{{ wartosc }}"{{ kolumna.colour|default('accent') == wartosc ? ' selected' : '' }}>{{ etykieta|trans }}</option>
+                        {% endfor %}
+                    </select>
+                    {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                </div>
+            </div>
+
+            {# Napis na przycisku jest jeden dla całej kolumny: kafle prowadzą
+               do działów tego samego rodzaju, więc i zaproszenie brzmi tak
+               samo. Pusty napis daje domyślne „Zobacz dział". #}
+            <div data-pole="button">
+                {{ fields.multilang('', 'Button on the tile'|trans, languages, kolumna.button|default({})) }}
+            </div>
+
+            <div class="qc-uklad-pole">
+                <span class="qc-label">{{ 'Tiles'|trans }}</span>
+                <div class="qc-seg qc-seg-wrap" data-pole="direction">
+                    {% for wartosc, etykieta in slowniki.tileDirections %}
+                        <button type="button" class="qc-seg-btn{{ kolumna.direction|default('horizontal') == wartosc ? ' is-active' }}"
+                                data-wartosc="{{ wartosc }}">{{ etykieta|trans }}</button>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {# Ikona dla każdej wybranej kategorii. Rysowana skryptem, bo zależy
+               od tego, co stoi w chipach powyżej. #}
+            <div class="qc-uklad-pole" style="flex:1 1 100%" data-gdy-kafel="icon"{{ kolumna.image|default('photo') == 'icon' ? '' : ' hidden' }}>
+                <span class="qc-label">{{ 'Icon for each category'|trans }}</span>
+                <div data-pole="icons" style="display:grid;gap:6px"></div>
+            </div>
+        </div>
+        </div>
+    </div>
+{% endmacro %}
+
+
+{# Jedna sekcja: wiersz listy, a pod strzałką kaskada jej ustawień. #}
+{% macro sekcja(sekcja, slowniki, languages, kategorie, siatka, numer) %}
+    {% import _self as m %}
+    {% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+    {% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+
+    {% set tryb = sekcja.mode|default('grid') %}
+    {% set czesci = sekcja.parts|default([siatka]) %}
+
+    <div class="qc-rep-row" data-sekcja x-sort:item="'{{ sekcja.id|default('section') }}'">
+        <div class="qc-rep-row-head" data-pasek>
+            <span class="qc-rep-handle" x-sort:handle title="{{ 'Drag to reorder'|trans }}">{{ icons.icon('drag', 14) }}</span>
+
+            {# Opis wpisuje skrypt z tego, co stoi w rozwinięciu: wiersz ma
+               powiedzieć, co sekcja pokazuje, zanim ktokolwiek ją otworzy. #}
+            <span class="qc-rep-name">
+                <span data-nazwa>{{ 'Section'|trans }} {{ numer }}</span>
+                <span class="qc-rep-sub" data-opis></span>
+            </span>
+
+            <div class="qc-rep-actions">
+                {# Znacznik siedzi na opakowaniu, bo przełącznik jest gotowym
+                   komponentem panelu i nie przyjmuje własnych atrybutów. #}
+                <span data-pole="active">{{ fields.toggle('', sekcja.active|default(true)) }}</span>
+
+                <button type="button" class="qc-icon-btn" data-rozwin title="{{ 'Settings'|trans }}">
+                    {{ icons.icon('chevronDown', 14, 'qc-strzalka') }}
+                </button>
+
+                <button type="button" class="qc-icon-btn qc-danger" data-usun-sekcje title="{{ 'Remove'|trans }}">
+                    {{ icons.icon('trash', 14) }}
+                </button>
+            </div>
+        </div>
+
+        <div class="qc-rep-body" hidden>
+            <input type="hidden" data-pole="id" value="{{ sekcja.id|default('') }}">
+
+            {# ── krok 1: podział ── #}
+            <div class="qc-krok qc-krok--gotowy">
+                <span class="qc-krok-numer">1</span>
+                <div>
+                    <div class="qc-krok-tytul">{{ 'How the section is split'|trans }}</div>
+                    <div class="qc-krok-opis">
+                        {{ 'A grid split keeps the tiles in line with product lists: the shop shows %n% tiles per row, so a column three fields wide shows three tiles. The last column takes whatever width is left.'|trans({'%n%': siatka}) }}
+                    </div>
+
+                    <div class="qc-uklad">
+                        <div class="qc-uklad-pole">
+                            <span class="qc-label">{{ 'Split'|trans }}</span>
+                            <div class="qc-seg qc-seg-wrap" data-pole="mode">
+                                {% for wartosc, etykieta in slowniki.modes %}
+                                    <button type="button" class="qc-seg-btn{{ tryb == wartosc ? ' is-active' }}"
+                                            data-wartosc="{{ wartosc }}">{{ etykieta|trans }}</button>
+                                {% endfor %}
+                            </div>
+                            <span class="qc-hint" data-tryb-opis></span>
+                        </div>
+
+                        <div class="qc-uklad-pole">
+                            <span class="qc-label">{{ 'How many columns'|trans }}</span>
+                            <div class="qc-seg qc-seg-wrap" data-pole="count">
+                                {% for n in 1..slowniki.maxColumns %}
+                                    <button type="button" class="qc-seg-btn{{ czesci|length == n ? ' is-active' }}"
+                                            data-wartosc="{{ n }}">{{ n }}</button>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        {# Po jednym polu na kolumnę. Ostatnia pokazuje resztę
+                           i nie ma czym jej zepsuć, więc nie dostaje kontrolki. #}
+                        {% for i in 0..(slowniki.maxColumns - 1) %}
+                            <div class="qc-uklad-pole" data-czesc="{{ i }}" hidden>
+                                <span class="qc-label">{{ 'Column'|trans }} {{ i + 1 }}</span>
+
+                                <div class="qc-select-wrap" data-gdy-tryb="grid">
+                                    <select class="qc-field-base qc-select qc-focusable" data-pole="part-grid"
+                                            style="inline-size:110px">
+                                        {% for n in 1..siatka %}
+                                            <option value="{{ n }}"{{ tryb == 'grid' and czesci[i]|default(0) == n ? ' selected' : '' }}>{{ n }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                                </div>
+
+                                <div class="qc-select-wrap" data-gdy-tryb="percent" hidden>
+                                    <select class="qc-field-base qc-select qc-focusable" data-pole="part-percent"
+                                            style="inline-size:110px">
+                                        {% for n in slowniki.percentSteps %}
+                                            <option value="{{ n }}"{{ tryb == 'percent' and czesci[i]|default(0) == n ? ' selected' : '' }}>{{ n }}%</option>
+                                        {% endfor %}
+                                    </select>
+                                    {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                                </div>
+
+                                <span class="qc-wyliczone" data-reszta hidden></span>
+                                <span class="qc-hint" data-czesc-opis></span>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="qc-podglad" data-podglad></div>
+                </div>
+            </div>
+
+            {# ── krok 2: treść kolumn ── #}
+            <div class="qc-krok qc-krok--gotowy">
+                <span class="qc-krok-numer">2</span>
+                <div>
+                    <div class="qc-krok-tytul">{{ 'What stands in each column'|trans }}</div>
+                    <div class="qc-krok-opis" data-kolumny-opis></div>
+
+                    {# Wiersze kolumn w powtarzaczu, tak jak w Link blocks: to on
+                       daje odstęp między wierszami. Bez niego kolumny stały
+                       sklejone w jeden blok. #}
+                    <div class="qc-repeater">
+                        {% for i in 0..(slowniki.maxColumns - 1) %}
+                            {{ m.kolumna(sekcja.columns[i]|default({}), i + 1, slowniki, kategorie, languages) }}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            {# ── krok 3: nagłówek ── #}
+            <div class="qc-krok{{ sekcja.header|default(false) ? ' qc-krok--gotowy' }}" data-krok-naglowek>
+                <span class="qc-krok-numer">3</span>
+                <div>
+                    <div class="qc-krok-tytul">{{ 'Heading'|trans }}</div>
+                    <div class="qc-krok-opis" data-naglowek-opis></div>
+
+                    <div class="qc-uklad">
+                        <div class="qc-uklad-pole">
+                            <span class="qc-label">{{ 'Heading'|trans }}</span>
+                            <span data-pole="header">{{ fields.toggle('', sekcja.header|default(false)) }}</span>
+                        </div>
+
+                        {# Ikona przed napisem nagłówka. Nieobowiązkowa, więc
+                           wybierak zaczyna od pozycji „bez ikony”. Ten sam
+                           komponent co w pasie informacyjnym i w stopce. #}
+                        <div class="qc-uklad-pole" data-pole="icon" data-gdy-naglowek{{ sekcja.header|default(false) ? '' : ' hidden' }}>
+                            <span class="qc-label">{{ 'Icon'|trans }}</span>
+                            {{ fields.iconpicker('', sekcja.icon|default(''), sekcja.icon_svg|default(''), path(slowniki.iconsRoute)) }}
+                        </div>
+
+                        <div data-pole="title" data-gdy-naglowek{{ sekcja.header|default(false) ? '' : ' hidden' }}>
+                            {{ fields.multilang('', 'Heading text'|trans, languages, sekcja.title|default({})) }}
+                        </div>
+
+                        <div class="qc-uklad-pole" data-gdy-naglowek{{ sekcja.header|default(false) ? '' : ' hidden' }}>
+                            <span class="qc-label">{{ 'Link'|trans }}</span>
+                            <input type="text" class="qc-field-base qc-focusable" data-pole="link"
+                                   style="inline-size:220px" value="{{ sekcja.link|default('') }}" placeholder="https://">
+                            <span class="qc-hint">{{ 'Leave it empty and the heading gets no link.'|trans }}</span>
+                        </div>
+
+                        <div data-pole="link_label" data-gdy-odnosnik{{ sekcja.link|default('') ? '' : ' hidden' }}>
+                            {{ fields.multilang('', 'Link text'|trans, languages, sekcja.link_label|default({})) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# ── krok 4: oprawa ── #}
+            <div class="qc-krok{{ sekcja.skin|default('none') != 'none' ? ' qc-krok--gotowy' }}" data-krok-oprawa>
+                <span class="qc-krok-numer">4</span>
+                <div>
+                    <div class="qc-krok-tytul">{{ 'Frame'|trans }}</div>
+                    <div class="qc-krok-opis">{{ 'The background behind the section and how wide the band runs.'|trans }}</div>
+
+                    <div class="qc-uklad">
+                        <div class="qc-uklad-pole">
+                            <span class="qc-label">{{ 'Background'|trans }}</span>
+                            <div class="qc-select-wrap">
+                                <select class="qc-field-base qc-select qc-focusable" data-pole="skin">
+                                    {% for wartosc, etykieta in slowniki.skins %}
+                                        <option value="{{ wartosc }}"{{ sekcja.skin|default('none') == wartosc ? ' selected' : '' }}>{{ etykieta|trans }}</option>
+                                    {% endfor %}
+                                </select>
+                                {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                            </div>
+                        </div>
+
+                        <div class="qc-uklad-pole">
+                            <span class="qc-label">{{ 'Width'|trans }}</span>
+                            <div class="qc-seg qc-seg-wrap" data-pole="width">
+                                {% for wartosc, etykieta in slowniki.widths %}
+                                    <button type="button" class="qc-seg-btn{{ sekcja.width|default('full') == wartosc ? ' is-active' }}"
+                                            data-wartosc="{{ wartosc }}">{{ etykieta|trans }}</button>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        {# Treść od krawędzi do krawędzi. Potrzebna slajderowi
+                           i pasom, w których zdjęcie ma dochodzić do brzegu
+                           okna; pozostałe trzymają treść w świetle strony. #}
+                        <div class="qc-uklad-pole">
+                            <span class="qc-label">{{ 'Content'|trans }}</span>
+                            <span data-pole="bleed">{{ fields.toggle('', sekcja.bleed|default(false), 'Edge to edge'|trans) }}</span>
+                        </div>
+
+                        <div class="qc-uklad-pole" data-gdy-skora="gradient"{{ sekcja.skin|default('none') == 'gradient' ? '' : ' hidden' }}>
+                            <span class="qc-label">{{ 'From'|trans }}</span>
+                            <input type="text" class="qc-field-base qc-focusable" data-pole="skin_from"
+                                   style="inline-size:150px" value="{{ sekcja.skin_from|default('') }}" placeholder="primary-6">
+                            <span class="qc-hint">{{ 'A step of the shop palette (neutral, primary, secondary, promo) or a hex code.'|trans }}</span>
+                        </div>
+
+                        <div class="qc-uklad-pole" data-gdy-skora="gradient"{{ sekcja.skin|default('none') == 'gradient' ? '' : ' hidden' }}>
+                            <span class="qc-label">{{ 'To'|trans }}</span>
+                            <input type="text" class="qc-field-base qc-focusable" data-pole="skin_to"
+                                   style="inline-size:150px" value="{{ sekcja.skin_to|default('') }}" placeholder="primary-11">
+                        </div>
+
+                        <div class="qc-uklad-pole" data-gdy-skora="gradient"{{ sekcja.skin|default('none') == 'gradient' ? '' : ' hidden' }}>
+                            <span class="qc-label">{{ 'Angle'|trans }}</span>
+                            <input type="number" class="qc-field-base qc-focusable" data-pole="skin_angle"
+                                   style="inline-size:88px;text-align:center"
+                                   value="{{ sekcja.skin_angle|default(120) }}" min="0" max="360" step="5">
+                        </div>
+
+                        <div class="qc-uklad-pole" data-gdy-skora="photo"{{ sekcja.skin|default('none') == 'photo' ? '' : ' hidden' }}>
+                            <span class="qc-label">{{ 'Photo'|trans }}</span>
+                            <input type="text" class="qc-field-base qc-focusable" data-pole="skin_image"
+                                   style="inline-size:280px" value="{{ sekcja.skin_image|default('') }}" placeholder="/img/cms/band.jpg">
+                        </div>
+
+                        <div class="qc-uklad-pole" data-gdy-skora="photo"{{ sekcja.skin|default('none') == 'photo' ? '' : ' hidden' }}>
+                            <span class="qc-label">{{ 'Veil'|trans }}</span>
+                            <span data-pole="skin_shade">{{ fields.toggle('', sekcja.skin_shade|default(false), 'Darken the photo'|trans) }}</span>
+                            <span class="qc-hint">{{ 'For a photo that fights with the text.'|trans }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}

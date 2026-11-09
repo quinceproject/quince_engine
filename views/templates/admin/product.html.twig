@@ -1,0 +1,264 @@
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{% block quince_actions %}
+    <button type="submit" form="quince-product" class="qc-btn qc-btn-primary">
+        {{ icons.icon('check', 14) }} {{ 'Save changes'|trans }}
+    </button>
+{% endblock %}
+
+{% block quince_body %}
+{# Ekran odwzorowuje stronę produktu, zgodnie z makietą
+   `quince/makiety/panel-karta-produktu.html` i jej inwentarzem:
+
+     sekcja  — blok od lewej do prawej krawędzi; niesie tło i odstęp,
+     karta   — powierzchnia w sekcji: tło, ramka, cień, zaokrąglenie,
+     obszar  — miejsce na wiersze wewnątrz karty,
+     wiersz  — pojemnik na jedno albo kilka miejsc,
+     miejsce — element silnika, hook modułu albo przycisk z wstawki. #}
+
+{# Wiersze i obszary są wspólne z ekranem listingu — patrz nagłówek tego pliku. #}
+
+{% import '@Modules/quince_engine/views/templates/admin/_macros/arrangement.html.twig' as uklad %}
+
+{# Zebatka wygladu bloku stoi we wspolnym makrze: tych samych czterech ustawien
+   uzywa ekran listingu. #}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/surface.html.twig' as m %}
+
+
+{# `x-data` jest konieczne: Alpine przetwarza wyłącznie drzewa, które mają
+   komponent w korzeniu. Bez tego `x-sort` w obszarach nie zostaje w ogóle
+   podpięty i przeciąganie nic nie robi. #}
+<form id="quince-product" method="post" action="{{ path('quince_product_save') }}" x-data data-quince-uklad
+      data-napis-nazwa-hooka="{{ 'displayHookName'|trans }}"
+      data-napis-zatwierdz="{{ 'Add'|trans }}"
+      data-napis-poniechaj="{{ 'Cancel'|trans }}"
+      data-napis-usun="{{ 'Remove'|trans }}"
+      data-napis-dodaj-miejsce="{{ 'Add a hook next to this one'|trans }}">
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_product_save') }}">
+    <input type="hidden" name="LAYOUT" value="{{ layout }}">
+    <input type="hidden" name="ARRANGEMENT" value="">
+
+    {# Jeden pasek informacyjny na stronę, w oprawie, ktora panel rezerwuje wlasnie
+       dla niego. Mowi, co sie tu ustawia, zanim ktos zacznie klikac. #}
+    <div class="qc-alert qc-alert-info">
+        {{ icons.icon('info', 18, 'qc-alert-icon') }}
+        <div>{{ 'This screen mirrors the product page. A section runs from edge to edge, cards sit inside it, and areas inside the cards hold the rows. Switch elements on and off, drag them into order and add module hooks where they should stand. A padlock means the element belongs to the theme: you can switch it off, but not remove it.'|trans }}</div>
+    </div>
+
+    {# Panel na wszystkich sklepach albo na grupie pokazuje ustawienie wspólne.
+       Sklep z własnym zapisem wygląda inaczej i bez tej informacji nie da się
+       zrozumieć, dlaczego strona nie odpowiada ekranowi. #}
+    {% if shopsWithOwnSettings|length %}
+        <div class="qc-alert qc-alert-warning">
+            {{ icons.icon('alertCircle', 18, 'qc-alert-icon') }}
+            <div>
+                <strong>{{ 'These shops show a different product page than this screen:'|trans }}</strong>
+                {{ shopsWithOwnSettings|join(', ') }}.
+                {{ 'They have their own settings. Choose the shop at the top of the panel to see them, or save here to give them what you see on this screen.'|trans }}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="qc-uklad">
+        <div class="qc-uklad-pole">
+            <span class="qc-label">{{ 'Main section layout'|trans }}</span>
+            <div class="qc-seg">
+                <button type="button" class="qc-seg-btn{{ layout == 'three' ? ' is-active' }}" data-uklad="three">{{ 'Three columns'|trans }}</button>
+                <button type="button" class="qc-seg-btn{{ layout == 'two' ? ' is-active' }}" data-uklad="two">{{ 'Two columns'|trans }}</button>
+            </div>
+            <span class="qc-hint">{{ 'Switching saves what you have set and opens the arrangement kept for that layout.'|trans }}</span>
+        </div>
+
+        {# Cztery szerokosci, nie suwak: prawa kolumna musi pomiescic wiersz
+           „ilosc + do koszyka" bez lamania, wiec to nie jest dowolna liczba. #}
+        <div class="qc-uklad-pole">
+            <span class="qc-label">{{ 'Buy panel width'|trans }}</span>
+            <div class="qc-seg">
+                {% for wartosc in splits %}
+                    <button type="button" class="qc-seg-btn{{ split == wartosc ? ' is-active' }}" data-split="{{ wartosc }}">{{ wartosc }}%</button>
+                {% endfor %}
+            </div>
+            <span class="qc-hint">{{ 'How much of the page width the buy panel takes in the shop.'|trans }}</span>
+            <input type="hidden" name="SPLIT" value="{{ split }}">
+        </div>
+    </div>
+
+    {# ─────────── sekcja główna ─────────── #}
+    <div class="qc-sekcja">
+        <div class="qc-alert qc-alert-info">
+            {{ icons.icon('info', 18, 'qc-alert-icon') }}
+            <div><strong>{{ 'Main section'|trans }}</strong> {{ 'The product card, buy panel, assurances and accordion. The buy panel travels along this whole section and stops at its end.'|trans }}</div>
+        </div>
+
+        <div class="qc-mapa">
+            <div class="qc-lewy">
+
+                <div class="qc-karta">
+                    <div class="qc-karta-glowa">
+                        <span class="qc-karta-nazwa">{{ 'Main card'|trans }}</span>
+                        {{ m.powierzchnia('karta', palette, surfaces['karta']|default({})) }}
+                    </div>
+                    <div class="qc-karta-cialo">
+                        {# Nagłówka nad galerią nie ma przy dwóch kolumnach: nazwa i ocena
+                           należą tam do panelu zakupu, więc silnik nie podaje tej strefy. #}
+                        {% if areas.naglowek is defined %}
+                            {{ uklad.obszar('naglowek', 'Header'|trans, '', areas.naglowek, catalogue, optionLabels) }}
+                        {% endif %}
+
+                        {# W układzie dwukolumnowym obszaru „Opis" nie ma wcale — jego
+                           elementy stoją w panelu zakupu. Galeria zajmuje wtedy całą
+                           szerokość karty, tak jak na stronie. #}
+                        {% if layout == 'two' %}
+                            <div style="margin-block-start:var(--space-4)">
+                                {{ uklad.obszar('galeria', 'Gallery'|trans, '', areas.galeria|default([]), catalogue, optionLabels) }}
+                            </div>
+                        {% else %}
+                            <div class="qc-para-kolumn" style="margin-block-start:var(--space-4)">
+                                {{ uklad.obszar('galeria', 'Gallery'|trans, '', areas.galeria|default([]), catalogue, optionLabels) }}
+                                {{ uklad.obszar('opis', 'Description'|trans, '', areas.opis|default([]), catalogue, optionLabels) }}
+                            </div>
+
+                            {# Pas pod obiema kolumnami, w tej samej karcie. Silnik nie
+                               stawia tu nic własnego, więc obszar bywa pusty do czasu,
+                               aż sklep wpnie w niego hooka. #}
+                            <div style="margin-block-start:var(--space-4)">
+                                {{ uklad.obszar('stopka', 'Footer'|trans, 'Full width under the gallery and the description'|trans, areas.stopka|default([]), catalogue, optionLabels) }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="qc-karta">
+                    <div class="qc-karta-glowa">
+                        <span class="qc-karta-nazwa">{{ 'Strip under the card'|trans }}</span>
+                        {{ m.powierzchnia('zapewnienia', palette, surfaces['zapewnienia']|default({})) }}
+                    </div>
+                    <div class="qc-karta-cialo">
+                        {{ uklad.obszar('zapewnienia', 'Strip under the card'|trans, '', areas.zapewnienia|default([]), catalogue, optionLabels, true) }}
+                    </div>
+                </div>
+
+                <div class="qc-karta">
+                    <div class="qc-karta-glowa">
+                        <span class="qc-karta-nazwa">{{ 'Accordion'|trans }}</span>
+                        {{ m.powierzchnia('akordeon', palette, surfaces['akordeon']|default({})) }}
+                    </div>
+                    <div class="qc-karta-cialo">
+                        {{ uklad.obszar('sekcje', 'Accordion'|trans, 'The order of the items is the order of the tabs'|trans, areas.sekcje|default([]), catalogue, optionLabels, true) }}
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="qc-prawy">
+
+                <div class="qc-karta">
+                    <div class="qc-karta-glowa">
+                        <span class="qc-karta-nazwa">{{ 'Buy panel'|trans }}</span>
+                        {{ m.powierzchnia('zakup', palette, surfaces['zakup']|default({}), 'end') }}
+                    </div>
+                    <div class="qc-karta-cialo">
+                        {{ uklad.obszar('zakup', 'Buy panel'|trans, '', areas.zakup|default([]), catalogue, optionLabels) }}
+                    </div>
+                </div>
+
+                {# Na wąskim ekranie panel zwija się do paska przy dolnej krawędzi.
+                   To decyzja o panelu zakupu, więc stoi przy nim. Zawartość paska
+                   odczytana z renderu makiety sklepu: cena i przycisk zakupu. #}
+                <div class="qc-karta">
+                    <div class="qc-karta-glowa">
+                        <span class="qc-karta-nazwa">{{ 'On a phone'|trans }}</span>
+                    </div>
+                    <div class="qc-karta-cialo">
+                        <div class="qc-telefon-tytul">
+                            {{ 'Bar at the bottom edge'|trans }}
+                            {{ fields.toggle('telefon[pasek]', phone.bar) }}
+                        </div>
+                        <div class="qc-hint">{{ 'It stays with the buyer once the buy panel scrolls off the screen.'|trans }}</div>
+
+                        {% for klucz, nazwa in {'cena': 'Price'|trans, 'przycisk': 'Buy button'|trans} %}
+                            <div class="qc-wiersz">
+                                <div class="qc-miejsca">
+                                    <div class="qc-miejsce">
+                                        <span class="qc-chwyt qc-chwyt--stale" title="{{ 'Its place comes from the design'|trans }}">&#128274;</span>
+                                        <span class="qc-nazwa">{{ nazwa }}</span>
+                                        {{ fields.toggle('telefon[pasek_' ~ klucz ~ ']', klucz == 'cena' ? phone.bar_price : phone.bar_button) }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        <div class="qc-telefon-tytul" style="margin-block-start:var(--space-4)">
+                            {{ 'Panel sliding out of the bar'|trans }}
+                            {{ fields.toggle('telefon[szuflada]', phone.sheet) }}
+                        </div>
+                        <div class="qc-hint">{{ 'The same elements as the buy panel and in the same order. You pick which of them enter the layer.'|trans }}</div>
+
+                        {# Panel zakupu jest listą wierszy — tu potrzebujemy samych
+                           elementów, w tej samej kolejności. #}
+                        {% for el in areas.zakup|default([])|reduce((suma, w) => suma|merge(w), []) %}
+                            <div class="qc-wiersz">
+                                <div class="qc-miejsca">
+                                    <div class="qc-miejsce">
+                                        <span class="qc-chwyt qc-chwyt--stale" title="{{ 'The order comes from the buy panel'|trans }}">&#128274;</span>
+                                        <span class="qc-nazwa{{ el.hook ? ' qc-nazwa--hook' }}">{{ el.label }}</span>
+                                        {{ fields.toggle('telefon[szuflada_' ~ el.id ~ ']', el.id not in phone.sheet_off) }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {# ─────────── zestawy ─────────── #}
+    <div class="qc-sekcja">
+        <div class="qc-alert qc-alert-info">
+            {{ icons.icon('info', 18, 'qc-alert-icon') }}
+            <div><strong>{{ 'Packs'|trans }}</strong> {{ 'They speak about this product, so by default they look like the main section. Setting them apart would cut them off from the product they describe.'|trans }}</div>
+        </div>
+        <div class="qc-karta">
+            <div class="qc-karta-glowa">
+                <span class="qc-karta-nazwa">{{ 'Packs'|trans }}</span>
+                {{ m.powierzchnia('zestawy', palette, surfaces['zestawy']|default({})) }}
+            </div>
+            <div class="qc-karta-cialo">
+                {{ uklad.obszar('zestawy', 'Packs'|trans, '', areas.zestawy|default([]), catalogue, optionLabels) }}
+            </div>
+        </div>
+    </div>
+
+    {# ─────────── zajawki ─────────── #}
+    <div class="qc-sekcja">
+        <div class="qc-alert qc-alert-info">
+            {{ icons.icon('info', 18, 'qc-alert-icon') }}
+            <div><strong>{{ 'Product carousels'|trans }}</strong> {{ 'Recommended, related, recently viewed and whatever modules add. One background for the whole section: the number of rows depends on the product, so an alternating rhythm cannot be planned in advance.'|trans }}</div>
+        </div>
+        <div class="qc-karta">
+            <div class="qc-karta-glowa">
+                <span class="qc-karta-nazwa">{{ 'Product carousels'|trans }}</span>
+                {{ m.powierzchnia('zajawki', palette, surfaces['zajawki']|default({})) }}
+            </div>
+            <div class="qc-karta-cialo">
+                {{ uklad.obszar('zajawki', 'Product carousels'|trans, '', areas.zajawki|default([]), catalogue, optionLabels) }}
+            </div>
+        </div>
+    </div>
+
+</form>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine-sort.min.js') ~ qcVer }}" defer></script>
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine.min.js') ~ qcVer }}" defer></script>
+    <script src="{{ asset('../modules/quince_engine/views/js/arrangement.js') ~ qcVer }}" defer></script>
+{% endblock %}

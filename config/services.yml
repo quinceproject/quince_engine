@@ -1,0 +1,157 @@
+services:
+  _defaults:
+    public: true
+
+    # Kontroler bez tych trzech rzeczy nie dostaje swojego lokalizatora usług
+    # i `render()` zgłasza, że nie ma Twiga.
+    #
+    # Wcześniej robił to za nas PrestaShop, ale w sposób, na którym nie da się
+    # polegać: ModuleControllerRegisterPass szuka kontrolerów **wyrażeniem
+    # regularnym po treści pliku** — `class X extends FrameworkBundleAdminController`.
+    # Nasza wspólna klasa bazowa sprawiła, że w pliku stoi teraz
+    # `extends QuinceController`, więc wzorzec przestał pasować i kontroler
+    # zniknął z listy. Deklarujemy to więc sami i nie zgadujemy, co rdzeń wykryje.
+    autoconfigure: true
+    autowire: true
+    tags: ['controller.service_arguments']
+
+  # Kontrolery muszą być publiczne — Symfony pobiera je z kontenera po nazwie klasy.
+  Quince\Engine\Controller\Admin\AppearanceController:
+    class: Quince\Engine\Controller\Admin\AppearanceController
+    arguments:
+      - '@Quince\Engine\Settings\AppearanceSettings'
+
+  # Układ karty produktu: sekcje, karty, obszary, elementy.
+  Quince\Engine\Settings\ProductPageSettings:
+    class: Quince\Engine\Settings\ProductPageSettings
+
+  Quince\Engine\Controller\Admin\ProductPageController:
+    class: Quince\Engine\Controller\Admin\ProductPageController
+    arguments:
+      - '@Quince\Engine\Settings\ProductPageSettings'
+      - '@Quince\Engine\Settings\AppearanceSettings'
+
+  Quince\Engine\Settings\ProductCardSettings:
+    class: Quince\Engine\Settings\ProductCardSettings
+
+  Quince\Engine\Controller\Admin\ProductCardController:
+    class: Quince\Engine\Controller\Admin\ProductCardController
+    arguments:
+      - '@Quince\Engine\Settings\ProductCardSettings'
+
+  Quince\Engine\Settings\HomepageSettings:
+    class: Quince\Engine\Settings\HomepageSettings
+
+  Quince\Engine\Settings\ListingSettings:
+    class: Quince\Engine\Settings\ListingSettings
+
+  Quince\Engine\Controller\Admin\HomepageController:
+    class: Quince\Engine\Controller\Admin\HomepageController
+    arguments:
+      - '@Quince\Engine\Settings\HomepageSettings'
+
+  Quince\Engine\Controller\Admin\ListingController:
+    class: Quince\Engine\Controller\Admin\ListingController
+    arguments:
+      - '@Quince\Engine\Settings\ListingSettings'
+      - '@Quince\Engine\Settings\AppearanceSettings'
+
+  Quince\Engine\Controller\Admin\TopbarController:
+    class: Quince\Engine\Controller\Admin\TopbarController
+    arguments:
+      - '@Quince\Engine\Settings\TopbarSettings'
+      - '@Quince\Engine\Settings\AppearanceSettings'
+
+  # Wybór wariantu kasy: krokowa czy jednostronicowa. Bez zależności —
+  # opakowuje tylko istniejący przełącznik rdzenia.
+  Quince\Engine\Settings\CheckoutSettings:
+    class: Quince\Engine\Settings\CheckoutSettings
+
+  Quince\Engine\Controller\Admin\CheckoutController:
+    class: Quince\Engine\Controller\Admin\CheckoutController
+    arguments:
+      - '@Quince\Engine\Settings\CheckoutSettings'
+
+  # Koszyk: blok zaufania i hook pod dokupką.
+  Quince\Engine\Settings\CartSettings:
+    class: Quince\Engine\Settings\CartSettings
+
+  Quince\Engine\Controller\Admin\CartController:
+    class: Quince\Engine\Controller\Admin\CartController
+    arguments:
+      - '@Quince\Engine\Settings\CartSettings'
+
+  # Nagłówek: logo, wyszukiwanie, akcje klienta.
+  Quince\Engine\Controller\Admin\HeaderController:
+    class: Quince\Engine\Controller\Admin\HeaderController
+    arguments:
+      - '@Quince\Engine\Settings\HeaderSettings'
+      - '@Quince\Engine\Settings\AppearanceSettings'
+
+  # Ustawienia nagłówka. Rejestr możliwości wstrzykiwany osobno, bo ta sama
+  # klasa odpowiada na pytanie „którą wyszukiwarkę mamy do wyboru".
+  Quince\Engine\Settings\HeaderSettings:
+    class: Quince\Engine\Settings\HeaderSettings
+
+  # Pasek nawigacji: kategorie i odnośniki własne.
+  Quince\Engine\Controller\Admin\NavigationController:
+    class: Quince\Engine\Controller\Admin\NavigationController
+    arguments:
+      - '@Quince\Engine\Settings\NavigationSettings'
+      - '@Quince\Engine\Settings\AppearanceSettings'
+
+  # Stopka: dane firmy z kontaktem, kolumny z hookami, pas dolny.
+  Quince\Engine\Controller\Admin\FooterController:
+    class: Quince\Engine\Controller\Admin\FooterController
+    arguments:
+      - '@Quince\Engine\Settings\FooterSettings'
+      - '@Quince\Engine\Settings\AppearanceSettings'
+
+  Quince\Engine\Settings\FooterSettings:
+    class: Quince\Engine\Settings\FooterSettings
+
+  # Brand & Schema: dane organizacji dla Schema.org, domyślne meta i llms.txt.
+  Quince\Engine\Controller\Admin\BrandSchemaController:
+    class: Quince\Engine\Controller\Admin\BrandSchemaController
+    arguments:
+      - '@Quince\Engine\Settings\BrandSchemaSettings'
+      - '@Quince\Engine\Seo\LlmsTxtManager'
+
+  Quince\Engine\Settings\BrandSchemaSettings:
+    class: Quince\Engine\Settings\BrandSchemaSettings
+
+  Quince\Engine\Seo\LlmsTxtManager:
+    class: Quince\Engine\Seo\LlmsTxtManager
+    arguments:
+      - '@Quince\Engine\Settings\BrandSchemaSettings'
+
+  Quince\Engine\Settings\NavigationSettings:
+    class: Quince\Engine\Settings\NavigationSettings
+
+  # Przegląd naszych modułów. Bez zależności — stan czyta wprost z PrestaShopa.
+  Quince\Engine\Controller\Admin\ModulesController:
+    class: Quince\Engine\Controller\Admin\ModulesController
+
+  # Wyszukiwanie ikon dla pola wyboru ikony w ustawieniach.
+  Quince\Engine\Controller\Admin\IconController:
+    class: Quince\Engine\Controller\Admin\IconController
+
+  # Treści i widoczność topbara. Bez zależności — czyta wprost z konfiguracji.
+  Quince\Engine\Settings\TopbarSettings:
+    class: Quince\Engine\Settings\TopbarSettings
+
+  # Odczyt i zapis ustawień wyglądu. Wydzielone z kontrolera, żeby ten sam kod
+  # obsłużył front przy generowaniu zmiennych CSS motywu.
+  Quince\Engine\Settings\AppearanceSettings:
+    class: Quince\Engine\Settings\AppearanceSettings
+    arguments:
+      - '@Quince\Engine\Appearance\PaletteGenerator'
+      - '@Quince\Engine\Appearance\MetricsGenerator'
+
+  # Wylicza role kolorystyczne z decyzji administratora. Bez stanu, bez zależności.
+  Quince\Engine\Appearance\PaletteGenerator:
+    class: Quince\Engine\Appearance\PaletteGenerator
+
+  # Wylicza wartości bazowe: typografię, kształt, przestrzeń, cień i siatkę.
+  Quince\Engine\Appearance\MetricsGenerator:
+    class: Quince\Engine\Appearance\MetricsGenerator

@@ -1,0 +1,149 @@
+{# Domena tłumaczeń musi stać TUTAJ. Plik z makrami nie dziedziczy jej po
+   szablonie, który go importuje, więc bez tego `|trans` sięgał do domeny
+   domyślnej, nie znajdował nic i wypisywał napisy źródłowe. Objawiało się to
+   polskimi nazwami stref i angielskimi nazwami elementów pod nimi. #}
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{# Układ elementów po strefach: wspólne dla każdego ekranu, który rozstawia
+   elementy przeciąganiem. Strona produktu i listing mają tę samą mechanikę,
+   więc mają też ten sam kod — dwie kopie rozjechałyby się przy pierwszej
+   poprawce, a poprawiono by tylko jedną.
+
+     obszar  — miejsce na wiersze wewnątrz karty,
+     wiersz  — pojemnik na jedno albo kilka miejsc,
+     miejsce — element silnika albo hook modułu. #}
+
+
+{# `jedenWWierszu` znaczy, ze w tej strefie miejsce zajmuje caly wiersz i nie da
+   sie dolozyc drugiego obok. Tak jest w akordeonie: pozycja to naglowek na cala
+   szerokosc i tresc pod nim. #}
+{% macro wiersz(miejsca, katalog, nazwyOpcji, jedenWWierszu = false) %}
+    {% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+
+    {# Wiersz jest pojemnikiem na jedno albo kilka miejsc. Przy kilku stoją jedno
+       pod drugim, bo kolumna „Opis" i panel zakupu mają około 370 px.
+
+       Chwyt ma każdy wiersz — kolejność da się zmienić zawsze. Kłódka stoi tam,
+       gdzie przy hooku byłby krzyżyk, i mówi jedno: tego elementu nie da się
+       usunąć. Element silnika należy do motywu, więc się go wyłącza, a nie kasuje. #}
+    <div class="qc-wiersz" x-sort:item="'{{ miejsca|first.id }}'">
+        <div class="qc-miejsca">
+            {% if miejsca|length > 1 %}
+                <div class="qc-obok">{{ 'they stand side by side on the page'|trans }}</div>
+            {% endif %}
+
+            {% for el in miejsca %}
+                {# Element, za którym stoi moduł, jest widoczny od początku, ale
+                   martwy, dopóki modułu nie ma. Po instalacji ożywa sam. #}
+                <div class="qc-miejsce{{ el.available is defined and not el.available ? ' qc-miejsce--czeka' }}">
+                    {% if katalog[el.id].fixed|default(false) %}
+                        <span class="qc-chwyt qc-chwyt--stale" title="{{ 'Its place comes from the design. You can switch it off, but not move it'|trans }}">&#128274;</span>
+                    {% else %}
+                        <span class="qc-chwyt" x-sort:handle>&#8942;&#8942;</span>
+                    {% endif %}
+                    {# Nazwa hooka zostaje po angielsku: to identyfikator, a nie napis.
+                       Etykieta elementu idzie przez tłumacza — bez tego ekran miał
+                       polskie nazwy stref i angielskie nazwy elementów pod nimi. #}
+                    <span class="qc-nazwa{{ el.hook ? ' qc-nazwa--hook' }}">{{ el.hook ? el.label : el.label|trans }}
+                        {% if el.available is defined and not el.available %}
+                            <small>{{ 'waits for the module'|trans }} {{ el.requires }}</small>
+                        {% elseif katalog[el.id].note is defined %}
+                            {# Kiedy element w ogóle widać na stronie. Karuzela bez
+                               treści znika, a z samego panelu nie dałoby się
+                               zgadnąć dlaczego. #}
+                            <small>{{ katalog[el.id].note|trans }}</small>
+                        {% endif %}
+                    </span>
+                    {% if el.options|length %}
+                        <button type="button" class="qc-ikonka" data-szczegoly title="{{ 'Details'|trans }}">&#9776;</button>
+                    {% endif %}
+                    {% if el.hook %}
+                        <button type="button" class="qc-ikonka" data-usun title="{{ 'Remove'|trans }}">&times;</button>
+                    {% endif %}
+                    {{ fields.toggle('on[' ~ el.id ~ ']', el.on and (el.available ?? true)) }}
+                </div>
+            {% endfor %}
+
+            {% if not jedenWWierszu %}
+                <button type="button" class="qc-plus" data-dodaj-miejsce
+                        title="{{ 'Add a hook next to this one'|trans }}">+</button>
+            {% endif %}
+        </div>
+
+        {# Szczegóły siedzą WEWNĄTRZ wiersza, a nie obok niego. Jako rodzeństwo
+           trafiały do listy sortowalnej i Alpine traktował je jak kolejne wiersze
+           — po pierwszym przestawieniu opcje odklejały się od swojego elementu
+           i przy „Dostępności" wyświetlały się ustawienia cen. #}
+        {% for el in miejsca %}
+            {% if el.options|length %}
+                <div class="qc-rozwiniete" hidden>
+                    {% for klucz, wl in el.options %}
+                        {% set modul = el.optionRequires[klucz]|default('') %}
+                        {% set gotowy = el.optionAvailable[klucz] ?? true %}
+                        <div class="qc-szczegol{{ gotowy ? '' : ' qc-szczegol--czeka' }}">
+                            <span>{{ (nazwyOpcji[klucz]|default(klucz))|trans }}{% if not gotowy %} <small>{{ 'waits for the module'|trans }} {{ modul }}</small>{% endif %}</span>
+                            {# Rodzaj kontrolki wynika z rodzaju wartości: liczba daje pole
+                               liczbowe, reszta przełącznik. Katalog elementów jest jedynym
+                               miejscem, w którym się o tym decyduje. #}
+                            {% if wl is not same as(true) and wl is not same as(false) %}
+                                {# Granice bierze katalog elementów: liczba cech mieści się
+                                   w kilku, a próg dni przed końcem promocji sięga roku. #}
+                                {% set zakres = el.optionRange[klucz]|default([0, 999]) %}
+                                <input type="number" class="qc-field-base qc-focusable"
+                                       style="inline-size:88px;text-align:center"
+                                       name="option[{{ el.id }}][{{ klucz }}]" value="{{ wl }}"
+                                       min="{{ zakres[0] }}" max="{{ zakres[1] }}" step="1">
+                            {% else %}
+                                {{ fields.toggle('option[' ~ el.id ~ '][' ~ klucz ~ ']', wl and gotowy) }}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{# `bezHookow` gasi pole dodawania hooka. Tak jest w siatce zajawek: hook
+   wstawiony MIĘDZY kafle ma własny mechanizm z numerem rzędu, a to pole
+   obiecywałoby drugą, gorszą drogę do tego samego. #}
+{% macro obszar(klucz, nazwa, opis, elementy, katalog, nazwyOpcji, jedenWWierszu = false, bezHookow = false, powierzchnia = null, palette = {}, wyglad = {}, skoraUkryta = false, przedLista = null) %}
+    {% import _self as m %}
+    {% import '@Modules/quince_engine/views/templates/admin/_macros/surface.html.twig' as skora %}
+    <div class="qc-obszar">
+        <div class="qc-obszar-glowa">
+            <span class="qc-obszar-nazwa">{{ nazwa }}{% if opis %}<span class="qc-obszar-opis">{{ opis }}</span>{% endif %}</span>
+            {% set miejsca = elementy|reduce((suma, w) => suma|merge(w), []) %}
+            <span class="qc-licznik">{{ miejsca|filter(e => e.on)|length }} / {{ miejsca|length }}</span>
+
+            {# Zebatka wygladu stoi w naglowku strefy, ktorej dotyczy. Postawiona
+               luzem miedzy strefami wisiala w powietrzu i nie bylo widac, co
+               ustawia. #}
+            {# Zebatka i jej panel ida WPROST do paska naglowka, bez owijki:
+               panel ma `flex: 1 0 100%`, wiec lamie sie do nowego wiersza tylko
+               wtedy, gdy jest dzieckiem tego samego paska. W owijce rozpychal
+               strefe i wchodzil miedzy nia a nastepna. #}
+            {% if powierzchnia %}
+                {{ skora.powierzchnia(powierzchnia, palette, wyglad, 'end', skoraUkryta) }}
+            {% endif %}
+        </div>
+        {# Wlasne pola strefy stoja miedzy jej naglowkiem a lista pozycji: to
+           ustawienia CALEJ strefy, wiec naleza do niej, a nie do osobnego paska
+           na gorze ekranu. #}
+        {% if przedLista %}{{ przedLista|raw }}{% endif %}
+
+        <div x-sort x-sort:group="{{ klucz }}"{{ jedenWWierszu ? ' data-jeden-w-wierszu' : '' }}>
+            {# Obszar jest listą wierszy, a wiersz listą miejsc. #}
+            {% for wiersz in elementy %}
+                {{ m.wiersz(wiersz, katalog, nazwyOpcji, jedenWWierszu) }}
+            {% endfor %}
+        </div>
+        {% if not bezHookow %}
+            <div class="qc-dodaj">
+                <input type="text" class="qc-field-base qc-field-sm qc-focusable" data-hook
+                       placeholder="{{ 'displayHookName'|trans }}">
+                <button type="button" class="qc-btn" data-dodaj-wiersz>{{ 'Add row'|trans }}</button>
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}
