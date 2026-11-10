@@ -167,7 +167,7 @@ class HomepageController extends QuinceController
 
             $kategorie[] = [
                 'id' => (int) $wiersz['id_category'],
-                'name' => str_repeat('— ', max(0, $glebokosc - $najplycej)) . (string) $wiersz['name'],
+                'name' => str_repeat('- ',max(0, $glebokosc - $najplycej)) . (string) $wiersz['name'],
             ];
         }
 
