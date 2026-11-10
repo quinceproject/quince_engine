@@ -80,7 +80,7 @@ final class IconPackManager
         $icons = glob($work . '/package/icons/*.svg') ?: [];
 
         if (!$icons) {
-            throw new \RuntimeException('No icons found at the expected path inside the archive — this does not look like a Bootstrap Icons package.');
+            throw new \RuntimeException('No icons found at the expected path inside the archive. This does not look like a Bootstrap Icons package.');
         }
 
         return $icons;
@@ -91,7 +91,7 @@ final class IconPackManager
         $manifest = $work . '/package/package.json';
 
         if (!is_file($manifest)) {
-            throw new \RuntimeException('The archive has no package.json — this is not an npm package.');
+            throw new \RuntimeException('The archive has no package.json, so this is not an npm package.');
         }
 
         $dane = json_decode((string) file_get_contents($manifest), true);

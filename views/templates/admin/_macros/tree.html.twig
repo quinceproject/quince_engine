@@ -97,7 +97,7 @@
                     style="text-align:start;cursor:pointer;inline-size:100%"
                     @click="otwarte = !otwarte; if (otwarte) pokazSciezke({{ model }})"
                     :aria-expanded="otwarte">
-                <span x-text="nazwaDla({{ model }}) || '{{ pusty|default('— choose —') }}'"></span>
+                <span x-text="nazwaDla({{ model }}) || '{{ pusty|default('(choose)') }}'"></span>
             </button>
         {# Znak listy rozwijanej. Bez niego przycisk z nazwa kategorii wyglada
            jak pole tekstowe i nic nie mowi, ze cokolwiek sie po nim otworzy. #}

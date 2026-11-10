@@ -38,7 +38,7 @@ class Quince_Engine extends Module
     {
         $this->name = 'quince_engine';
         $this->tab = 'front_office_features';
-        $this->version = '0.5.8';
+        $this->version = '0.5.9';
         $this->author = 'Quince Project';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = ['min' => '9.0.0', 'max' => '9.99.99'];
@@ -617,7 +617,7 @@ class Quince_Engine extends Module
 
         $hook = new Hook();
         $hook->name = self::HOOK_HEADER_ACTIONS;
-        $hook->title = 'Quince — akcje modułów w nagłówku';
+        $hook->title = 'Quince: akcje modułów w nagłówku';
         $hook->description = 'Miejsce obok konta, ulubionych i koszyka. Moduł rysuje własną '
             . 'akcję klasami motywu (q-action, q-action__icon, q-action__count), '
             . 'żeby wyglądała jak reszta pasa.';
@@ -641,7 +641,7 @@ class Quince_Engine extends Module
 
         $hook = new Hook();
         $hook->name = Quince\Engine\Form\FormGuard::HOOK_VERIFY;
-        $hook->title = 'Quince — ocena zgłoszenia formularza';
+        $hook->title = 'Quince: ocena zgłoszenia formularza';
         $hook->description = 'Moduł captchy zwraca true (przepuszczam), false (odrzucam) '
             . 'albo nic, gdy nie jest skonfigurowany. Jedno „odrzucam" zatrzymuje zgłoszenie.';
         $hook->position = false;
@@ -680,7 +680,7 @@ class Quince_Engine extends Module
         if (!Hook::getIdByName(Quince\Engine\Feature\FeatureRegistry::HOOK)) {
             $hook = new Hook();
             $hook->name = Quince\Engine\Feature\FeatureRegistry::HOOK;
-            $hook->title = 'Quince — moduł zgłasza, co dostarcza';
+            $hook->title = 'Quince: moduł zgłasza, co dostarcza';
             $hook->description = 'Zbiera deklaracje modułów Quince: wyszukiwarka, menu, karuzela, lista życzeń.';
             $hook->position = false;
 

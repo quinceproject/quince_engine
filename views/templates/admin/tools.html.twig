@@ -17,7 +17,7 @@
         <div class="qc-card-head">
             <div>
                 <div class="qc-card-title">{{ 'Icon pack'|trans }}</div>
-                <div class="qc-card-desc">{{ 'Bootstrap Icons, bundled with the shop — nothing is loaded from Google or anywhere else while a visitor browses.'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Bootstrap Icons, bundled with the shop. Nothing is loaded from Google or anywhere else while a visitor browses.'|trans }}</div>
             </div>
         </div>
 
@@ -41,7 +41,7 @@
                 <div class="qc-tool-card-icon">{{ icons.icon('upload', 18) }}</div>
                 <div class="qc-tool-card-title">{{ 'Update the icon pack'|trans }}</div>
                 <div class="qc-tool-card-desc">
-                    {{ 'Download a newer "bootstrap-icons" package from %link% and upload the .tgz file here. The whole set is replaced — an icon removed from the new version disappears from the picker as well.'|trans({'%link%': '<a href="https://www.npmjs.com/package/bootstrap-icons" target="_blank" rel="noopener noreferrer">npmjs.com</a>'})|raw }}
+                    {{ 'Download a newer "bootstrap-icons" package from %link% and upload the .tgz file here. The whole set is replaced: an icon removed from the new version disappears from the picker as well.'|trans({'%link%': '<a href="https://www.npmjs.com/package/bootstrap-icons" target="_blank" rel="noopener noreferrer">npmjs.com</a>'})|raw }}
                 </div>
 
                 <form method="post" action="{{ path('quince_tools_icons_update') }}" enctype="multipart/form-data"

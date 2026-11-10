@@ -15,8 +15,8 @@
 
       <!-- Ekran: Checkout -->
       <trans-unit id="quince.checkout.intro">
-        <source>This switches the checkout every visitor sees, store-wide. It does not change how the pages themselves look — both variants already carry the same design.</source>
-        <target>To przełącza kasę, którą widzi każdy odwiedzający, dla całego sklepu. Nie zmienia wyglądu samych stron — oba warianty mają już ten sam projekt.</target>
+        <source>This switches the checkout every visitor sees, store-wide. It does not change how the pages themselves look: both variants already carry the same design.</source>
+        <target>To przełącza kasę, którą widzi każdy odwiedzający, dla całego sklepu. Nie zmienia wyglądu samych stron: oba warianty mają już ten sam projekt.</target>
       </trans-unit>
       <trans-unit id="quince.checkout.variant">
         <source>Checkout variant</source>
@@ -43,8 +43,8 @@
         <target>Hook pod szczegółami zamówienia</target>
       </trans-unit>
       <trans-unit id="quince.checkout.hook_hint">
-        <source>A spot in the order confirmation column, right under "Order details" — the same free name you give a hook anywhere in the product page layout. Leave it empty and nothing shows there. A module (WiseBlock, or any other) registers to whatever name you type here.</source>
-        <target>Miejsce w kolumnie potwierdzenia zamówienia, zaraz pod „Szczegóły zamówienia" — ta sama dowolna nazwa, co przy hooku gdziekolwiek w układzie strony produktu. Zostaw puste i nic się tam nie pokaże. Moduł (WiseBlock albo dowolny inny) rejestruje się pod nazwą, którą tu wpiszesz.</target>
+        <source>A spot in the order confirmation column, right under "Order details". It takes the same free name you give a hook anywhere in the product page layout. Leave it empty and nothing shows there. A module (WiseBlock, or any other) registers to whatever name you type here.</source>
+        <target>Miejsce w kolumnie potwierdzenia zamówienia, zaraz pod „Szczegóły zamówienia". Przyjmuje tę samą dowolną nazwę, co przy hooku gdziekolwiek w układzie strony produktu. Zostaw puste i nic się tam nie pokaże. Moduł (WiseBlock albo dowolny inny) rejestruje się pod nazwą, którą tu wpiszesz.</target>
       </trans-unit>
 
       <!-- Ekran: Cart -->
@@ -57,8 +57,8 @@
         <target>Pokaż na stronie koszyka</target>
       </trans-unit>
       <trans-unit id="quince.cart.trust_hint">
-        <source>Secure payments, return policy, shipping time — the same block the module itself fills in. This only decides whether it shows up here, on the cart page.</source>
-        <target>Bezpieczne płatności, zasady zwrotu, czas wysyłki — ta sama treść, którą wypełnia sam moduł. Tu decydujemy tylko, czy ten blok pokazuje się na stronie koszyka.</target>
+        <source>Secure payments, return policy, shipping time: the same block the module itself fills in. This only decides whether it shows up here, on the cart page.</source>
+        <target>Bezpieczne płatności, zasady zwrotu, czas wysyłki: ta sama treść, którą wypełnia sam moduł. Tu decydujemy tylko, czy ten blok pokazuje się na stronie koszyka.</target>
       </trans-unit>
       <trans-unit id="quince.cart.below_suggest_title">
         <source>Below suggestions</source>
@@ -69,8 +69,8 @@
         <target>Hook pod „Może Ci się przydać"</target>
       </trans-unit>
       <trans-unit id="quince.cart.below_suggest_hint">
-        <source>A spot at the bottom of the cart column, under the suggested products — the same free name you give a hook anywhere in the product page layout. Leave it empty and nothing shows there. A module (WiseBlock, or any other) registers to whatever name you type here.</source>
-        <target>Miejsce na dole kolumny koszyka, pod podpowiedzianymi produktami — ta sama dowolna nazwa, co przy hooku gdziekolwiek w układzie strony produktu. Zostaw puste i nic się tam nie pokaże. Moduł (WiseBlock albo dowolny inny) rejestruje się pod nazwą, którą tu wpiszesz.</target>
+        <source>A spot at the bottom of the cart column, under the suggested products. It takes the same free name you give a hook anywhere in the product page layout. Leave it empty and nothing shows there. A module (WiseBlock, or any other) registers to whatever name you type here.</source>
+        <target>Miejsce na dole kolumny koszyka, pod podpowiedzianymi produktami. Przyjmuje tę samą dowolną nazwę, co przy hooku gdziekolwiek w układzie strony produktu. Zostaw puste i nic się tam nie pokaże. Moduł (WiseBlock albo dowolny inny) rejestruje się pod nazwą, którą tu wpiszesz.</target>
       </trans-unit>
 
       <!-- Nawigacja: grupy -->
@@ -1130,8 +1130,8 @@
         <target>Godziny pracy</target>
       </trans-unit>
       <trans-unit id="quince.topbar.hours_ph">
-        <source>Mon–Fri 8:00–16:00</source>
-        <target>Pon–Pt 8:00–16:00</target>
+        <source>Mon-Fri 8:00-16:00</source>
+        <target>Pon-Pt 8:00-16:00</target>
       </trans-unit>
       <trans-unit id="quince.topbar.lang_sel">
         <source>Language selector</source>
@@ -2909,6 +2909,728 @@
       <trans-unit id="quince.checkout.nip.wylaczony">
         <source>Turned off, the shop accepts whatever the customer types, and a mistyped number goes onto the invoice.</source>
         <target>Po wyłączeniu sklep przyjmuje wszystko, co wpisze klient, a numer z literówką trafia na fakturę.</target>
+      </trans-unit>
+
+      <!-- Filmy produktu -->
+      <trans-unit id="quince.films.add_another">
+        <source>Add another film</source>
+        <target>Dodaj kolejny film</target>
+      </trans-unit>
+      <trans-unit id="quince.films.paste">
+        <source>Paste the address from YouTube or Vimeo</source>
+        <target>Wklej adres z YouTube albo Vimeo</target>
+      </trans-unit>
+      <trans-unit id="quince.films.not_film">
+        <source>This address is not a YouTube or Vimeo film</source>
+        <target>Ten adres nie prowadzi do filmu na YouTube ani Vimeo</target>
+      </trans-unit>
+      <trans-unit id="quince.films.all_shops">
+        <source>The same films in every shop</source>
+        <target>Te same filmy w każdym sklepie</target>
+      </trans-unit>
+
+      <!-- Wspólne: komunikaty, drzewo kategorii, rozstawienie -->
+      <trans-unit id="quince.common.invalid_token">
+        <source>Invalid security token, please try again.</source>
+        <target>Nieprawidłowy token bezpieczeństwa, spróbuj ponownie.</target>
+      </trans-unit>
+      <trans-unit id="quince.common.no_file_sent">
+        <source>No file was sent.</source>
+        <target>Nie wysłano pliku.</target>
+      </trans-unit>
+      <trans-unit id="quince.icons.updated">
+        <source>Icon pack updated to version %version%.</source>
+        <target>Pakiet ikon zaktualizowany do wersji %version%.</target>
+      </trans-unit>
+      <trans-unit id="quince.tree.search">
+        <source>Search categories</source>
+        <target>Szukaj kategorii</target>
+      </trans-unit>
+      <trans-unit id="quince.tree.expand">
+        <source>Expand</source>
+        <target>Rozwiń</target>
+      </trans-unit>
+      <trans-unit id="quince.tree.collapse">
+        <source>Collapse</source>
+        <target>Zwiń</target>
+      </trans-unit>
+      <trans-unit id="quince.tree.select_visible">
+        <source>Select visible</source>
+        <target>Zaznacz widoczne</target>
+      </trans-unit>
+      <trans-unit id="quince.arrangement.waits_for_module">
+        <source>waits for the module</source>
+        <target>czeka na moduł</target>
+      </trans-unit>
+      <trans-unit id="quince.fields.no_background">
+        <source>No background</source>
+        <target>Bez tła</target>
+      </trans-unit>
+
+      <!-- Strona główna: kolumny -->
+      <trans-unit id="quince.home.extra.highlight">
+        <source>Highlight</source>
+        <target>Wyróżnienie</target>
+      </trans-unit>
+      <trans-unit id="quince.home.extra.text">
+        <source>Text</source>
+        <target>Tekst</target>
+      </trans-unit>
+      <trans-unit id="quince.home.column">
+        <source>Column</source>
+        <target>Kolumna</target>
+      </trans-unit>
+      <trans-unit id="quince.home.hook_name">
+        <source>Hook name</source>
+        <target>Nazwa hooka</target>
+      </trans-unit>
+      <trans-unit id="quince.home.hook_hint">
+        <source>A WiseBlock block, the configurator, any module. The column disappears when the module shows nothing.</source>
+        <target>Blok WiseBlock, konfigurator, dowolny moduł. Kolumna znika, gdy moduł nic nie pokazuje.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.category">
+        <source>Category</source>
+        <target>Kategoria</target>
+      </trans-unit>
+      <trans-unit id="quince.home.product_ids">
+        <source>Product ids</source>
+        <target>Identyfikatory produktów</target>
+      </trans-unit>
+      <trans-unit id="quince.home.product_ids_placeholder">
+        <source>12, 34, 56</source>
+        <target>12, 34, 56</target>
+      </trans-unit>
+      <trans-unit id="quince.home.how_many_tiles">
+        <source>How many tiles</source>
+        <target>Ile kafelków</target>
+      </trans-unit>
+      <trans-unit id="quince.home.visible_at_once">
+        <source>Visible at once</source>
+        <target>Widocznych naraz</target>
+      </trans-unit>
+      <trans-unit id="quince.home.the_rest">
+        <source>The rest</source>
+        <target>Reszta</target>
+      </trans-unit>
+      <trans-unit id="quince.home.product_id">
+        <source>Product id</source>
+        <target>Identyfikator produktu</target>
+      </trans-unit>
+      <trans-unit id="quince.home.extras">
+        <source>Extras</source>
+        <target>Dodatki</target>
+      </trans-unit>
+      <trans-unit id="quince.home.add_line">
+        <source>Add a line</source>
+        <target>Dodaj wiersz</target>
+      </trans-unit>
+      <trans-unit id="quince.home.tiles_order">
+        <source>Tiles stand in the order you pick them.</source>
+        <target>Kafelki stoją w kolejności, w jakiej je wybierzesz.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.on_tile">
+        <source>On the tile</source>
+        <target>Na kafelku</target>
+      </trans-unit>
+      <trans-unit id="quince.home.icon_colour">
+        <source>Icon colour</source>
+        <target>Kolor ikony</target>
+      </trans-unit>
+      <trans-unit id="quince.home.tile_button">
+        <source>Button on the tile</source>
+        <target>Przycisk na kafelku</target>
+      </trans-unit>
+      <trans-unit id="quince.home.icon_each_category">
+        <source>Icon for each category</source>
+        <target>Ikona dla każdej kategorii</target>
+      </trans-unit>
+
+      <!-- Strona główna: sekcja -->
+      <trans-unit id="quince.home.drag">
+        <source>Drag to reorder</source>
+        <target>Przeciągnij, żeby zmienić kolejność</target>
+      </trans-unit>
+      <trans-unit id="quince.home.section">
+        <source>Section</source>
+        <target>Sekcja</target>
+      </trans-unit>
+      <trans-unit id="quince.home.settings">
+        <source>Settings</source>
+        <target>Ustawienia</target>
+      </trans-unit>
+      <trans-unit id="quince.home.split_title">
+        <source>How the section is split</source>
+        <target>Jak dzieli się sekcja</target>
+      </trans-unit>
+      <trans-unit id="quince.home.split_intro">
+        <source>A grid split keeps the tiles in line with product lists: the shop shows %n% tiles per row, so a column three fields wide shows three tiles. The last column takes whatever width is left.</source>
+        <target>Podział według siatki trzyma kafelki w jednej linii z listami produktów: sklep ustawia kafelki po %n% w rzędzie, więc kolumna szeroka na trzy pola pokazuje trzy kafelki. Ostatnia kolumna bierze szerokość, która zostaje.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.split">
+        <source>Split</source>
+        <target>Podział</target>
+      </trans-unit>
+      <trans-unit id="quince.home.how_many_columns">
+        <source>How many columns</source>
+        <target>Ile kolumn</target>
+      </trans-unit>
+      <trans-unit id="quince.home.what_in_column">
+        <source>What stands in each column</source>
+        <target>Co stoi w każdej kolumnie</target>
+      </trans-unit>
+      <trans-unit id="quince.home.heading_text">
+        <source>Heading text</source>
+        <target>Tekst nagłówka</target>
+      </trans-unit>
+      <trans-unit id="quince.home.heading_no_link">
+        <source>Leave it empty and the heading gets no link.</source>
+        <target>Zostaw puste, a nagłówek nie dostanie odnośnika.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.link_text">
+        <source>Link text</source>
+        <target>Tekst odnośnika</target>
+      </trans-unit>
+      <trans-unit id="quince.home.frame">
+        <source>Frame</source>
+        <target>Oprawa</target>
+      </trans-unit>
+      <trans-unit id="quince.home.frame_intro">
+        <source>The background behind the section and how wide the band runs.</source>
+        <target>Tło za sekcją i szerokość, na jaką biegnie pas.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.gradient_from">
+        <source>From</source>
+        <target>Od</target>
+      </trans-unit>
+      <trans-unit id="quince.home.gradient_hint">
+        <source>A step of the shop palette (neutral, primary, secondary, promo) or a hex code.</source>
+        <target>Stopień palety sklepu (neutral, primary, secondary, promo) albo kod hex.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.gradient_to">
+        <source>To</source>
+        <target>Do</target>
+      </trans-unit>
+      <trans-unit id="quince.home.gradient_angle">
+        <source>Angle</source>
+        <target>Kąt</target>
+      </trans-unit>
+      <trans-unit id="quince.home.veil">
+        <source>Veil</source>
+        <target>Przesłona</target>
+      </trans-unit>
+      <trans-unit id="quince.home.darken_photo">
+        <source>Darken the photo</source>
+        <target>Przyciemnij zdjęcie</target>
+      </trans-unit>
+      <trans-unit id="quince.home.darken_hint">
+        <source>For a photo that fights with the text.</source>
+        <target>Dla zdjęcia, które gryzie się z tekstem.</target>
+      </trans-unit>
+      <trans-unit id="quince.tree.choose_category">
+        <source>Choose a category…</source>
+        <target>Wybierz kategorię…</target>
+      </trans-unit>
+
+      <!-- Wygląd: obramowania -->
+      <trans-unit id="quince.appearance.step">
+        <source>Step</source>
+        <target>Stopień</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.borders">
+        <source>Borders</source>
+        <target>Obramowania</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.borders_intro">
+        <source>Lines around blocks, around form fields and in tables. Point at a shade for the card background above; what the engine keeps is the DISTANCE between the two, and it applies that distance to every block, whatever background the block has.</source>
+        <target>Kreski wokół bloków, wokół pól formularzy i w tabelach. Wskaż odcień na tle kart ustawionym wyżej; silnik zapamiętuje ODLEGŁOŚĆ między nimi i stosuje ją do każdego bloku, niezależnie od tego, jakie ma tło.</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.border_card">
+        <source>Blocks and dividers</source>
+        <target>Bloki i linie podziału</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.border_card_note">
+        <source>Card outline and the lines that separate content, for example under the key features. Counted from the card background in the same way.</source>
+        <target>Obrys karty i kreski oddzielające treść, na przykład pod najważniejszymi cechami. Liczone od tła kart w ten sam sposób.</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.border_field">
+        <source>Form fields</source>
+        <target>Pola formularzy</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.border_field_note">
+        <source>Text fields, drop-down lists and text areas. What counts is the distance from the shade above: a block with its own darker background gets a line darker by the same number of steps, so the line stays visible everywhere.</source>
+        <target>Pola tekstowe, listy rozwijane i obszary tekstu. Liczy się odległość od odcienia powyżej: blok z własnym, ciemniejszym tłem dostaje kreskę ciemniejszą o tyle samo stopni, więc kreska jest widoczna wszędzie.</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.border_table">
+        <source>Tables</source>
+        <target>Tabele</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.border_table_note">
+        <source>The grid in tables, including the ones a shop puts in a product description.</source>
+        <target>Siatka w tabelach, także w tych, które sklep wstawia do opisu produktu.</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.field_active">
+        <source>Field under the cursor and in use</source>
+        <target>Pole pod kursorem i w użyciu</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.field_brand">
+        <source>Use the brand colour</source>
+        <target>Użyj koloru marki</target>
+      </trans-unit>
+      <trans-unit id="quince.appearance.field_brand_note">
+        <source>A field the customer points at gets a darker line, and the field being typed into gets a thicker one. Off, both are ink; on, both take the brand colour, the same one that fills the buttons.</source>
+        <target>Pole, na które klient najeżdża kursorem, dostaje ciemniejszą kreskę, a pole, w którym pisze, grubszą. Po wyłączeniu obie są w kolorze atramentu, po włączeniu obie biorą kolor marki, ten sam, który wypełnia przyciski.</target>
+      </trans-unit>
+
+      <!-- Marka i schema -->
+      <trans-unit id="quince.schema.save_settings">
+        <source>Save settings</source>
+        <target>Zapisz ustawienia</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.intro">
+        <source>PrestaShop already emits a basic Organization graph sitewide (name, logo). This screen enriches it with sameAs and a contact point when you fill these fields in. It does not add a second, separate graph.</source>
+        <target>PrestaShop już umieszcza na całej stronie podstawowy graf Organization (nazwa, logo). Ten ekran uzupełnia go o sameAs i punkt kontaktowy, gdy wypełnisz te pola. Nie dodaje drugiego, osobnego grafu.</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.organization">
+        <source>Organization (Schema.org)</source>
+        <target>Organizacja (Schema.org)</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.organization_intro">
+        <source>Only fill a field in if you want a different value than what the shop already uses. Empty fields keep the native PrestaShop behaviour.</source>
+        <target>Wypełnij pole tylko wtedy, gdy chcesz innej wartości niż ta, której sklep już używa. Puste pola zostawiają natywne działanie PrestaShop.</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.name_override">
+        <source>Name (override)</source>
+        <target>Nazwa (własna)</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.name_hint">
+        <source>Only fill if you want a different brand name than the shop name.</source>
+        <target>Wypełnij tylko wtedy, gdy marka ma się nazywać inaczej niż sklep.</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.logo_override">
+        <source>Logo URL or relative path (override)</source>
+        <target>Adres URL logo albo ścieżka względna (własne)</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.logo_hint">
+        <source>Empty = use the shop logo.</source>
+        <target>Puste: używane jest logo sklepu.</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.email">
+        <source>Email</source>
+        <target>E-mail</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.contact_type">
+        <source>Contact type</source>
+        <target>Rodzaj kontaktu</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.contact_type_hint">
+        <source>Only used when phone or email above is filled in.</source>
+        <target>Używane tylko wtedy, gdy powyżej wypełniono telefon albo e-mail.</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.same_as">
+        <source>Social profiles (sameAs)</source>
+        <target>Profile społecznościowe (sameAs)</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.same_as_empty">
+        <source>No social profiles added.</source>
+        <target>Nie dodano profili społecznościowych.</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.same_as_add">
+        <source>Add social URL</source>
+        <target>Dodaj adres profilu</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.hide_preview">
+        <source>Hide preview</source>
+        <target>Ukryj podgląd</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.preview_jsonld">
+        <source>Preview JSON-LD</source>
+        <target>Podgląd JSON-LD</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.default_meta">
+        <source>Default meta (fallback)</source>
+        <target>Domyślne meta (zastępcze)</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.default_meta_intro">
+        <source>Site-wide fallbacks. Per-page tags from modules (blog, products, categories) take priority: these only apply where nothing else sets them.</source>
+        <target>Wartości zastępcze dla całej witryny. Tagi poszczególnych stron z modułów (blog, produkty, kategorie) mają pierwszeństwo, a te działają tylko tam, gdzie nic innego ich nie ustawia.</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.default_robots">
+        <source>Default robots</source>
+        <target>Domyślne robots</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.robots_none">
+        <source>(do not emit, use PS9 default)</source>
+        <target>(nie dodawaj, zostaw domyślne PS9)</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.default_og_image">
+        <source>Default og:image</source>
+        <target>Domyślne og:image</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.default_og_image_hint">
+        <source>Used when a page does not provide its own social share image.</source>
+        <target>Używane, gdy strona nie ma własnego obrazka do udostępniania w mediach społecznościowych.</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.llms">
+        <source>llms.txt (AI manifest)</source>
+        <target>llms.txt (manifest dla AI)</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.llms_intro">
+        <source>Plain-text manifest at /llms.txt, consumed by some AI engines for fast site understanding. Low but growing adoption.</source>
+        <target>Manifest w czystym tekście pod adresem /llms.txt. Czytają go niektóre silniki AI, żeby szybko zrozumieć witrynę. Na razie mało używany, ale coraz popularniejszy.</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.llms_served">
+        <source>Served live at %url%, in the language of the visitor. Nothing is written to disk, so it is correct for every shop and every language at once.</source>
+        <target>Podawany na żywo pod adresem %url%, w języku odwiedzającego. Nic nie jest zapisywane na dysku, więc jest poprawny jednocześnie dla każdego sklepu i każdego języka.</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.llms_title">
+        <source>Title</source>
+        <target>Tytuł</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.llms_summary">
+        <source>Summary</source>
+        <target>Podsumowanie</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.llms_sections">
+        <source>Sections (key URLs grouped by topic)</source>
+        <target>Sekcje (najważniejsze adresy pogrupowane tematycznie)</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.llms_no_sections">
+        <source>No sections yet.</source>
+        <target>Brak sekcji.</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.llms_note">
+        <source>Note (optional)</source>
+        <target>Opis (opcjonalnie)</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.llms_add_section">
+        <source>Add section</source>
+        <target>Dodaj sekcję</target>
+      </trans-unit>
+      <trans-unit id="quince.schema.llms_preview">
+        <source>Preview llms.txt</source>
+        <target>Podgląd llms.txt</target>
+      </trans-unit>
+
+      <!-- Karta produktu: opis ekranu -->
+      <trans-unit id="quince.card.intro_two_kinds">
+        <source>The product card is everywhere the shop lists products: on listings, in search results and in module carousels. Two kinds, because they have different amounts of room. The tile is about 250 px wide; the row takes the full width of the list and fits a description, features and codes as well. A padlock means the element stays: without a photo, a name, a price and a way to buy there is no card.</source>
+        <target>Karta produktu stoi wszędzie tam, gdzie sklep wylicza produkty: na listach, w wynikach wyszukiwania i w karuzelach modułów. Dwa rodzaje, bo mają do dyspozycji różnie dużo miejsca. Kafelek ma około 250 px szerokości; wiersz zajmuje całą szerokość listy i mieści też opis, cechy i kody. Kłódka znaczy, że element zostaje: bez zdjęcia, nazwy, ceny i sposobu zakupu nie ma karty.</target>
+      </trans-unit>
+
+      <!-- Strona główna: napisy skryptu -->
+      <trans-unit id="quince.home.js.visible_grid">
+        <source>As many as the column is wide.</source>
+        <target>Tyle, na ile pozwala szerokość kolumny.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.visible_percent">
+        <source>That is how many whole grid fields fit in this width.</source>
+        <target>Tyle całych pól siatki mieści się w tej szerokości.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.rest_carousel">
+        <source>The rest scrolls sideways.</source>
+        <target>Reszta przewija się w bok.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.rest_rows">
+        <source>Further rows below.</source>
+        <target>Kolejne rzędy poniżej.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.rest_none">
+        <source>They all fit in one row.</source>
+        <target>Wszystkie mieszczą się w jednym rzędzie.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.mode_grid">
+        <source>Tiles line up with product lists.</source>
+        <target>Kafelki równają do list produktów.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.mode_percent">
+        <source>Free of the grid. For big tiles and module blocks.</source>
+        <target>Bez siatki. Dla dużych kafelków i bloków modułów.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.leftover">
+        <source>The width that is left.</source>
+        <target>Szerokość, która zostaje.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.grid_fields">
+        <source>grid fields</source>
+        <target>pola siatki</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.percent_width">
+        <source>percent of the width</source>
+        <target>procent szerokości</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.one_column">
+        <source>One column across the whole section.</source>
+        <target>Jedna kolumna przez całą sekcję.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.many_columns">
+        <source>columns, each with its own content.</source>
+        <target>kol., każda z własną treścią.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.header_on">
+        <source>It stands above the whole section.</source>
+        <target>Stoi nad całą sekcją.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.header_off">
+        <source>Without a heading the content speaks for itself.</source>
+        <target>Bez nagłówka treść mówi sama za siebie.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.tile_photo">
+        <source>The photo comes from the category in the catalogue.</source>
+        <target>Zdjęcie pochodzi z kategorii w katalogu.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.tile_icon">
+        <source>The icon takes its colour from the shop palette.</source>
+        <target>Ikona bierze kolor z palety sklepu.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.add_category">
+        <source>add a category</source>
+        <target>dodaj kategorię</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.remove_category">
+        <source>Remove the category</source>
+        <target>Usuń kategorię</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.icon_name">
+        <source>icon name</source>
+        <target>nazwa ikony</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.tiles">
+        <source>tiles</source>
+        <target>szt.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.visible">
+        <source>visible</source>
+        <target>na widoku</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.no_hook">
+        <source>hook not set</source>
+        <target>nie ustawiono hooka</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.no_product">
+        <source>product not picked</source>
+        <target>nie wybrano produktu</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.categories">
+        <source>categories</source>
+        <target>kat.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.big_tile">
+        <source>big tile</source>
+        <target>duży kafelek</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.claims">
+        <source>claims</source>
+        <target>szt. dodatków</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.close">
+        <source>Close</source>
+        <target>Zamknij</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.line">
+        <source>line</source>
+        <target>wiersze</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.lines">
+        <source>lines</source>
+        <target>wiersze</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.lines_max">
+        <source>the most you can add</source>
+        <target>najwięcej, ile można dodać</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.extras_pills">
+        <source>One line each, for example „5 years warranty”.</source>
+        <target>Po jednym wierszu, na przykład „5 lat gwarancji”.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.extras_blocks">
+        <source>A highlight and a line under it, for example „42” over „connectors in the set”.</source>
+        <target>Wyróżnienie i wiersz pod nim, na przykład „42” nad „złączy w zestawie”.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.background">
+        <source>background</source>
+        <target>tło</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.width_full">
+        <source>full width</source>
+        <target>pełna szerokość</target>
+      </trans-unit>
+      <trans-unit id="quince.home.js.width_boxed">
+        <source>page width</source>
+        <target>szerokość strony</target>
+      </trans-unit>
+
+      <!-- Strona główna: ekran -->
+      <trans-unit id="quince.home.intro">
+        <source>The home page is a list of sections, one below another. A section splits into columns and every column gets its own content. Drag a section by its handle to move it.</source>
+        <target>Strona główna to lista sekcji, jedna pod drugą. Sekcja dzieli się na kolumny, a każda kolumna dostaje własną treść. Żeby przesunąć sekcję, przeciągnij ją za uchwyt.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.other_shops">
+        <source>These shops show a different home page than this screen:</source>
+        <target>Te sklepy pokazują inną stronę główną niż ten ekran:</target>
+      </trans-unit>
+      <trans-unit id="quince.common.other_shops_see">
+        <source>They have their own settings. Choose the shop at the top of the panel to see them, or save here to give them what you see on this screen.</source>
+        <target>Mają własne ustawienia. Wybierz sklep u góry panelu, żeby je zobaczyć, albo zapisz tutaj, żeby dostały to, co widzisz na tym ekranie.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.add_section">
+        <source>Add a section</source>
+        <target>Dodaj sekcję</target>
+      </trans-unit>
+
+      <!-- Strona produktu -->
+      <trans-unit id="quince.product.intro">
+        <source>This screen mirrors the product page. A section runs from edge to edge, cards sit inside it, and areas inside the cards hold the rows. Switch elements on and off, drag them into order and add module hooks where they should stand. A padlock means the element belongs to the theme: you can switch it off, but not remove it.</source>
+        <target>Ten ekran odwzorowuje stronę produktu. Sekcja biegnie od krawędzi do krawędzi, w niej stoją karty, a obszary wewnątrz kart mieszczą wiersze. Włączaj i wyłączaj elementy, przeciąganiem ustawiaj ich kolejność i dokładaj hooki modułów tam, gdzie mają stać. Kłódka znaczy, że element należy do motywu: można go wyłączyć, ale nie usunąć.</target>
+      </trans-unit>
+      <trans-unit id="quince.product.other_shops">
+        <source>These shops show a different product page than this screen:</source>
+        <target>Te sklepy pokazują inną stronę produktu niż ten ekran:</target>
+      </trans-unit>
+      <trans-unit id="quince.product.layout">
+        <source>Main section layout</source>
+        <target>Układ sekcji głównej</target>
+      </trans-unit>
+      <trans-unit id="quince.product.three_columns">
+        <source>Three columns</source>
+        <target>Trzy kolumny</target>
+      </trans-unit>
+      <trans-unit id="quince.product.layout_hint">
+        <source>Switching saves what you have set and opens the arrangement kept for that layout.</source>
+        <target>Przełączenie zapisuje to, co ustawiono, i otwiera rozstawienie zapamiętane dla tego układu.</target>
+      </trans-unit>
+      <trans-unit id="quince.product.buy_width">
+        <source>Buy panel width</source>
+        <target>Szerokość panelu zakupu</target>
+      </trans-unit>
+      <trans-unit id="quince.product.buy_width_hint">
+        <source>How much of the page width the buy panel takes in the shop.</source>
+        <target>Jaką część szerokości strony zajmuje w sklepie panel zakupu.</target>
+      </trans-unit>
+      <trans-unit id="quince.product.main_section">
+        <source>Main section</source>
+        <target>Sekcja główna</target>
+      </trans-unit>
+      <trans-unit id="quince.product.main_section_intro">
+        <source>The product card, buy panel, assurances and accordion. The buy panel travels along this whole section and stops at its end.</source>
+        <target>Karta produktu, panel zakupu, zapewnienia i akordeon. Panel zakupu przesuwa się wzdłuż całej sekcji i zatrzymuje się na jej końcu.</target>
+      </trans-unit>
+      <trans-unit id="quince.product.main_card">
+        <source>Main card</source>
+        <target>Karta główna</target>
+      </trans-unit>
+      <trans-unit id="quince.product.gallery">
+        <source>Gallery</source>
+        <target>Galeria</target>
+      </trans-unit>
+      <trans-unit id="quince.product.footer_hint">
+        <source>Full width under the gallery and the description</source>
+        <target>Przez całą szerokość pod galerią i opisem</target>
+      </trans-unit>
+      <trans-unit id="quince.product.strip">
+        <source>Strip under the card</source>
+        <target>Pasek pod kartą</target>
+      </trans-unit>
+      <trans-unit id="quince.product.accordion">
+        <source>Accordion</source>
+        <target>Akordeon</target>
+      </trans-unit>
+      <trans-unit id="quince.product.accordion_hint">
+        <source>The order of the items is the order of the tabs</source>
+        <target>Kolejność pozycji to kolejność zakładek</target>
+      </trans-unit>
+      <trans-unit id="quince.product.buy_panel">
+        <source>Buy panel</source>
+        <target>Panel zakupu</target>
+      </trans-unit>
+      <trans-unit id="quince.product.phone">
+        <source>On a phone</source>
+        <target>Na telefonie</target>
+      </trans-unit>
+      <trans-unit id="quince.product.bottom_bar">
+        <source>Bar at the bottom edge</source>
+        <target>Pasek przy dolnej krawędzi</target>
+      </trans-unit>
+      <trans-unit id="quince.product.bottom_bar_hint">
+        <source>It stays with the buyer once the buy panel scrolls off the screen.</source>
+        <target>Zostaje z kupującym, kiedy panel zakupu zniknie z ekranu.</target>
+      </trans-unit>
+      <trans-unit id="quince.product.place_from_design">
+        <source>Its place comes from the design</source>
+        <target>Miejsce wynika z projektu</target>
+      </trans-unit>
+      <trans-unit id="quince.product.sliding_panel">
+        <source>Panel sliding out of the bar</source>
+        <target>Panel wysuwany z paska</target>
+      </trans-unit>
+      <trans-unit id="quince.product.sliding_panel_hint">
+        <source>The same elements as the buy panel and in the same order. You pick which of them enter the layer.</source>
+        <target>Te same elementy co w panelu zakupu i w tej samej kolejności. Wybierasz, które z nich trafią do warstwy.</target>
+      </trans-unit>
+      <trans-unit id="quince.product.order_from_buy_panel">
+        <source>The order comes from the buy panel</source>
+        <target>Kolejność pochodzi z panelu zakupu</target>
+      </trans-unit>
+      <trans-unit id="quince.product.packs">
+        <source>Packs</source>
+        <target>Pakiety</target>
+      </trans-unit>
+      <trans-unit id="quince.product.packs_hint">
+        <source>They speak about this product, so by default they look like the main section. Setting them apart would cut them off from the product they describe.</source>
+        <target>Mówią o tym produkcie, więc domyślnie wyglądają jak sekcja główna. Wyróżnienie ich odcięłoby je od produktu, który opisują.</target>
+      </trans-unit>
+      <trans-unit id="quince.product.carousels">
+        <source>Product carousels</source>
+        <target>Karuzele produktów</target>
+      </trans-unit>
+      <trans-unit id="quince.product.carousels_hint">
+        <source>Recommended, related, recently viewed and whatever modules add. One background for the whole section: the number of rows depends on the product, so an alternating rhythm cannot be planned in advance.</source>
+        <target>Polecane, powiązane, ostatnio oglądane i to, co dokładają moduły. Jedno tło dla całej sekcji: liczba wierszy zależy od produktu, więc naprzemiennego rytmu nie da się zaplanować z góry.</target>
+      </trans-unit>
+
+      <!-- Narzędzia: pakiet ikon -->
+      <trans-unit id="quince.icons.pack">
+        <source>Icon pack</source>
+        <target>Pakiet ikon</target>
+      </trans-unit>
+      <trans-unit id="quince.icons.pack_intro">
+        <source>Bootstrap Icons, bundled with the shop. Nothing is loaded from Google or anywhere else while a visitor browses.</source>
+        <target>Bootstrap Icons, dołączone do sklepu. Gdy odwiedzający przegląda sklep, nic nie jest pobierane z Google ani z żadnego innego miejsca.</target>
+      </trans-unit>
+      <trans-unit id="quince.icons.installed_version">
+        <source>Installed version</source>
+        <target>Zainstalowana wersja</target>
+      </trans-unit>
+      <trans-unit id="quince.icons.available">
+        <source>Icons available</source>
+        <target>Dostępne ikony</target>
+      </trans-unit>
+      <trans-unit id="quince.icons.last_updated">
+        <source>Last updated</source>
+        <target>Ostatnia aktualizacja</target>
+      </trans-unit>
+      <trans-unit id="quince.icons.update_title">
+        <source>Update the icon pack</source>
+        <target>Zaktualizuj pakiet ikon</target>
+      </trans-unit>
+      <trans-unit id="quince.icons.update_intro">
+        <source>Download a newer "bootstrap-icons" package from %link% and upload the .tgz file here. The whole set is replaced: an icon removed from the new version disappears from the picker as well.</source>
+        <target>Pobierz nowszy pakiet „bootstrap-icons” ze strony %link% i wgraj tutaj plik .tgz. Cały zestaw zostaje zastąpiony: ikona usunięta w nowej wersji znika też z wyboru ikon.</target>
+      </trans-unit>
+      <trans-unit id="quince.icons.no_file">
+        <source>No file chosen</source>
+        <target>Nie wybrano pliku</target>
+      </trans-unit>
+      <trans-unit id="quince.icons.file_hint">
+        <source>The .tgz file from the npm package, unchanged.</source>
+        <target>Plik .tgz z pakietu npm, bez zmian.</target>
+      </trans-unit>
+      <trans-unit id="quince.icons.choose_file">
+        <source>Choose a file</source>
+        <target>Wybierz plik</target>
+      </trans-unit>
+      <trans-unit id="quince.icons.update">
+        <source>Update</source>
+        <target>Zaktualizuj</target>
       </trans-unit>
     </body>
   </file>

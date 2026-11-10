@@ -46,6 +46,16 @@
         <target>Ten numer NIP jest niepoprawny. Sprawdź, czy nie ma literówki.</target>
       </trans-unit>
 
+      <!-- Strona główna: sekcje -->
+      <trans-unit id="quince.home.shop.see_section">
+        <source>See section</source>
+        <target>Zobacz dział</target>
+      </trans-unit>
+      <trans-unit id="quince.home.shop.see_all">
+        <source>See all</source>
+        <target>Zobacz wszystkie</target>
+      </trans-unit>
+
     </body>
   </file>
 </xliff>

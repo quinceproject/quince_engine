@@ -136,6 +136,15 @@ services:
   Quince\Engine\Controller\Admin\IconController:
     class: Quince\Engine\Controller\Admin\IconController
 
+  # Narzędzia: aktualizacja pakietu ikon z panelu.
+  Quince\Engine\Ui\IconPackManager:
+    class: Quince\Engine\Ui\IconPackManager
+
+  Quince\Engine\Controller\Admin\ToolsController:
+    class: Quince\Engine\Controller\Admin\ToolsController
+    arguments:
+      - '@Quince\Engine\Ui\IconPackManager'
+
   # Treści i widoczność topbara. Bez zależności — czyta wprost z konfiguracji.
   Quince\Engine\Settings\TopbarSettings:
     class: Quince\Engine\Settings\TopbarSettings

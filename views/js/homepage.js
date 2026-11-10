@@ -459,7 +459,7 @@
             var select = document.createElement('select');
 
             select.className = 'qc-field-base qc-select qc-focusable';
-            select.appendChild(new Option('— ' + napisy.addCategory + ' —', ''));
+            select.appendChild(new Option('(' + napisy.addCategory + ')', ''));
 
             pozostale.forEach(function (k) { select.appendChild(new Option(k.name, k.id)); });
 

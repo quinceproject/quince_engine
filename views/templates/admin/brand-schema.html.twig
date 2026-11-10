@@ -27,7 +27,7 @@
     <div class="qc-alert qc-alert-info">
         {{ icons.icon('info', 18, 'qc-alert-icon') }}
         <div>
-            {{ 'PrestaShop already emits a basic Organization graph sitewide (name, logo). This screen enriches it with sameAs and a contact point when you fill these fields in — it does not add a second, separate graph.'|trans }}
+            {{ 'PrestaShop already emits a basic Organization graph sitewide (name, logo). This screen enriches it with sameAs and a contact point when you fill these fields in. It does not add a second, separate graph.'|trans }}
         </div>
     </div>
 {% endblock %}
@@ -143,7 +143,7 @@
         <div class="qc-card-head">
             <div>
                 <div class="qc-card-title">{{ 'Default meta (fallback)'|trans }}</div>
-                <div class="qc-card-desc">{{ 'Site-wide fallbacks. Per-page tags from modules (blog, products, categories) take priority — these only apply where nothing else sets them.'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Site-wide fallbacks. Per-page tags from modules (blog, products, categories) take priority: these only apply where nothing else sets them.'|trans }}</div>
             </div>
         </div>
 
@@ -154,7 +154,7 @@
                     <div class="qc-select-wrap">
                         <select id="q-default-robots" name="default_robots" class="qc-field-base qc-select qc-focusable">
                             <option value="" {{ settings.DEFAULT_ROBOTS == '' ? 'selected' }}>
-                                {{ '— do not emit (use PS9 default) —'|trans }}
+                                {{ '(do not emit, use PS9 default)'|trans }}
                             </option>
                             {% for value in ['index,follow', 'index,nofollow', 'noindex,follow', 'noindex,nofollow'] %}
                                 <option value="{{ value }}" {{ value == settings.DEFAULT_ROBOTS ? 'selected' }}>{{ value }}</option>
@@ -179,7 +179,7 @@
         <div class="qc-card-head">
             <div>
                 <div class="qc-card-title">{{ 'llms.txt (AI manifest)'|trans }}</div>
-                <div class="qc-card-desc">{{ 'Plain-text manifest at /llms.txt — consumed by some AI engines for fast site understanding. Low but growing adoption.'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Plain-text manifest at /llms.txt, consumed by some AI engines for fast site understanding. Low but growing adoption.'|trans }}</div>
             </div>
         </div>
 
@@ -187,7 +187,7 @@
             <div class="qc-alert qc-alert-info">
                 {{ icons.icon('info', 18, 'qc-alert-icon') }}
                 <div>
-                    {{ 'Served live at %url%, in the language of the visitor — nothing is written to disk, so it is correct for every shop and every language at once.'|trans({ '%url%': llmsUrl }) }}
+                    {{ 'Served live at %url%, in the language of the visitor. Nothing is written to disk, so it is correct for every shop and every language at once.'|trans({ '%url%': llmsUrl }) }}
                 </div>
             </div>
 

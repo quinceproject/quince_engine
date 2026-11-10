@@ -4,6 +4,18 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.9] - 2026-11-10
+
+### Changed
+
+- Polish translation completed: the texts added since the previous translation are now translated.
+- Texts no longer use long dashes.
+
+### Fixed
+
+- The Tools screen, where the icon pack is updated, opens again. Its controller was not
+  registered, so the screen ended in an error.
+
 ## [0.5.8] - 2026-11-09
 
 ### Fixed
