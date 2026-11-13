@@ -33,7 +33,7 @@
 {% endblock %}
 
 {% block quince_body %}
-<form id="quince-header" method="post" action="{{ path('quince_header_save') }}" class="qc-stack">
+<form id="quince-header" method="post" action="{{ path('quince_header_save') }}" class="qc-stack" enctype="multipart/form-data">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_header_save') }}">
 
     {# ── Logo i zachowanie ── #}
@@ -89,15 +89,40 @@
                 </div>
                 <div class="qc-field" x-show="sticky" x-cloak>
                     <label class="qc-label">{{ 'Logo after scrolling'|trans }}</label>
-                    <div class="qc-seg qc-seg-wrap" x-data="{ v: '{{ settings.LOGO_STUCK }}' }">
-                        {% for value, label in {'none': 'Unchanged'|trans, 'invert': 'Inverted'|trans,
-                                                'white': 'White'|trans, 'black': 'Black'|trans} %}
-                            <button type="button" class="qc-seg-btn" :class="v === '{{ value }}' && 'is-active'"
-                                    @click="v = '{{ value }}'">{{ label }}</button>
-                        {% endfor %}
-                        <input type="hidden" name="LOGO_STUCK" value="{{ settings.LOGO_STUCK }}" :value="v">
+                    <div x-data="{ v: '{{ settings.LOGO_STUCK }}', nazwaPliku: '' }">
+                        <div class="qc-seg qc-seg-wrap">
+                            {% for value, label in {'none': 'Unchanged'|trans, 'invert': 'Inverted'|trans,
+                                                    'white': 'White'|trans, 'black': 'Black'|trans,
+                                                    'file': 'Separate file'|trans} %}
+                                <button type="button" class="qc-seg-btn" :class="v === '{{ value }}' && 'is-active'"
+                                        @click="v = '{{ value }}'">{{ label }}</button>
+                            {% endfor %}
+                            <input type="hidden" name="LOGO_STUCK" value="{{ settings.LOGO_STUCK }}" :value="v">
+                        </div>
+
+                        {# Wgrywanie jak na ekranie Narzędzi (`qc-upload`). #}
+                        <div class="qc-upload" x-show="v === 'file'" x-cloak style="margin-top:12px">
+                            <span class="qc-upload-thumb">
+                                {% if stuckLogoUrl %}
+                                    <img src="{{ stuckLogoUrl }}" alt="" style="max-inline-size:100%; max-block-size:100%">
+                                {% else %}
+                                    {{ icons.icon('upload', 18) }}
+                                {% endif %}
+                            </span>
+                            <div class="qc-upload-info">
+                                <div class="qc-upload-name" x-text="nazwaPliku || '{{ (stuckLogoUrl ? 'Current file' : 'No file chosen')|trans|e('js') }}'"></div>
+                                <div>{{ 'PNG, JPG or WEBP, up to 1 MB.'|trans }}</div>
+                            </div>
+                            <div class="qc-upload-actions">
+                                <button type="button" class="qc-btn qc-btn-outline" @click="$refs.logoStuck.click()">
+                                    {{ icons.icon('upload', 14) }} {{ 'Choose a file'|trans }}
+                                </button>
+                            </div>
+                            <input type="file" x-ref="logoStuck" hidden name="LOGO_STUCK_UPLOAD" accept=".png,.jpg,.jpeg,.webp"
+                                   @change="nazwaPliku = $event.target.files.length ? $event.target.files[0].name : ''">
+                        </div>
                     </div>
-                    <div class="qc-hint">{{ 'For a dark bar under a dark logo. Inversion keeps the colours, the other two flatten the logo to one.'|trans }}</div>
+                    <div class="qc-hint">{{ 'For a dark bar under a dark logo. Inverted reverses every colour, so yellow turns blue. White and black flatten the logo to one colour. A separate file shows your own version of the logo.'|trans }}</div>
                 </div>
 
                 <div class="qc-field" x-show="sticky" x-cloak>

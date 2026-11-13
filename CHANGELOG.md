@@ -4,6 +4,19 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-11-13
+
+### Added
+
+- **Logo after scrolling** has a fifth choice, **Separate file**: upload a PNG, JPG or WEBP
+  version of the logo (up to 1 MB) and the stuck header shows it instead of the main
+  logo. Needs Quince theme 0.1.2.
+
+### Fixed
+
+- The hint under **Logo after scrolling** says what inversion does: it reverses every
+  colour, so yellow turns blue.
+
 ## [0.6.2] - 2026-11-13
 
 ### Fixed

@@ -38,6 +38,7 @@ class HeaderController extends QuinceController
             'translations' => $this->settings->translations(),
             'providers' => $this->settings->searchProviders(),
             'iconSvg' => $this->settings->iconSvg(),
+            'stuckLogoUrl' => $this->settings->stuckLogoUrl(),
             'providerMissing' => $this->settings->searchProviderMissing(),
             'wishlistAvailable' => $this->settings->wishlistAvailable(),
             'moduleActionsAvailable' => $this->settings->moduleActionsAvailable(),
@@ -58,6 +59,18 @@ class HeaderController extends QuinceController
         }
 
         $this->settings->save($request->request->all());
+
+        $plik = $request->files->get('LOGO_STUCK_UPLOAD');
+        if ($plik !== null && $plik->isValid()) {
+            try {
+                $this->settings->storeStuckLogo((string) $plik->getPathname(), (int) $plik->getSize());
+            } catch (\RuntimeException $e) {
+                $this->addFlash('error', $this->trans($e->getMessage(), 'Modules.Quinceengine.Admin'));
+
+                return $this->redirectToRoute('quince_header');
+            }
+        }
+
         $this->addFlash('success', $this->trans('Settings saved.', 'Modules.Quinceengine.Admin'));
 
         return $this->redirectToRoute('quince_header');

@@ -2185,8 +2185,32 @@
         <target>Na czarno</target>
       </trans-unit>
       <trans-unit id="quince.naglowek.logo.uwaga">
-        <source>For a dark bar under a dark logo. Inversion keeps the colours, the other two flatten the logo to one.</source>
-        <target>Na ciemny pas pod ciemnym logo. Odwrócenie zostawia barwy, dwa pozostałe spłaszczają logo do jednej.</target>
+        <source>For a dark bar under a dark logo. Inverted reverses every colour, so yellow turns blue. White and black flatten the logo to one colour. A separate file shows your own version of the logo.</source>
+        <target>Na ciemny pas pod ciemnym logo. Odwrócenie odwraca każdą barwę, więc żółty robi się niebieski. Na biało i na czarno spłaszczają logo do jednej barwy. Osobny plik pokazuje Twoją własną wersję logo.</target>
+      </trans-unit>
+      <trans-unit id="quince.naglowek.logo.osobny">
+        <source>Separate file</source>
+        <target>Osobny plik</target>
+      </trans-unit>
+      <trans-unit id="quince.naglowek.logo.biezacy">
+        <source>Current file</source>
+        <target>Obecny plik</target>
+      </trans-unit>
+      <trans-unit id="quince.naglowek.logo.typy">
+        <source>PNG, JPG or WEBP, up to 1 MB.</source>
+        <target>PNG, JPG albo WEBP, do 1 MB.</target>
+      </trans-unit>
+      <trans-unit id="quince.naglowek.logo.err_rozmiar">
+        <source>The logo file must be smaller than 1 MB.</source>
+        <target>Plik logo musi mieć mniej niż 1 MB.</target>
+      </trans-unit>
+      <trans-unit id="quince.naglowek.logo.err_typ">
+        <source>Upload the logo as PNG, JPG or WEBP.</source>
+        <target>Wgraj logo jako PNG, JPG albo WEBP.</target>
+      </trans-unit>
+      <trans-unit id="quince.naglowek.logo.err_zapis">
+        <source>The logo file could not be saved.</source>
+        <target>Nie udało się zapisać pliku logo.</target>
       </trans-unit>
 
       <trans-unit id="quince.menu.kafelki.telefon">

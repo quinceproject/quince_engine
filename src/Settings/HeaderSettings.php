@@ -35,8 +35,9 @@ final class HeaderSettings
     /**
      * Obróbka logo w przyklejonym nagłówku.
      *
-     * Odwrócenie zamienia ciemne na jasne i zostawia barwy. „Na biało"
-     * i „na czarno" spłaszczają logo do jednej barwy.
+     * Odwrócenie odwraca każdą barwę, nie tylko jasność: żółty staje się
+     * niebieski. „Na biało” i „na czarno” spłaszczają logo do jednej barwy.
+     * „Osobny plik” nie obrabia niczego: motyw podmienia obrazek.
      *
      * @var array<string,string>
      */
@@ -45,7 +46,18 @@ final class HeaderSettings
         'invert' => 'invert(1)',
         'white' => 'brightness(0) invert(1)',
         'black' => 'brightness(0)',
+        'file' => 'none',
     ];
+
+    /** Typy plików logo po przewinięciu i ich rozszerzenia. Bez SVG: plik
+     *  otwarty wprost z adresu mógłby wykonać skrypt. */
+    private const STUCK_LOGO_TYPES = [
+        'image/png' => 'png',
+        'image/jpeg' => 'jpg',
+        'image/webp' => 'webp',
+    ];
+
+    private const STUCK_LOGO_MAX_BYTES = 1048576;
 
     /** @var array<string,string> klucz => wartość domyślna */
     private const SCHEMA = [
@@ -76,8 +88,11 @@ final class HeaderSettings
         // Tło pasa: stopień skali albo kod barwy. Nagłówek przyklejony ma własne.
         'BG' => 'neutral-1',
         'BG_STUCK' => 'neutral-1',
-        // Obróbka logo w przyklejonym nagłówku: none | invert | white | black.
+        // Obróbka logo w przyklejonym nagłówku: none | invert | white | black | file.
         'LOGO_STUCK' => 'none',
+        // Nazwa wgranego pliku dla opcji `file`, w img/quince/header/. Zapisywana
+        // tylko przez storeStuckLogo(), nie z pól formularza.
+        'LOGO_STUCK_FILE' => '',
 
         // Po przewinięciu nagłówek jest ciaśniejszy: dochodzi w nim przycisk
         // katalogu, a pola i akcje zostają te same. Podpisy akcji znikają wtedy
@@ -154,6 +169,8 @@ final class HeaderSettings
 
         return [
             'logo_height' => (int) $s['LOGO_HEIGHT'],
+            // Pusty, gdy sklep nie wybrał osobnego pliku albo go nie wgrał.
+            'logo_stuck_src' => $s['LOGO_STUCK'] === 'file' ? $this->stuckLogoUrl() : '',
             'sticky' => $s['STICKY'] === '1',
             'scroll_icons' => $s['SCROLL_ICONS'] === '1',
             'icon_labels' => $s['ICON_LABELS'] === '1',
@@ -194,6 +211,51 @@ final class HeaderSettings
                 'label' => $this->translate($s['CART_LABEL'], $idLang),
             ],
         ];
+    }
+
+    /**
+     * Zapisuje wgrany plik logo dla przyklejonego nagłówka.
+     *
+     * Typ sprawdzany po zawartości pliku, nie po rozszerzeniu z przeglądarki.
+     * Nazwa zawiera skrót zawartości, więc nowy plik ma nowy adres i przeglądarka
+     * nie pokazuje starego z pamięci.
+     *
+     * @throws \RuntimeException z komunikatem do pokazania w panelu
+     */
+    public function storeStuckLogo(string $tmpPath, int $size): void
+    {
+        if ($size <= 0 || $size > self::STUCK_LOGO_MAX_BYTES) {
+            throw new \RuntimeException('The logo file must be smaller than 1 MB.');
+        }
+
+        $info = @getimagesize($tmpPath);
+        $ext = is_array($info) ? (self::STUCK_LOGO_TYPES[$info['mime'] ?? ''] ?? null) : null;
+        if ($ext === null) {
+            throw new \RuntimeException('Upload the logo as PNG, JPG or WEBP.');
+        }
+
+        $dir = _PS_IMG_DIR_ . 'quince/header/';
+        if (!is_dir($dir) && !@mkdir($dir, 0775, true)) {
+            throw new \RuntimeException('The logo file could not be saved.');
+        }
+
+        $name = 'logo-stuck-' . substr((string) hash_file('sha256', $tmpPath), 0, 16) . '.' . $ext;
+        if (!@copy($tmpPath, $dir . $name)) {
+            throw new \RuntimeException('The logo file could not be saved.');
+        }
+
+        ConfigStore::set(self::PREFIX . 'LOGO_STUCK_FILE', $name);
+    }
+
+    /** Adres wgranego logo po przewinięciu albo pusty napis, gdy pliku nie ma. */
+    public function stuckLogoUrl(): string
+    {
+        $name = basename($this->all()['LOGO_STUCK_FILE']);
+        if ($name === '' || !is_file(_PS_IMG_DIR_ . 'quince/header/' . $name)) {
+            return '';
+        }
+
+        return _PS_IMG_ . 'quince/header/' . $name;
     }
 
     /**
@@ -312,7 +374,7 @@ final class HeaderSettings
     public function save(array $values): void
     {
         foreach (self::SCHEMA as $key => $default) {
-            if (in_array($key, self::TRANSLATABLE, true) || !array_key_exists($key, $values)) {
+            if (in_array($key, self::TRANSLATABLE, true) || $key === 'LOGO_STUCK_FILE' || !array_key_exists($key, $values)) {
                 continue;
             }
 
