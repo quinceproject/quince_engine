@@ -4,6 +4,14 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.1] - 2026-11-13
+
+### Fixed
+
+- **Install** and **Update** on the Quince modules screen lock after the first click. A
+  second click unpacked the same package at the same time and PrestaShop reported
+  that it could not write a file.
+
 ## [0.7.0] - 2026-11-13
 
 ### Added

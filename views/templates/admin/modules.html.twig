@@ -31,7 +31,10 @@
 {% macro action(row) %}
     {% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
     {% if row.action %}
-        <form method="post" action="{{ path('quince_modules_install') }}" style="display:inline">
+        {# Po wysłaniu blokujemy wszystkie przyciski instalacji: drugie kliknięcie
+           rozpakowywało tę samą paczkę równolegle i rdzeń zgłaszał błąd zapisu. #}
+        <form method="post" action="{{ path('quince_modules_install') }}" style="display:inline" data-quince-install
+              onsubmit="document.querySelectorAll('form[data-quince-install] button').forEach(function (b) { b.disabled = true; })">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_modules_install') }}">
             <input type="hidden" name="module" value="{{ row.name }}">
             <input type="hidden" name="kind" value="{{ row.kind }}">
