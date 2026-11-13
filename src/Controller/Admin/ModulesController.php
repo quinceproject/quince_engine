@@ -41,23 +41,22 @@ class ModulesController extends QuinceController
     {
         $releases = $this->manifest->modules();
         $catalogue = new ModuleCatalogue();
-        $rows = [];
 
         $engine = Module::getInstanceByName('quince_engine');
-        $rows[] = $this->row('quince_engine', 'Quince Engine', 'module', true, true,
-            $engine instanceof Module ? (string) $engine->version : null, $releases['quince_engine'] ?? null);
-
         $themeVersion = $this->themeVersion();
-        $rows[] = $this->row(self::THEME, 'Quince theme', 'theme', $themeVersion !== null, true,
-            $themeVersion, $this->manifest->themes()[self::THEME] ?? null);
 
+        $modules = [];
         foreach (array_merge($catalogue->all(), $catalogue->others(array_keys($releases))) as $module) {
-            $rows[] = $this->row($module['name'], $module['label'], 'module', $module['installed'], $module['active'],
-                $module['version'], $releases[$module['name']] ?? null);
+            $modules[] = $this->row($module['name'], $module['label'], 'module', $module['installed'], $module['active'],
+                $module['version'], $releases[$module['name']] ?? null) + $module;
         }
 
         return $this->renderPanel('@Modules/quince_engine/views/templates/admin/modules.html.twig', [
-            'rows' => $rows,
+            'engine' => $this->row('quince_engine', 'Quince Engine', 'module', true, true,
+                $engine instanceof Module ? (string) $engine->version : null, $releases['quince_engine'] ?? null),
+            'theme' => $this->row(self::THEME, 'Quince theme', 'theme', $themeVersion !== null, true,
+                $themeVersion, $this->manifest->themes()[self::THEME] ?? null),
+            'modules' => $modules,
             'manifestError' => $this->manifest->error(),
             'manifestFetchedAt' => $this->manifest->fetchedAt(),
             'layoutTitle' => 'Quince modules',

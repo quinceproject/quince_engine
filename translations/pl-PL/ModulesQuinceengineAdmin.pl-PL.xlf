@@ -1248,21 +1248,13 @@
         <source>The release list could not be downloaded, so installing and updating is not available right now.</source>
         <target>Nie udało się pobrać listy wydań, więc instalacja i aktualizacje są teraz niedostępne.</target>
       </trans-unit>
-      <trans-unit id="quince.dist.table_title">
-        <source>Engine, theme and modules</source>
-        <target>Silnik, motyw i moduły</target>
-      </trans-unit>
-      <trans-unit id="quince.dist.col_module">
-        <source>Module</source>
-        <target>Moduł</target>
+      <trans-unit id="quince.dist.engine_theme">
+        <source>Engine and theme</source>
+        <target>Silnik i motyw</target>
       </trans-unit>
       <trans-unit id="quince.dist.col_latest">
         <source>Latest version</source>
         <target>Najnowsza wersja</target>
-      </trans-unit>
-      <trans-unit id="quince.dist.col_status">
-        <source>Status</source>
-        <target>Stan</target>
       </trans-unit>
       <trans-unit id="quince.dist.up_to_date">
         <source>Up to date</source>

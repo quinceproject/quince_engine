@@ -3,7 +3,54 @@
 
 {% trans_default_domain 'Modules.Quinceengine.Admin' %}
 
+{# Stan pakietu: czy jest w sklepie i czy jest aktualny. Jedno słowo na pakiet. #}
+{% macro state(row) %}
+    {% if row.state == 'current' %}
+        <span class="qc-mod-state qc-mod-state--on">{{ 'Up to date'|trans({}, 'Modules.Quinceengine.Admin') }}</span>
+    {% elseif row.state == 'update' %}
+        <span class="qc-mod-state qc-mod-state--off">{{ 'Update available'|trans({}, 'Modules.Quinceengine.Admin') }}</span>
+    {% elseif row.state == 'disabled' %}
+        <span class="qc-mod-state qc-mod-state--off">{{ 'Installed, switched off'|trans({}, 'Modules.Quinceengine.Admin') }}</span>
+    {% elseif row.state == 'unknown' %}
+        <span class="qc-mod-state qc-mod-state--on">{{ 'Installed'|trans({}, 'Modules.Quinceengine.Admin') }}</span>
+    {% else %}
+        <span class="qc-mod-state">{{ 'Not installed'|trans({}, 'Modules.Quinceengine.Admin') }}</span>
+    {% endif %}
+{% endmacro %}
+
+{# Wersja zainstalowana i najnowsza, zawsze obie, żeby było widać różnicę. #}
+{% macro versions(row) %}
+    <div class="qc-hint">
+        {{ 'Installed version'|trans({}, 'Modules.Quinceengine.Admin') }}: <strong>{{ row.version ?: '-' }}</strong>
+        &nbsp;·&nbsp;
+        {{ 'Latest version'|trans({}, 'Modules.Quinceengine.Admin') }}: <strong>{{ row.latest ?: '-' }}</strong>
+    </div>
+{% endmacro %}
+
+{# Przycisk instalacji albo aktualizacji, tylko gdy jest co zrobić. #}
+{% macro action(row) %}
+    {% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+    {% if row.action %}
+        <form method="post" action="{{ path('quince_modules_install') }}" style="display:inline">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_modules_install') }}">
+            <input type="hidden" name="module" value="{{ row.name }}">
+            <input type="hidden" name="kind" value="{{ row.kind }}">
+            {% if row.action == 'install' %}
+                <button type="submit" class="qc-btn qc-btn-primary">{{ icons.icon('plus', 14) }} {{ 'Install'|trans({}, 'Modules.Quinceengine.Admin') }}</button>
+            {% else %}
+                <button type="submit" class="qc-btn qc-btn-primary">{{ icons.icon('refresh', 14) }} {{ 'Update'|trans({}, 'Modules.Quinceengine.Admin') }}</button>
+            {% endif %}
+        </form>
+    {% endif %}
+{% endmacro %}
+
 {% block quince_intro %}
+    <div class="qc-alert qc-alert-info">
+        {{ icons.icon('info', 18, 'qc-alert-icon') }}
+        <div>
+            {{ 'Modules built for this engine. Each one adds a section to the menu on the left once it is running. Install and update them here from the Quince release list.'|trans }}
+        </div>
+    </div>
     {% if manifestError %}
         <div class="qc-alert qc-alert-warning">
             {{ icons.icon('info', 18, 'qc-alert-icon') }}
@@ -13,72 +60,64 @@
 {% endblock %}
 
 {% block quince_body %}
-<div class="qc-card">
-    <div class="qc-card-head">
-        <div>
-            <div class="qc-card-title">{{ 'Engine, theme and modules'|trans }}</div>
-            <div class="qc-card-desc">
-                {% if manifestFetchedAt %}
-                    {{ 'Release list checked on %date%.'|trans({'%date%': manifestFetchedAt|date('Y-m-d H:i')}) }}
-                {% else %}
-                    {{ 'The release list has not been downloaded yet.'|trans }}
-                {% endif %}
+{% import _self as pkg %}
+<div class="qc-stack">
+
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Engine and theme'|trans }}</div>
+                <div class="qc-card-desc">
+                    {% if manifestFetchedAt %}
+                        {{ 'Release list checked on %date%.'|trans({'%date%': manifestFetchedAt|date('Y-m-d H:i')}) }}
+                    {% else %}
+                        {{ 'The release list has not been downloaded yet.'|trans }}
+                    {% endif %}
+                </div>
             </div>
+            <form method="post" action="{{ path('quince_modules_refresh') }}">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_modules_refresh') }}">
+                <button type="submit" class="qc-btn qc-btn-outline">{{ icons.icon('refresh', 14) }} {{ 'Check for updates'|trans }}</button>
+            </form>
         </div>
-        <form method="post" action="{{ path('quince_modules_refresh') }}">
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_modules_refresh') }}">
-            <button type="submit" class="qc-btn qc-btn-outline">{{ icons.icon('refresh', 14) }} {{ 'Check for updates'|trans }}</button>
-        </form>
+
+        {% for row in [engine, theme] %}
+            <div class="qc-card-body qc-mod-body" style="display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap">
+                <div>
+                    <div class="qc-card-title">{{ row.label|trans }}</div>
+                    {{ pkg.versions(row) }}
+                </div>
+                <div style="display:flex; gap:12px; align-items:center">
+                    {{ pkg.state(row) }}
+                    {{ pkg.action(row) }}
+                </div>
+            </div>
+        {% endfor %}
     </div>
 
-    <div class="qc-table-wrap">
-        <table class="qc-table">
-            <thead>
-                <tr>
-                    <th>{{ 'Module'|trans }}</th>
-                    <th>{{ 'Installed version'|trans }}</th>
-                    <th>{{ 'Latest version'|trans }}</th>
-                    <th>{{ 'Status'|trans }}</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in rows %}
-                    <tr>
-                        <td><strong>{{ row.label|trans }}</strong></td>
-                        <td>{{ row.version ?: '-' }}</td>
-                        <td>{{ row.latest ?: '-' }}</td>
-                        <td>
-                            {% if row.state == 'current' %}
-                                <span class="qc-badge qc-badge-success">{{ 'Up to date'|trans }}</span>
-                            {% elseif row.state == 'update' %}
-                                <span class="qc-badge qc-badge-warning">{{ 'Update available'|trans }}</span>
-                            {% elseif row.state == 'disabled' %}
-                                <span class="qc-badge">{{ 'Installed, switched off'|trans }}</span>
-                            {% elseif row.state == 'unknown' %}
-                                <span class="qc-badge">{{ 'Installed'|trans }}</span>
-                            {% else %}
-                                <span class="qc-badge">{{ 'Not installed'|trans }}</span>
-                            {% endif %}
-                        </td>
-                        <td style="text-align:right">
-                            {% if row.action %}
-                                <form method="post" action="{{ path('quince_modules_install') }}" style="display:inline">
-                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_modules_install') }}">
-                                    <input type="hidden" name="module" value="{{ row.name }}">
-                                    <input type="hidden" name="kind" value="{{ row.kind }}">
-                                    {% if row.action == 'install' %}
-                                        <button type="submit" class="qc-btn qc-btn-primary qc-btn-sm">{{ icons.icon('plus', 14) }} {{ 'Install'|trans }}</button>
-                                    {% else %}
-                                        <button type="submit" class="qc-btn qc-btn-primary qc-btn-sm">{{ icons.icon('refresh', 14) }} {{ 'Update'|trans }}</button>
-                                    {% endif %}
-                                </form>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    {% for module in modules %}
+        <div class="qc-card">
+            <div class="qc-card-head">
+                <div class="qc-mod-head">
+                    <span class="qc-mod-icon">{{ icons.icon(module.icon, 18) }}</span>
+                    <div>
+                        <div class="qc-card-title">{{ module.label|trans }}</div>
+                        {% if module.description %}<div class="qc-card-desc">{{ module.description|trans }}</div>{% endif %}
+                    </div>
+                </div>
+                {{ pkg.state(module) }}
+            </div>
+
+            <div class="qc-card-body qc-mod-body" style="display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap">
+                {{ pkg.versions(module) }}
+                <div style="display:flex; gap:8px">
+                    {% if module.active and module.route %}
+                        <a class="qc-btn qc-btn-outline" href="{{ path(module.route) }}">{{ 'Open settings'|trans }}</a>
+                    {% endif %}
+                    {{ pkg.action(module) }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 </div>
 {% endblock %}
