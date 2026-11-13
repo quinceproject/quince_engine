@@ -336,13 +336,20 @@ final class ModuleCatalogue
      */
     private function routeFor(array $entry): ?string
     {
-        if ($entry['type'] === null) {
-            return null;
+        if ($entry['type'] !== null) {
+            foreach ($this->registry->providersFor($entry['type']) as $provider) {
+                if ($provider['module'] === $entry['name'] && $provider['route']) {
+                    return $provider['route'];
+                }
+            }
         }
 
-        foreach ($this->registry->providersFor($entry['type']) as $provider) {
-            if ($provider['module'] === $entry['name']) {
-                return $provider['route'];
+        // Ekran z pozycji menu: to samo zgłoszenie, z którego silnik buduje menu
+        // po lewej. Mają je także moduły, które nie dostarczają żadnej funkcji
+        // z rejestru (blog, pytania, roboty).
+        foreach ($this->registry->panelEntries() as $pozycja) {
+            if ($pozycja['module'] === $entry['name'] && $this->trasaIstnieje($pozycja['route'])) {
+                return $pozycja['route'];
             }
         }
 

@@ -40,13 +40,16 @@ class ModulesController extends QuinceController
     public function indexAction(): Response
     {
         $releases = $this->manifest->modules();
-        $catalogue = new ModuleCatalogue();
+        // Router pozwala sprawdzić, czy trasa zgłoszona przez moduł istnieje, zanim
+        // szablon zbuduje z niej odnośnik.
+        $catalogue = new ModuleCatalogue(null, $this->container->get('router'));
 
         $engine = Module::getInstanceByName('quince_engine');
         $themeVersion = $this->themeVersion();
 
         $modules = [];
         foreach (array_merge($catalogue->all(), $catalogue->others(array_keys($releases))) as $module) {
+            $module['settings_url'] = $module['active'] ? $this->settingsUrl($module['name'], $module['route']) : null;
             $modules[] = $this->row($module['name'], $module['label'], 'module', $module['installed'], $module['active'],
                 $module['version'], $releases[$module['name']] ?? null) + $module;
         }
@@ -166,6 +169,34 @@ class ModulesController extends QuinceController
             'state' => $state,
             'action' => $action,
         ];
+    }
+
+    /**
+     * Adres ekranu modułu: trasa z menu silnika, a gdy moduł ma ekran tylko
+     * w menu PrestaShopa (np. Withdrawal pod Obsługą klienta), jego zakładka.
+     * Null, gdy moduł nie ma żadnego ekranu (np. API).
+     */
+    private function settingsUrl(string $name, ?string $route): ?string
+    {
+        if ($route !== null) {
+            return $this->generateUrl($route);
+        }
+
+        $link = \Context::getContext()->link;
+
+        foreach (\Tab::getCollectionFromModule($name) as $tab) {
+            if ($tab->active && $tab->class_name !== '') {
+                return $link->getAdminLink($tab->class_name);
+            }
+        }
+
+        // Moduł z ukrytymi zakładkami prowadzi do swoich ekranów przez „Konfiguruj”.
+        $module = Module::getInstanceByName($name);
+        if ($module instanceof Module && method_exists($module, 'getContent')) {
+            return $link->getAdminLink('AdminModules', true, [], ['configure' => $name]);
+        }
+
+        return null;
     }
 
     /** Wersja motywu z jego theme.yml, albo null, gdy sklep go nie ma. */

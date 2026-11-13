@@ -111,8 +111,8 @@
             <div class="qc-card-body qc-mod-body" style="display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap">
                 {{ pkg.versions(module) }}
                 <div style="display:flex; gap:8px">
-                    {% if module.active and module.route %}
-                        <a class="qc-btn qc-btn-outline" href="{{ path(module.route) }}">{{ 'Open settings'|trans }}</a>
+                    {% if module.settings_url %}
+                        <a class="qc-btn qc-btn-outline" href="{{ module.settings_url }}">{{ 'Open settings'|trans }}</a>
                     {% endif %}
                     {{ pkg.action(module) }}
                 </div>
