@@ -86,7 +86,7 @@ final class ModuleCatalogue
             // moduł nosi ikonę neutralną.
             'icon' => 'box',
             'type' => FeatureRegistry::TYPE_PRICE_HISTORY,
-            'description' => 'Records every price change and shows the lowest price of the last days, as the Omnibus Directive requires.',
+            'description' => 'Records every price change and shows the lowest price before a reduction, as the Omnibus Directive requires.',
         ],
         [
             'name' => 'quince_offers',
@@ -114,7 +114,7 @@ final class ModuleCatalogue
             'label' => 'Slider',
             'icon' => 'image',
             'type' => FeatureRegistry::TYPE_SLIDER,
-            'description' => 'Home page carousel with three slide types.',
+            'description' => 'A band of slides on the home page, also slides about a product with data from the catalogue.',
         ],
         [
             'name' => 'quince_blog',
@@ -128,14 +128,14 @@ final class ModuleCatalogue
             'label' => 'Dictionaries',
             'icon' => 'folder',
             'type' => 'dictionaries',
-            'description' => 'Vehicle fitment, OEM numbers and engine codes shown on the product page.',
+            'description' => 'Dictionaries for product data shared by many products, with their own levels and fields, shown on the product page as tables.',
         ],
         [
             'name' => 'quince_feature_rank',
             'label' => 'Feature rank',
             'icon' => 'layout',
             'type' => FeatureRegistry::TYPE_FEATURE_RANK,
-            'description' => 'Picks which product specs to show first, based on which ones actually set products apart in that category.',
+            'description' => 'Orders the product features on the product page: first those filled in for most products of the category, without those with the same value everywhere.',
         ],
         [
             'name' => 'quince_qa',

@@ -1417,8 +1417,52 @@
         <target>Menu główne z wielokolumnowymi rozwinięciami i blokami promocyjnymi.</target>
       </trans-unit>
       <trans-unit id="quince.mod.slider_desc">
-        <source>Home page carousel with three slide types.</source>
-        <target>Karuzela na stronie głównej z trzema rodzajami slajdów.</target>
+        <source>A band of slides on the home page, also slides about a product with data from the catalogue.</source>
+        <target>Pas slajdów na stronie głównej, także slajdy o produkcie z danymi prosto z katalogu.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.linkblocks_desc">
+        <source>Blocks of links for the footer: categories, content pages and addresses of your own.</source>
+        <target>Bloki odnośników w stopce: kategorie, strony treści i własne adresy.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.recaptcha_desc">
+        <source>Google reCAPTCHA on shop forms, on top of what the engine checks by itself.</source>
+        <target>Google reCAPTCHA w formularzach sklepu, jako dodatek do zabezpieczeń silnika.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.omnibus_desc">
+        <source>Records every price change and shows the lowest price before a reduction, as the Omnibus Directive requires.</source>
+        <target>Zapisuje każdą zmianę ceny i pokazuje najniższą cenę sprzed obniżki, jak wymaga dyrektywa Omnibus.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.offers_desc">
+        <source>A PDF quote for the products a customer picks, with its own number and a copy kept in the shop.</source>
+        <target>Oferta w PDF na produkty wybrane przez klienta, z własnym numerem i kopią zapisaną w sklepie.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.crossselling_desc">
+        <source>Products to add on the product page, in the cart and after the order, picked from order history, accessories, category and best sellers.</source>
+        <target>Produkty do dokupienia na stronie produktu, w koszyku i po zamówieniu, dobierane z historii zamówień, akcesoriów, kategorii i bestsellerów.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.product_section_desc">
+        <source>A row of recommended products under the product list, set up separately for the category, brand, search, best sellers, new products, promotions and supplier pages.</source>
+        <target>Rząd polecanych produktów pod listą produktów, ustawiany osobno dla stron kategorii, marki, wyszukiwania, bestsellerów, nowości, promocji i dostawcy.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.blog_desc">
+        <source>Multilingual blog with posts, categories, tags and teasers you can place anywhere in the theme.</source>
+        <target>Wielojęzyczny blog z wpisami, kategoriami i tagami oraz zajawkami, które wstawisz w dowolnym miejscu motywu.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.dictionaries_desc">
+        <source>Dictionaries for product data shared by many products, with their own levels and fields, shown on the product page as tables.</source>
+        <target>Słowniki danych wspólnych dla wielu produktów, z własnymi poziomami i polami, pokazywane na stronie produktu w tabelach.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.feature_rank_desc">
+        <source>Orders the product features on the product page: first those filled in for most products of the category, without those with the same value everywhere.</source>
+        <target>Ustawia kolejność cech na stronie produktu: najpierw te uzupełnione w większości produktów kategorii, bez tych, które mają wszędzie tę samą wartość.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.qa_desc">
+        <source>Customer questions about a product, answered by the shop and shown on the product page.</source>
+        <target>Pytania klientów o produkt, na które odpowiada sklep, pokazywane na stronie produktu.</target>
+      </trans-unit>
+      <trans-unit id="quince.mod.robots_desc">
+        <source>Decide which crawlers and AI agents may enter the shop, and see which of them actually come.</source>
+        <target>Decyduj, które roboty i agenci AI mogą wejść do sklepu, i sprawdzaj, które z nich faktycznie przychodzą.</target>
       </trans-unit>
       <trans-unit id="quince.mod.wishlist">
         <source>Wishlist</source>
