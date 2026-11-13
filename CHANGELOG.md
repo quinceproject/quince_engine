@@ -15,9 +15,16 @@ All notable changes to this module are documented here. The format follows
   version of the engine, with the installed and the latest version.
 - **Check for updates** downloads the release list again instead of waiting a day.
 
+- Each module shows its installed and latest version and one status: up to date,
+  update available, installed but switched off, or not installed.
+
 ### Fixed
 
 - Links to module repositories point to github.com/quinceproject.
+- **Open settings** appears for every Quince module that has a screen, also the ones
+  with a screen only in the PrestaShop menu.
+- Module descriptions on the Quince modules screen are translated and match what the
+  modules do.
 
 ## [0.5.10] - 2026-11-10
 
