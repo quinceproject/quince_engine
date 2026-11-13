@@ -41,35 +41,23 @@ class ModulesController extends QuinceController
     {
         $releases = $this->manifest->modules();
         $catalogue = new ModuleCatalogue();
-        $modules = array_merge($catalogue->all(), $catalogue->others(array_keys($releases)));
-
-        foreach ($modules as &$module) {
-            $module['release'] = $releases[$module['name']] ?? null;
-            $module['update'] = $module['release'] !== null && $module['installed'] && $module['version'] !== null
-                && version_compare($module['release']['version'], (string) $module['version'], '>');
-        }
-        unset($module);
+        $rows = [];
 
         $engine = Module::getInstanceByName('quince_engine');
-        $engineRelease = $releases['quince_engine'] ?? null;
-        $themeRelease = $this->manifest->themes()[self::THEME] ?? null;
+        $rows[] = $this->row('quince_engine', 'Quince Engine', 'module', true, true,
+            $engine instanceof Module ? (string) $engine->version : null, $releases['quince_engine'] ?? null);
+
         $themeVersion = $this->themeVersion();
+        $rows[] = $this->row(self::THEME, 'Quince theme', 'theme', $themeVersion !== null, true,
+            $themeVersion, $this->manifest->themes()[self::THEME] ?? null);
+
+        foreach (array_merge($catalogue->all(), $catalogue->others(array_keys($releases))) as $module) {
+            $rows[] = $this->row($module['name'], $module['label'], 'module', $module['installed'], $module['active'],
+                $module['version'], $releases[$module['name']] ?? null);
+        }
 
         return $this->renderPanel('@Modules/quince_engine/views/templates/admin/modules.html.twig', [
-            'modules' => $modules,
-            'engine' => [
-                'version' => $engine instanceof Module ? (string) $engine->version : null,
-                'release' => $engineRelease,
-                'update' => $engineRelease !== null && $engine instanceof Module
-                    && version_compare($engineRelease['version'], (string) $engine->version, '>'),
-            ],
-            'theme' => [
-                'name' => self::THEME,
-                'version' => $themeVersion,
-                'release' => $themeRelease,
-                'update' => $themeRelease !== null && $themeVersion !== null
-                    && version_compare($themeRelease['version'], $themeVersion, '>'),
-            ],
+            'rows' => $rows,
             'manifestError' => $this->manifest->error(),
             'manifestFetchedAt' => $this->manifest->fetchedAt(),
             'layoutTitle' => 'Quince modules',
@@ -93,7 +81,11 @@ class ModulesController extends QuinceController
                 if ($name !== self::THEME) {
                     throw new \RuntimeException('This theme is not on the release list.');
                 }
+                $isNew = $this->themeVersion() === null;
                 $version = $this->installer->installTheme($name);
+                if ($isNew) {
+                    $this->addFlash('info', $this->trans('Switch the theme on in Design → Theme & Logo.', 'Modules.Quinceengine.Admin'));
+                }
             } else {
                 if (!preg_match('/^quince_[a-z_]+$/', $name)) {
                     throw new \RuntimeException('This module is not on the release list.');
@@ -130,6 +122,51 @@ class ModulesController extends QuinceController
         }
 
         return $this->redirectToRoute('quince_modules');
+    }
+
+    /**
+     * Jeden wiersz tabeli: jeden stan i co najwyżej jedna czynność.
+     *
+     * Stan odpowiada na dwa pytania naraz: czy pakiet jest w sklepie i czy jest
+     * aktualny. Wyłączony moduł ma osobny stan, bo „zainstalowany” bez tej
+     * informacji wprowadzałby w błąd.
+     *
+     * @param array{version:string}|null $release
+     *
+     * @return array<string,mixed>
+     */
+    private function row(string $name, string $label, string $kind, bool $installed, bool $active, ?string $version, ?array $release): array
+    {
+        $latest = $release['version'] ?? null;
+
+        if (!$installed) {
+            $state = 'not_installed';
+        } elseif ($latest !== null && $version !== null && version_compare($latest, $version, '>')) {
+            $state = 'update';
+        } elseif (!$active) {
+            $state = 'disabled';
+        } elseif ($latest === null) {
+            $state = 'unknown';
+        } else {
+            $state = 'current';
+        }
+
+        $action = null;
+        if ($release !== null && $state === 'not_installed') {
+            $action = 'install';
+        } elseif ($state === 'update') {
+            $action = 'update';
+        }
+
+        return [
+            'name' => $name,
+            'label' => $label,
+            'kind' => $kind,
+            'version' => $installed ? $version : null,
+            'latest' => $latest,
+            'state' => $state,
+            'action' => $action,
+        ];
     }
 
     /** Wersja motywu z jego theme.yml, albo null, gdy sklep go nie ma. */

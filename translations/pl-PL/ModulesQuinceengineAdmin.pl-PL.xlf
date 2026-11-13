@@ -1248,9 +1248,33 @@
         <source>The release list could not be downloaded, so installing and updating is not available right now.</source>
         <target>Nie udało się pobrać listy wydań, więc instalacja i aktualizacje są teraz niedostępne.</target>
       </trans-unit>
-      <trans-unit id="quince.dist.engine_theme">
-        <source>Engine and theme</source>
-        <target>Silnik i motyw</target>
+      <trans-unit id="quince.dist.table_title">
+        <source>Engine, theme and modules</source>
+        <target>Silnik, motyw i moduły</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.col_module">
+        <source>Module</source>
+        <target>Moduł</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.col_latest">
+        <source>Latest version</source>
+        <target>Najnowsza wersja</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.col_status">
+        <source>Status</source>
+        <target>Stan</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.up_to_date">
+        <source>Up to date</source>
+        <target>Aktualny</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.update_available">
+        <source>Update available</source>
+        <target>Dostępna aktualizacja</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.installed_unknown">
+        <source>Installed</source>
+        <target>Zainstalowany</target>
       </trans-unit>
       <trans-unit id="quince.dist.checked_on">
         <source>Release list checked on %date%.</source>
@@ -1264,29 +1288,17 @@
         <source>Check for updates</source>
         <target>Sprawdź aktualizacje</target>
       </trans-unit>
-      <trans-unit id="quince.dist.version_available">
-        <source>Version %version% is available.</source>
-        <target>Dostępna jest wersja %version%.</target>
-      </trans-unit>
       <trans-unit id="quince.dist.theme">
         <source>Quince theme</source>
         <target>Motyw Quince</target>
       </trans-unit>
-      <trans-unit id="quince.dist.theme_missing">
-        <source>Not in this shop yet. After installing, switch it on in Design → Theme &amp; Logo.</source>
-        <target>Sklep jeszcze go nie ma. Po instalacji włącz go w Wygląd → Szablony.</target>
-      </trans-unit>
-      <trans-unit id="quince.dist.theme_update">
-        <source>Version %version% is available. Files of the theme are replaced; files the shop added are kept.</source>
-        <target>Dostępna jest wersja %version%. Pliki motywu zostaną podmienione, a pliki dodane przez sklep zostaną.</target>
+      <trans-unit id="quince.dist.theme_enable">
+        <source>Switch the theme on in Design → Theme &amp; Logo.</source>
+        <target>Włącz motyw w Wygląd → Szablony.</target>
       </trans-unit>
       <trans-unit id="quince.dist.install">
         <source>Install</source>
         <target>Zainstaluj</target>
-      </trans-unit>
-      <trans-unit id="quince.dist.ready">
-        <source>Version %version% is ready to install.</source>
-        <target>Wersja %version% jest gotowa do instalacji.</target>
       </trans-unit>
       <trans-unit id="quince.dist.installed">
         <source>%name% %version% is installed.</source>
