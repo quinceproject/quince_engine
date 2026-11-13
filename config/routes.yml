@@ -1,7 +1,7 @@
 # Routing panelu Quince.
 #
-# _legacy_controller musi odpowiadać class_name zakładki zadeklarowanej w quince_engine.php —
-# to po nim PrestaShop rozpoznaje uprawnienia do strony i podświetla pozycję w menu.
+# _legacy_controller musi odpowiadać class_name zakładki zadeklarowanej w quince_engine.php.
+# To po nim PrestaShop rozpoznaje uprawnienia do strony i podświetla pozycję w menu.
 # _legacy_link pozwala starym linkom (Tools::redirectAdmin, getAdminLink) trafić na tę trasę.
 
 quince_appearance:
@@ -21,7 +21,7 @@ quince_appearance_save:
     _legacy_link: 'AdminQuinceAppearance:save'
 
 # Podgląd palety bez zapisu. Paleta liczona jest wyłącznie w PHP (PaletteGenerator),
-# więc panel pokazuje dokładnie te kolory, które trafią do sklepu — bez drugiej
+# więc panel pokazuje dokładnie te kolory, które trafią do sklepu, bez drugiej
 # implementacji tej samej matematyki w JavaScripcie.
 quince_appearance_preview:
   path: quince/appearance/preview
@@ -31,7 +31,7 @@ quince_appearance_preview:
     _legacy_controller: 'AdminQuinceAppearance'
     _legacy_link: 'AdminQuinceAppearance'
 
-# Ustawienia topbara — treści i widoczność. Kolory pasa wylicza silnik
+# Ustawienia topbara: treści i widoczność. Kolory pasa wylicza silnik
 # z decyzji w ustawieniach ogólnych, więc tutaj ich nie ma.
 quince_topbar:
   path: quince/topbar
@@ -85,7 +85,6 @@ quince_header_save:
     _legacy_controller: 'AdminQuince'
     _legacy_link: 'AdminQuince:save'
 
-# Ustawienia paska nawigacji: kategorie i odnośniki własne.
 # Ustawienia stopki: dane firmy, kolumny, ikony społecznościowe, pas dolny.
 quince_footer:
   path: quince/footer
@@ -120,6 +119,7 @@ quince_brand_schema_save:
     _legacy_controller: 'AdminQuince'
     _legacy_link: 'AdminQuince:save'
 
+# Ustawienia paska nawigacji: kategorie i odnośniki własne.
 quince_navigation:
   path: quince/navigation
   methods: [GET]

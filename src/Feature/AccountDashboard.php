@@ -18,13 +18,13 @@ use PrestaShop\PrestaShop\Adapter\Presenter\Order\OrderPresenter;
 /**
  * Dane panelu klienta (`my-account`): liczniki i ostatnie zamówienia.
  *
- * Rdzeń nie liczy nic z tego sam — `MyAccountController` tylko wyświetla listę
+ * Rdzeń nie liczy nic z tego sam: `MyAccountController` tylko wyświetla listę
  * odnośników. Adresy ma już szablon przez `$customer.addresses`, więc tu tylko
  * to, czego nigdzie indziej nie ma.
  */
 final class AccountDashboard
 {
-    /** Tyle ostatnich zamówień pokazuje panel — tyle samo, co w prototypie. */
+    /** Tyle ostatnich zamówień pokazuje panel (tyle samo, co w prototypie). */
     private const RECENT_ORDERS_LIMIT = 3;
 
     /**

@@ -66,8 +66,8 @@ class NavigationController extends QuinceController
     }
 
     /**
-     * Odnośniki własne z kodem SVG wybranej ikony — przycisk wyboru ma ją rysować
-     * od razu, a nie dopiero po otwarciu listy.
+     * Odnośniki własne z kodem SVG wybranej ikony, żeby przycisk wyboru rysował
+     * ją od razu, a nie dopiero po otwarciu listy.
      *
      * @return array<int,array<string,mixed>>
      */
@@ -86,7 +86,7 @@ class NavigationController extends QuinceController
     /**
      * Kategorie główne sklepu w kolejności ustawionej w panelu.
      *
-     * Najpierw te wybrane, w zapisanej kolejności, potem reszta katalogu — dzięki
+     * Najpierw te wybrane, w zapisanej kolejności, potem reszta katalogu. Dzięki
      * temu przeciąganie wierszy układa menu, a kategorie dołożone w katalogu
      * czekają na końcu, zamiast wskakiwać w środek.
      *

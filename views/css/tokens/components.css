@@ -163,16 +163,16 @@
 .qc-upload-name{color:var(--fg-1);font-weight:var(--weight-medium);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .qc-upload-actions{display:flex;gap:8px;flex:none}
 
-/* Duży podgląd nad rzędem `.qc-upload` — dla zdjęć, które same w sobie są
+/* Duży podgląd nad rzędem `.qc-upload` dla zdjęć, które same w sobie są
    treścią (np. wyróżnione zdjęcie wpisu bloga), nie tylko logo/miniaturą.
-   Ta sama ramka i promień co `.qc-upload`, żeby to była jedna rodzina. */
+   Ta sama ramka i promień co `.qc-upload`. */
 .qc-upload-preview{border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface-sunken)}
 .qc-upload-preview img{display:block;width:100%;max-height:320px;object-fit:cover}
 
 /* Wybór wielokrotny jako lista rozwijana z polami wyboru.
    Wyzwalacz wygląda jak zwykłe pole ze strzałką, menu i wiersze mają geometrię
-   listy języków — żeby to był ten sam panel, a nie nowy wynalazek. */
-/* Listy rozwijane muszą wyjść ponad pasek zapisu (z-index 20) — inaczej wybór
+   listy języków. */
+/* Listy rozwijane muszą wyjść ponad pasek zapisu (z-index 20). Inaczej wybór
    przy dolnej krawędzi ekranu chowa się pod nim. */
 .qc-multipick{position:relative}
 .qc-multipick-btn{display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;cursor:pointer}
@@ -269,10 +269,8 @@
 .qc-tool-card-title{font-weight:var(--weight-semibold);font-size:var(--text-base)}
 .qc-tool-card-desc{font-size:var(--text-sm);color:var(--fg-2);flex:1}
 /* Akcja karty nie rozciąga się na jej szerokość. Karta jest kolumną, więc
-   `<a class="qc-btn">` domyślnie rósł do pełnej szerokości i biały prostokąt
-   z cienką kreską czytał się jak pole tekstowe, a nie jak przycisk. Sąsiednie
-   akcje w `<form>` zostawały wąskie i przyciski jednego rzędu miały różne
-   szerokości. */
+   bez tego `<a class="qc-btn">` rośnie do pełnej szerokości, a sąsiednie
+   akcje w `<form>` zostają wąskie. */
 .qc-tool-card > .qc-btn,
 .qc-tool-card > form{align-self:flex-start}
 .qc-tool-card > form{display:flex;gap:8px}
@@ -288,8 +286,7 @@
 
 /* Category tree */
 /* Pole z żetonami: wybrane kategorie stoją W ŚRODKU pola, a pisanie idzie dalej
-   w tym samym wierszu. Osobna lista pod polem oddzielała wybór od miejsca, w którym
-   się go dokonuje, i przy kilku pozycjach rozpychała formularz na dwa razy tyle. */
+   w tym samym wierszu. */
 .qc-tags{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:36px;padding:4px 8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);cursor:text;transition:border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
 .qc-tags:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--focus-ring)}
 /* Pole tekstowe bez własnej ramki: ramkę niesie pojemnik, więc druga byłaby
@@ -298,19 +295,19 @@
 .qc-tags-input::placeholder{color:var(--fg-3)}
 .qc-tag{display:inline-flex;align-items:center;height:24px;padding-inline-start:8px;border-radius:var(--radius-sm);background:var(--accent);color:var(--fg-on-accent);font-size:var(--text-sm);font-weight:var(--weight-semibold);white-space:nowrap}
 /* Krzyżyk oddzielony kreską, a nie odstępem: przy dwóch żetonach obok siebie
-   odstęp czytał się jak przerwa między nimi, a nie jak część tego żetonu. */
-/* Numer kategorii na żetonie: przygaszony, bo jest rozstrzygnięciem, a nie
-   treścią — czyta się go tylko wtedy, gdy dwie kategorie mają tę samą nazwę. */
+   odstęp czyta się jak przerwa między nimi. */
+/* Numer kategorii na żetonie: przygaszony, bo rozstrzyga tylko wtedy, gdy dwie
+   kategorie mają tę samą nazwę. */
 .qc-tag-id{margin-inline-start:6px;opacity:.7;font-weight:var(--weight-normal);font-variant-numeric:tabular-nums}
 .qc-tag-x{display:inline-flex;align-items:center;justify-content:center;inline-size:20px;block-size:24px;margin-inline-start:6px;border:0;border-inline-start:1px solid var(--surface);background:none;color:inherit;font-size:var(--text-base);line-height:1;cursor:pointer;opacity:.75}
 .qc-tag-x:hover{opacity:1}
 /* Podpowiedzi pod polem, na pełną jego szerokość. */
 /* Warstwa wyżej niż pasek zapisu (`qc-actionbar`, z-index 20): pasek jest lepki
-   przy dolnej krawędzi i przykrywał listę dokładnie tam, gdzie ona wychodzi. */
+   przy dolnej krawędzi i przykrywa listę dokładnie tam, gdzie ona wychodzi. */
 .qc-tags-menu{position:absolute;z-index:30;inset-inline:0;margin-block-start:4px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);box-shadow:var(--shadow-md);max-height:240px;overflow:auto;padding:4px}
 /* Jeden wiersz: nazwa, numer, ścieżka. W wąskiej kolumnie skraca się ŚCIEŻKA,
-   bo jest z tych trzech najmniej potrzebna — nazwa i numer muszą zostać czytelne
-   w całości. Bez tego wiersz łamał się w poprzek. */
+   bo jest z tych trzech najmniej potrzebna. Nazwa i numer muszą zostać czytelne
+   w całości. */
 .qc-tags-option{display:flex;align-items:baseline;gap:8px;padding:7px 10px;border-radius:var(--radius-sm);font-size:var(--text-sm);cursor:pointer}
 .qc-tags-option:hover{background:var(--surface-sunken)}
 .qc-tags-name{flex:none;white-space:nowrap}

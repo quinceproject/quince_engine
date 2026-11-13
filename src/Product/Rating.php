@@ -17,12 +17,11 @@ use Db;
 use Module;
 
 /**
- * Ocena produktu — średnia i liczba opinii.
+ * Ocena produktu: średnia i liczba opinii.
  *
  * Opinie prowadzi `productcomments`: jego tabele, jego moderacja, jego formularz.
- * Bierzemy z nich dwie liczby i rysujemy je sami, tak jak robimy to z listą
- * życzeń — bo gwiazdki pod nazwą produktu mają wyglądać jak reszta strony,
- * a nie jak wstawka z cudzego modułu.
+ * Bierzemy z nich dwie liczby i rysujemy je sami, tak jak listę życzeń, żeby
+ * gwiazdki pod nazwą produktu wyglądały jak reszta strony.
  *
  * Bez modułu opinii nie ma czego liczyć i nic się nie renderuje. Nie jest to
  * błąd: sklep bez opinii po prostu ich nie pokazuje.
@@ -77,8 +76,8 @@ final class Rating
     /**
      * Średnia zapisana po ludzku dla bieżącego języka.
      *
-     * Poza żądaniem sklepu (konsola, zadanie w tle) kontekst nie ma lokalizacji —
-     * wtedy zostaje zapis z kropką, bo lepszy niż błąd.
+     * Poza żądaniem sklepu (konsola, zadanie w tle) kontekst nie ma lokalizacji.
+     * Wtedy zostaje zapis z kropką, bo lepszy niż błąd.
      */
     private static function liczba(float $srednia): string
     {

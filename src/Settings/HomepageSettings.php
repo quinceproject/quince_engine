@@ -38,7 +38,7 @@ use Configuration;
  * jedzie w bok albo schodzi do kolejnych rzędów.
  *
  * Zapis idzie w JSON jednym kluczem, bo liczba sekcji i kolumn zmienia się przy
- * każdym przestawieniu — tak samo jak miejsca promocyjne na listingu.
+ * każdym przestawieniu (tak samo jak miejsca promocyjne na listingu).
  *
  * Projekt ekranu: `quince/widoki/panel-strona-glowna.html`.
  */
@@ -63,7 +63,7 @@ final class HomepageSettings
      *
      * Przy podziale kolumnowym i tak ogranicza go siatka: kolumn nie może być
      * więcej niż pól, bo kolumna węższa od jednego pola nie pomieści zajawki.
-     * Szóstka jest granicą samego ekranu — przy siedmiu kolumnach nie zostaje
+     * Szóstka jest granicą samego ekranu: przy siedmiu kolumnach nie zostaje
      * miejsce na żadną treść.
      */
     public const MAX_COLUMNS = 6;
@@ -71,8 +71,8 @@ final class HomepageSettings
     /**
      * Skale palety, z których wolno brać barwę pasa.
      *
-     * Nazwa spoza tej listy przechodziła walidację i kończyła się odwołaniem
-     * do zmiennej, której nie ma: pas był wtedy przezroczysty bez żadnego błędu.
+     * Nazwa spoza tej listy skończyłaby się odwołaniem do zmiennej CSS, której
+     * nie ma: pas byłby przezroczysty bez żadnego błędu.
      */
     private const SKALE = ['neutral', 'primary', 'secondary', 'promo'];
 
@@ -82,9 +82,8 @@ final class HomepageSettings
     /**
      * Wartości do wyboru przy podziale procentowym.
      *
-     * Skok co pięć punktów, a do tego trzecie i szóste części. Bez nich równy
-     * podział na trzy albo sześć kolumn nie miał na czym stanąć i ostatnia
-     * kolumna zabierała całą resztę.
+     * Skok co pięć punktów, a do tego trzecie i szóste części, żeby dało się
+     * równo podzielić pas na trzy albo sześć kolumn.
      */
     public const PERCENT_STEPS = [10, 15, 16, 20, 25, 30, 33, 35, 40, 45, 50, 55, 60, 65, 67, 70, 75, 80, 85, 90];
 
@@ -142,8 +141,8 @@ final class HomepageSettings
     /**
      * Skąd biorą się produkty w kolumnie.
      *
-     * „Ostatnio oglądane” daje pustą kolumnę komuś, kto wchodzi pierwszy raz —
-     * sekcja gaśnie wtedy sama, tak samo jak przy hooku bez wyjścia.
+     * „Ostatnio oglądane” daje pustą kolumnę komuś, kto wchodzi pierwszy raz.
+     * Sekcja gaśnie wtedy sama, tak samo jak przy hooku bez wyjścia.
      *
      * @var array<string,string>
      */
@@ -192,9 +191,8 @@ final class HomepageSettings
      * Ile krótkich zapewnień mieści duża zajawka.
      *
      * To NIE są cechy z katalogu. Cechy przychodzą jako para nazwa i wartość,
-     * więc dałyby „Gwarancja: 5 lat”, a tu ma stać „5 lat gwarancji”. Poza tym
-     * połowa tych napisów nie dotyczy produktu, tylko sklepu: „szkolenie
-     * w cenie”, „montaż u ciebie”, „wysyłka 24 h”. Dlatego wpisuje je sklep.
+     * więc dałyby „Gwarancja: 5 lat”, a tu ma stać „5 lat gwarancji”. Napisy
+     * wpisuje sklep.
      */
     public const MAX_EXTRAS = 4;
 
@@ -203,8 +201,7 @@ final class HomepageSettings
      *
      * Pigułka to jeden napis w ramce: „5 lat gwarancji”. Blok rozbija to samo
      * na wyróżnioną wartość i zdanie pod nią: „42” nad „złącza w komplecie,
-     * od 2-pin do multipinu 40”. Przełącznik jest jawny, bo to wybór układu,
-     * a nie skutek uboczny tego, które pole zostało wypełnione.
+     * od 2-pin do multipinu 40”.
      */
     public const EXTRA_PILLS = 'pills';
     public const EXTRA_BLOCKS = 'blocks';
@@ -245,10 +242,8 @@ final class HomepageSettings
     /**
      * Sekcje, które sklep dostaje po instalacji.
      *
-     * Celowo dwie i celowo takie: slajder, bo bez niego strona zaczyna się od
-     * pustki, oraz bestsellery, bo to sekcja działająca bez konfiguracji
-     * katalogu. Reszta jest do dołożenia, a nie do skasowania — sklep, który
-     * dostaje dwanaście gotowych sekcji, zaczyna od kasowania.
+     * Slajder oraz bestsellery, bo to sekcja działająca bez konfiguracji
+     * katalogu.
      *
      * @return array<int,array<string,mixed>>
      */
@@ -455,8 +450,8 @@ final class HomepageSettings
     /**
      * Szerokości kolumn.
      *
-     * Ostatnia kolumna bierze resztę, więc podział zawsze sumuje się do całości
-     * — także wtedy, gdy przyszedł z wysyłki policzony źle albo gdy sklep zmienił
+     * Ostatnia kolumna bierze resztę, więc podział zawsze sumuje się do całości,
+     * także wtedy, gdy przyszedł z wysyłki policzony źle albo gdy sklep zmienił
      * liczbę zajawek w rzędzie już po zapisaniu strony.
      *
      * @param mixed $dane
@@ -520,7 +515,7 @@ final class HomepageSettings
             }
         }
 
-        // Kolumn może przyjść mniej, niż ma podział — brakujące dostają
+        // Kolumn może przyjść mniej, niż ma podział. Brakujące dostają
         // zawartość domyślną, żeby siatka nie miała dziury.
         while (count($kolumny) < $ile) {
             $kolumny[] = $this->sanitizeColumn([], self::COLUMN_PRODUCTS);

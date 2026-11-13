@@ -18,21 +18,20 @@ use Quince\Engine\Ui\IconLibrary;
 /**
  * Ustawienia stopki: kolumny, dane firmy, pas dolny.
  *
- * Stopka nie zna treści, które w niej stoją. Kolumna ma nazwę i listę hooków —
- * to, co się w nich wyświetli, przynoszą moduły. Dzięki temu przestawienie
+ * Stopka nie zna treści, które w niej stoją. Kolumna ma nazwę i listę hooków,
+ * a to, co się w nich wyświetli, przynoszą moduły. Dzięki temu przestawienie
  * kolumn nie wymaga ruszania modułów, a dołożenie modułu nie wymaga zmiany
  * w motywie.
  *
  * Wyjątkiem jest pierwsza kolumna: dane firmy i kontakt to treść samego sklepu,
  * nie modułu, więc siedzą tutaj. Adres, telefon, e-mail i godziny ustawia się
- * na miejscu, każdy z własną ikoną — stopka mówi co innego niż pas informacyjny
- * i nie zawsze ma pokazywać ten sam numer.
+ * na miejscu, każdy z własną ikoną, niezależnie od pasa informacyjnego.
  */
 final class FooterSettings
 {
     private const PREFIX = 'QUINCE_FOOTER_';
 
-    /** Klucze wielojęzyczne — wartość trzymana jako JSON `{"1":"…","2":"…"}`. */
+    /** Klucze wielojęzyczne, wartość trzymana jako JSON `{"1":"…","2":"…"}`. */
     private const TRANSLATABLE = [
         'COMPANY_TITLE', 'COMPANY_TEXT', 'ADDRESS', 'PHONE', 'EMAIL', 'HOURS', 'COPYRIGHT',
     ];
@@ -48,27 +47,23 @@ final class FooterSettings
         'COPYRIGHT' => '',
 
         // Ikona przy każdym wierszu kontaktu. Domyślne są te same, co w pasie
-        // informacyjnym — sklep, który ich nie ruszy, ma stopkę spójną z pasem.
+        // informacyjnym.
         'ADDRESS_ICON' => 'geo-alt-fill',
         'PHONE_ICON' => 'telephone',
         'EMAIL_ICON' => 'envelope',
         'HOURS_ICON' => 'clock',
 
-        // Kolumny i ikony społecznościowe trzymamy jako JSON: liczba jednych
-        // i drugich zależy od sklepu, więc kolumna w tabeli musiałaby powstawać
-        // przy każdej zmianie zdania.
+        // Listy o zmiennej długości trzymane jako JSON.
         'COLUMNS' => '',
         'SOCIALS' => '',
         'PAYMENTS' => '',
         'BAR_LINKS' => '',
 
-        // Tło pasa: stopień skali albo kod barwy. Pas dolny ma własne, bo bywa,
-        // że ma się odciąć od kolumn — a bywa, że ma być ich przedłużeniem.
+        // Tło pasa: stopień skali albo kod barwy. Pas dolny ma własne.
         'BG' => 'neutral-12',
         'BAR_BG' => 'neutral-12',
 
-        // Pasek nad stopką: miejsce dla modułu, który ma coś powiedzieć tuż
-        // przed nią — baner, zapis do newslettera, pas zaufania.
+        // Pasek nad stopką: hooki modułów (baner, zapis do newslettera, pas zaufania).
         'STRIP_HOOKS' => '',
         'STRIP_BG' => 'neutral-1',
         'STRIP_WIDTH' => 'container',
@@ -83,8 +78,8 @@ final class FooterSettings
         $out = [];
 
         // Wartość domyślna wchodzi wyłącznie wtedy, gdy klucza nie ma w konfiguracji.
-        // Pusty napis jest wyborem administratora — tak zapisuje się „bez ikony" —
-        // i podmiana go na wartość domyślną przywracałaby skasowaną ikonę przy odczycie.
+        // Pusty napis jest wyborem administratora (tak zapisuje się „bez ikony"),
+        // a podmiana go na wartość domyślną przywracałaby skasowaną ikonę przy odczycie.
         foreach (self::SCHEMA as $key => $default) {
             $value = Configuration::get(self::PREFIX . $key);
             $out[$key] = ($value === false || $value === null) ? $default : (string) $value;
@@ -97,8 +92,7 @@ final class FooterSettings
      * Kolumny stopki: nazwa w każdym języku i hooki, które w niej stoją.
      *
      * Sklep bez własnego ustawienia dostaje trzy kolumny z hookami, których
-     * PrestaShop używa od zawsze — stopka działa od razu, zamiast być pusta
-     * do pierwszej wizyty w panelu.
+     * PrestaShop używa od zawsze.
      *
      * @return array<int,array{labels:array<int,string>,hooks:string[]}>
      */
@@ -143,8 +137,7 @@ final class FooterSettings
     /**
      * Ikony społecznościowe: ikona z biblioteki i adres.
      *
-     * Bez pola na serwis: lista rośnie co roku o kolejny, a ikona plus adres
-     * opisują każdy z nich tak samo dobrze.
+     * Bez pola na nazwę serwisu: ikona i adres wystarczą.
      *
      * @return array<int,array{icon:string,url:string}>
      */
@@ -157,12 +150,10 @@ final class FooterSettings
     }
 
     /**
-     * Wpisy tak, jak stoją w konfiguracji — z niedokończonymi włącznie.
+     * Wpisy tak, jak stoją w konfiguracji, z niedokończonymi włącznie.
      *
-     * Panel pokazuje to, co zapisane, a nie to, co zobaczy sklep. Wiersz bez ikony
-     * albo bez adresu nigdzie się nie wyświetli, ale nadal jest wierszem, który ktoś
-     * zaczął wypełniać; wycięcie go z listy panelu kasowało go przy pierwszym zapisie
-     * razem z wpisanym już adresem.
+     * Dla panelu. Wiersz bez ikony albo bez adresu nie wyświetli się w sklepie,
+     * ale wycięty z listy panelu zniknąłby przy zapisie razem z wpisanym adresem.
      *
      * @return array<int,array{icon:string,url:string}>
      */
@@ -210,7 +201,7 @@ final class FooterSettings
     }
 
     /**
-     * Odnośniki w pasie dolnym — regulamin, prywatność, zwroty.
+     * Odnośniki w pasie dolnym (regulamin, prywatność, zwroty).
      *
      * Nazwa i adres w każdym języku: sklep dwujęzyczny ma dwie strony regulaminu
      * i dwa adresy do nich.
@@ -271,7 +262,7 @@ final class FooterSettings
             ],
 
             // Każdy wiersz kontaktu niesie swój tekst i rysunek ikony. Wiersz bez
-            // tekstu szablon pomija — sama ikona niczego nie mówi.
+            // tekstu szablon pomija.
             'contact' => [
                 'address' => $this->contactRow($s, 'ADDRESS', $idLang),
                 'phone' => $this->contactRow($s, 'PHONE', $idLang),
@@ -288,7 +279,7 @@ final class FooterSettings
             ),
 
             // Nazwa ikony jedzie obok jej rysunku: to ona opisuje odnośnik czytnikowi
-            // ekranu. Bez niej opisem zostawał adres i czytnik dyktował cały URL.
+            // ekranu. Bez niej czytnik dyktowałby cały URL.
             'socials' => array_map(
                 static fn (array $w): array => [
                     'icon' => IconLibrary::svg($w['icon']),
@@ -622,11 +613,11 @@ final class FooterSettings
         return '';
     }
     /**
-     * PeÅne nazwy kluczy konfiguracji tej klasy.
+     * Pełne nazwy kluczy konfiguracji tej klasy.
      *
-     * Potrzebne przy odinstalowaniu: moduÅ kasuje dokÅadnie to, co zaÅoÅ¼yÅ.
-     * Nazwy wyliczane ze schematu, a nie wypisane drugi raz â inaczej doÅoÅ¼enie
-     * pola zostawiaÅoby po sobie klucz na zawsze.
+     * Potrzebne przy odinstalowaniu: moduł kasuje dokładnie to, co założył.
+     * Nazwy wyliczane ze schematu, a nie wypisane drugi raz, inaczej dołożenie
+     * pola zostawiałoby po sobie klucz na zawsze.
      *
      * @return string[]
      */

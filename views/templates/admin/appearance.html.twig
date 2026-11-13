@@ -37,10 +37,9 @@
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_appearance_save') }}">
     <input type="hidden" name="COLOR_OVERRIDES" value="{{ overrides|json_encode }}" :value="JSON.stringify(overrides)">
 
-    {# Jeden komunikat na stronę, nie dwa. Bez uwag jest informacją o tym, co się
-       tu ustawia; kiedy silnik coś wykryje, zmienia rangę na ostrzeżenie i dopisuje
-       listę. Dwa osobne paski jeden pod drugim czytały się jak to samo powiedziane
-       dwa razy, a różnią się tym, czy trzeba coś zrobić.
+    {# Jeden komunikat na stronę. Bez uwag jest informacją o tym, co się tu
+       ustawia; kiedy silnik coś wykryje, zmienia rangę na ostrzeżenie i dopisuje
+       listę.
 
        Blok siedzi wewnątrz formularza, bo lista uwag zmienia się po każdej zmianie
        koloru, poza zasięgiem stanu strony byłaby nieaktualna do przeładowania. #}
@@ -251,7 +250,7 @@
             </div>
         </div>
         <div class="qc-card-body">
-            {# Wybór powierzchni to NUMER STOPNIA skali neutralnej, nie kod barwy —
+            {# Wybór powierzchni to NUMER STOPNIA skali neutralnej, nie kod barwy:
                powierzchnia ma należeć do palety, a nie stać obok niej. Stopień idzie
                za skalą: zmiana atramentu przemalowuje tło bez wracania na ten ekran. #}
             {% for surface in [
@@ -304,9 +303,7 @@
         </div>
         <div class="qc-card-body">
             {# Ten sam wybór co przy powierzchniach: numer stopnia skali, nie kod
-               barwy. Kreska ma zmieniać się razem z paletą, a sklep, który
-               przemalował markę albo przełączył szarości na ciepłe, nie ma tu
-               wracać. #}
+               barwy. Kreska zmienia się razem z paletą. #}
             {% for kreska in [
                 {pole: 'BORDER_CARD',  stan: 'borderCard',  name: 'Blocks and dividers'|trans, note: 'Card outline and the lines that separate content, for example under the key features. Counted from the card background in the same way.'|trans},
                 {pole: 'BORDER_FIELD', stan: 'borderField', name: 'Form fields'|trans,         note: 'Text fields, drop-down lists and text areas. What counts is the distance from the shade above: a block with its own darker background gets a line darker by the same number of steps, so the line stays visible everywhere.'|trans},
@@ -571,7 +568,7 @@ function quinceAppearance() {
 
         init() {
             // Paleta przelicza się NA ŻĄDANIE, nie po każdym drgnięciu próbnika.
-            // Dopóki nie przeliczysz, wybory oparte na skalach są wygaszone —
+            // Do przeliczenia wybory oparte na skalach są wygaszone,
             // inaczej dałoby się wskazać odcień, którego jeszcze nie ma.
             ['primary', 'secondary', 'dark', 'promo', 'neutralTint'].forEach(
                 k => this.$watch(k, () => { this.stale = true; })

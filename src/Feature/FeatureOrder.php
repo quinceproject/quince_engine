@@ -20,13 +20,13 @@ use Module;
  * Ranking liczy moduł `quince_feature_rank`: sprawdza, które cechy naprawdę
  * odróżniają produkty w danej kategorii, i odrzuca te o jednej wartości
  * u wszystkich oraz numery katalogowe. Silnik pyta o niego przez rejestr
- * możliwości, a nie po nazwie klasy — sklep bez tego modułu ma działać dalej,
+ * możliwości, a nie po nazwie klasy. Sklep bez tego modułu ma działać dalej,
  * tylko z cechami w kolejności katalogu.
  *
- * Osobna klasa, bo pytają o to dwa miejsca w dwóch trybach. Karta produktu
- * dostaje kolejność raz, w zmiennych strony, bo produkt jest jeden. Zajawka na
- * listingu pyta osobno dla każdego produktu, bo każdy może stać w innej
- * kategorii i mieć inny ranking — stąd modyfikator Smarty `qcechy`.
+ * Pytają o to dwa miejsca w dwóch trybach. Karta produktu dostaje kolejność
+ * raz, w zmiennych strony, bo produkt jest jeden. Zajawka na listingu pyta
+ * osobno dla każdego produktu (modyfikator Smarty `qcechy`), bo każdy może
+ * stać w innej kategorii i mieć inny ranking.
  */
 final class FeatureOrder
 {

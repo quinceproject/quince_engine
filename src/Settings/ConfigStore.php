@@ -19,13 +19,12 @@ use Shop;
  *
  * Configuration::updateValue zapisuje tam, gdzie wskazuje kontekst back-office.
  * Przy włączonej wielosklepowości i wybranej pozycji „Wszystkie sklepy" kontekst nie
- * wskazuje żadnego sklepu, więc wartość ląduje w wierszu globalnym — a sklep czyta
- * najpierw swój własny wiersz i po globalny sięga dopiero wtedy, gdy własnego nie ma.
- * Ustawienie zapisane „dla wszystkich sklepów" nie docierało wtedy do żadnego z nich:
- * panel pokazywał nową wartość, sklep zostawał przy starej.
+ * wskazuje żadnego sklepu, więc wartość ląduje w wierszu globalnym. Sklep czyta
+ * najpierw swój własny wiersz i po globalny sięga dopiero wtedy, gdy własnego nie ma,
+ * więc zwykły zapis „dla wszystkich sklepów" nie dociera do sklepu z własnym wierszem.
  *
- * Dlatego zapisujemy wartość każdemu sklepowi z bieżącego kontekstu — jednemu,
- * grupie albo wszystkim, zależnie od tego, co administrator ma wybrane — a w kontekście
+ * Dlatego zapisujemy wartość każdemu sklepowi z bieżącego kontekstu (jednemu,
+ * grupie albo wszystkim, zależnie od wyboru w panelu), a w kontekście
  * „wszystkie sklepy" dodatkowo do wiersza globalnego, żeby sklep założony później
  * też ją dostał.
  */

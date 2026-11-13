@@ -21,8 +21,8 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Ustawienia topbara: treści, widoczność i pasek komunikatu.
  *
- * Kolorów tu nie ma — wylicza je silnik z decyzji „pas jasny / ciemny / w kolorze
- * marki", którą sprzedawca podejmuje w ustawieniach ogólnych.
+ * Kolorów tu nie ma. Wylicza je silnik z wyboru „pas jasny / ciemny / w kolorze
+ * marki" w ustawieniach ogólnych.
  */
 class TopbarController extends QuinceController
 {
@@ -42,7 +42,7 @@ class TopbarController extends QuinceController
             'settings' => $settings,
             'translations' => $this->settings->translations(),
             'languages' => $languages,
-            // Wybrana ikona rysuje się od razu, bez czekania na zapytanie —
+            // Wybrana ikona rysuje się od razu, bez czekania na zapytanie:
             // select dopytuje serwer dopiero po otwarciu listy.
             'iconSvg' => [
                 'PHONE_ICON' => IconLibrary::svg($settings['PHONE_ICON']),
@@ -50,7 +50,7 @@ class TopbarController extends QuinceController
                 'HOURS_ICON' => IconLibrary::svg($settings['HOURS_ICON']),
             ],
             // Tło pasa wybiera się ze skal palety, więc ekran musi je znać. Wie też,
-            // czy paleta jest decyzją sklepu, czy zgadywanką silnika — bez zapisanych
+            // czy paleta jest decyzją sklepu, czy zgadywanką silnika. Bez zapisanych
             // ustawień podstawowych nie ma z czego wybierać.
             'palette' => $this->appearance->palette(),
             'prepared' => $this->appearance->isPrepared(),
@@ -88,7 +88,7 @@ class TopbarController extends QuinceController
                 'name' => (string) $language['name'],
                 'iso_code' => (string) $language['iso_code'],
                 // Pola wielojęzyczne otwierają się na języku sklepu, a nie na
-                // pierwszym z listy — inaczej sprzedawca pisze swój tekst
+                // pierwszym z listy. Inaczej sprzedawca pisze swój tekst
                 // w rubryce obcego języka.
                 'default' => (int) $language['id_lang'] === (int) \Configuration::get('PS_LANG_DEFAULT'),
             ];

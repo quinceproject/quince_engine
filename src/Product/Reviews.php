@@ -151,8 +151,8 @@ final class Reviews
     /**
      * Podpis pod opinią: imię i pierwsza litera nazwiska.
      *
-     * Nazwisko w całości jest daną osobową wystawioną publicznie bez potrzeby —
-     * do rozróżnienia dwóch Marków wystarczy inicjał. Gość, który nie ma konta,
+     * Nazwisko w całości jest daną osobową wystawioną publicznie bez potrzeby.
+     * Do rozróżnienia dwóch Marków wystarczy inicjał. Gość, który nie ma konta,
      * zostaje przy nazwie, którą sam podał w formularzu.
      *
      * @param array<string,mixed> $wiersz
@@ -197,7 +197,7 @@ final class Reviews
     /**
      * Data zapisana po ludzku dla bieżącego języka.
      *
-     * Poza żądaniem sklepu kontekst nie ma lokalizacji — zostaje wtedy zapis
+     * Poza żądaniem sklepu kontekst nie ma lokalizacji. Zostaje wtedy zapis
      * z bazy, bo lepszy niż błąd.
      */
     private static function data(string $data): string
@@ -232,7 +232,7 @@ final class Reviews
      * Pięć gwiazdek jako lista stanów.
      *
      * Ocena pojedynczej opinii jest liczbą całkowitą po zaokrągleniu, więc nie ma
-     * tu połówek — te ma tylko średnia ze wszystkich opinii.
+     * tu połówek. Te ma tylko średnia ze wszystkich opinii.
      *
      * @return array<int,string> 'full' | 'empty'
      */
@@ -247,7 +247,7 @@ final class Reviews
         return $stany;
     }
 
-    /** Ile opinii na porcję — ustawienie modułu, gdy je ma. */
+    /** Ile opinii na porcję: ustawienie modułu, gdy je ma. */
     private static function naStrone(): int
     {
         $zModulu = (int) Configuration::get('PRODUCT_COMMENTS_COMMENTS_PER_PAGE');
@@ -288,7 +288,7 @@ final class Reviews
      *
      * Pytamy ustawienia sklepu, a nie odpowiedzi modułu: po zapisie zwraca on
      * `success` i treść opinii, ale ani słowem nie mówi, czy jest już widoczna.
-     * Bez tego potwierdzenie obiecywało publikację także tam, gdzie opinia szła
+     * Bez tego potwierdzenie obiecywałoby publikację także tam, gdzie opinia idzie
      * do kolejki moderacji.
      */
     public static function moderated(): bool

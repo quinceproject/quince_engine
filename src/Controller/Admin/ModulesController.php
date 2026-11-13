@@ -18,8 +18,8 @@ use Symfony\Component\HttpFoundation\Response;
  * Przegląd naszych modułów: co jest wgrane, co zainstalowane, co działa.
  *
  * Osobno od Module Managera PrestaShopa, bo tamten pokazuje wszystkie kilkadziesiąt
- * modułów sklepu i nie wie, że nasze tworzą jedną całość. Tutaj sprzedawca widzi
- * także to, czego jeszcze nie ma — bo inaczej nie wie, że może mieć więcej.
+ * modułów sklepu i nie wie, że nasze tworzą jedną całość. Lista obejmuje także
+ * moduły, których sklep jeszcze nie ma.
  */
 class ModulesController extends QuinceController
 {

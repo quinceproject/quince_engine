@@ -16,9 +16,8 @@ namespace Quince\Engine\Checkout;
  *
  * VIES oddaje nazwę i adres jednym ciągiem tekstu, inaczej sformatowanym
  * w każdym kraju. Rozbijamy go na ulicę, kod pocztowy i miasto wzorcem dla
- * tego kraju, a czego nie da się rozpoznać — zostawiamy klientowi do wpisania.
- * Zgadywanie na siłę wpisałoby mu w pola śmieci, których i tak musiałby
- * poprawiać.
+ * tego kraju, a czego nie da się rozpoznać, zostawiamy klientowi do wpisania.
+ * Zgadywanie na siłę wpisałoby mu w pola śmieci do poprawienia.
  *
  * Zapytanie idzie z serwera, nie z przeglądarki: VIES nie oddaje nagłówków
  * pozwalających odpytać go ze strony sklepu.

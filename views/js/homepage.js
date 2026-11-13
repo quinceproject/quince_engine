@@ -1,5 +1,5 @@
 /**
- * Ekran „Strona główna" — to, czego nie obsługuje sam znacznik.
+ * Ekran „Strona główna": to, czego nie obsługuje sam znacznik.
  *
  * Sekcje stoją w stronie jako gotowy znacznik z Twiga, a kolejność zmienia
  * Alpine (`x-sort`), tak samo jak rozstawienie elementów na stronie produktu.
@@ -120,7 +120,7 @@
      *
      * Ostatnia bierze resztę, więc podział zawsze się sumuje. Pozostałe są
      * przycinane tak, żeby dla każdej następnej zostało po jednej najmniejszej
-     * części — inaczej wybór w pierwszej kolumnie mógłby nie zostawić miejsca
+     * części. Inaczej wybór w pierwszej kolumnie mógłby nie zostawić miejsca
      * na drugą.
      */
     function czesci(sekcja) {
@@ -153,7 +153,7 @@
      *
      * Potrzebne przy zmianie sposobu dzielenia i liczby kolumn: wartość „1”
      * znaczy co innego w polach siatki, a co innego w procentach, więc
-     * przeniesiona bez przeliczenia dawała kolumnę na jeden procent.
+     * przeniesiona bez przeliczenia daje kolumnę na jeden procent.
      */
     function rozlozRowno(sekcja) {
         var jakiTryb = tryb(sekcja);
@@ -374,9 +374,8 @@
             kolumna.querySelector('[data-zapewnienia-opis]').textContent =
                 postac === 'blocks' ? napisy.extrasBlocks : napisy.extrasPills;
 
-            /* Pierwszy wiersz stoi od razu: pusta lista z samym przyciskiem
-               nie mówi, co się pod nim kryje. Dokładamy go raz, przy pierwszym
-               rysowaniu kolumny — skasowany przez sklep już nie wraca. */
+            /* Pierwszy wiersz stoi od razu. Dokładamy go raz, przy pierwszym
+               rysowaniu kolumny; skasowany przez sklep już nie wraca. */
             if (!kolumna.dataset.zapewnieniaGotowe) {
                 kolumna.dataset.zapewnieniaGotowe = '1';
 
@@ -752,9 +751,8 @@
             kolumna.querySelector('[data-zapewnienia-opis]').textContent =
                 postac === 'blocks' ? napisy.extrasBlocks : napisy.extrasPills;
 
-            /* Pierwszy wiersz stoi od razu: pusta lista z samym przyciskiem
-               nie mówi, co się pod nim kryje. Dokładamy go raz, przy pierwszym
-               rysowaniu kolumny — skasowany przez sklep już nie wraca. */
+            /* Pierwszy wiersz stoi od razu. Dokładamy go raz, przy pierwszym
+               rysowaniu kolumny; skasowany przez sklep już nie wraca. */
             if (!kolumna.dataset.zapewnieniaGotowe) {
                 kolumna.dataset.zapewnieniaGotowe = '1';
 

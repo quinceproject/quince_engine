@@ -30,8 +30,7 @@
 
 {% block quince_body %}
 
-{# Braki tłumaczeń pokazuje kropka przy selektorze języka w samym polu — nie ma
-   potrzeby dublować tego ostrzeżeniem na górze ekranu. #}
+{# Braki tłumaczeń pokazuje kropka przy selektorze języka w samym polu. #}
 
 <form id="quince-topbar" method="post" action="{{ path('quince_topbar_save') }}" class="qc-stack">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_topbar_save') }}">
@@ -52,9 +51,8 @@
             </label>
         </div>
 
-        {# Wyłączony pas wygasza treść karty i odcina ją od kliknięć — ustawienia
-           zostają widoczne, żeby dało się je przejrzeć, ale nie zapraszają
-           do zmian, dopóki pas nie działa. #}
+        {# Wyłączony pas wygasza treść karty i odcina ją od kliknięć. Ustawienia
+           zostają widoczne do przejrzenia. #}
         <div class="qc-card-body qc-disabled-area" :class="!on && 'is-off'" :inert="!on">
             <table class="qc-vis-table">
                 <thead>
@@ -116,7 +114,7 @@
             </div>
 
             {# Tło pasa: stopień skali, nie kod barwy. Wybór ze skal trzyma pas
-               w palecie sklepu — po zmianie koloru marki pas idzie za nią. #}
+               w palecie sklepu: po zmianie koloru marki pas idzie za nią. #}
             <div class="qc-field" style="margin-top:18px" :class="!prepared && 'qc-zalezna'">
                 <label class="qc-label">{{ 'Bar background'|trans }}</label>
                 {{ fields.colorpicker('BG', settings.BG, palette, {
@@ -161,7 +159,7 @@
             </div>
 
             {# Tło pasa: stopień skali, nie kod barwy. Wybór ze skal trzyma pas
-               w palecie sklepu — po zmianie koloru marki pas idzie za nią. #}
+               w palecie sklepu: po zmianie koloru marki pas idzie za nią. #}
             <div class="qc-field" style="margin-top:18px" :class="!prepared && 'qc-zalezna'">
                 <label class="qc-label">{{ 'Bar background'|trans }}</label>
                 {{ fields.colorpicker('PROMO_BG', settings.PROMO_BG, palette, {

@@ -18,9 +18,8 @@ use Quince\Engine\Ui\IconLibrary;
 /**
  * Ustawienia nagłówka: logo, wyszukiwanie, akcje klienta.
  *
- * Kolorów tu nie ma — wylicza je silnik z decyzji „pas jasny / ciemny / w kolorze
- * marki" w ustawieniach ogólnych. Tutaj jest wyłącznie to, co sklep pokazuje
- * i czego nie pokazuje.
+ * Kolorów tu nie ma: wylicza je silnik z decyzji „pas jasny / ciemny / w kolorze
+ * marki" w ustawieniach ogólnych.
  *
  * Wybór wyszukiwarki przechodzi przez rejestr możliwości: lista zawiera wyłącznie
  * to, co faktycznie jest zainstalowane, a wybór wskazujący moduł, którego już nie
@@ -30,15 +29,14 @@ final class HeaderSettings
 {
     private const PREFIX = 'QUINCE_HEADER_';
 
-    /** Klucze wielojęzyczne — wartość trzymana jako JSON `{"1":"…","2":"…"}`. */
+    /** Klucze wielojęzyczne, wartość trzymana jako JSON `{"1":"…","2":"…"}`. */
     private const TRANSLATABLE = ['SEARCH_PLACEHOLDER', 'ACCOUNT_LABEL', 'WISHLIST_LABEL', 'CART_LABEL'];
 
     /**
      * Obróbka logo w przyklejonym nagłówku.
      *
-     * Odwrócenie zamienia ciemne na jasne i zostawia barwy — dobre dla logo
-     * kolorowego. „Na biało" i „na czarno" spłaszczają je do jednej barwy:
-     * kiedy odwrócenie daje kolory, których w marce nie ma.
+     * Odwrócenie zamienia ciemne na jasne i zostawia barwy. „Na biało"
+     * i „na czarno" spłaszczają logo do jednej barwy.
      *
      * @var array<string,string>
      */
@@ -75,8 +73,7 @@ final class HeaderSettings
         'CART_LABEL' => '',
 
         'STICKY' => '1',
-        // Tło pasa: stopień skali albo kod barwy. Nagłówek przyklejony ma własne,
-        // bo leży wtedy na treści i bywa, że musi się od niej odciąć mocniej.
+        // Tło pasa: stopień skali albo kod barwy. Nagłówek przyklejony ma własne.
         'BG' => 'neutral-1',
         'BG_STUCK' => 'neutral-1',
         // Obróbka logo w przyklejonym nagłówku: none | invert | white | black.
@@ -84,7 +81,7 @@ final class HeaderSettings
 
         // Po przewinięciu nagłówek jest ciaśniejszy: dochodzi w nim przycisk
         // katalogu, a pola i akcje zostają te same. Podpisy akcji znikają wtedy
-        // pierwsze — po to, żeby nie ubywało pola wyszukiwania.
+        // pierwsze, żeby nie ubywało pola wyszukiwania.
         'SCROLL_ICONS' => '1',
     ];
 
@@ -171,8 +168,7 @@ final class HeaderSettings
             ],
 
             // Podpisy: pusty oznacza „zostaw domyślny", a domyślny zna szablon,
-            // bo to on ma tłumaczenia. Silnik nie zgaduje za sprzedawcę nazwy,
-            // której ten nie podał.
+            // bo to on ma tłumaczenia.
             'account' => [
                 'visible' => $s['ACCOUNT_VISIBLE'] === '1',
                 'dropdown' => $s['ACCOUNT_DROPDOWN'] === '1',
@@ -180,11 +176,10 @@ final class HeaderSettings
                 'label' => $this->translate($s['ACCOUNT_LABEL'], $idLang),
             ],
 
-            // Ikona listy życzeń pojawia się dopiero razem z czymś, co tę listę
-            // prowadzi. Bez tego byłby to odnośnik donikąd, a ustawienie w panelu
-            // mówi wprost, czego brakuje.
             'module_actions' => $s['MODULE_ACTIONS'] === '1' && $this->moduleActionsAvailable(),
 
+            // Ikona listy życzeń pojawia się dopiero razem z modułem, który tę
+            // listę prowadzi. Bez niego byłby to odnośnik donikąd.
             'wishlist' => [
                 'visible' => $s['WISHLIST_VISIBLE'] === '1' && $this->wishlistAvailable(),
                 'icon' => IconLibrary::svg($s['WISHLIST_ICON']),
@@ -218,24 +213,22 @@ final class HeaderSettings
     }
 
     /**
-     * Czy cokolwiek prowadzi listę życzeń. Rejestr zawsze wystawia pozycję
-     * wbudowaną, więc sama lista nigdy nie jest pusta — liczy się to, czy stoi
-     * w niej cokolwiek poza nią.
-     */
-    /**
      * Czy jakikolwiek moduł zgłosił akcję do nagłówka.
      *
-     * Ta sama zasada, co przy liście życzeń: ustawienie nie może oferować czegoś,
-     * czego nie da się spełnić. Bez modułu przełącznik nie pojawia się w panelu,
-     * a miejsce w nagłówku zostaje puste — czyli nagłówek wygląda jak dotąd.
+     * Bez modułu przełącznik nie pojawia się w panelu, a miejsce w nagłówku
+     * zostaje puste.
      */
     public function moduleActionsAvailable(): bool
     {
-        // Rejestr zawsze zwraca rozwiązanie wbudowane — dostawcą, który coś naprawdę
-        // przynosi, jest dopiero drugi wpis. Tak samo liczy to lista życzeń.
+        // Rejestr zawsze zwraca rozwiązanie wbudowane. Dostawcą, który coś naprawdę
+        // przynosi, jest dopiero drugi wpis.
         return count($this->registry->providersFor(FeatureRegistry::TYPE_NOTIFICATIONS)) > 1;
     }
 
+    /**
+     * Czy cokolwiek prowadzi listę życzeń. Rejestr zawsze wystawia pozycję
+     * wbudowaną, więc liczy się to, czy stoi w nim cokolwiek poza nią.
+     */
     public function wishlistAvailable(): bool
     {
         return count($this->registry->providersFor(FeatureRegistry::TYPE_WISHLIST)) > 1;
@@ -244,9 +237,8 @@ final class HeaderSettings
     /**
      * Ile produktów klient ma zapisanych.
      *
-     * Liczymy w tabelach modułu prowadzącego listy, bo tylko on je zna. Zero
-     * zwracamy jako zero i szablon go nie pokazuje: pusty krążek przy sercu
-     * mówiłby „masz zero", zamiast nie mówić nic.
+     * Liczymy w tabelach modułu prowadzącego listy, bo tylko on je zna. Zera
+     * szablon nie pokazuje.
      */
     private function wishlistCount(): int
     {
@@ -263,7 +255,7 @@ final class HeaderSettings
         try {
             return (int) \Db::getInstance()->getValue($sql);
         } catch (\Throwable) {
-            // Brak tabel znaczy brak modułu list — ikona i tak wtedy nie stoi w pasie.
+            // Brak tabel znaczy brak modułu list, a wtedy ikona i tak nie stoi w pasie.
             return 0;
         }
     }
@@ -271,10 +263,8 @@ final class HeaderSettings
     /**
      * Adres strony z listami życzeń.
      *
-     * Listę prowadzi blockwishlist — jego tabele i model zostają, podmieniamy
-     * dopiero warstwę widoczną, bo jego własny frontend jest aplikacją Vue,
-     * której nie da się czysto ostylować. Dopóki nasze szablony nie stoją na
-     * miejscu, odnośnik prowadzi na jego stronę: działającą, choć nie naszą.
+     * Listę prowadzi blockwishlist (jego tabele i model). Odnośnik prowadzi
+     * na jego stronę list.
      */
     private function wishlistUrl(): string
     {
@@ -288,7 +278,7 @@ final class HeaderSettings
     }
 
     /**
-     * Kod SVG wybranych ikon — dla selektora w panelu, żeby rysował je od razu,
+     * Kod SVG wybranych ikon dla selektora w panelu, żeby rysował je od razu,
      * zanim ktokolwiek otworzy listę.
      *
      * @return array<string,string>

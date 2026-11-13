@@ -24,8 +24,8 @@ use Tab;
  *
  * Kolejność ustala więc silnik, jedną listą: od tego, co sklep dotyka
  * najczęściej, do tego, co ustawia się raz i zostawia. Moduł nieobecny w liście
- * ląduje na końcu, w kolejności, jaką miał — nie znikają wpisy, których silnik
- * nie zna, na przykład z modułu dołożonego później.
+ * ląduje na końcu, w kolejności, jaką miał. Dzięki temu nie znikają wpisy,
+ * których silnik nie zna, na przykład z modułu dołożonego później.
  */
 final class MenuOrder
 {

@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Układ karty produktu: sekcje, karty, obszary i elementy w nich.
  *
- * Ekran odwzorowuje strukturę strony — sekcje idą od lewej do prawej krawędzi,
+ * Ekran odwzorowuje strukturę strony: sekcje idą od lewej do prawej krawędzi,
  * w środku stoją karty, a w kartach obszary z wierszami. Odpowiada to makiecie
  * `quince/makiety/panel-karta-produktu.html`.
  */
@@ -50,9 +50,9 @@ class ProductPageController extends QuinceController
             // sklepy wyglądają inaczej.
             'shopsWithOwnSettings' => $this->settings->shopsWithOwnSettings(),
 
-            // Zapisany wygląd powierzchni. Bez tego ekran rysował próbnik
-            // z wartością wpisaną na sztywno i każdy zapis nadpisywał sklepowi
-            // jego własne ustawienia tłem pierwszego odcienia z palety.
+            // Zapisany wygląd powierzchni. Bez niego próbnik pokazuje wartość
+            // domyślną i każdy zapis nadpisuje sklepowi jego własne ustawienia
+            // tłem pierwszego odcienia z palety.
             'surfaces' => $this->settings->surfaces(),
             'palette' => $this->appearance->palette(),
             'layoutTitle' => 'Product page',

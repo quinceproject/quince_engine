@@ -24,8 +24,8 @@ use Link;
  * na kategorię: menu z pięcioma działami po dziesięć podkategorii to przy naiwnym
  * podejściu pięćdziesiąt zapytań na każdej stronie sklepu.
  *
- * Czego tu nie ma: żadnej wiedzy o tym, jak menu wygląda. Kolumny, kafelki
- * i kaskada dostają ten sam materiał — różni je wyłącznie szablon.
+ * Klasa nie wie, jak menu wygląda. Kolumny, kafelki i kaskada dostają ten sam
+ * materiał, różni je wyłącznie szablon.
  */
 final class CategoryTree
 {
@@ -44,8 +44,7 @@ final class CategoryTree
      *
      * @param array<int,array{id:int,icon:string}> $roots wybrane kategorie główne
      *                              w kolejności sprzedawcy; pusto znaczy wszystkie
-     *                              dzieci korzenia sklepu — sklep, który nic nie
-     *                              wybrał, ma działające menu, a nie puste
+     *                              dzieci korzenia sklepu
      *
      * @return array<int,array{id:int,name:string,url:string,image:?string,icon:string,children:array<int,mixed>}>
      */
@@ -57,7 +56,7 @@ final class CategoryTree
         if ($roots !== []) {
             $level = $this->fetch(array_column($roots, 'id'), $idLang);
 
-            // Ikona jest ustawieniem menu, nie własnością kategorii — dokładamy ją
+            // Ikona jest ustawieniem menu, nie własnością kategorii, więc dokładamy ją
             // po wyjęciu z bazy, po numerze.
             $icons = array_column($roots, 'icon', 'id');
 
@@ -98,8 +97,8 @@ final class CategoryTree
     }
 
     /**
-     * Kategorie wskazane wprost, w kolejności podanej przez sprzedawcę — to on
-     * ustawił ją w panelu i baza nie ma prawa jej zmieniać.
+     * Kategorie wskazane wprost, w kolejności ustawionej w panelu (nie w kolejności
+     * zwróconej przez bazę).
      *
      * @param array<int,int> $ids
      *
@@ -185,7 +184,7 @@ final class CategoryTree
             'id' => $id,
             'name' => (string) $row['name'],
             'url' => $this->link->getCategoryLink($id, (string) $row['link_rewrite']),
-            // Obraz istnieje tylko dla części kategorii — kafelki muszą sobie
+            // Obraz istnieje tylko dla części kategorii. Kafelki muszą sobie
             // z jego brakiem poradzić, więc null jest tu wartością, nie błędem.
             'image' => $this->image($id),
             // Nadpisywana wyżej dla kategorii głównych; podkategorie ikon nie mają.

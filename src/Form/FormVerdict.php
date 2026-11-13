@@ -14,7 +14,7 @@ namespace Quince\Engine\Form;
 /**
  * Wynik sprawdzenia zgłoszenia formularza.
  *
- * Powód odrzucenia zostaje po naszej stronie — do dziennika i do decyzji, co
+ * Powód odrzucenia zostaje po naszej stronie: do dziennika i do decyzji, co
  * pokazać. Klientowi nie mówimy, która zapora zadziałała: bot dostałby wtedy
  * instrukcję, co poprawić, a człowiek i tak nie wie, co zrobić z informacją
  * „wypełniłeś formularz za szybko".

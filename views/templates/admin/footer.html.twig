@@ -102,7 +102,7 @@
             </div>
 
             {# Wiersze kontaktu: tekst i ikona obok niego, tak samo jak w pasie
-               informacyjnym. Stopka ma własne wpisy — nie zawsze pokazuje ten
+               informacyjnym. Stopka ma własne wpisy: nie zawsze pokazuje ten
                sam numer co pas nad nagłówkiem. #}
             <div class="qc-form-grid qc-form-grid-2" style="margin-block-start:16px">
                 {{ fields.multilang('ADDRESS', 'Address'|trans, languages, translations.ADDRESS, 'ul. Przykładowa 1, 00-001 Warszawa', '',
@@ -415,7 +415,7 @@
 
         <div class="qc-card-body">
             <div class="qc-form-grid qc-form-grid-2">
-                {# Tło pasa: stopień skali, nie kod barwy — stopka idzie wtedy za
+                {# Tło pasa: stopień skali, nie kod barwy. Stopka idzie wtedy za
                    paletą, kiedy zmieni się kolor marki. #}
                 <div class="qc-field" :class="!prepared && 'qc-zalezna'">
                     <label class="qc-label">{{ 'Columns background'|trans }}</label>
@@ -492,8 +492,7 @@ function quinceFooter() {
             });
         },
 
-        /* Ten sam hook w dwóch kolumnach wyświetliłby tę samą treść dwa razy —
-           a to zawsze pomyłka, nie zamiar. */
+        /* Ten sam hook w dwóch kolumnach wyświetliłby tę samą treść dwa razy. */
         addHook(column) {
             const nazwa = String(column.nowy || '').trim();
 

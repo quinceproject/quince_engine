@@ -14,10 +14,10 @@ if (!defined('_PS_VERSION_')) {
 }
 
 /**
- * 0.3.0 — wysyłka zdarzeń na zewnątrz.
+ * 0.3.0: wysyłka zdarzeń na zewnątrz.
  *
  * Skrzynka nadawcza przeniosła się od tej wersji do osobnego modułu,
- * `quince_events` — jego własna instalacja zakłada tabelę `quince_event`.
+ * `quince_events`. Jego własna instalacja zakłada tabelę `quince_event`.
  * Ten krok został tylko bez treści, żeby historia uaktualnień sklepów
  * zainstalowanych przed portem nie urywała się na klasie, która już nie
  * istnieje w tym module.

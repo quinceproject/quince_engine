@@ -17,11 +17,10 @@
 
 {% block quince_body %}
 
-{# Jeden przełącznik, bez własnej przestrzeni ustawień silnika — ekran tylko
-   przyjaźniej opakowuje `PS_ONE_PAGE_CHECKOUT_ENABLED` rdzenia
+{# Jeden przełącznik, bez własnej przestrzeni ustawień silnika: ekran opakowuje
+   `PS_ONE_PAGE_CHECKOUT_ENABLED` rdzenia
    (`Quince\Engine\Settings\CheckoutSettings`). Oba warianty mają własny
-   komplet szablonów w motywie; ten ekran tylko wybiera, który z nich
-   zobaczy klient. #}
+   komplet szablonów w motywie. #}
 <form id="quince-checkout" method="post" action="{{ path('quince_checkout_save') }}"
       class="qc-stack" x-data="quinceCheckout()">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_checkout_save') }}">
@@ -97,10 +96,9 @@
 
 {# Wartość wariantu w kontekście JS (tu, nie w atrybucie `x-data`): string
    z `json_encode` niesie własne cudzysłowy, które w środku atrybutu HTML
-   ucinały go w połowie — Alpine dostawał `mode` jako `undefined` i żaden
-   z dwóch przycisków nigdy nie wyglądał na wybrany. Ten sam wzorzec, co
-   `quinceFooter()` w ustawieniach stopki: nazwana funkcja w skrypcie,
-   wołana z `x-data`. #}
+   ucinają go w połowie i Alpine dostaje `mode` jako `undefined`. Ten sam
+   wzorzec, co `quinceFooter()` w ustawieniach stopki: nazwana funkcja
+   w skrypcie, wołana z `x-data`. #}
 <script>
 function quinceCheckout() {
     return {

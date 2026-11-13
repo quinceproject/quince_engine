@@ -1,10 +1,9 @@
 {**
- * Quince — strona główna złożona z pasów.
+ * Quince: strona główna złożona z pasów.
  *
  * Znaczniki przeniesione z `makiety/strona-glowna.html`. Pas, układ kolumn,
  * kafel działu, duża zajawka i bohater pasa to `q-ps__*` prosto z makiety.
- * Zajawka produktu, taśma, cena i przycisk przychodzą z motywu — sklep ma je
- * już zbudowane i pas po nie sięga, zamiast budować drugie takie same.
+ * Zajawka produktu, taśma, cena i przycisk przychodzą z motywu.
  *
  * Szerokość kolumny liczy się w polach siatki sklepu, nie w ułamkach pasa:
  * pole wyznaczamy raz, od szerokości całego rzędu, więc zajawka w kolumnie ma

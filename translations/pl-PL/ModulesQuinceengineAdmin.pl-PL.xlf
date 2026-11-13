@@ -1714,7 +1714,7 @@
         <target>Ten sklep nie ma jeszcze kategorii.</target>
       </trans-unit>
 
-      <!-- Nagłówek i menu — dopisane 2026-08-14 -->
+      <!-- Nagłówek i menu -->
       <trans-unit id="nav.caption">
         <source>Caption</source>
         <target>Podpis</target>

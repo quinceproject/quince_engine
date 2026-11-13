@@ -14,7 +14,7 @@ if (!defined('_PS_VERSION_')) {
 }
 
 /**
- * 0.2.0 — strażnik formularzy.
+ * 0.2.0: strażnik formularzy.
  *
  * Dochodzi licznik przyjętych zgłoszeń, na którym stoi limit powtórzeń z jednego
  * adresu, i hook, na którym moduły captchy oceniają zgłoszenie.

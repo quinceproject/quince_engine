@@ -60,13 +60,10 @@ class ListingController extends QuinceController
             'placementViews' => ListingSettings::PLACEMENT_VIEWS,
 
             // Liczba kolumn i to, co z niej zostaje po oddaniu jednej filtrom.
-            // Ekran mówi właścicielowi sklepu wprost, ile zajawek zobaczy
-            // w rzędzie, zamiast kazać mu to policzyć.
             //
             // Wartość dla kolumny liczymy zawsze, także gdy filtry stoją dziś
-            // gdzie indziej: komunikat ma odpowiadać na pytanie „co się stanie,
-            // jeśli to wybiorę", a nie opisywać stan bieżący. Liczony ze stanu
-            // dawał „4 zajawki zamiast 4".
+            // gdzie indziej: komunikat opisuje skutek wyboru kolumny, a nie
+            // stan bieżący.
             'gridColumns' => $kolumny,
             'listingColumns' => max(1, $kolumny - 1),
             'filterWidth' => $this->filterWidth($kolumny),

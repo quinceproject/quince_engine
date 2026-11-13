@@ -18,16 +18,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Ustawienia globalne wyglądu — kolory, typografia, kształt i siatka.
+ * Ustawienia globalne wyglądu: kolory, typografia, kształt i siatka.
  */
 class AppearanceController extends QuinceController
 {
     /**
      * Grupy wynikowej palety w kolejności wyświetlania: klucz tłumaczenia => role.
      *
-     * Pokazujemy warstwę semantyczną, nie stopnie skali — administratorowi nic nie mówi
-     * `brand-9`, mówi mu „wypełnienie przycisku". Stopnie zostają pod spodem, do wglądu
-     * w trybie ręcznym.
+     * Grupy zawierają role semantyczne, nie stopnie skali (`brand-9`). Stopnie są
+     * widoczne tylko w trybie ręcznym.
      */
     private const COLOUR_GROUPS = [
         'Buttons and links' => [
@@ -84,7 +83,7 @@ class AppearanceController extends QuinceController
             // Rzutowanie na obiekt jest konieczne: panel indeksuje nadpisania nazwą roli,
             // a pusta tablica PHP zapisuje się jako `[]`. JavaScript dostałby wtedy tablicę,
             // pierwszy przypięty kolor wpadłby do niej jako właściwość spoza indeksu
-            // i zniknął przy JSON.stringify — nie dałoby się zapisać żadnego nadpisania.
+            // i zniknął przy JSON.stringify. Nie dałoby się zapisać żadnego nadpisania.
             'overrides' => (object) $this->settings->overrides(),
             'diagnostics' => $this->settings->diagnostics(),
             'colourGroups' => self::COLOUR_GROUPS,
@@ -96,8 +95,8 @@ class AppearanceController extends QuinceController
     /**
      * Zwraca paletę wyliczoną z przesłanych wartości, bez zapisu.
      *
-     * Dzięki temu przycisk „Generate palette" pokazuje dokładnie to, co zobaczy sklep —
-     * ta sama klasa liczy kolory tutaj i przy zapisie.
+     * Ta sama klasa liczy kolory tutaj i przy zapisie, więc przycisk „Generate palette"
+     * pokazuje dokładnie to, co zobaczy sklep.
      */
     public function previewAction(Request $request): JsonResponse
     {

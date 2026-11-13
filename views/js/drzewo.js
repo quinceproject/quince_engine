@@ -1,14 +1,9 @@
 /**
- * Drzewo kategorii panelu — jedna maszyneria dla wszystkich ekranów.
- *
- * Powstało, bo w panelu były trzy różne wybieraki kategorii: płaska lista
- * rozwijana bez wcięć w blokach odnośników i dwa przewijane spisy z polami
- * wyboru w historii cen i wyszukiwarce. Przy stu kategoriach żaden z nich nie
- * pokazywał zagnieżdżenia i w żadnym nie dało się szukać.
+ * Drzewo kategorii panelu: jedna maszyneria dla wszystkich ekranów.
  *
  * Dwie odmiany, ta sama logika pod spodem:
- *   `quinceDrzewo`  — wybór JEDNEJ kategorii, przejście pod jej adres,
- *   `quinceDrzewoWiele` — zaznaczanie wielu, wartości idą z formularzem.
+ *   `quinceDrzewo`: wybór JEDNEJ kategorii, przejście pod jej adres,
+ *   `quinceDrzewoWiele`: zaznaczanie wielu, wartości idą z formularzem.
  *
  * Dane przychodzą z PHP jako tablica obiektów: `id`, `name`, `depth`, `parent`,
  * `sciezka` (przodkowie od rodzica w górę), `dzieci` (czy ma potomków).
@@ -87,7 +82,7 @@ function quinceDrzewoPole(kategorie) {
     };
 
     /* Po wyborze rozwijamy gałąź wybranej kategorii, żeby przy ponownym otwarciu
-       było widać, gdzie się jest — inaczej drzewo wraca zwinięte do korzenia. */
+       było widać, gdzie się jest. Inaczej drzewo wraca zwinięte do korzenia. */
     baza.pokazSciezke = function (id) {
         var k = this.kategorie.find(function (x) { return x.id === Number(id); });
 
@@ -98,15 +93,10 @@ function quinceDrzewoPole(kategorie) {
 }
 
 /**
- * Pole wyszukiwania kategorii — po nazwie ALBO po numerze.
+ * Pole wyszukiwania kategorii, po nazwie ALBO po numerze.
  *
  * Dla miejsc, gdzie rozwinięte drzewo zabiera pół ekranu: wiersze powtarzalnika
- * i listy wykluczeń. Tutaj jest jedno pole, a podpowiedzi pokazują się dopiero
- * przy pisaniu.
- *
- * Numer jest równoprawnym sposobem szukania, bo sklep często zna go z adresu
- * albo z pliku wsadowego, a wpisanie „37" idzie szybciej niż przypominanie
- * sobie, jak dokładnie nazwano kategorię.
+ * i listy wykluczeń.
  *
  * `wiele` przełącza na zaznaczanie wielu: wybrane lądują na liście pod polem
  * i każde da się zdjąć osobno.
@@ -116,7 +106,7 @@ function quinceSzukajkaKategorii(kategorie, wybrane, wiele) {
         kategorie: kategorie,
         wiele: !!wiele,
         fraza: '',
-        // Wybór pojedynczy trzyma liczbę, wielokrotny tablicę — ale obsługa jest
+        // Wybór pojedynczy trzyma liczbę, wielokrotny tablicę, ale obsługa jest
         // jedna, więc pojedynczy też siedzi w tablicy i wychodzi z niej przy zapisie.
         wybrane: (wiele ? (wybrane || []) : (wybrane ? [wybrane] : [])).map(Number).filter(Boolean),
         otwarte: false,
@@ -128,10 +118,8 @@ function quinceSzukajkaKategorii(kategorie, wybrane, wiele) {
             return k ? k.name : '';
         },
 
-        /* Lista zawsze POD polem — tak działa każda inna lista w panelu i tego
-           się ludzie spodziewają. Gdy pod polem brakuje miejsca, przewijamy stronę
-           zamiast odwracać kierunek: lista wyskakująca raz w dół, raz w górę czyta
-           się jak usterka, a nie jak ułatwienie. */
+        /* Lista zawsze POD polem, jak każda inna lista w panelu. Gdy pod polem
+           brakuje miejsca, przewijamy stronę zamiast odwracać kierunek. */
         otworz: function (element) {
             this.otwarte = true;
 
@@ -142,17 +130,15 @@ function quinceSzukajkaKategorii(kategorie, wybrane, wiele) {
             }
         },
 
-        /* Ścieżka nad nazwą, bo „Mercedes" bywa i pod filtrami, i pod olejami —
-           sama nazwa nie mówi, którą się wybiera. */
+        /* Ścieżka nad nazwą, bo „Mercedes" bywa i pod filtrami, i pod olejami. */
         sciezkaDla: function (k) {
             return k.sciezka.slice().reverse().map(function (id) {
                 return this.nazwaDla(id);
             }, this).filter(Boolean).join(' › ');
         },
 
-        /* Lista pokazuje się po wejściu w pole, a nie dopiero przy pisaniu: sklep
-           często nie zna nazwy i chce ją najpierw zobaczyć. Puste pole daje
-           początek listy, wpisanie zawęża. */
+        /* Lista pokazuje się po wejściu w pole, a nie dopiero przy pisaniu.
+           Puste pole daje początek listy, wpisanie zawęża. */
         get trafienia() {
             if (!this.otwarte) {
                 return [];
@@ -228,8 +214,7 @@ function quinceDrzewoWiele(kategorie, zaznaczone) {
     };
 
     /* Podpis na przycisku, gdy drzewo jest schowane w menu. Nazwa przy jednym
-       wyborze, liczba przy kilku: cztery nazwy nie mieszczą się w przycisku,
-       a ucięte w połowie nie mówią nic. */
+       wyborze, liczba przy kilku. */
     baza.podpisWyboru = function (pusty) {
         if (this.zaznaczone.length === 0) {
             return pusty || '';

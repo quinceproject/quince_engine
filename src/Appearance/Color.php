@@ -16,19 +16,19 @@ namespace Quince\Engine\Appearance;
  *
  * Dwie przestrzenie, każda do czego innego:
  *
- * HSL służy do WSKAZYWANIA barwy — odcień i nasycenie statusów, wariant szarości.
+ * HSL służy do WSKAZYWANIA barwy: odcień i nasycenie statusów, wariant szarości.
  * Tam podajemy liczby z palca i chcemy, żeby były czytelne dla człowieka.
  *
- * OKLCH służy do LICZENIA odmian — jaśniejszych i ciemniejszych stopni skali,
- * stanów najechania i wciśnięcia. Powód jest twardy: „jasność" w HSL nie ma nic
- * wspólnego z tym, co widzi oko. Żółty #fcc804 i granat #10224a mają w HSL 50%
- * i 18%, a wyglądają jak dzień i noc. Jeden wzór „zejdź o tyle a tyle" dawał
- * przez to raz brąz (żółty przyciemniony w HSL), raz zmianę niewidoczną (granat).
- * W OKLCH ta sama liczba znaczy tę samą różnicę dla każdej barwy.
+ * OKLCH służy do LICZENIA odmian: jaśniejszych i ciemniejszych stopni skali,
+ * stanów najechania i wciśnięcia. „Jasność" w HSL nie ma nic wspólnego z tym,
+ * co widzi oko. Żółty #fcc804 i granat #10224a mają w HSL 50% i 18%, a wyglądają
+ * jak dzień i noc, więc jeden wzór „zejdź o tyle a tyle" daje raz brąz (żółty
+ * przyciemniony w HSL), raz zmianę niewidoczną (granat). W OKLCH ta sama liczba
+ * znaczy tę samą różnicę dla każdej barwy.
  *
  * UWAGA na odcienie: `toHsl()` zwraca skalę HSL (czerwień ~4°, bursztyn ~38°,
  * zieleń ~142°, błękit ~212°), `toOklch()` zupełnie inną (żółty ~90°, czerwień ~29°).
- * Pomylenie ich sprawiło kiedyś, że ostrzeżenie wychodziło zielone.
+ * Pomylenie ich daje na przykład zielone ostrzeżenie.
  */
 final class Color
 {
@@ -120,7 +120,7 @@ final class Color
     }
 
     /**
-     * Czerń albo biel — ta, która ma większy kontrast z podanym tłem.
+     * Czerń albo biel: ta, która ma większy kontrast z podanym tłem.
      *
      * Nie używamy czystego #000 i #fff: na kolorowym tle wyglądają jak dziura, a różnica
      * w kontraście wobec #111 i #fff jest pomijalna.
@@ -134,7 +134,7 @@ final class Color
      * Przesuwa jasność koloru, aż osiągnie zadany kontrast wobec tła.
      *
      * Kierunek wynika z tła: na jasnym schodzimy w dół, na ciemnym w górę. Zwraca
-     * najlepszy osiągnięty wynik również wtedy, gdy progu nie da się spełnić — lepiej
+     * najlepszy osiągnięty wynik również wtedy, gdy progu nie da się spełnić. Lepiej
      * oddać kolor bliski wymaganiu niż czerń w miejscu marki.
      */
     public static function adjustToContrast(float $h, float $s, float $l, string $bg, float $target): string
@@ -227,7 +227,7 @@ final class Color
      *
      * Nie każda para jasność–nasycenie istnieje w sRGB: mocno nasycony żółty przy
      * jasności 0.4 to kolor, którego monitor nie wyświetli. Zamiast oddać sieczkę
-     * po obcięciu kanałów, zbijamy nasycenie do wartości, która się mieści — barwa
+     * po obcięciu kanałów, zbijamy nasycenie do wartości, która się mieści: barwa
      * zostaje ta sama, tylko mniej krzyczy.
      */
     public static function fromOklch(float $lightness, float $chroma, float $hue): string
@@ -267,7 +267,7 @@ final class Color
      * Odpowiednik `atLightness()`, tyle że liczony tam, gdzie liczby odpowiadają
      * widzeniu. Ciemny żółty zostaje złoty zamiast zszarzeć w brąz.
      *
-     * `$chromaFactor` mnoży nasycenie. Domyślnie zostaje bez zmian — ale odmiana
+     * `$chromaFactor` mnoży nasycenie. Domyślnie zostaje bez zmian, ale odmiana
      * bliska bieli MUSI je stracić, bo inaczej „prawie biały" wychodzi jaskrawym
      * pastelem: pełne nasycenie przy jasności 0.98 to nie jest tło strony, tylko
      * plama koloru.
@@ -288,7 +288,7 @@ final class Color
     /**
      * Napis na tym tle: biel albo atrament, ta z większym kontrastem.
      *
-     * Nie zmienia tła — w odróżnieniu od `resolveFillPair()`, która wolno poprawić
+     * Nie zmienia tła, w odróżnieniu od `resolveFillPair()`, która wolno poprawić
      * kolor administratora. Stany przycisku mają brać napis do tego, co wyszło,
      * a nie przesuwać kolor po raz drugi.
      */
@@ -299,7 +299,7 @@ final class Color
         return self::contrast($bg, '#ffffff') >= self::contrast($bg, $ink) ? '#ffffff' : $ink;
     }
 
-    /** Konwersja bez sprawdzania gamutu — do użytku wewnętrznego przez `fromOklch()`. */
+    /** Konwersja bez sprawdzania gamutu, do użytku wewnętrznego przez `fromOklch()`. */
     private static function oklchToHex(float $lightness, float $chroma, float $hue): string
     {
         $a = $chroma * cos(deg2rad($hue));
@@ -327,7 +327,7 @@ final class Color
      * Para wypełnienie + napis, doprowadzona do czytelności.
      *
      * Gdy ani biel, ani czerń nie osiągają 4.5:1 na kolorze administratora, przesuwamy
-     * jasność wypełnienia o minimum potrzebne do progu — i zwracamy tę informację,
+     * jasność wypełnienia o minimum potrzebne do progu i zwracamy tę informację,
      * bo panel ma to powiedzieć wprost, a nie poprawiać po cichu.
      *
      * @return array{fill:string,on:string,adjusted:bool,contrast:float}
@@ -350,7 +350,7 @@ final class Color
             ];
         }
 
-        // Biały napis wymaga ciemniejszego tła, czarny — jaśniejszego.
+        // Biały napis wymaga ciemniejszego tła, czarny jaśniejszego.
         $target = $useWhite ? $white : $ink;
         $fill   = $hex;
 

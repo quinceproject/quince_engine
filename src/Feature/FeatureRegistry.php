@@ -15,15 +15,14 @@ use Hook;
 use Module;
 
 /**
- * Rejestr możliwości — co sklep faktycznie potrafi.
+ * Rejestr możliwości: co sklep faktycznie potrafi.
  *
  * Silnik nie zna z góry nazw naszych modułów. Ogłasza hook, a każdy moduł, który
  * coś dostarcza, zgłasza się sam. Dzięki temu dołożenie kolejnego modułu nie
  * wymaga zmiany w silniku, czyli nowej jego wersji u wszystkich klientów.
  *
- * Po co to jest: ustawienie nie może oferować wyboru, którego nie da się spełnić.
- * Jeśli nasza wyszukiwarka nie jest zainstalowana, jej nazwa nie ma prawa pojawić
- * się na liście — a nie: pojawić się i nie działać.
+ * Ustawienie nie może oferować wyboru, którego nie da się spełnić. Jeśli nasza
+ * wyszukiwarka nie jest zainstalowana, jej nazwa nie pojawia się na liście.
  *
  * Zgłoszenie modułu wygląda tak:
  *
@@ -54,7 +53,7 @@ final class FeatureRegistry
     /**
      * Powiadomienia dla klienta: dzwonek w nagłówku i to, co się pod nim otwiera.
      *
-     * Silnik nie rysuje ich sam — daje miejsce hookiem `displayQuinceHeaderActions`,
+     * Silnik nie rysuje ich sam. Daje miejsce hookiem `displayQuinceHeaderActions`,
      * a treść przynosi moduł. Rejestr służy tu do jednego: żeby przełącznik
      * w panelu pojawił się dopiero wtedy, gdy jest co włączać.
      */
@@ -66,7 +65,7 @@ final class FeatureRegistry
     /**
      * Zabezpieczenie formularzy zewnętrznym dostawcą.
      *
-     * Silnik broni formularzy sam — pułapką, czasem wypełnienia i limitem
+     * Silnik broni formularzy sam: pułapką, czasem wypełnienia i limitem
      * powtórzeń. Moduł tego typu dokłada ostatnią warstwę i dostaje ostatnie
      * słowo na hooku `actionQuinceFormVerify`.
      */
@@ -79,7 +78,7 @@ final class FeatureRegistry
      * Historia cen produktu i najniższa cena z ostatnich dni.
      *
      * Silnik sam jej nie prowadzi: zapis każdej zmiany ceny to własna tabela,
-     * która rośnie z katalogiem, i harmonogram — czyli moduł, a nie ustawienie.
+     * która rośnie z katalogiem, i harmonogram, czyli moduł, a nie ustawienie.
      * Rejestr służy tu do tego, żeby włącznik przy cenie ożył dopiero wtedy,
      * gdy jest co pokazać, a nie obiecywał notę, której nikt nie policzy.
      */
@@ -90,8 +89,8 @@ final class FeatureRegistry
      *
      * Silnik sam ich nie wybiera. Kolejność wynika z tego, jak cechy rozkładają
      * się w całej kategorii, więc trzeba je policzyć na całym katalogu i gdzieś
-     * zapisać — to jest własna tabela i zadanie w tle, czyli moduł. Bez modułu
-     * element pokazuje pierwsze cechy w kolejności katalogu, tak jak dotąd.
+     * zapisać. To jest własna tabela i zadanie w tle, czyli moduł. Bez modułu
+     * element pokazuje pierwsze cechy w kolejności katalogu.
      */
     public const TYPE_FEATURE_RANK = 'feature_rank';
 
@@ -143,7 +142,7 @@ final class FeatureRegistry
     public const HOOK = 'actionQuinceRegisterFeature';
 
     /**
-     * Rozwiązanie wbudowane — zawsze obecne, bo sklep musi działać także wtedy,
+     * Rozwiązanie wbudowane, zawsze obecne, bo sklep musi działać także wtedy,
      * gdy nie ma zainstalowanego ani jednego naszego modułu.
      */
     public const BUILT_IN = 'built-in';
@@ -152,7 +151,7 @@ final class FeatureRegistry
     private static ?array $cache = null;
 
     /**
-     * Pozycje panelu z tego samego zbierania — trzymane osobno, bo rządzą się
+     * Pozycje panelu z tego samego zbierania. Trzymane osobno, bo rządzą się
      * inną regułą: możliwości muszą być znane, pozycja wystarczy że jest pełna.
      *
      * @var array<string,array{module:string,label:string,icon:string,route:string}>|null
@@ -172,7 +171,7 @@ final class FeatureRegistry
     /**
      * Sprawdzony wybór sprzedawcy.
      *
-     * Wartość zapisana w ustawieniach może wskazywać moduł, którego już nie ma —
+     * Wartość zapisana w ustawieniach może wskazywać moduł, którego już nie ma:
      * sprzedawca wybrał naszą wyszukiwarkę, a potem ją odinstalował. Wtedy
      * wracamy do rozwiązania wbudowanego, zamiast zostawiać sklep bez wyszukiwania.
      */
@@ -183,7 +182,7 @@ final class FeatureRegistry
 
     /**
      * Czy zapisany wybór wskazuje na coś, czego już nie ma. Panel pokazuje z tego
-     * ostrzeżenie — cicha zmiana zachowania sklepu jest gorsza niż komunikat.
+     * ostrzeżenie, bo `resolve()` po cichu wraca wtedy do rozwiązania wbudowanego.
      */
     public function isMissing(string $type, string $chosen): bool
     {
@@ -193,7 +192,7 @@ final class FeatureRegistry
     /**
      * Pozycje do menu panelu: każdy zainstalowany moduł, który zgłosił własny ekran.
      *
-     * Niezależne od `TYPES` — patrz komentarz przy zbieraniu. Silnik nie musi
+     * Niezależne od `TYPES` (patrz komentarz przy zbieraniu). Silnik nie musi
      * rozumieć, czym moduł się zajmuje, żeby postawić odnośnik do jego ustawień.
      *
      * @return array<int,array{module:string,label:string,icon:string,route:string}>
@@ -212,7 +211,7 @@ final class FeatureRegistry
     }
 
     /**
-     * Nasze moduły widziane przez silnik — do przeglądu w panelu.
+     * Nasze moduły widziane przez silnik, do przeglądu w panelu.
      *
      * @return array<int,array{module:string,type:string,label:string,route:?string,version:string}>
      */
@@ -284,13 +283,12 @@ final class FeatureRegistry
                     continue;
                 }
 
-                // POZYCJA W PANELU — otwarta, sprawdzana po kształcie.
+                // POZYCJA W PANELU: lista otwarta, sprawdzana po kształcie.
                 //
                 // Moduł, który ma własny ekran, ma się w menu pokazać niezależnie
                 // od tego, czy silnik zna jego dziedzinę. Inaczej każdy kolejny
                 // moduł linii wymagałby wydania silnika u wszystkich sklepów tylko
-                // po to, żeby dołożyć jedną pozycję — a to jest dokładnie ta wada,
-                // którą dokument publikacji każe usunąć.
+                // po to, żeby dołożyć jedną pozycję.
                 //
                 // Warunkiem jest komplet danych, nie przynależność do spisu nazw:
                 // moduł napisany pod nowszy silnik nadal nie wywróci panelu na
@@ -304,13 +302,13 @@ final class FeatureRegistry
                     ];
                 }
 
-                // MOŻLIWOŚĆ — zamknięta, sprawdzana po przynależności do spisu.
+                // MOŻLIWOŚĆ: lista zamknięta, sprawdzana po przynależności do spisu.
                 //
                 // Tu lista musi zostać zamknięta, bo `TYPES` to nie filtr, tylko
                 // spis rzeczy, których silnik UMIE UŻYĆ: wybór wyszukiwarki
                 // w nagłówku, dostawcy menu, listy życzeń. Przyjęcie nieznanego
-                // typu nie dałoby silnikowi umiejętności skorzystania z niego —
-                // zwróciłoby wiersze, których nikt nie czyta.
+                // typu nie dałoby silnikowi umiejętności skorzystania z niego,
+                // tylko zwróciłoby wiersze, których nikt nie czyta.
                 if (!isset($out[$type])) {
                     continue;
                 }
@@ -352,7 +350,7 @@ final class FeatureRegistry
             self::TYPE_SEARCH => 'Built-in search',
             self::TYPE_MENU => 'Built-in menu',
             self::TYPE_SLIDER => 'No slider',
-            // Silnik nie ma własnej listy życzeń — bez modułu nie ma gdzie
+            // Silnik nie ma własnej listy życzeń. Bez modułu nie ma gdzie
             // zapisywać produktów, więc „wbudowana" znaczy tu: żadna.
             self::TYPE_WISHLIST => 'No wishlist',
             self::TYPE_FEATURE_RANK => 'Catalogue order',

@@ -20,13 +20,12 @@ use Configuration;
 final class CartSettings
 {
     /**
-     * Nieustawiony klucz ma znaczyć „pokazuj" — tak wygląda strona koszyka,
-     * zanim ktokolwiek dotknie tego ustawienia.
+     * Nieustawiony klucz znaczy „pokazuj".
      */
     private const SHOW_REASSURANCE_CONFIG_KEY = 'QUINCE_CART_SHOW_REASSURANCE';
 
     /**
-     * Nazwa hooka pod dokupką — ten sam mechanizm, co hook pod „Order details"
+     * Nazwa hooka pod dokupką. Mechanizm jak hook pod „Order details"
      * na potwierdzeniu zamówienia (`CheckoutSettings`): sklep sam wpisuje
      * nazwę, pod którą moduł (np. WiseBlock) się rejestruje. Puste pole nic
      * nie renderuje.
@@ -55,9 +54,8 @@ final class CartSettings
     }
 
     /**
-     * Dane dla `$modules.quince_engine.cart` — ten sam mechanizm, którym
-     * silnik udostępnia szablonom resztę swoich ustawień
-     * (`hookActionFrontControllerSetVariables`).
+     * Dane dla `$modules.quince_engine.cart`, przekazywane szablonom przez
+     * `hookActionFrontControllerSetVariables`.
      *
      * @return array<string,bool|string>
      */

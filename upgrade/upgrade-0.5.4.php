@@ -24,7 +24,7 @@ use Quince\Engine\Feature\MenuOrder;
  *
  * Po tej zmianie w „Ulepszaniu" stoi jedna gałąź z jednym wpisem na moduł.
  * Świeża instalacja zakłada te wpisy sama, z deklaracji `$this->tabs` każdego
- * modułu; sklep, który ma je już zainstalowane, dostaje je tutaj — inaczej menu
+ * modułu; sklep, który ma je już zainstalowane, dostaje je tutaj. Inaczej menu
  * pojawiłoby się dopiero po przeinstalowaniu wszystkiego.
  *
  * @param Module $module
@@ -90,7 +90,7 @@ function upgrade_module_0_5_4($module): bool
  *
  * Nazwa jest jedna dla wszystkich języków. Tłumaczenia menu idą w PrestaShopie
  * przez `wording` z deklaracji modułu, a ta droga jest tylko dla sklepów, które
- * mają moduły już zainstalowane — nazwa techniczna wystarczy, bo i tak zostaje
+ * mają moduły już zainstalowane. Nazwa techniczna wystarczy, bo i tak zostaje
  * nadpisana przy najbliższej ponownej instalacji modułu.
  *
  * @return int identyfikator zakładki albo zero, gdy nie udało się jej założyć

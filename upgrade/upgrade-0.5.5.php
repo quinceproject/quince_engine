@@ -22,7 +22,7 @@ if (!defined('_PS_VERSION_')) {
  *
  * `filterProductSearch` odpala się tuż przed przekazaniem wyniku wyszukiwania
  * do szablonu i przekazuje go przez referencję. Liczymy w nim, ile zawężeń
- * wybrał klient — rdzeń podaje szablonowi gotowy HTML pigułek, ale nie ich
+ * wybrał klient. Rdzeń podaje szablonowi gotowy HTML pigułek, ale nie ich
  * liczbę, a ta stoi przy przycisku filtrów. Policzyć da się to tylko tam:
  * później zostaje sam kawałek HTML-a, bez obiektu wyniku.
  *

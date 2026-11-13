@@ -5,7 +5,7 @@
  # dostępu do sąsiadów w tym samym pliku, a `import _self` gryzie się z nazwą,
  # pod którą ekran importuje ten plik u siebie.
  #
- # Parametry: `wiele` — czy zaznaczanie wielu, `nazwaPola` — nazwa pola formularza.
+ # Parametry: `wiele`: czy zaznaczanie wielu, `nazwaPola`: nazwa pola formularza.
  #}
     <div class="qc-tree-search">
         <input type="search" class="qc-field-base qc-focusable"
@@ -27,7 +27,7 @@
         <template x-for="k in kategorie" :key="k.id">
             <div class="qc-tree-node" x-show="widoczna(k)"
                  :style="`padding-inline-start:${6 + k.depth * 16}px`">
-                {# Strzałka zwija gałąź, nazwa wybiera kategorię — dwie różne akcje
+                {# Strzałka zwija gałąź, nazwa wybiera kategorię: dwie różne akcje
                    w jednym wierszu, więc dwa osobne elementy. #}
                 <span class="qc-tree-toggle" x-show="k.dzieci" @click="przelacz(k.id)"
                       x-text="rozwiniete.includes(k.id) ? '⌄' : '›'"></span>

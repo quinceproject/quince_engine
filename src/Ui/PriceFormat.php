@@ -17,12 +17,11 @@ use Context;
  * Kwota zapisana tak, jak zapisuje ją sklep.
  *
  * PrestaShop podaje szablonowi część kwot gotowych do wypisania, a część jako
- * surowe liczby — cena netto produktu jest surowa. Zapis kwoty zależy od języka
- * i waluty odwiedzającego, więc nie da się go złożyć w szablonie; robi to
- * lokalizacja sklepu, ta sama, która formatuje cenę brutto obok.
+ * surowe liczby (np. cena netto produktu). Zapis kwoty zależy od języka
+ * i waluty odwiedzającego, więc formatuje go lokalizacja sklepu, ta sama,
+ * która formatuje cenę brutto obok.
  *
- * Klasa jedzie do Smarty jako modyfikator `qprice`, bo kwoty wypisujemy
- * w kilku miejscach karty produktu i każde z nich ma pokazać ten sam zapis.
+ * Klasa jedzie do Smarty jako modyfikator `qprice`.
  */
 final class PriceFormat
 {
@@ -36,7 +35,7 @@ final class PriceFormat
         $waluta = $kontekst->currency;
 
         // Poza żądaniem sklepu (konsola, zadanie w tle) kontekst nie ma ani
-        // lokalizacji, ani waluty. Zostaje goła liczba, bo lepsza niż błąd.
+        // lokalizacji, ani waluty. Zwracamy wtedy samą liczbę.
         if ($locale === null || $waluta === null) {
             return (string) $kwota;
         }

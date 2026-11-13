@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Ustawienia nagłówka: logo, wyszukiwanie, akcje klienta.
  *
- * Tło pasa wybiera się tutaj, ze skal palety — osobno dla nagłówka stojącego
+ * Tło pasa wybiera się tutaj, ze skal palety, osobno dla nagłówka stojącego
  * na swoim miejscu i dla przyklejonego. Resztę ról liczy silnik z tego tła.
  */
 class HeaderController extends QuinceController

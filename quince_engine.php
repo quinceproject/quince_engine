@@ -8,7 +8,7 @@
  */
 
 /**
- * Quince Engine — theme engine for PrestaShop 9.
+ * Quince Engine: theme engine for PrestaShop 9.
  */
 
 if (!defined('_PS_VERSION_')) {
@@ -45,13 +45,11 @@ class Quince_Engine extends Module
         $this->bootstrap = true;
 
         // Tabs declared here are created by PrestaShop on install and removed on uninstall.
-        // class_name must match _legacy_controller from config/routes.yml — that is what
+        // class_name must match _legacy_controller from config/routes.yml: that is what
         // links the Symfony route to back-office permissions and to the menu entry.
         // Gałąź menu i wpisy modułów. Każdy nasz moduł zgłasza jeden wpis
-        // prowadzący na swój ekran; podstron nie zgłasza żaden, bo ma je we
-        // własnym bocznym pasku po wejściu, a menu PrestaShopa urosłoby wtedy
-        // z dziesięciu pozycji do trzydziestu. Kolejność wpisów ustala silnik,
-        // patrz `Quince\Engine\Feature\MenuOrder`.
+        // prowadzący na swój ekran; podstrony ma we własnym bocznym pasku.
+        // Kolejność wpisów ustala silnik, patrz `Quince\Engine\Feature\MenuOrder`.
         $this->tabs = [
             [
                 // IMPROVE = sekcja „Ulepszanie" w głównym menu, na równi z Modułami,
@@ -61,8 +59,7 @@ class Quince_Engine extends Module
                 'name' => 'Quince project',
                 'parent_class_name' => 'IMPROVE',
                 // Menu PrestaShopa rysuje ikonę czcionką Material Icons: w kolumnie
-                // `icon` siedzi sama nazwa znaku. Bez niej pozycja stoi w menu bez
-                // niczego po lewej i odstaje od reszty.
+                // `icon` siedzi sama nazwa znaku.
                 'icon' => 'nutrition',
                 'wording' => 'Quince project',
                 'wording_domain' => 'Modules.Quinceengine.Admin',
@@ -135,14 +132,10 @@ class Quince_Engine extends Module
      *
      * `ps_sharebuttons` wpina się w `displayProductAdditionalInfo`, więc jego
      * przyciski lądują tam, gdzie motyw wypisuje ten hook, i sklep nie ma jak
-     * ich stamtąd ruszyć ani wyłączyć z panelu. Poza tym są to skrypty obcych
-     * serwisów, czyli kolejna pozycja do zgody na ciasteczka, a klikalność
-     * mają znikomą: duże sklepy zdjęły je z kart produktów.
+     * ich stamtąd ruszyć ani wyłączyć z panelu.
      *
      * Wyłączamy, a nie odinstalowujemy: sklep, który ich chce, włącza moduł
-     * z powrotem jednym kliknięciem, bez wgrywania czegokolwiek. Odinstalowanie
-     * silnika ich nie przywraca, bo po tamtej decyzji sklep mógł je już
-     * świadomie zostawić wyłączone.
+     * z powrotem. Odinstalowanie silnika ich nie przywraca.
      */
     public function wylaczUdostepnianie(): bool
     {
@@ -163,9 +156,7 @@ class Quince_Engine extends Module
      * Identyfikator bierzemy wprost z bazy. `getInstanceByName()` wywołane
      * w trakcie aktualizacji innego modułu oddaje obiekt z `id` równym zeru,
      * a wtedy `disable()` i `unregisterHook()` pracują na module o numerze zero,
-     * czyli na niczym, i mimo to zwracają prawdę. Sprawdzone: przy aktualizacji
-     * silnika przyciski udostępniania zostawały włączone, choć wywołanie
-     * kończyło się powodzeniem.
+     * czyli na niczym, i mimo to zwracają prawdę.
      */
     private function modulPoNazwie(string $nazwa): ?Module
     {
@@ -193,16 +184,6 @@ class Quince_Engine extends Module
     public const VIDEOS_LIMIT = 5;
 
     /**
-     * Kontrolka pola filmów na karcie produktu.
-     *
-     * PrestaShop rysuje tam zwykłe pole tekstowe, bo tyle mówi definicja pola
-     * dodatkowego. Skrypt zamienia je na wiersze z miniaturami, a wartość pisze
-     * z powrotem do tego samego pola, więc zapis formularza zostaje rdzenia.
-     *
-     * Wyłącznie na karcie produktu: reszta panelu nie ma czego z tym zrobić,
-     * a każdy dokładany plik obciąża wszystkie ekrany.
-     */
-    /**
      * Kolejność wpisów w menu po instalacji dowolnego modułu.
      *
      * PrestaShop dokłada wpis na koniec gałęzi, więc bez tego menu układałoby
@@ -219,6 +200,15 @@ class Quince_Engine extends Module
         \Quince\Engine\Feature\MenuOrder::apply();
     }
 
+    /**
+     * Kontrolka pola filmów na karcie produktu.
+     *
+     * PrestaShop rysuje tam zwykłe pole tekstowe, bo tyle mówi definicja pola
+     * dodatkowego. Skrypt zamienia je na wiersze z miniaturami, a wartość pisze
+     * z powrotem do tego samego pola, więc zapis formularza zostaje rdzenia.
+     *
+     * Wyłącznie na karcie produktu.
+     */
     public function hookActionAdminControllerSetMedia(): void
     {
         $kontroler = (string) Tools::getValue('controller');
@@ -342,8 +332,7 @@ class Quince_Engine extends Module
      * Pole na filmy przy produkcie.
      *
      * Adresy wpisuje się jednym polem, po przecinku, a silnik rozbiera je przy
-     * wyświetlaniu karty. Osobna tabela i osobna zakładka dawałyby to samo,
-     * a kosztowały moduł, którego sklep musiałby pilnować.
+     * wyświetlaniu karty.
      *
      * `display_front` wypuszcza wartość na kartę produktu, więc motyw dostaje
      * ją bez dodatkowego zapytania.
@@ -380,9 +369,8 @@ class Quince_Engine extends Module
     /**
      * Nazwa hooka, w który moduły wstawiają własne akcje nagłówka.
      *
-     * Dziś zgłosi się tu moduł powiadomień; jutro cokolwiek, co ma stanąć obok
-     * konta i koszyka. Silnik nie zna z góry nazw tych modułów i nie musi —
-     * ogłasza miejsce, one same się w nie wpinają.
+     * Silnik nie zna z góry nazw tych modułów: ogłasza miejsce, a one same się
+     * w nie wpinają.
      */
     public const HOOK_HEADER_ACTIONS = 'displayQuinceHeaderActions';
 
@@ -390,9 +378,8 @@ class Quince_Engine extends Module
      * Zasoby blockwishlista, których motyw nie używa.
      *
      * Jego frontend to aplikacja Vue budująca własne przyciski w znacznikach
-     * motywu klasycznego. Model i tabele zostają nasze — podmieniamy wyłącznie
-     * warstwę widoczną, zgodnie z tym, co silnik robi już z licznikiem serca
-     * w nagłówku.
+     * motywu klasycznego. Model i tabele zostają jego; podmieniamy wyłącznie
+     * warstwę widoczną.
      *
      * @var string[]
      */
@@ -403,7 +390,7 @@ class Quince_Engine extends Module
     ];
 
     /**
-     * Własne strony listy życzeń modułu — tu `blockwishlistController` to nie
+     * Własne strony listy życzeń modułu: tu `blockwishlistController` to nie
      * zbędny duplikat spod karty produktu, tylko jedyny skrypt, który w ogóle
      * rysuje treść strony (`<div class="wishlist-container">` jest pusty bez
      * niego). Zdejmowanie zasobów niżej musi je omijać, inaczej strona zostaje
@@ -420,13 +407,13 @@ class Quince_Engine extends Module
      * Zdjęcie warstwy widocznej listy życzeń.
      *
      * Skrypt blockwishlista szuka na każdej karcie produktu elementu
-     * `.thumbnail-container` — klasy z motywu klasycznego, której Quince nie ma.
+     * `.thumbnail-container`, klasy z motywu klasycznego, której Quince nie ma.
      * `querySelector` zwraca null, `append` wywala się i skrypt przerywa pracę,
      * zostawiając błąd w konsoli na każdej stronie z listingiem.
      *
      * Zdejmujemy jego pliki, a nie jego hooki: rejestracje trzeba by odtwarzać
      * po każdej reinstalacji tamtego modułu, a jego dane w JS (adresy działań
-     * i lista zapisanych produktów) są nam potrzebne — publikuje je ten sam hook
+     * i lista zapisanych produktów) są nam potrzebne: publikuje je ten sam hook
      * i zostają na miejscu.
      */
     public function hookActionFrontControllerSetMedia(): void
@@ -454,8 +441,8 @@ class Quince_Engine extends Module
         }
 
         // Adresy dla naszego serca na karcie. Adres działania publikuje moduł
-        // list życzeń (`blockwishlistController`), ale tylko jako zmienną JS —
-        // wyspa dostaje go tutaj razem z napisami i adresem logowania, żeby nie
+        // list życzeń (`blockwishlistController`), ale tylko jako zmienną JS.
+        // Wyspa dostaje go tutaj razem z napisami i adresem logowania, żeby nie
         // musiała znać nazw tamtego modułu.
         Media::addJsDef(['quinceWishlist' => [
             'adres' => $this->context->link->getModuleLink('blockwishlist', 'action'),
@@ -469,8 +456,8 @@ class Quince_Engine extends Module
             'usun' => $this->trans('Remove from your saved products', [], 'Shop.Theme.Actions'),
         ]]);
 
-        // Podstrony konta, które są kontrolerami MODUŁÓW („RODO — Dane
-        // osobowe” w `psgdpr`, „Moje powiadomienia” w `ps_emailalerts`), nie
+        // Podstrony konta, które są kontrolerami MODUŁÓW (dane osobowe
+        // w `psgdpr`, „Moje powiadomienia” w `ps_emailalerts`), nie
         // ustawiają własnego `php_self`, więc `theme.yml` nigdy ich nie
         // dopasuje po kluczu strony (rdzeń woła `getPageSpecificAssets(
         // $this->php_self)`, a nie po nazwie widocznej w `$page.page_name`/
@@ -514,7 +501,7 @@ class Quince_Engine extends Module
         // Podgląd pojedynczej listy dziedziczy po tym samym kontrolerze co
         // kategoria (`ProductListingFrontController`), ale ma własny klucz
         // strony, więc `theme.yml` nie dopasuje mu arkusza i wysp listingu
-        // po nazwie (`category`, `manufacturer`…) — dopinamy je tak samo
+        // po nazwie (`category`, `manufacturer`…). Dopinamy je tak samo
         // ręcznie, jak arkusz konta wyżej.
         if (get_class($this->context->controller) === 'BlockWishlistViewModuleFrontController') {
             $this->context->controller->registerStylesheet(
@@ -559,7 +546,7 @@ class Quince_Engine extends Module
      * Rdzeń wywołuje stronę listy produktów wishlisty przez `doProductSearch()`
      * z GOŁĄ ścieżką względną (`../../../modules/blockwishlist/…`), nie przez
      * zasób `module:`, jak robi to `lists.php`. `TemplateFinder` taką ścieżkę
-     * trawi dosłownie — przy katalogu szablonów motywu `../../../` zawsze
+     * trawi dosłownie: przy katalogu szablonów motywu `../../../` zawsze
      * zwija się z powrotem do PLIKU MODUŁU, więc żaden motyw nie potrafi jej
      * podmienić zwykłym nadpisaniem pliku w `themes/<motyw>/modules/…`.
      *
@@ -577,12 +564,12 @@ class Quince_Engine extends Module
     }
 
     /**
-     * Czysty adres dla `/llms.txt` (Brand & Schema) — bez tego siedziałby pod
+     * Czysty adres dla `/llms.txt` (Brand & Schema). Bez tego siedziałby pod
      * `index.php?fc=module&module=quince_engine&controller=llmstxt`, a
      * silniki AI szukają go dokładnie pod `/llms.txt`. PrestaShop liczy tę
      * trasę osobno dla każdego sklepu i każdego jego języka
      * (`Dispatcher::loadRoutes()`), więc wielosklepowość i wielojęzyczność
-     * załatwia sam rdzeń — kontroler dostaje już właściwy kontekst.
+     * załatwia sam rdzeń, a kontroler dostaje już właściwy kontekst.
      *
      * @return array<string,array{controller:string,rule:string,keywords:array<string,mixed>,params:array<string,string>}>
      */
@@ -631,7 +618,7 @@ class Quince_Engine extends Module
      *
      * Strażnik formularzy pyta ten hook o zdanie po swoich własnych zaporach.
      * Bez zainstalowanego dostawcy nikt się nie zgłasza i formularze działają
-     * dalej — captcha jest warstwą, nie warunkiem.
+     * dalej: captcha jest warstwą, nie warunkiem.
      */
     public function registerFormVerifyHook(): bool
     {
@@ -650,7 +637,7 @@ class Quince_Engine extends Module
     }
 
     /**
-     * Licznik przyjętych zgłoszeń — na nim stoi limit powtórzeń z jednego adresu.
+     * Licznik przyjętych zgłoszeń, na którym stoi limit powtórzeń z jednego adresu.
      *
      * Adres trzymamy jako skrót i kasujemy wiersze starsze niż okno limitu, więc
      * tabela nie rośnie i nie zbiera danych, których nikt nie potrzebuje.
@@ -672,8 +659,8 @@ class Quince_Engine extends Module
      * Hook, którym nasze moduły zgłaszają silnikowi, co dostarczają.
      *
      * `Hook::add()` MUSI iść przed rejestracją: PrestaShop po cichu pomija
-     * rejestrację na hook, którego nie ma jeszcze w tabeli. Lokalnie zwykle
-     * działa, bo hook został po wcześniejszej instalacji — na czystym sklepie nie.
+     * rejestrację na hook, którego nie ma jeszcze w tabeli. Błąd widać dopiero
+     * na czystym sklepie, gdzie hook nie został po wcześniejszej instalacji.
      */
     public function registerFeatureHook(): bool
     {
@@ -692,24 +679,6 @@ class Quince_Engine extends Module
         return true;
     }
 
-    /**
-     * Przekazuje szablonom dane, których nie da się wyliczyć w Smarty.
-     *
-     * Treści topbara przychodzą tu gotowe: teksty rozwiązane dla bieżącego języka,
-     * widoczność zamieniona na klasy CSS. Szablon ma je tylko wypisać — zero obliczeń
-     * po stronie prezentacji, zgodnie z zasadą projektu.
-     *
-     * @return array<string,mixed>
-     */
-    /**
-     * Sprawdzenie wysyłanego formularza, zanim kontroler go przetworzy.
-     *
-     * Interesują nas wyłącznie wysyłki niosące pola strażnika — resztę ruchu
-     * przepuszczamy bez dotykania. Odrzucone zgłoszenie kończy się opróżnieniem
-     * danych żądania: żaden formularz nie zobaczy wtedy swojego przycisku jako
-     * wciśniętego, więc nikt niczego nie przetworzy, a klient dostaje jedno
-     * zdanie wyjaśnienia zamiast pustej strony.
-     */
     /**
      * Dopisuje otwarty produkt do historii odwiedzającego.
      *
@@ -746,12 +715,21 @@ class Quince_Engine extends Module
         $this->context->cookie->viewed = implode(',', array_slice($numery, -20));
     }
 
+    /**
+     * Sprawdzenie wysyłanego formularza, zanim kontroler go przetworzy.
+     *
+     * Interesują nas wyłącznie wysyłki niosące pola strażnika; resztę ruchu
+     * przepuszczamy bez dotykania. Odrzucone zgłoszenie kończy się opróżnieniem
+     * danych żądania: żaden formularz nie zobaczy wtedy swojego przycisku jako
+     * wciśniętego, więc nikt niczego nie przetworzy, a klient dostaje jedno
+     * zdanie wyjaśnienia zamiast pustej strony.
+     */
     public function hookActionFrontControllerInitAfter(): void
     {
         // Filmy produktu prosto do szablonu. NIE przez zmienne frontu: te
         // PrestaShop wypisuje także jako zmienne JavaScriptu strony, a moduł
         // zgód dopasowuje reguły blokowania po treści skryptów, więc adres
-        // z YouTube wycinał tam skrypt rdzenia razem z sobą.
+        // z YouTube wycina tam skrypt rdzenia razem z sobą.
         $this->context->smarty->assign('qFilmy', $this->filmyProduktu());
         $this->context->smarty->assign('qZestawy', $this->zestawyProduktu());
         $this->zapisKwot();
@@ -794,14 +772,12 @@ class Quince_Engine extends Module
      *
      * NIE przez `actionFrontControllerSetVariables`: tamte dane PrestaShop
      * wypisuje także jako zmienne JavaScriptu strony, a moduł zgód dopasowuje
-     * swoje reguły po treści skryptów. Adres z YouTube w zmiennych JS pasował
-     * do reguły blokowania i moduł zgód wycinał skrypt rdzenia razem z nim,
-     * przez co sklep tracił cały JavaScript.
+     * swoje reguły po treści skryptów. Adres z YouTube w zmiennych JS pasuje
+     * do reguły blokowania i moduł zgód wycina skrypt rdzenia razem z nim,
+     * przez co sklep traci cały JavaScript.
      *
-     * Liczone tylko na karcie produktu: na listingu i w koszyku nikt ich nie
-     * pokazuje, a zapytanie kosztowałoby tam tyle samo.
-     */
-    /**
+     * Liczone tylko na karcie produktu.
+     *
      * @return array<int,array<string,string>>
      */
     private function filmyProduktu(): array
@@ -843,7 +819,7 @@ class Quince_Engine extends Module
     /**
      * Modyfikator `qprice`: surowa liczba zapisana walutą sklepu.
      *
-     * PrestaShop formatuje szablonowi tylko część kwot — cena netto produktu
+     * PrestaShop formatuje szablonowi tylko część kwot: cena netto produktu
      * przychodzi jako goła liczba zmiennoprzecinkowa. Zapis zależy od języka
      * i waluty odwiedzającego, więc szablon nie może go złożyć sam.
      *
@@ -878,7 +854,7 @@ class Quince_Engine extends Module
             'qcechy' => [\Quince\Engine\Feature\FeatureOrder::class, 'forProduct'],
 
             // Odcień plakietki statusu zamówienia (panel konta, podgląd
-            // zamówienia) — zawsze z naszych czterech tokenów, nigdy
+            // zamówienia): zawsze z naszych czterech tokenów, nigdy
             // z dowolnego koloru wpisanego w panelu przy statusie.
             'qstatustone' => [\Quince\Engine\Feature\OrderStatusTone::class, 'forState'],
         ];
@@ -949,17 +925,25 @@ class Quince_Engine extends Module
         $params['searchVariables']['quince_active_filters'] = $ile;
     }
 
+    /**
+     * Przekazuje szablonom dane, których nie da się wyliczyć w Smarty.
+     *
+     * Treści topbara przychodzą tu gotowe: teksty rozwiązane dla bieżącego języka,
+     * widoczność zamieniona na klasy CSS. Szablon ma je tylko wypisać.
+     *
+     * @return array<string,mixed>
+     */
     public function hookActionFrontControllerSetVariables(array $params = []): array
     {
         $idLang = (int) $this->context->language->id;
 
         // Brand & Schema: od PS 9.2 rdzeń sam liczy Organization/WebSite/WebPage
         // (`FrontController::getStructuredData()`) i podaje gotowy `structured_data`
-        // w tych samych `templateVars`, zanim ten hook się wykona — tablica
+        // w tych samych `templateVars`, zanim ten hook się wykona. Tablica
         // przychodzi przez referencję, więc dopisanie do niej tutaj jest dokładnie
         // tym rozszerzeniem, o którym mówi dokumentacja tamtej metody. Starszy
         // szablon (`_partials/microdata/head-jsonld.tpl`) renderuje się tylko
-        // wtedy, gdy `structured_data` jest puste — tam ta sama treść ma osobną
+        // wtedy, gdy `structured_data` jest puste; tam ta sama treść ma osobną
         // ścieżkę, liczoną wprost w Smarty.
         if (isset($params['templateVars']['structured_data']['organization'])) {
             $params['templateVars']['structured_data']['organization'] = array_merge(
@@ -976,7 +960,7 @@ class Quince_Engine extends Module
             'navigation' => (new \Quince\Engine\Settings\NavigationSettings())->forTemplate($idLang),
             'footer' => (new \Quince\Engine\Settings\FooterSettings())->forTemplate($idLang),
 
-            // Wariant kasy nie trafia tu — szablon go nie potrzebuje, decyduje
+            // Wariant kasy nie trafia tu: szablon go nie potrzebuje, decyduje
             // o nim sam rdzeń. Hook pod „Order details" na potwierdzeniu
             // zamówienia owszem, bo to zwykłe miejsce na treść modułu.
             'checkout' => (new \Quince\Engine\Settings\CheckoutSettings())->forTemplate(),
@@ -985,7 +969,7 @@ class Quince_Engine extends Module
             'cart' => (new \Quince\Engine\Settings\CartSettings())->forTemplate(),
 
             // Panel klienta: liczniki i ostatnie zamówienia. Tylko na tej
-            // stronie — poza nią zwracamy null tym samym sposobem, co ocena
+            // stronie; poza nią zwracamy null tym samym sposobem, co ocena
             // produktu poza kartą produktu.
             'account' => $this->panelKlienta($idLang),
 
@@ -1006,7 +990,7 @@ class Quince_Engine extends Module
             'card' => (new \Quince\Engine\Settings\ProductCardSettings())->forTemplate(),
 
             // Ocena produktu: średnia i liczba opinii z modułu opinii, policzone
-            // po naszemu. Tylko na stronie produktu — na listingu ocenę rysuje
+            // po naszemu. Tylko na stronie produktu: na listingu ocenę rysuje
             // karta produktu z własnych danych.
             'rating' => $this->ocenaProduktu(),
 
@@ -1019,7 +1003,7 @@ class Quince_Engine extends Module
             // Kolejność cech podstawowych. Silnik sam jej nie liczy: to statystyka
             // z całej kategorii, czyli własna tabela i zadanie w tle, więc robi to
             // moduł. Bez niego zostaje `null`, a szablon bierze cechy w kolejności
-            // katalogu — tak jak działało, zanim moduł powstał.
+            // katalogu.
             'features' => $this->kolejnoscCech(),
 
             // Pola strażnika są te same dla wszystkich formularzy na stronie:
@@ -1031,7 +1015,7 @@ class Quince_Engine extends Module
     /**
      * Ocena produktu, którego dotyczy bieżąca strona.
      *
-     * Poza stroną produktu zwracamy null — hook wypisuje zmienne na każdej
+     * Poza stroną produktu zwracamy null: hook wypisuje zmienne na każdej
      * stronie sklepu, a zapytanie o opinie ma sens tylko przy jednym produkcie.
      *
      * @return array<string,mixed>|null
@@ -1106,8 +1090,7 @@ class Quince_Engine extends Module
         );
 
         // Dwa ustawienia modułu, o które pyta szablon: czy ten odwiedzający może
-        // napisać opinię i czy sklep zbiera głosy „przydatne". Przycisk, który
-        // kończy się odmową modułu, jest gorszy niż jego brak.
+        // napisać opinię i czy sklep zbiera głosy „przydatne".
         $porcja['canPost'] = \Quince\Engine\Product\Reviews::canPost();
         $porcja['usefulness'] = \Quince\Engine\Product\Reviews::usefulnessEnabled();
         $porcja['moderated'] = \Quince\Engine\Product\Reviews::moderated();
@@ -1121,7 +1104,7 @@ class Quince_Engine extends Module
      * Pytamy modułu rankingu przez rejestr możliwości, a nie po nazwie klasy:
      * silnik nie zna z góry nazw naszych modułów, a sklep bez tego modułu ma
      * działać dalej. Zwracamy NAZWY, bo rdzeń podaje szablonowi `grouped_features`
-     * bez identyfikatorów cech — i to nazwa jest tam kluczem.
+     * bez identyfikatorów cech, a kluczem jest tam nazwa.
      *
      * @return string[]|null
      */
@@ -1158,10 +1141,9 @@ class Quince_Engine extends Module
     /**
      * Zapamiętane drzewo kategorii przestaje być prawdą, gdy katalog się zmieni.
      *
-     * Czas życia by tu nie wystarczył: sprzedawca, który właśnie dodał kategorię,
-     * chce ją zobaczyć w menu od razu, a nie za dziesięć minut. Kasujemy więc zapis
-     * przy każdej zmianie w katalogu — kosztuje jedno przeliczenie przy najbliższym
-     * wejściu na sklep.
+     * Czas życia by tu nie wystarczył: nowa kategoria ma być w menu od razu.
+     * Kasujemy więc zapis przy każdej zmianie w katalogu; kosztuje to jedno
+     * przeliczenie przy najbliższym wejściu na sklep.
      */
     public function hookActionCategoryAdd(): void
     {
@@ -1181,11 +1163,10 @@ class Quince_Engine extends Module
     /**
      * Silnik jako dostawca listy życzeń.
      *
-     * Decyzja zapisana w specyfikacji: nie budujemy listy od zera, tylko nakładkę
-     * na blockwishlist — jego tabele i model zostają, podmieniamy warstwę widoczną,
-     * bo jego własny frontend jest aplikacją Vue, której nie da się czysto
-     * ostylować. Zgłaszamy się więc tylko wtedy, gdy on w sklepie jest: bez jego
-     * tabel nie ma gdzie zapisywać produktów, a ikona prowadziłaby donikąd.
+     * Nakładka na blockwishlist: jego tabele i model zostają, podmieniamy warstwę
+     * widoczną, bo jego własny frontend jest aplikacją Vue, której nie da się
+     * czysto ostylować. Zgłaszamy się tylko wtedy, gdy on w sklepie jest: bez
+     * jego tabel nie ma gdzie zapisywać produktów.
      *
      * @return array<int,array<string,string>>
      */
@@ -1203,23 +1184,11 @@ class Quince_Engine extends Module
     }
 
     /**
-     * Wypisuje warstwę pierwszą tokenów do nagłówka sklepu.
-     *
-     * Role kolorystyczne i wartości bazowe zależą od ustawień sprzedawcy, więc nie mogą
-     * leżeć w pliku na dysku — muszą powstawać przy każdym żądaniu. Warstwy druga
-     * i trzecia (pochodne i tokeny komponentu) siedzą w themes/quince/assets/css/tokens.css,
-     * bo są stałe.
-     *
-     * Deklaracja idzie w warstwie kaskady `quince.engine`, zadeklarowanej przed
-     * `quince.tokens` — dzięki temu kolejność jest jednoznaczna niezależnie od tego,
-     * w którym miejscu <head> wyląduje arkusz motywu.
-     */
-    /**
      * Strona główna złożona z sekcji.
      *
      * Silnik mówi GDZIE: stawia pasy, dzieli je na kolumny i daje im tło.
-     * CO w nich stanie, przychodzi z hooków — slajder, bloki WiseBlocka,
-     * karuzele modułów. Dzięki temu dołożenie sekcji nie wymaga zmiany
+     * CO w nich stanie, przychodzi z hooków (slajder, bloki WiseBlocka,
+     * karuzele modułów). Dzięki temu dołożenie sekcji nie wymaga zmiany
      * w motywie, a dołożenie modułu nie wymaga zmiany tutaj.
      *
      * Ustawienia: `Wygląd → Quince → Strona główna`.
@@ -1241,7 +1210,7 @@ class Quince_Engine extends Module
             $sekcje[$i]['title'] = \Quince\Engine\Settings\HomepageSettings::text($sekcja['title'], $jezyk);
             $sekcje[$i]['link_label'] = \Quince\Engine\Settings\HomepageSettings::text($sekcja['link_label'], $jezyk);
 
-            // Ikona nagłówka: kod SVG z biblioteki silnika, a nie nazwa —
+            // Ikona nagłówka: kod SVG z biblioteki silnika, a nie nazwa;
             // szablon ma go tylko wstawić.
             $sekcje[$i]['icon_svg'] = ($sekcja['icon'] ?? '') !== ''
                 ? \Quince\Engine\Ui\IconLibrary::svg((string) $sekcja['icon'])
@@ -1343,11 +1312,22 @@ class Quince_Engine extends Module
         return $gotowe;
     }
 
+    /**
+     * Wypisuje warstwę pierwszą tokenów do nagłówka sklepu.
+     *
+     * Role kolorystyczne i wartości bazowe zależą od ustawień sprzedawcy, więc nie mogą
+     * leżeć w pliku na dysku: muszą powstawać przy każdym żądaniu. Warstwy druga
+     * i trzecia (pochodne i tokeny komponentu) siedzą w themes/quince/assets/css/tokens.css,
+     * bo są stałe.
+     *
+     * Deklaracja idzie w warstwie kaskady `quince.engine`, zadeklarowanej przed
+     * `quince.tokens`. Dzięki temu kolejność jest jednoznaczna niezależnie od tego,
+     * w którym miejscu <head> wyląduje arkusz motywu.
+     */
     public function hookDisplayHeader(): string
     {
         // Obiekty tworzymy wprost, bez kontenera: usługi z config/services.yml modułu
         // rejestrują się w kontenerze back-office, a na froncie `$this->get()` zwraca null.
-        // Generatory nie mają zależności poza sobą, więc nic na tym nie tracimy.
         $settings = new \Quince\Engine\Settings\AppearanceSettings(
             new \Quince\Engine\Appearance\PaletteGenerator(),
             new \Quince\Engine\Appearance\MetricsGenerator()
@@ -1357,7 +1337,7 @@ class Quince_Engine extends Module
 
         // Pasy topbara mają własny kolor, ustawiany na ekranie topbara. Ich role
         // dokładamy PO tokenach palety, żeby nadpisały te wyliczone z decyzji
-        // `BAND_TOPBAR` — inaczej wybór ze skali nie miałby żadnego skutku.
+        // `BAND_TOPBAR`. Inaczej wybór ze skali nie miałby żadnego skutku.
         $paleta = $settings->palette();
 
         $tokens = array_merge(
@@ -1372,14 +1352,14 @@ class Quince_Engine extends Module
             (new \Quince\Engine\Settings\FooterSettings())->bandTokens($paleta),
 
             // Toasty wychodzą nad treścią każdej strony, więc ich tło jest
-            // decyzją globalną — stąd tutaj, a nie w ustawieniach pasa.
+            // decyzją globalną, stąd tutaj, a nie w ustawieniach pasa.
             (new \Quince\Engine\Appearance\PaletteGenerator())->toastTokens(
                 $settings->all()['TOAST'] ?? 'dark',
                 $paleta
             )
         );
 
-        // Proporcja obrazu pochodzi z konfiguracji sklepu, nie z ustawień motywu —
+        // Proporcja obrazu pochodzi z konfiguracji sklepu, nie z ustawień motywu,
         // dlatego dokładana jest tutaj, a nie w generatorach. Nazwa idzie ze spisu
         // tokenów wypisywanych przy żądaniu, bo tego samego spisu pilnuje kontrola
         // arkuszy: powtórzenie tej nazwy w tokens.css unieważniłoby tę wartość.
@@ -1387,13 +1367,11 @@ class Quince_Engine extends Module
             = (new \Quince\Engine\Catalog\ImageRatioProvider())->forListing();
 
         // Wygląd powierzchni strony produktu: tło, ramka, cień i zaokrąglenie
-        // każdej karty z osobna. Wypisujemy tylko to, co sklep ustawił —
+        // każdej karty z osobna. Wypisujemy tylko to, co sklep ustawił;
         // powierzchnia bez własnego ustawienia zostaje przy wartości motywu.
         // Przeskok kreski: różnica między stopniem wskazanym w Wyglądzie a globalnym
         // tłem kart. Blok z własnym tłem dostaje kreskę o tyle samo stopni od SWOJEGO
         // tła, więc ustawienie znaczy to samo na białej karcie i na szarym pasie.
-        // Ustawienia są już wczytane wyżej w tej metodzie: druga instancja tej
-        // klasy wymagałaby generatorów, a wartości i tak byłyby te same.
         $wyglad = $settings->all();
         $tloKart = (int) ($wyglad['SURFACE_CARD'] ?? 3);
         $przeskoki = [
@@ -1412,7 +1390,7 @@ class Quince_Engine extends Module
 
         $lines = [];
         foreach ($tokens as $name => $value) {
-            // Wartości pochodzą z generatorów i z bazy — do CSS trafiają wyłącznie znaki,
+            // Wartości pochodzą z generatorów i z bazy. Do CSS trafiają wyłącznie znaki,
             // które mogą wystąpić w wartości właściwości; reszta wypada.
             $safe = preg_replace('/[^a-zA-Z0-9#().,%\/\s\'"-]/', '', (string) $value);
             $lines[] = sprintf('--q-%s:%s', $name, trim((string) $safe));
@@ -1424,12 +1402,12 @@ class Quince_Engine extends Module
 
         // Brand & Schema: wzbogacony Organization JSON-LD trafia do Smarty tutaj,
         // bo `_partials/microdata/head-jsonld.tpl` renderuje się w tym samym
-        // przebiegu co ten hook, ale dalej w kolejce — zmienna jest już gotowa,
+        // przebiegu co ten hook, ale dalej w kolejce, więc zmienna jest już gotowa,
         // zanim szablon po nią sięgnie.
         $brandSchema = new \Quince\Engine\Settings\BrandSchemaSettings();
         $this->context->smarty->assign('quince_organization_jsonld', $brandSchema->organizationJsonLd($this->context));
 
-        // Domyślne <meta> — tylko gdy sklep je ustawił w Brand & Schema.
+        // Domyślne <meta>, tylko gdy sklep je ustawił w Brand & Schema.
         foreach ($brandSchema->defaultMetaTags($this->context) as $tag) {
             $output .= '<meta ' . $tag['attr'] . ' content="' . htmlspecialchars($tag['content'], ENT_QUOTES) . "\">\n";
         }
@@ -1441,7 +1419,7 @@ class Quince_Engine extends Module
      * Odinstalowanie zabiera wszystko, co instalacja założyła.
      *
      * Bez tego sklep, który przestał używać silnika, zostaje z dwiema tabelami
-     * i ponad setką kluczy konfiguracji — w tym z sekretem podpisu zdarzeń.
+     * i ponad setką kluczy konfiguracji.
      * Klucze kasujemy z nazw wyliczonych ze schematów, nigdy wzorcem
      * `LIKE 'QUINCE_%'`: pod ten wzorzec podpadają też klucze innych modułów
      * rodziny, których silnik nie zakładał i nie ma prawa ruszać.
@@ -1473,7 +1451,7 @@ class Quince_Engine extends Module
      * Klucze konfiguracji założone przez ekrany silnika.
      *
      * Każda klasa ustawień wylicza swoje nazwy ze schematu, więc dołożenie pola
-     * nie wymaga dopisywania go tutaj — i nie zostawia po sobie klucza.
+     * nie wymaga dopisywania go tutaj i nie zostawia po sobie klucza.
      *
      * @return string[]
      */
@@ -1500,8 +1478,7 @@ class Quince_Engine extends Module
      * Grant access to every customer group.
      *
      * Without rows in ps_module_group, Hook::getHookModuleExecList() filters the module out
-     * on the frontend even though it is enabled and its hooks are registered. Costs nothing
-     * now and saves a confusing debugging session once frontend hooks appear.
+     * on the frontend even though it is enabled and its hooks are registered.
      */
     public function installModuleGroups(): bool
     {

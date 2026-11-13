@@ -20,11 +20,9 @@ use Configuration;
 final class CheckoutSettings
 {
     /**
-     * Wybór wariantu nie jest ustawieniem silnika we własnej przestrzeni nazw
-     * (`QUINCE_*`) — ekran tylko przyjaźniej opakowuje istniejący przełącznik
-     * rdzenia `PS_ONE_PAGE_CHECKOUT_ENABLED`. Osobny klucz Quince obok niego
-     * dawałby dwa źródła prawdy do zsynchronizowania — rdzeń i tak czyta tylko
-     * swój klucz, więc panel pisze wprost do niego.
+     * Wariant kasy to klucz rdzenia, nie `QUINCE_*`: rdzeń czyta tylko
+     * `PS_ONE_PAGE_CHECKOUT_ENABLED`, więc panel pisze wprost do niego.
+     * Osobny klucz Quince byłby drugim źródłem prawdy.
      */
     private const MODE_CONFIG_KEY = 'PS_ONE_PAGE_CHECKOUT_ENABLED';
 
@@ -33,9 +31,8 @@ final class CheckoutSettings
 
     /**
      * Nazwa hooka w kolumnie formularza na stronie potwierdzenia zamówienia,
-     * pod kartą „Order details" — ten sam mechanizm, co miejsce na dowolny
-     * hook w elementach strony produktu (`ProductPageSettings`): sklep sam
-     * wpisuje nazwę, pod którą moduł (np. WiseBlock) się rejestruje. Puste
+     * pod kartą „Order details". Mechanizm jak w `ProductPageSettings`: sklep
+     * sam wpisuje nazwę, pod którą moduł (np. WiseBlock) się rejestruje. Puste
      * pole nic nie renderuje.
      */
     private const ORDER_CONFIRMATION_HOOK_CONFIG_KEY = 'QUINCE_CHECKOUT_ORDER_CONFIRMATION_HOOK';
@@ -44,8 +41,7 @@ final class CheckoutSettings
      * Zakup na firmę: przycisk „Pobierz dane” przy polu NIP (zapytanie do
      * rejestru VIES) i sprawdzenie numeru przy zapisie adresu.
      *
-     * Brak wiersza w konfiguracji czytamy jako „włączone”: tak kasa działała,
-     * zanim te przełączniki powstały.
+     * Brak wiersza w konfiguracji czytamy jako „włączone”.
      */
     public const VIES_LOOKUP_CONFIG_KEY = 'QUINCE_CHECKOUT_VIES_LOOKUP';
     public const VAT_CHECK_CONFIG_KEY = 'QUINCE_CHECKOUT_VAT_CHECK';
@@ -91,9 +87,8 @@ final class CheckoutSettings
     }
 
     /**
-     * Dane dla `$modules.quince_engine.checkout` — ten sam mechanizm, którym
-     * silnik udostępnia szablonom resztę swoich ustawień
-     * (`hookActionFrontControllerSetVariables`).
+     * Dane dla `$modules.quince_engine.checkout`, przekazywane szablonom przez
+     * `hookActionFrontControllerSetVariables`.
      *
      * @return array<string,string>
      */

@@ -18,21 +18,20 @@ use Quince\Engine\Settings\ConfigStore;
  * Wgranie nowej paczki Bootstrap Icons z panelu.
  *
  * Robi to samo, co `tools/build-icons.php` uruchamiany ręcznie z konsoli, ale
- * z pliku .tgz wgranego przez sprzedawcę, nie pobranego z npm — sklep na
- * żywym hostingu nie musi mieć wyjścia do internetu ani włączonego
- * `allow_url_fopen`. Numer wersji nie pochodzi z nazwy pliku (sprzedawca mógł
- * ją zmienić), tylko z `package.json` wewnątrz archiwum.
+ * z wgranego pliku .tgz, nie pobranego z npm: serwer nie potrzebuje wyjścia do
+ * internetu ani `allow_url_fopen`. Numer wersji pochodzi z `package.json`
+ * wewnątrz archiwum, nie z nazwy pliku.
  *
- * Wgrywanie zawsze zastępuje cały zestaw: ikona usunięta w nowej wersji
- * po prostu znika z dysku. Ustawienie, które na nią wskazywało, nie wywala
- * się — `IconLibrary::svg()` na nieznaną nazwę zwraca pusty ciąg.
+ * Wgrywanie zawsze zastępuje cały zestaw: ikona usunięta w nowej wersji znika
+ * z dysku. Ustawienie, które na nią wskazywało, nie powoduje błędu, bo
+ * `IconLibrary::svg()` na nieznaną nazwę zwraca pusty ciąg.
  */
 final class IconPackManager
 {
     private const KEY_VERSION = 'QUINCE_ICON_PACK_VERSION';
     private const KEY_UPDATED = 'QUINCE_ICON_PACK_UPDATED';
 
-    /** Jedyna paczka, którą przyjmujemy — inna nie ma ikon pod tą samą nazwą. */
+    /** Jedyna paczka, którą przyjmujemy: inna nie ma ikon pod tymi samymi nazwami. */
     private const NAZWA_PACZKI = 'bootstrap-icons';
 
     public function version(): string

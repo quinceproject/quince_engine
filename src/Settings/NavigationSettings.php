@@ -20,12 +20,11 @@ use Quince\Engine\Ui\IconLibrary;
 /**
  * Ustawienia paska nawigacji: kategorie i odnośniki własne.
  *
- * Pasek i odnośniki własne należą do motywu — działają bez żadnego modułu.
+ * Pasek i odnośniki własne należą do motywu i działają bez żadnego modułu.
  * Moduł menu może przez rejestr podmienić samo źródło kategorii, nie cały pasek.
  *
- * Kategorie stoją zawsze pod jednym przyciskiem — sklep wybiera wyłącznie kształt
- * ich rozwinięcia: kolumny, kafelki albo kaskadę. Sklep z płaskim katalogiem weźmie
- * kafelki, z głębokim — kaskadę.
+ * Kategorie stoją zawsze pod jednym przyciskiem; ustawienie PANEL wybiera
+ * kształt ich rozwinięcia: kolumny, kafelki albo kaskadę.
  */
 final class NavigationSettings
 {
@@ -38,22 +37,14 @@ final class NavigationSettings
 
     /**
      * Przycisk katalogu w przyklejonym nagłówku: cały, sama ikona albo ikona
-     * z krótszą nazwą.
-     *
-     * Wybór jest realny, bo miejsce w nagłówku jest policzone: nazwa katalogu
-     * zajmuje tam tyle samo, co pole wyszukiwania na wąskim ekranie. Sklep
-     * z krótką nazwą weźmie całą, sklep z długą — skróconą albo samą ikonę.
+     * z krótszą nazwą (SCROLL_TEXT).
      */
     public const SCROLL_BUTTONS = ['full', 'icon', 'short'];
 
     /** Układ kafelków na telefonie: wiersz z obrazkiem po lewej albo dwie kolumny. */
     public const TILE_MOBILE = ['list', 'grid'];
 
-    /** Styl odnośnika własnego: zwykły albo wyróżniony barwą.
-     *
-     * Kropka wypadła: robiła to samo, co ikona, tylko gorzej — nie mówiła nic
-     * o treści odnośnika. Kto chce wyróżnić pozycję, stawia przy niej ikonę.
-     */
+    /** Styl odnośnika własnego: zwykły albo wyróżniony barwą. */
     public const LINK_STYLES = ['normal', 'accent'];
 
     /** @var array<string,string> */
@@ -93,9 +84,8 @@ final class NavigationSettings
     /**
      * Role pasa menu i przycisku kategorii, gotowe do wypisania jako tokeny.
      *
-     * Przycisk dostaje własne wypełnienie, bo to on jest wejściem do katalogu —
-     * pas może być ciemny, a przycisk w barwie marki albo odwrotnie. Napis
-     * i stan pod kursorem liczą się z wybranego tła, nie z barwy marki.
+     * Przycisk ma własne wypełnienie, niezależne od tła pasa. Napis i stan pod
+     * kursorem liczą się z wybranego tła, nie z barwy marki.
      *
      * @param array<string,string> $palette
      *
@@ -173,16 +163,14 @@ final class NavigationSettings
 
             // Ten sam przycisk, drugie miejsce: nagłówek, który został na ekranie
             // po odjechaniu pasa menu. Krótsza nazwa jest osobnym tekstem, a nie
-            // przycięciem tamtego — „Wszystkie kategorie" ucięte w połowie nie
-            // znaczy nic, a „Katalog" znaczy to samo w jednym słowie.
+            // przycięciem pełnej.
             'scroll' => [
                 'button' => in_array($s['SCROLL_BUTTON'], self::SCROLL_BUTTONS, true) ? $s['SCROLL_BUTTON'] : 'full',
                 'text' => $this->translate($s['SCROLL_TEXT'], $idLang),
             ],
 
-            // Kafelki są jednopoziomowe z założenia: kafelek ze zdjęciem jest
-            // zajawką kategorii, a nie węzłem drzewa.
-            // Kafelek jest zajawką kategorii, nie węzłem drzewa — stąd jeden poziom.
+            // Kafelki są jednopoziomowe: kafelek ze zdjęciem jest zajawką
+            // kategorii, a nie węzłem drzewa.
             'depth' => $panel === 'tiles' ? 1 : max(1, min(3, (int) $s['DEPTH'])),
             'columns' => max(2, min(6, (int) $s['COLUMNS'])),
             'tile_columns' => max(2, min(8, (int) $s['TILE_COLUMNS'])),
@@ -202,14 +190,10 @@ final class NavigationSettings
     /**
      * Kategorie główne pokazywane w menu, w kolejności ustawionej przez sprzedawcę.
      *
-     * Pusto znaczy wszystkie — sklep, który nic nie wybrał, ma działające menu,
-     * a nie puste. Kolejność bierze się z tablicy, nie z katalogu: w menu układa
-     * się je według tego, co sprzedaje, a nie według tego, co ustawiono w drzewie
-     * kategorii dla całego sklepu.
+     * Pusta lista znaczy wszystkie. Kolejność bierze się z zapisu, nie z pozycji
+     * w drzewie kategorii.
      *
-     * Zapis sprzed rozszerzenia to była lista numerów. Czytamy oba kształty, bo
-     * sklep zaktualizowany ze starszej wersji ma w bazie tamten i nie ma powodu
-     * kazać mu ustawiać menu od nowa.
+     * Starszy zapis to sama lista numerów; czytamy oba kształty.
      *
      * @return array<int,array{id:int,icon:string}>
      */
@@ -236,7 +220,7 @@ final class NavigationSettings
     }
 
     /**
-     * Same numery wybranych kategorii — do zaznaczenia pozycji w panelu.
+     * Same numery wybranych kategorii, do zaznaczenia pozycji w panelu.
      *
      * @return array<int,int>
      */
@@ -246,8 +230,7 @@ final class NavigationSettings
     }
 
     /**
-     * Gałęzie z ikonami zamienionymi na kod SVG. Szablon dostaje gotowy rysunek,
-     * a nie nazwę pliku, której i tak nie umiałby otworzyć.
+     * Gałęzie z ikonami zamienionymi na kod SVG, gotowym do wypisania w szablonie.
      *
      * @return array<int,array<string,mixed>>
      */
@@ -256,8 +239,8 @@ final class NavigationSettings
         $chosen = $this->categories();
 
         // Klucz obejmuje wszystko, co zmienia wynik: język, głębokość i wybór
-        // kategorii razem z ikonami. Zmiana któregokolwiek daje inny zapis,
-        // więc stary nie ma jak przeżyć zmiany ustawień.
+        // kategorii razem z ikonami. Zmiana ustawień daje więc nowy klucz
+        // i nie wymaga czyszczenia pamięci podręcznej.
         $key = $idLang . '|' . $depth . '|' . json_encode($chosen);
 
         $branches = (new CategoryTreeCache())->remember(
@@ -275,12 +258,10 @@ final class NavigationSettings
     /**
      * Odnośniki własne w kolejności ustawionej przez sprzedawcę.
      *
-     * Adres jest wielojęzyczny tak samo jak nazwa: sklep prowadzony w dwóch
-     * językach ma dwie strony promocji, dwa regulaminy i dwa blogi, więc jeden
-     * adres dla wszystkich odsyłałby część klientów na obcą wersję.
+     * Adres jest wielojęzyczny tak samo jak nazwa.
      *
-     * Zapis sprzed tej zmiany miał jeden adres — czytamy go i traktujemy jako
-     * wspólny dla wszystkich języków, żeby nikt nie musiał wpisywać menu od nowa.
+     * Starszy zapis ma jeden adres (`url`); traktujemy go jako adres języka
+     * domyślnego, a translateArray() podaje go też pozostałym językom.
      *
      * @return array<int,array{labels:array<int,string>,urls:array<int,string>,icon:string,style:string}>
      */
@@ -316,8 +297,7 @@ final class NavigationSettings
 
     /**
      * Odnośniki gotowe dla sklepu: nazwa rozwiązana dla języka, ikona jako SVG.
-     * Odnośnik bez nazwy albo bez adresu wypada — pusta pozycja w pasku to wada,
-     * nie decyzja.
+     * Odnośnik bez nazwy albo bez adresu wypada.
      *
      * @return array<int,array{label:string,url:string,icon:string,style:string}>
      */
@@ -368,7 +348,7 @@ final class NavigationSettings
         return $out;
     }
 
-    /** Kod SVG wybranych ikon — dla selektorów w panelu. */
+    /** Kod SVG wybranej ikony przycisku, dla selektora w panelu. */
     public function triggerIconSvg(): string
     {
         return IconLibrary::svg($this->all()['TRIGGER_ICON']);
@@ -377,8 +357,8 @@ final class NavigationSettings
     /** @param array<string,mixed> $values */
     public function save(array $values): void
     {
-        // Tła pasa i przycisku: stopień skali albo kod barwy — sprawdza je silnik
-        // przy wypisywaniu tokenów, więc tutaj przepisujemy je bez zgadywania.
+        // Tła pasa i przycisku (stopień skali albo kod barwy) sprawdza
+        // bandTokens() przy wypisywaniu tokenów, więc tu zapisujemy je bez zmian.
         foreach (['ENABLED', 'MENU_PROVIDER', 'TRIGGER_ICON', 'TILE_ICON_MODE',
                   'BG', 'TRIGGER_BG'] as $key) {
             if (array_key_exists($key, $values)) {
@@ -433,8 +413,8 @@ final class NavigationSettings
 
     /**
      * Kategorie z formularza: wyłącznie zaznaczone, w kolejności, w jakiej przyszły,
-     * bo tę kolejność ustawił sprzedawca przeciąganiem. Każdy numer raz — dwa wpisy
-     * tej samej kategorii dałyby ją w menu dwa razy.
+     * bo to kolejność z przeciągania w panelu. Każdy numer raz, żeby kategoria
+     * nie stała w menu dwa razy.
      *
      * @param array<string,mixed> $values
      *

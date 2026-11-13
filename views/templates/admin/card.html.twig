@@ -11,12 +11,8 @@
 {% endblock %}
 
 {% block quince_body %}
-{# Dwa rodzaje zajawki obok siebie, a nie jeden pod drugim: sklep ustawia je
-   porównując, bo różnica między nimi jest właśnie tym, co tu się decyduje.
-
-   Kolejności elementów nie ma, bo nie jest ustawieniem. Zajawka to jeden wzór
-   powtórzony kilkanaście razy na ekranie i czytelność bierze się stąd, że cena
-   stoi zawsze w tym samym miejscu. #}
+{# Dwa rodzaje zajawki obok siebie. Kolejność elementów nie jest ustawieniem:
+   zajawka ma stały układ. #}
 
 <form id="quince-card" method="post" action="{{ path('quince_card_save') }}">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_card_save') }}">
@@ -54,8 +50,7 @@
                                         </span>
 
                                         {% if element.number is defined %}
-                                            {# Liczba, nie przełącznik: zero znaczy „nie pokazuj cech wcale",
-                                               więc osobny włącznik obok byłby drugim zapisem tej samej decyzji. #}
+                                            {# Liczba, nie przełącznik: zero znaczy „nie pokazuj cech wcale". #}
                                             <input type="number" class="qc-field-base qc-focusable"
                                                    style="inline-size:88px;text-align:center"
                                                    name="{{ variant }}[{{ id }}]"

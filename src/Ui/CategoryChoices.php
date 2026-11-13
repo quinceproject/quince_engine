@@ -16,11 +16,8 @@ use Db;
 /**
  * Kategorie sklepu w postaci, której oczekuje wybierak drzewa w panelu.
  *
- * Jedno miejsce dla wszystkich ekranów. Zanim to powstało, każdy moduł budował
- * tę samą listę u siebie: historia cen, wyszukiwarka i bloki odnośników miały
- * po własnym zapytaniu, a każde z nich pomijało coś innego — raz brakowało
- * złączenia po sklepie i przy czterech sklepach lista rosła czterokrotnie, raz
- * wcięcia doklejone myślnikami do nazwy psuły potem wyszukiwanie.
+ * Jedno miejsce dla wszystkich ekranów i modułów. Wcięcie idzie w polu `depth`,
+ * nie w nazwie, żeby nazwa nadawała się do wyszukiwania.
  *
  * Zwracamy nie tylko poziom, ale i ŚCIEŻKĘ PRZODKÓW oraz informację o potomkach,
  * bo z tego komponent zwija gałęzie. Wyliczenie tego w szablonie oznaczałoby
@@ -55,8 +52,8 @@ final class CategoryChoices
     /**
      * Dokłada ścieżkę przodków i informację o potomkach.
      *
-     * Publiczne, bo ekran bywa potrzebuje własnego zapytania — na przykład
-     * z dodatkową kolumną — a ścieżki liczy się wtedy tak samo.
+     * Publiczne dla ekranów z własnym zapytaniem (np. z dodatkową kolumną,
+     * przekazaną w `$dodatkowe`).
      *
      * @param array<int,array<string,mixed>> $wiersze wiersze z `id_category`, `id_parent`, `level_depth`, `name`
      *
@@ -89,8 +86,7 @@ final class CategoryChoices
             $biezacy = $kategoria['parent'];
 
             // Idziemy w górę po rodzicach. Warunek na obecność w tablicy zatrzymuje
-            // pętlę na korzeniu, którego w zbiorze nie ma — i chroni przed
-            // zapętleniem, gdyby dane były uszkodzone.
+            // pętlę na korzeniu, którego w zbiorze nie ma.
             while (isset($rodzice[$biezacy])) {
                 $sciezka[] = $biezacy;
                 $biezacy = $rodzice[$biezacy];

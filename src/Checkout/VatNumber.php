@@ -47,7 +47,7 @@ final class VatNumber
      * Przyjmujemy zarówno „PL1234563218", jak i „123-456-32-18" czy
      * „123 456 32 18": klient przepisuje numer z pieczątki albo z faktury,
      * a te zapisują go na kilka sposobów. Kraj bierzemy z przedrostka, a gdy
-     * go nie ma — z kraju wybranego w adresie.
+     * go nie ma, z kraju wybranego w adresie.
      */
     public static function zTekstu(string $tekst, string $krajAdresu = 'PL'): self
     {

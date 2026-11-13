@@ -6,7 +6,7 @@
 
    Wiersz mówi, co sekcja pokazuje; ustawienia otwierają się dopiero pod
    strzałką i prowadzą krok po kroku: podział, treść kolumn, nagłówek, oprawa.
-   Każdy krok odsłania tylko to, co wynika z poprzedniego — pola bez znaczenia
+   Każdy krok odsłania tylko to, co wynika z poprzedniego: pola bez znaczenia
    dla wybranego podziału albo rodzaju treści są schowane, a nie wyszarzone.
 
    Wszystkie odmiany stoją w znaczniku od razu, a skrypt je pokazuje i gasi.
@@ -370,8 +370,7 @@
                     <div class="qc-krok-opis" data-kolumny-opis></div>
 
                     {# Wiersze kolumn w powtarzaczu, tak jak w Link blocks: to on
-                       daje odstęp między wierszami. Bez niego kolumny stały
-                       sklejone w jeden blok. #}
+                       daje odstęp między wierszami. #}
                     <div class="qc-repeater">
                         {% for i in 0..(slowniki.maxColumns - 1) %}
                             {{ m.kolumna(sekcja.columns[i]|default({}), i + 1, slowniki, kategorie, languages) }}

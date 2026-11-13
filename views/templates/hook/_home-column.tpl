@@ -1,5 +1,5 @@
 {**
- * Quince — treść jednej kolumny pasa strony głównej.
+ * Quince: treść jednej kolumny pasa strony głównej.
  *
  * Wydzielone z `homepage.tpl`, bo kolumna wygląda tak samo, czy stoi sama na
  * pasie, czy w rzędzie z innymi.
@@ -48,7 +48,7 @@
     {if $qBohater}
 
         {* Bohater pasa: jeden produkt na całej szerokości. Nadpis bierze napis
-           nagłówka sekcji — krótka etykieta nad nazwą, a nie drugi tytuł. *}
+           nagłówka sekcji: krótka etykieta nad nazwą, a nie drugi tytuł. *}
         <div class="q-ps__hero">
             <div class="q-ps__hero-media">
                 <a href="{$qProdukt.url}"><img src="{$qProdukt.cover.bySize.large_default.url}" alt="{$qProdukt.name|escape:'html':'UTF-8'}" loading="lazy"></a>

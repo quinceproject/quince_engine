@@ -29,8 +29,7 @@
                 </div>
 
                 {# Trzy stany, nie dwa: moduł bywa wgrany na dysk, ale niezainstalowany,
-                   i zainstalowany, ale wyłączony. Sprzedawca, który wyłączył moduł
-                   i zapomniał, szuka potem błędu w ustawieniach. #}
+                   i zainstalowany, ale wyłączony. #}
                 {% if module.active %}
                     <span class="qc-mod-state qc-mod-state--on">{{ 'Running'|trans }}</span>
                 {% elseif module.installed %}

@@ -14,7 +14,7 @@ if (!defined('_PS_VERSION_')) {
 /**
  * Kontener menu „Quince".
  *
- * Sam nie renderuje żadnego widoku — istnieje wyłącznie po to, żeby PrestaShop miał klasę
+ * Sam nie renderuje żadnego widoku. Istnieje wyłącznie po to, żeby PrestaShop miał klasę
  * dla zakładki-rodzica. Bez niej instalacja zgłasza „Class AdminQuinceController not found"
  * i podrzędne zakładki lądują z id_parent = 0, czyli w głównym menu zamiast pod Quince.
  *

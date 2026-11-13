@@ -19,9 +19,8 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Wyszukiwanie ikon dla selecta w ustawieniach.
  *
- * Zestaw ma ponad dwa tysiące pozycji i 1,2 MB kodu SVG — wpisanie go w stronę
- * panelu byłoby marnotrawstwem, skoro sprzedawca wybiera jedną. Stąd osobne
- * zapytanie zwracające tylko to, co pasuje do wpisanej frazy.
+ * Zestaw ma ponad dwa tysiące pozycji i 1,2 MB kodu SVG, więc nie jest wpisywany
+ * w stronę panelu. Osobne zapytanie zwraca tylko to, co pasuje do wpisanej frazy.
  */
 class IconController extends FrameworkBundleAdminController
 {

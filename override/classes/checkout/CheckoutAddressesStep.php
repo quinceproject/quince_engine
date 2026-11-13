@@ -16,7 +16,7 @@
  * pusty formularz jako kolejny krok. W Quince panel drugiego adresu stoi
  * w DOM-ie od razu (`other_*` pola w tym samym formularzu, pokazywane JS-em),
  * więc oba adresy przychodzą w jednym POST-cie, a formularz zawsze deklaruje
- * rdzeniowi `use_same_address=1` — niech zapisze pierwszy adres i przejdzie
+ * rdzeniowi `use_same_address=1`, żeby zapisał pierwszy adres i przeszedł
  * dalej jak zwykle. Role (który adres jest którym) i drugi adres poprawiamy
  * TUTAJ, PO `parent::handleRequest()`: rdzeń w swoim `saveAddress` sam wywołuje
  * `setIdAddressDelivery`/`setIdAddressInvoice` na końcu tej metody, więc
@@ -55,8 +55,8 @@ class CheckoutAddressesStep extends CheckoutAddressesStepCore
         if ($firma && !$chceInnyAdres) {
             // Bez osobnej dostawy: ten sam adres jest i fakturą, i dostawą.
             // Formularz renderuje się rdzeniowi zawsze jako „delivery", ale
-            // to, co klient wpisał, to dane do faktury (stąd NIP i VIES) —
-            // jedyna poprawka to zamiana roli, nie id.
+            // to, co klient wpisał, to dane do faktury (stąd NIP i VIES).
+            // Jedyna poprawka to zamiana roli, nie id.
             $this->getCheckoutSession()->setIdAddressInvoice($idGlowny);
 
             return $this;
@@ -75,7 +75,7 @@ class CheckoutAddressesStep extends CheckoutAddressesStepCore
 
         // Kolejność ma znaczenie: `setIdAddressDelivery()` woła
         // `Cart::updateAddressId()`, które podmienia KAŻDE wystąpienie
-        // starego id dostawy na nowe — w tym fakturę, jeśli miała akurat to
+        // starego id dostawy na nowe, w tym fakturę, jeśli miała akurat to
         // samo id (bo rdzeń ustawił oba na `$idGlowny`, use_same_address=1).
         // Dlatego dostawę zmieniamy najpierw, a fakturę ustawiamy na końcu,
         // jako ostatnie, rozstrzygające słowo.

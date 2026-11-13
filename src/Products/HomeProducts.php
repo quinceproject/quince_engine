@@ -30,12 +30,11 @@ use Tools;
  * Produkty do kolumny sekcji strony głównej.
  *
  * Dwie rzeczy i nic poza tym: skąd wziąć numery produktów i jak przełożyć je
- * na postać, której oczekuje zajawka motywu. Ta sama postać co na listingu —
- * karta ma wyglądać wszędzie tak samo, a nie „prawie tak samo".
+ * na postać, której oczekuje zajawka motywu. Ta sama postać co na listingu,
+ * żeby karta wyglądała wszędzie tak samo.
  *
- * Prezentacja jest przepisana z `quince_product_section`: tam działa i jest
- * sprawdzona, a dwa własne sposoby prezentowania tego samego rozjechałyby się
- * przy pierwszej zmianie w rdzeniu.
+ * Prezentacja jest przepisana z `quince_product_section`. Zmiana w jednym
+ * miejscu wymaga tej samej zmiany w drugim.
  */
 final class HomeProducts
 {
@@ -130,7 +129,7 @@ final class HomeProducts
      * Jeden produkt do duzej zajawki.
      *
      * Bez typu zwracanego: prezenter oddaje `ProductListingLazyArray`, ktory
-     * zachowuje sie jak tablica, ale nia nie jest. Wymuszenie `?array` konczylo
+     * zachowuje sie jak tablica, ale nia nie jest. Wymuszenie `?array` konczy
      * sie bledem typu i bialym ekranem na stronie glownej.
      *
      * @return mixed produkt w postaci dla szablonu albo null
@@ -226,8 +225,8 @@ final class HomeProducts
     }
 
     /**
-     * Produkty z najwyższym score z `quince_search_score` — opcjonalna
-     * zależność. Bez zainstalowanego modułu kolumna gaśnie po cichu, tak samo
+     * Produkty z najwyższym score z `quince_search_score` (opcjonalna
+     * zależność). Bez zainstalowanego modułu kolumna gaśnie po cichu, tak samo
      * jak „ostatnio oglądane" bez historii: panel chowa tę opcję w dropdownie,
      * ale wcześniej zapisana sekcja (moduł odinstalowany już po wyborze) ma
      * dostać puste, nie błąd.
@@ -290,11 +289,11 @@ final class HomeProducts
      * Numery produktów, które faktycznie istnieją i są aktywne w tym sklepie.
      *
      * Kolumna „pojedynczy produkt" i lista „ręcznie wybrane" trzymają numer
-     * wpisany kiedyś w panelu — sprzedawca mógł od tego czasu produkt skasować
-     * albo wyłączyć. Bez tego filtra taki numer trafiał do `ProductAssembler`,
-     * który zwracał niepełny wiersz (bez `out_of_stock`, `minimal_quantity`),
-     * a cena liczona na jego podstawie wychodziła `null` — `PriceFormatter`
-     * tego nie przyjmuje i cała strona główna padała białym ekranem.
+     * wpisany kiedyś w panelu, a produkt mógł od tego czasu zniknąć albo zostać
+     * wyłączony. Bez tego filtra taki numer trafia do `ProductAssembler`,
+     * który zwraca niepełny wiersz (bez `out_of_stock`, `minimal_quantity`),
+     * a cena liczona na jego podstawie wychodzi `null`. `PriceFormatter`
+     * tego nie przyjmuje i cała strona główna pada białym ekranem.
      *
      * @param int[] $ids
      *

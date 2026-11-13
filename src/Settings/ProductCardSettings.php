@@ -18,19 +18,13 @@ use Configuration;
  *
  * Zajawka stoi wszędzie tam, gdzie sklep wymienia produkty: na listingu,
  * w wynikach wyszukiwania, w karuzelach na stronie głównej i na karcie
- * produktu. Dlatego jest osobnym ekranem, a nie częścią listingu — inaczej
- * karuzele nie miałyby żadnych ustawień.
+ * produktu. Dlatego ustawienia są osobne od listingu.
  *
- * Dwa rodzaje, bo to dwie różne ilości miejsca, a nie ten sam układ w dwóch
- * szerokościach. KAFEL ma około 250 px i mieści zdjęcie, nazwę, cenę
- * i przycisk. RZĄD ma całą szerokość listy i mieści do tego opis, zestawienie
- * cech, kody i słupek z dostępnością. Ten sam włącznik dla obu znaczyłby, że
- * albo rząd świeci pustkami, albo kafel nie ma gdzie oddychać.
+ * Dwa rodzaje z osobnymi włącznikami. KAFEL ma około 250 px i mieści zdjęcie,
+ * nazwę, cenę i przycisk. RZĄD ma całą szerokość listy i mieści do tego opis,
+ * zestawienie cech, kody i słupek z dostępnością.
  *
- * Kolejność elementów NIE jest ustawieniem. Zajawka to jeden wzór powtórzony
- * kilkanaście razy na ekranie, a nie strona do rozstawiania: czytelność bierze
- * się stąd, że cena stoi zawsze w tym samym miejscu. Sklep decyduje, co widać
- * i ile, a nie w jakiej kolejności.
+ * Kolejność elementów NIE jest ustawieniem: ustala ją szablon.
  */
 final class ProductCardSettings
 {
@@ -111,9 +105,7 @@ final class ProductCardSettings
             'variants' => [self::ROW],
         ],
 
-        // Tylko rząd. W kaflu cechy zepchnęłyby cenę poza wysokość, którą
-        // trzymają wszystkie kafle w rzędzie, a zajawka w siatce odpowiada na
-        // pytanie „który z nich", nie „czym się różnią".
+        // Tylko rząd, z tego samego powodu co opis.
         'features' => [
             'label' => 'Features',
             'note' => 'How many to show, counted from the most telling one. The order comes from the feature ranking.',
@@ -142,10 +134,6 @@ final class ProductCardSettings
 
     /**
      * Wartości po instalacji, osobno dla każdego rodzaju.
-     *
-     * Kafel jest ubogi z wyboru: pokazuje to, po czym klient wybiera jedną
-     * pozycję z dwunastu. Rząd pokazuje to, czym te pozycje się różnią, bo po
-     * to ktoś go włącza.
      *
      * @var array<string,array<string,bool|int>>
      */
@@ -244,9 +232,9 @@ final class ProductCardSettings
     /**
      * Co silnik podaje szablonowi: oba rodzaje naraz.
      *
-     * Zajawka nie wie z góry, w którym trybie stoi — ten sam szablon renderuje
+     * Zajawka nie wie z góry, w którym trybie stoi: ten sam szablon renderuje
      * kafel i rząd, a o tym, co widać, decyduje arkusz. Dostaje więc oba
-     * zestawy i sięga po ten, którego akurat potrzebuje.
+     * zestawy.
      *
      * @return array<string,array<string,bool|int>>
      */

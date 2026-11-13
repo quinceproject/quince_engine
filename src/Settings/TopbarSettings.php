@@ -17,32 +17,26 @@ use Quince\Engine\Ui\IconLibrary;
 /**
  * Ustawienia topbara: treści, widoczność i pasek komunikatu.
  *
- * Osobno od AppearanceSettings, bo to inna kategoria decyzji. Tamte dotyczą wyglądu
- * całego sklepu i są wspólne dla wszystkich widoków; te mówią, co sklep wpisuje
- * w jednym pasie i na jakich ekranach ma to być widoczne.
+ * Kolor każdego z dwóch pasów jest tutaj, nie w AppearanceSettings. Trzymamy
+ * STOPIEŃ SKALI (`neutral-12`, `primary-9`), nie kod barwy, żeby pas szedł za
+ * paletą po zmianie koloru marki. Pozostałe role (tekst, odnośnik, kreskę, tło
+ * pod kursorem) wyprowadza `bandFromBackground()`.
  *
- * Kolor każdego z dwóch pasów jest tutaj, bo dotyczy tego pasa, a nie całego
- * sklepu. Trzymamy STOPIEŃ SKALI (`neutral-12`, `primary-9`), nie kod barwy —
- * pas idzie wtedy za paletą, kiedy zmieni się kolor marki. Resztę ról — tekst,
- * odnośnik, kreskę, tło pod kursorem — wyprowadza `bandFromBackground()`.
- *
- * Widoczność ma dwie kolumny, nie trzy: sprzedawca myśli kategoriami „komputer
- * i telefon", nie breakpointami. Tablet dziedziczy po dużym ekranie, a to, co się
- * na nim nie mieści, chowa reguła w motywie — to decyzja projektowa, nie sklepu.
+ * Widoczność ma dwa przełączniki: komputer i telefon. Tablet dziedziczy po dużym
+ * ekranie, a to, co się na nim nie mieści, chowa reguła w motywie.
  */
 final class TopbarSettings
 {
     private const PREFIX = 'QUINCE_TOPBAR_';
 
-    /** Klucze wielojęzyczne — wartość trzymana jako JSON `{"1":"…","2":"…"}`. */
+    /** Klucze wielojęzyczne: wartość trzymana jako JSON `{"1":"…","2":"…"}`. */
     private const TRANSLATABLE = ['PHONE', 'EMAIL', 'HOURS', 'PROMO_TEXT', 'PROMO_LINK'];
 
     /** @var array<string,string> klucz => wartość domyślna */
     private const SCHEMA = [
         // pas informacyjny
         'ENABLED'           => '1',
-        // Tło pasa: stopień skali palety, nie kod barwy — pas ma iść za paletą,
-        // kiedy zmieni się kolor marki.
+        // Tło pasa: stopień skali palety, nie kod barwy.
         'BG'                => 'neutral-12',
         'PHONE'             => '',
         'PHONE_ICON'        => 'telephone',
@@ -59,13 +53,11 @@ final class TopbarSettings
         'LANG_DESKTOP'      => '1',
         'LANG_MOBILE'       => '1',
         'CURRENCY_DESKTOP'  => '1',
-        // Waluta zostaje na telefonie. Sklep, który w ogóle pokazuje przełącznik
-        // waluty, ma klientów płacących w różnych walutach — a ci nie przestają
-        // ich mieć po sięgnięciu po telefon. Miejsca w pasie starcza: przy 390 px
-        // kontakt zajmuje 133 px, oba przełączniki 109, zostaje 130 px zapasu.
+        // Przy 390 px kontakt zajmuje 133 px, oba przełączniki 109 px,
+        // więc waluta mieści się w pasie także na telefonie.
         'CURRENCY_MOBILE'   => '1',
 
-        // pasek komunikatu — osobny wiersz nad pasem informacyjnym
+        // pasek komunikatu: osobny wiersz nad pasem informacyjnym
         'PROMO_ENABLED'     => '0',
         'PROMO_BG'          => 'primary-9',
         'PROMO_TEXT'        => '',
@@ -77,8 +69,7 @@ final class TopbarSettings
      * Role obu pasów, gotowe do wypisania jako tokeny żądania.
      *
      * Stopień, którego nie ma w palecie, cofa się do wartości domyślnej zamiast
-     * zostawiać pas bez tła: paleta zmienia się rzadko, ale kiedy już się zmieni,
-     * sklep ma dalej działać, a nie wyświetlić przezroczysty pasek.
+     * zostawiać pas przezroczysty.
      *
      * @param array<string,string> $palette
      *
@@ -128,9 +119,6 @@ final class TopbarSettings
      * Dane gotowe do wstawienia w szablon: treści rozwiązane dla bieżącego języka,
      * widoczność zamieniona na klasy CSS.
      *
-     * Szablon nie ma tu nic do policzenia — dostaje to, co ma wypisać. Dzięki temu
-     * ta sama logika obsłuży kiedyś inny silnik szablonów bez przepisywania reguł.
-     *
      * @return array<string,mixed>
      */
     public function forTemplate(int $idLang): array
@@ -171,9 +159,8 @@ final class TopbarSettings
             ],
 
             'promo' => [
-                // Pasek pokazujemy tylko wtedy, gdy jest włączony ORAZ ma treść w tym
-                // języku. Włączony bez tłumaczenia to wada do zgłoszenia w panelu,
-                // nie powód, żeby wypisać pusty pas.
+                // Pasek pokazujemy tylko wtedy, gdy jest włączony ORAZ ma treść
+                // w tym języku.
                 'visible'     => $s['PROMO_ENABLED'] === '1' && $promoText !== '',
                 'text'        => $promoText,
                 'link'        => $this->translate($s['PROMO_LINK'], $idLang),
@@ -183,7 +170,7 @@ final class TopbarSettings
     }
 
     /**
-     * Pola wielojęzyczne rozpakowane do tablic — dla formularza w panelu.
+     * Pola wielojęzyczne rozpakowane do tablic, dla formularza w panelu.
      * Dekodowanie robimy tutaj, bo Twig nie ma filtra na JSON.
      *
      * @return array<string,array<int,string>>
@@ -254,8 +241,8 @@ final class TopbarSettings
             return $decoded;
         }
 
-        // Wartość sprzed zmiany pola na wielojęzyczne: zwykły tekst zamiast JSON-a.
-        // Przypisujemy ją językowi domyślnemu, żeby nie przepadła w migracji.
+        // Starszy zapis: zwykły tekst zamiast JSON-a. Przypisujemy go językowi
+        // domyślnemu.
         if (trim($raw) !== '') {
             return [(int) Configuration::get('PS_LANG_DEFAULT') => $raw];
         }
@@ -267,8 +254,8 @@ final class TopbarSettings
     {
         $values = $this->decode($raw);
 
-        // Brak tłumaczenia dla języka nie może dać pustego miejsca w pasie —
-        // spadamy na pierwszą niepustą wartość, żeby sklep pokazał cokolwiek.
+        // Bez tłumaczenia dla języka bierzemy pierwszą niepustą wartość,
+        // żeby w pasie nie zostało puste miejsce.
         if (isset($values[$idLang]) && trim($values[$idLang]) !== '') {
             return $values[$idLang];
         }
@@ -290,7 +277,7 @@ final class TopbarSettings
 
     /**
      * Klasy ukrywające. Element niewidoczny na danym ekranie dostaje klasę, a nie
-     * znika z dokumentu — dzięki temu obrót telefonu nie wymaga przeładowania strony.
+     * znika z dokumentu, więc obrót telefonu nie wymaga przeładowania strony.
      *
      * @param array<string,string> $s
      */

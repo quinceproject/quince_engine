@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Brand & Schema: dane organizacji dla Schema.org, domyślne meta i llms.txt.
  *
- * `llms.txt` nie jest tu zapisywany na dysk — serwuje go
+ * `llms.txt` nie jest tu zapisywany na dysk. Serwuje go
  * `Quince_EngineLlmstxtModuleFrontController` na żywo, pod `/llms.txt`,
  * osobno dla każdego sklepu i każdego jego języka. Ten ekran tylko
  * ustawia treść i pokazuje jej podgląd.

@@ -20,16 +20,16 @@ use Context;
  *
  * PS9 już wypisuje podstawowy Organization JSON-LD na każdej stronie
  * (`_partials/microdata/head-jsonld.tpl`: nazwa, adres, logo). Ta klasa go
- * NIE dubluje — dostarcza wzbogaconą wersję tego samego obiektu (sameAs,
+ * NIE dubluje, tylko dostarcza wzbogaconą wersję tego samego obiektu (sameAs,
  * contactPoint, nadpisanie nazwy/logo), którą motyw wstawia w to samo
  * miejsce. Puste pole znaczy „jak w rdzeniu PS9", nie „brak wartości".
  *
- * Nazwa firmy, logo, telefon i e-mail NIE są wielojęzyczne — tak samo jak
- * `PS_SHOP_NAME` w samym rdzeniu PS9: to dane firmy, nie treść strony.
- * Tytuł, opis i sekcje llms.txt SĄ wielojęzyczne — to wolny tekst czytany
- * przez silniki AI, ma iść w języku, w którym ktoś odwiedził sklep.
- * Wszystko idzie przez `ConfigStore`, więc działa też w wielosklepowości —
- * każdy sklep z grupy ma swój własny zestaw wartości.
+ * Nazwa firmy, logo, telefon i e-mail NIE są wielojęzyczne, tak samo jak
+ * `PS_SHOP_NAME` w rdzeniu PS9: to dane firmy, nie treść strony.
+ * Tytuł, opis i sekcje llms.txt SĄ wielojęzyczne: to wolny tekst czytany
+ * przez silniki AI, w języku, w którym ktoś odwiedził sklep.
+ * Zapis idzie przez `ConfigStore`, więc w wielosklepowości każdy sklep
+ * z grupy ma swój własny zestaw wartości.
  */
 final class BrandSchemaSettings
 {
@@ -77,7 +77,7 @@ final class BrandSchemaSettings
     }
 
     /**
-     * Zapisane wartości pól wielojęzycznych, do pól panelu —
+     * Zapisane wartości pól wielojęzycznych, do pól panelu:
      * `fields.multilang()`/`fields.multilangArea()` oczekuje `{id_lang: string}`.
      *
      * @return array<string,array<int,string>>
@@ -96,9 +96,9 @@ final class BrandSchemaSettings
 
     /**
      * Sekcje llms.txt tak, jak zapisane: nagłówek i każde pole pozycji
-     * (tytuł, adres, notatka) jako mapa język→tekst. Surowy kształt — do
-     * uwodnienia stanu Alpine w panelu, gdzie przełącznik języka działa na
-     * żywo w przeglądarce, bez przeładowania strony.
+     * (tytuł, adres, notatka) jako mapa język→tekst. Surowy kształt służy
+     * do uwodnienia stanu Alpine w panelu, gdzie przełącznik języka działa
+     * w przeglądarce, bez przeładowania strony.
      *
      * @return array<int,array{heading:array<int,string>,items:array<int,array{title:array<int,string>,url:array<int,string>,note:array<int,string>}>}>
      */
@@ -136,7 +136,7 @@ final class BrandSchemaSettings
 
     /**
      * Sekcje llms.txt rozwiązane do jednego języka: bieżące tłumaczenie, a bez
-     * niego pierwsze dostępne — ten sam zabieg co `TopbarSettings`. Pozycja bez
+     * niego pierwsze dostępne (jak w `TopbarSettings`). Pozycja bez
      * tytułu albo adresu W TYM JĘZYKU znika z wyniku dla niego, choćby miała
      * komplet w innym.
      *
@@ -203,7 +203,7 @@ final class BrandSchemaSettings
             ConfigStore::set(self::PREFIX . $key, trim((string) ($values[$pole] ?? '')));
         }
 
-        // Format `index|noindex[,follow|nofollow]` albo pusto — inna wartość
+        // Format `index|noindex[,follow|nofollow]` albo pusto. Inna wartość
         // zapisana tu trafiłaby do <meta robots> na każdej stronie, która sama
         // tego taga nie ustawia, i cichcem wyłączyła sklep z indeksu.
         $robots = trim((string) ($values['default_robots'] ?? ''));
@@ -243,7 +243,7 @@ final class BrandSchemaSettings
      * Zapisuje sekcję, jeśli ma choć jedno tłumaczenie nagłówka; zapisuje
      * pozycję, jeśli ma choć jedno tłumaczenie z kompletem tytułu i adresu.
      * Czy pozycja ma KOMPLET w KONKRETNYM języku, rozstrzyga dopiero
-     * `llmsSectionsFor()` przy generowaniu pliku — tu tylko odsiewa to, co
+     * `llmsSectionsFor()` przy generowaniu pliku. Tu odsiewane jest tylko to, co
      * nie ma żadnej treści w żadnym języku.
      *
      * @return array<int,array{heading:array<int,string>,items:array<int,array{title:array<int,string>,url:array<int,string>,note:array<int,string>}>}>
@@ -343,10 +343,10 @@ final class BrandSchemaSettings
     }
 
     /**
-     * Pola, którymi ten ekran DOKŁADA się do Organization — nic, co rdzeń PS9
+     * Pola, którymi ten ekran DOKŁADA się do Organization. Bez tego, co rdzeń PS9
      * już umie policzyć sam (nazwa, adres, telefon, e-mail z `PS_SHOP_*`,
      * logo motywu). Nadpisanie nazwy/logo wchodzi tylko, gdy pole nie jest
-     * puste — puste wraca do zachowania rdzenia, nie zapisuje się jako nic.
+     * puste; puste wraca do zachowania rdzenia.
      *
      * Jedno źródło dla dwóch odbiorców: hook `actionFrontControllerSetVariables`
      * dokleja ten zestaw do `structured_data.organization`, który od PS 9.2
@@ -397,7 +397,7 @@ final class BrandSchemaSettings
 
     /**
      * Pełny Organization, dla ekranów bez rdzeniowego `structured_data`
-     * (PS 9.0/9.1 — `head-jsonld.tpl`) i dla podglądu w panelu. Baza
+     * (PS 9.0/9.1, `head-jsonld.tpl`) i dla podglądu w panelu. Baza
      * (nazwa, url, logo motywu) liczona tak samo, jak rdzeń PS 9.2 liczy ją
      * w `getStructuredData()`, żeby obie ścieżki dawały ten sam wynik.
      */
@@ -426,9 +426,9 @@ final class BrandSchemaSettings
         // BEZ JSON_UNESCAPED_SLASHES: wyjście trafia do <script> przez `nofilter`
         // (fallback dla PS 9.0/9.1 w head-jsonld.tpl, gdy rdzeń nie ma jeszcze
         // $structured_data). Pole „Name"/sameAs z literalnym `</script>` inaczej
-        // zamknęłoby tag przedwcześnie i wstrzyknęło dowolny HTML — ucięte `/`
-        // tego nie zmienia (`<\/script>` parsuje się tak samo), ale rozbija ciąg
-        // znaków, którego przeglądarka szuka.
+        // zamknęłoby tag przedwcześnie i wstrzyknęło dowolny HTML. Escapowane `/`
+        // nie zmienia danych (`<\/script>` parsuje się w JSON tak samo), ale rozbija
+        // ciąg znaków, którego przeglądarka szuka.
         return (string) json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }
 
@@ -456,9 +456,9 @@ final class BrandSchemaSettings
     }
 
     /**
-     * Gotowe znaczniki `<meta>` dla domyślnych wartości robots/og:image —
+     * Gotowe znaczniki `<meta>` dla domyślnych wartości robots/og:image,
      * tylko gdy sklep je ustawił. Strona, która ustawia własny tag, i tak
-     * wypisze swój — przeglądarki i roboty czytają pierwsze wystąpienie,
+     * wypisze swój. Przeglądarki i roboty czytają pierwsze wystąpienie,
      * a ten tag stoi w `<head>` wcześnie, więc per-stronowy zwykle wygrywa.
      *
      * @return array<int,array{attr:string,content:string}>

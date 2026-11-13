@@ -19,10 +19,10 @@ namespace Quince\Engine\Appearance;
  * wartości brane wprost z konfiguracji PrestaShopa, a nie z panelu wyglądu.
  * Ta klasa jest ich spisem.
  *
- * Po co osobny spis: tokenu warstwy pierwszej NIE WOLNO powtórzyć w tokens.css.
- * Warstwa kaskady `quince.tokens` stoi po `quince.engine`, więc powtórzona
- * nazwa oznacza, że plik nadpisuje wartość ze sklepu i ustawienie przestaje
- * działać — po cichu, bo w kodzie wszystko wygląda poprawnie. Kontrola arkuszy
+ * Tokenu warstwy pierwszej NIE WOLNO powtórzyć w tokens.css. Warstwa kaskady
+ * `quince.tokens` stoi po `quince.engine`, więc powtórzona nazwa oznacza, że
+ * plik nadpisuje wartość ze sklepu i ustawienie przestaje działać po cichu,
+ * bo w kodzie wszystko wygląda poprawnie. Kontrola arkuszy
  * czyta ten spis i zgłasza taką kolizję jako błąd.
  *
  * Klasa celowo nie zna PrestaShopa: kontrola arkuszy wczytuje ją bezpośrednio,
@@ -32,7 +32,7 @@ final class RuntimeTokens
 {
     /**
      * Proporcja kadru zajawki produktu. Pochodzi z Design → Image Settings,
-     * a nie z ustawień motywu — wylicza ją Catalog\ImageRatioProvider.
+     * a nie z ustawień motywu; wylicza ją Catalog\ImageRatioProvider.
      */
     public const PCARD_MEDIA_RATIO = 'pcard-media-ratio';
 

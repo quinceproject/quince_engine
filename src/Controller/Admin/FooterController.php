@@ -21,8 +21,8 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Ustawienia stopki: dane firmy, kolumny, ikony społecznościowe, pas dolny.
  *
- * Kolumna ma nazwę i listę hooków — treść przynoszą moduły. Ekran nie pyta więc
- * „co wpisać w kolumnie", tylko „co ma w niej stanąć".
+ * Kolumna ma tylko nazwę i listę hooków. Treść przynoszą moduły podpięte
+ * do tych hooków.
  */
 class FooterController extends QuinceController
 {
@@ -86,8 +86,8 @@ class FooterController extends QuinceController
     }
 
     /**
-     * Ikony społecznościowe z kodem SVG wybranej ikony — przycisk wyboru ma ją
-     * rysować od razu, a nie dopiero po otwarciu listy.
+     * Ikony społecznościowe z kodem SVG wybranej ikony, żeby przycisk wyboru
+     * rysował ją od razu, a nie dopiero po otwarciu listy.
      *
      * @return array<int,array<string,mixed>>
      */

@@ -64,10 +64,9 @@
                     <div class="qc-hint">{{ 'Search and cart stay within reach on long listings. Costs a strip of screen on phones.'|trans }}</div>
                 </div>
 
-                {# Zwężenie dotyczy wyłącznie stanu przyklejonego, więc stoi przy nim,
-                   a nie przy podpisach akcji — tam decyzja dotyczy całego nagłówka. #}
+                {# Zwężenie dotyczy wyłącznie stanu przyklejonego, więc stoi przy nim. #}
 
-                {# Tło pasa: stopień skali, nie kod barwy — nagłówek idzie wtedy za
+                {# Tło pasa: stopień skali, nie kod barwy. Nagłówek idzie wtedy za
                    paletą, kiedy zmieni się kolor marki. #}
                 <div class="qc-field" :class="!prepared && 'qc-zalezna'">
                     <label class="qc-label">{{ 'Header background'|trans }}</label>
@@ -78,7 +77,7 @@
                     <div class="qc-hint">{{ 'Text, links and the line under the header are matched to this background.'|trans }}</div>
                 </div>
 
-                {# Tło pasa: stopień skali, nie kod barwy — nagłówek idzie wtedy za
+                {# Tło pasa: stopień skali, nie kod barwy. Nagłówek idzie wtedy za
                    paletą, kiedy zmieni się kolor marki. #}
                 <div class="qc-field" x-show="sticky" x-cloak :class="!prepared && 'qc-zalezna'">
                     <label class="qc-label">{{ 'Background after scrolling'|trans }}</label>
@@ -141,7 +140,7 @@
                         {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
                     </div>
                     <div class="qc-hint">
-                        {# Lista zawiera wyłącznie to, co jest zainstalowane — ustawienie
+                        {# Lista zawiera wyłącznie to, co jest zainstalowane: ustawienie
                            nie może oferować wyboru, którego sklep nie obsłuży. #}
                         {% if providers|length > 1 %}
                             {{ 'Modules that are installed and running.'|trans }}
@@ -179,9 +178,8 @@
 
     {# ── Akcje klienta ──
        Jeden wiersz to jedna akcja: nazwa, podpis, ikona i to, czy w ogóle stoi
-       w nagłówku. Wybory ZACHOWANIA — czy konto rozwija listę i czy koszyk pokazuje
-       kwotę — stoją pod tabelą, a nie w wierszach: dwa przełączniki w jednym wierszu,
-       każdy o czymś innym, nie dają się odróżnić bez czytania podpisów. #}
+       w nagłówku. Wybory ZACHOWANIA (czy konto rozwija listę i czy koszyk pokazuje
+       kwotę) stoją pod tabelą, a nie w wierszach. #}
     <div class="qc-card"
          x-data="{
              labels: {{ settings.ICON_LABELS == '1' ? 'true' : 'false' }},
@@ -219,9 +217,8 @@
                         </td>
                     </tr>
 
-                    {# Akcje z modułów: dziś powiadomienia, jutro cokolwiek, co zgłosi się
-                       do miejsca w nagłówku. Wiersz pojawia się dopiero z modułem —
-                       inaczej byłby przełącznikiem bez pokrycia. Treść i ikonę
+                    {# Akcje z modułów, które zgłoszą się do miejsca w nagłówku.
+                       Wiersz pojawia się dopiero z modułem. Treść i ikonę
                        przynosi moduł, więc nie ma tu ani podpisu, ani selektora ikony. #}
                     {% if moduleActionsAvailable %}
                         <tr>
@@ -241,8 +238,7 @@
                     {% endif %}
 
                     {# Bez modułu listy życzeń nie ma dokąd prowadzić ikony, więc wiersz
-                       zostaje wyłączony — ustawienie nie może obiecywać czegoś,
-                       czego sklep nie zrobi. #}
+                       zostaje wyłączony. #}
                     <tr class="qc-disabled-area {{ wishlistAvailable ? '' : 'is-off' }}">
                         <td>
                             <span class="qc-label">{{ 'Saved products'|trans }}</span>
@@ -267,8 +263,7 @@
                     <tr>
                         <td><span class="qc-label">{{ 'Cart'|trans }}</span></td>
                         {# Pole zostaje edytowalne także wtedy, gdy koszyk pokazuje kwotę:
-                           wygaszone nie pozwalałoby przygotować podpisu na moment, w którym
-                           kwota zostanie wyłączona. Informacja wystarczy. #}
+                           podpis wraca, gdy kwota zostanie wyłączona. #}
                         <td class="qc-vis-table__caption qc-disabled-area" :class="!labels && 'is-off'" :inert="!labels">
                             {{ fields.multilang('CART_LABEL', '', languages, translations.CART_LABEL, 'Cart'|trans) }}
                         </td>

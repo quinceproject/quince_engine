@@ -71,10 +71,9 @@ final class ListingSettings
     /**
      * Jak klient dochodzi do dalszych produktów.
      *
-     * Ponumerowane strony mają własne adresy, więc wyszukiwarka je indeksuje,
-     * a klient może wrócić do konkretnej. Dokładanie trzyma wszystko pod jednym
-     * adresem i czyta się płynniej, ale nie ma do czego wrócić ani czego
-     * zaindeksować poza pierwszą porcją.
+     * Ponumerowane strony mają własne adresy (indeksowane). Dokładanie trzyma
+     * wszystko pod jednym adresem, więc poza pierwszą porcją nie ma czego
+     * zaindeksować.
      *
      * @var array<string,string>
      */
@@ -86,10 +85,7 @@ final class ListingSettings
     /**
      * Które widoki listy sklep w ogóle daje.
      *
-     * Przy jednym widoku przełącznik w belce znika: sklep, który sprzedaje
-     * odzież, nie ma po co pokazywać rzędu z tabelą cech, a sklep z częściami
-     * może nie chcieć kafelków. Zostawiony przełącznik przy jednym widoku
-     * byłby przyciskiem, który nic nie zmienia.
+     * Przy jednym widoku przełącznik w belce znika.
      *
      * @var array<string,string>
      */
@@ -111,9 +107,6 @@ final class ListingSettings
      * @var array<string,array{label:string,note:string,jedenWWierszu?:bool}>
      */
     private const ZONES = [
-        // Nazwa mówi o położeniu względem listy, a nie „nagłówek": nagłówek
-        // sklepu jest osobną sekcją panelu i to samo słowo w dwóch miejscach
-        // czytało się jak zarządzanie nagłówkiem sklepu z ekranu listingu.
         'header' => [
             'label' => 'Above the list',
             'note' => 'Full width above the list and the filters.',
@@ -144,7 +137,7 @@ final class ListingSettings
     /**
      * Katalog elementów.
      *
-     * `zone` to strefa domyślna, `zones` to miejsca dozwolone — pusta tablica
+     * `zone` to strefa domyślna, `zones` to miejsca dozwolone. Pusta tablica
      * znaczy „tylko tam, gdzie stoi domyślnie". `fixed` znaczy, że elementu nie
      * da się wyłączyć: bez siatki i bez tytułu nie ma listingu.
      *
@@ -178,8 +171,7 @@ final class ListingSettings
         ],
 
         // Zdjęcie kategorii stoi OBOK tytułu i opisu, w kolumnie tej samej
-        // szerokości co kafelek podkategorii pod spodem. Makieta tego elementu
-        // nie pokazuje; układ ustaliliśmy na osobnym podglądzie
+        // szerokości co kafelek podkategorii pod spodem. Układ:
         // `makiety/kategoria-naglowek-ze-zdjeciem.html`.
         'cover' => [
             'label' => 'Category image',
@@ -187,9 +179,7 @@ final class ListingSettings
             'zones' => ['header'],
             'off' => true,
             'options' => [
-                // Osobno dla szerokiego ekranu i osobno dla telefonu, bo to dwie
-                // różne decyzje: na szerokim zdjęcie zajmuje miejsce, którego
-                // i tak nie ma czym wypełnić, a na telefonie odbiera je tytułowi.
+                // Osobno dla szerokiego ekranu i osobno dla telefonu.
                 'desktop' => true,
                 'mobile' => true,
             ],
@@ -202,16 +192,10 @@ final class ListingSettings
             'options' => [
                 'images' => true,
                 // Zdjęcie jako maska malowana barwą tekstu, a po najechaniu
-                // barwą marki. Dla sklepów, które mają do kategorii
-                // jednobarwne rysunki zamiast fotografii: bez tego trybu
-                // każdy z nich zostaje w swoim kolorze i rząd nie trzyma się
-                // kupy. Port z Flavora.
+                // barwą marki. Dla jednobarwnych rysunków kategorii zamiast
+                // fotografii.
                 'icons' => false,
-                // Czy kafelek reaguje na najechanie. We Flavorze to ustawienie
-                // gasiło tło pod kafelkiem, bo tam najechanie je zapalało.
-                // W Quince najechanie zmienia barwę obramowania, więc włącznik
-                // dotyczy obramowania — to ta sama decyzja sklepu przeniesiona
-                // na to, co robi nasz motyw.
+                // Czy kafelek reaguje na najechanie (zmiana barwy obramowania).
                 'hover' => true,
             ],
         ],
@@ -221,9 +205,7 @@ final class ListingSettings
         // jako element, żeby sklep przechodzący na Quince nie stracił po cichu
         // modułów, które się w nim zarejestrowały.
         //
-        // Etykieta niesie nazwę hooka, bo tylko ona ten element definiuje:
-        // sam napis „Moduły nad listą" nie mówi, o który hook chodzi, a sklep
-        // szuka właśnie nazwy.
+        // Etykieta niesie nazwę hooka, bo tylko ona ten element definiuje.
         'hook_header' => [
             'label' => 'Modules above every list (displayHeaderCategory)',
             'zone' => 'header',
@@ -268,9 +250,8 @@ final class ListingSettings
             'fixed' => true,
             'options' => [
                 // Ile cech pokazuje zajawka w widoku listy. Ranking jest ten
-                // sam co w środkowej kolumnie karty produktu — osobny liczyłby
-                // drugi raz to samo. Różni się tylko limit, bo w rzędzie listy
-                // jest na cechy więcej miejsca niż w wąskiej kolumnie karty.
+                // sam co w środkowej kolumnie karty produktu. Różni się tylko
+                // limit, bo w rzędzie listy jest na cechy więcej miejsca.
                 'features' => 6,
             ],
             'ranges' => ['features' => [0, 12]],
@@ -319,7 +300,7 @@ final class ListingSettings
     private const DEFAULT_ORDER = [
         // Zdjęcie kategorii przed tytułem, bo stoi w kolumnie OBOK niego i obok
         // opisu. Blok otwiera się na zdjęciu i zamyka na pierwszym elemencie,
-        // który do nagłówka nie należy — patrz `catalog/listing/product-list.tpl`.
+        // który do nagłówka nie należy (patrz `catalog/listing/product-list.tpl`).
         'header' => ['breadcrumb', 'cover', 'title', 'description', 'hook_header', 'subcategories'],
         'filters' => ['facets'],
         'toolbar' => ['filters_button', 'count', 'sort', 'view_switch', 'active_filters'],
@@ -346,13 +327,12 @@ final class ListingSettings
      * Wokół siatki produktów PrestaShop nie daje ani jednego hooka, więc te
      * miejsca budujemy sami. Wpis nie niesie treści: silnik stawia miejsce
      * i woła hooka, a treść daje moduł. Hook, który zwróci pusto, nie zostawia
-     * dziury — miejsce nie renderuje się wcale.
+     * dziury, bo miejsce nie renderuje się wcale.
      *
      * `row` to numer RZĘDU, nie kafla. Pas na całą szerokość potrzebuje wolnego
      * całego rzędu: postawiony po kaflu, który wypada w środku rzędu, przeskakuje
      * do następnego i zostawia po sobie puste komórki. Numer kafla trafia
-     * w granicę rzędu tylko przy jednej liczbie kolumn, więc Flavor kazał sklepowi
-     * podawać go trzy razy, osobno dla każdego progu. Numer rzędu trafia w nią
+     * w granicę rzędu tylko przy jednej liczbie kolumn. Numer rzędu trafia w nią
      * zawsze, przy każdej szerokości ekranu i po włączeniu kolumny filtrów,
      * bo kafel wylicza z niego silnik.
      *
@@ -369,12 +349,8 @@ final class ListingSettings
     /** Numer rzędu liczony od początku listy: wpis pojawia się jeden raz. */
     public const SCOPE_LIST = 'list';
 
-    /** @var array<string,string> */
     /**
      * Na jakim widoku listy miejsce się pokazuje.
-     *
-     * Kafelki i rzędy to dwa różne układy: pas, który między kafelkami wygląda
-     * dobrze, między rzędami bywa zbędny i odwrotnie.
      *
      * @var array<string,string>
      */
@@ -403,9 +379,8 @@ final class ListingSettings
         // Gdzie stoją filtry: szuflada, kolumna albo pas nad listą.
         'FILTERS' => self::FILTERS_DRAWER,
 
-        // Który widok listy sklep pokazuje na wejściu. Klient może go przełączyć
-        // i jego wybór zostaje w przeglądarce, ale pierwsze wejście decyduje
-        // o tym, co zobaczy ktoś, kto nigdy tu nie był.
+        // Który widok listy sklep pokazuje na wejściu. Wybór klienta zostaje
+        // w przeglądarce.
         'VIEW' => self::VIEW_GRID,
 
         // Które widoki listy sklep w ogóle daje: oba, same kafelki albo same
@@ -590,7 +565,7 @@ final class ListingSettings
      *
      * Sklep podaje POZYCJĘ: zero znaczy „przed pierwszą zajawką", dwa „po
      * drugiej", czyli miejsce jest trzecią pozycją listy, a zajawki przesuwają
-     * się o jedno pole dalej. Tak samo liczył to Flavor.
+     * się o jedno pole dalej.
      *
      * Jeden wyjątek robi pas na całą szerokość. Taki pas zajmuje cały rząd,
      * więc postawiony w jego środku przeskakuje do następnego i zostawia po
@@ -632,7 +607,7 @@ final class ListingSettings
                 $kafel = intdiv($kafel, $kolumny) * $kolumny;
             }
 
-            // Kilka wpisów może trafić w ten sam kafel — przy zasięgu „raz na
+            // Kilka wpisów może trafić w ten sam kafel: przy zasięgu „raz na
             // całej liście" zsunięcie do granicy rzędu sprowadza tu sąsiednie
             // rzędy. Stają wtedy jeden pod drugim, zamiast po cichu się kasować.
             $mapa[$kafel][] = [
@@ -678,7 +653,7 @@ final class ListingSettings
             }
         }
 
-        // Element, którego w spisie nie ma — nowy w katalogu — dochodzi na koniec
+        // Element, którego w spisie nie ma (nowy w katalogu), dochodzi na koniec
         // swojej strefy domyślnej, żeby nie zniknął z ekranu.
         foreach (self::CATALOGUE as $id => $element) {
             if (!isset($ustawione[$id])) {
@@ -691,7 +666,7 @@ final class ListingSettings
 
     /**
      * Co silnik podaje szablonowi: strefy z włączonymi elementami w kolejności
-     * wyświetlania. Szablon nie wie, skąd się wzięły — przechodzi je po kolei.
+     * wyświetlania. Szablon przechodzi je po kolei.
      *
      * @return array<string,mixed>
      */
@@ -747,7 +722,7 @@ final class ListingSettings
     }
 
     /**
-     * Miejsca promocyjne przeliczone na numery kafli — wejście dla szablonu.
+     * Miejsca promocyjne przeliczone na numery kafli, wejście dla szablonu.
      *
      * Modyfikator Smarty, nie metoda obiektu: szablon dostaje z silnika same
      * dane, a tego wyliczenia nie da się zrobić w Smarty bez przepisania go
@@ -811,8 +786,7 @@ final class ListingSettings
     }
 
     /**
-     * Strefy z miejscami w kolejności wyświetlania — to, czym żywi się ekran
-     * panelu.
+     * Strefy z miejscami w kolejności wyświetlania, dla ekranu panelu.
      *
      * @return array<string,array<int,array<int,array<string,mixed>>>>
      */
@@ -844,8 +818,8 @@ final class ListingSettings
             }
         }
 
-        // Elementy, których zapis nie zna — nowe w katalogu albo takie, które
-        // dopiero co zmieniły strefę — dochodzą tam, gdzie stoją domyślnie.
+        // Elementy, których zapis nie zna (nowe w katalogu albo takie, które
+        // zmieniły strefę), dochodzą tam, gdzie stoją domyślnie.
         foreach ($this->defaultArrangement() as $strefa => $wiersze) {
             foreach ($wiersze as $identyfikatory) {
                 foreach ($identyfikatory as $id) {
@@ -880,7 +854,7 @@ final class ListingSettings
     /**
      * Jedno miejsce w wierszu: element silnika albo hook modułu.
      *
-     * Zwraca null dla pozycji, której nie wolno tu postawić — spoza katalogu,
+     * Zwraca null dla pozycji, której nie wolno tu postawić: spoza katalogu,
      * powtórzonej albo w niedozwolonej strefie.
      *
      * @param array<string,mixed>                $pozycja

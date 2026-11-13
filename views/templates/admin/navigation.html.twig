@@ -13,9 +13,8 @@
 {% endblock %}
 
 {% block quince_intro %}
-    {# Jeden komunikat na stronę, w tym samym miejscu i kształcie, co na pozostałych
-       ekranach panelu. Bez warunków i bez skryptu: uwaga o ciasnym pasku stoi przy
-       samym przełączniku, którego dotyczy, bo tam jest potrzebna. #}
+    {# Jeden komunikat na stronę, bez warunków i bez skryptu. Uwaga o ciasnym
+       pasku stoi przy przełączniku, którego dotyczy. #}
     <div class="qc-alert qc-alert-info">
         {{ icons.icon('info', 18, 'qc-alert-icon') }}
         <div>{{ 'Set how the catalogue is shown in the menu bar and which links stand next to it.'|trans }}</div>
@@ -50,8 +49,6 @@
         </div>
 
         <div class="qc-card-body qc-disabled-area" :class="!enabled && 'is-off'" :inert="!enabled">
-            {# Wyboru „które menu" tu nie ma: nawigacja jest częścią silnika, a nie
-               osobnym modułem, więc byłby to wybór z jednej pozycji. #}
             <div class="qc-form-grid qc-form-grid-2">
                 {{ fields.multilang(
                     'TRIGGER_TEXT',
@@ -93,7 +90,7 @@
 
             {# Ten sam przycisk w drugim miejscu: nagłówek zostaje na ekranie po
                odjechaniu pasa menu i przejmuje dojście do katalogu. Miejsca ma tam
-               mniej, bo stoi obok wyszukiwarki i akcji klienta — stąd wybór. #}
+               mniej, bo stoi obok wyszukiwarki i akcji klienta. #}
             <div class="qc-form-grid qc-form-grid-2" style="margin-block-start:16px">
                 <div class="qc-field">
                     <label class="qc-label">{{ 'Button after scrolling'|trans }}</label>
@@ -207,9 +204,7 @@
 
         <div class="qc-card-body qc-disabled-area" :class="!enabled && 'is-off'" :inert="!enabled">
             {# Wiersze przychodzą z serwera, bo lista kategorii głównych nie zmienia się
-               w formularzu — zmienia się tylko ich kolejność, zaznaczenie i ikona.
-               Dzięki temu selektor ikon jest ten sam, co wszędzie indziej, zamiast
-               własnej odmiany rysowanej w pętli po stronie przeglądarki.
+               w formularzu: zmienia się tylko ich kolejność, zaznaczenie i ikona.
 
                Kolejność zapisuje się sama: PHP buduje tablicę w kolejności, w jakiej
                pola przychodzą w żądaniu, a ta idzie za układem elementów na stronie. #}
@@ -320,7 +315,7 @@
 
                                 {# Adres jest wielojęzyczny tak samo jak nazwa: sklep w dwóch
                                    językach ma dwie strony promocji i dwa blogi. Przełącznik
-                                   języka jest wspólny z nazwą — obie rzeczy wpisuje się
+                                   języka jest wspólny z nazwą: obie rzeczy wpisuje się
                                    dla jednego języka naraz. #}
                                 <div class="qc-field">
                                     <label class="qc-label">{{ 'Address'|trans }}</label>
@@ -352,9 +347,8 @@
                                     <input type="hidden" :name="'link[' + index + '][style]'" :value="link.style">
                                 </div>
 
-                                {# Ikona zamiast dawnej kropki: kropka wyróżniała pozycję, ale nic
-                                   o niej nie mówiła. Ten sam selektor, co przy kategoriach — tylko
-                                   wiązany z wierszem, bo nazwa pola zawiera jego numer. #}
+                                {# Ten sam selektor ikon, co przy kategoriach, tylko wiązany
+                                   z wierszem, bo nazwa pola zawiera jego numer. #}
                                 <div class="qc-field">
                                     <label class="qc-label">{{ 'Icon'|trans }}</label>
                                     {{ fields.iconpicker(
@@ -409,7 +403,7 @@ function quinceNav() {
         prepared: {{ prepared ? 'true' : 'false' }},
         {# |raw jest tu konieczne: wewnątrz <script> Twig zamienia cudzysłowy na
            encje HTML i do przeglądarki trafia `&quot;trigger&quot;`, co wywala
-           cały blok skryptu — a z nim całą obsługę strony. W atrybutach (x-data)
+           cały blok skryptu, a z nim całą obsługę strony. W atrybutach (x-data)
            jest odwrotnie: tam escapowanie jest właściwe i |raw byłoby błędem. #}
         panel: {{ settings.PANEL|json_encode|raw }},
         scroll: {{ settings.SCROLL_BUTTON|json_encode|raw }},

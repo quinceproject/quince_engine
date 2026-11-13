@@ -16,9 +16,9 @@ if (!defined('_PS_VERSION_')) {
 /**
  * 0.5.6: `/llms.txt` serwowany na żywo (Brand & Schema).
  *
- * Trasa zastępuje wcześniejszy zapis pliku na dysk — ta instalacja ma kilka
- * sklepów, część z nich dzieli jeden fizyczny katalog (`virtual_uri`), więc
- * zapisany plik był wspólny dla wszystkich naraz. `moduleRoutes` każe
+ * Trasa zastępuje wcześniejszy zapis pliku na dysk. W multistore część
+ * sklepów może dzielić jeden fizyczny katalog (`virtual_uri`), więc
+ * zapisany plik byłby wspólny dla wszystkich naraz. `moduleRoutes` każe
  * rdzeniowi policzyć adres osobno dla każdego sklepu i każdego jego języka.
  *
  * Świeża instalacja rejestruje ten hook sama, z `install()`. Ten plik jest dla

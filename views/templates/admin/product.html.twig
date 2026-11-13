@@ -14,13 +14,13 @@
 {# Ekran odwzorowuje stronę produktu, zgodnie z makietą
    `quince/makiety/panel-karta-produktu.html` i jej inwentarzem:
 
-     sekcja  — blok od lewej do prawej krawędzi; niesie tło i odstęp,
-     karta   — powierzchnia w sekcji: tło, ramka, cień, zaokrąglenie,
-     obszar  — miejsce na wiersze wewnątrz karty,
-     wiersz  — pojemnik na jedno albo kilka miejsc,
-     miejsce — element silnika, hook modułu albo przycisk z wstawki. #}
+     sekcja:  blok od lewej do prawej krawędzi; niesie tło i odstęp,
+     karta:   powierzchnia w sekcji (tło, ramka, cień, zaokrąglenie),
+     obszar:  miejsce na wiersze wewnątrz karty,
+     wiersz:  pojemnik na jedno albo kilka miejsc,
+     miejsce: element silnika, hook modułu albo przycisk z wstawki. #}
 
-{# Wiersze i obszary są wspólne z ekranem listingu — patrz nagłówek tego pliku. #}
+{# Wiersze i obszary są wspólne z ekranem listingu: patrz nagłówek makra `arrangement`. #}
 
 {% import '@Modules/quince_engine/views/templates/admin/_macros/arrangement.html.twig' as uklad %}
 
@@ -43,8 +43,6 @@
     <input type="hidden" name="LAYOUT" value="{{ layout }}">
     <input type="hidden" name="ARRANGEMENT" value="">
 
-    {# Jeden pasek informacyjny na stronę, w oprawie, ktora panel rezerwuje wlasnie
-       dla niego. Mowi, co sie tu ustawia, zanim ktos zacznie klikac. #}
     <div class="qc-alert qc-alert-info">
         {{ icons.icon('info', 18, 'qc-alert-icon') }}
         <div>{{ 'This screen mirrors the product page. A section runs from edge to edge, cards sit inside it, and areas inside the cards hold the rows. Switch elements on and off, drag them into order and add module hooks where they should stand. A padlock means the element belongs to the theme: you can switch it off, but not remove it.'|trans }}</div>
@@ -110,7 +108,7 @@
                             {{ uklad.obszar('naglowek', 'Header'|trans, '', areas.naglowek, catalogue, optionLabels) }}
                         {% endif %}
 
-                        {# W układzie dwukolumnowym obszaru „Opis" nie ma wcale — jego
+                        {# W układzie dwukolumnowym obszaru „Opis" nie ma wcale: jego
                            elementy stoją w panelu zakupu. Galeria zajmuje wtedy całą
                            szerokość karty, tak jak na stronie. #}
                         {% if layout == 'two' %}
@@ -167,9 +165,8 @@
                     </div>
                 </div>
 
-                {# Na wąskim ekranie panel zwija się do paska przy dolnej krawędzi.
-                   To decyzja o panelu zakupu, więc stoi przy nim. Zawartość paska
-                   odczytana z renderu makiety sklepu: cena i przycisk zakupu. #}
+                {# Na wąskim ekranie panel zwija się do paska przy dolnej krawędzi
+                   (cena i przycisk zakupu). #}
                 <div class="qc-karta">
                     <div class="qc-karta-glowa">
                         <span class="qc-karta-nazwa">{{ 'On a phone'|trans }}</span>
@@ -199,7 +196,7 @@
                         </div>
                         <div class="qc-hint">{{ 'The same elements as the buy panel and in the same order. You pick which of them enter the layer.'|trans }}</div>
 
-                        {# Panel zakupu jest listą wierszy — tu potrzebujemy samych
+                        {# Panel zakupu jest listą wierszy, a tu potrzebujemy samych
                            elementów, w tej samej kolejności. #}
                         {% for el in areas.zakup|default([])|reduce((suma, w) => suma|merge(w), []) %}
                             <div class="qc-wiersz">

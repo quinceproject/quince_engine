@@ -4,12 +4,12 @@
   Strona podrzędna dostarcza cztery bloki: quince_title, quince_description,
   quince_actions i quince_body. Nawigacja i nagłówek są tutaj raz.
 
-  Językiem bazowym silnika jest angielski — wszystkie napisy przechodzą przez
+  Językiem bazowym silnika jest angielski: wszystkie napisy przechodzą przez
   filtr trans z domeną Modules.Quinceengine.Admin. Tłumaczenia leżą
   w translations/pl-PL/.
 
   Zmienne od kontrolera:
-    quinceRoute — nazwa bieżącej trasy, podświetla pozycję w nawigacji
+    quinceRoute: nazwa bieżącej trasy, podświetla pozycję w nawigacji
 #}
 {% extends '@PrestaShop/Admin/layout.html.twig' %}
 {% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
@@ -19,8 +19,8 @@
 {#
    Znacznik wersji przy każdym pliku. Bez niego przeglądarka trzyma poprzedni arkusz
    i poprawki CSS/JS nie docierają do panelu mimo poprawnego pliku na dysku.
-   W trybie deweloperskim znacznik czasu — plik zmienia się kilkanaście razy dziennie.
-   Na produkcji wersja modułu, więc cache działa aż do aktualizacji.
+   W trybie deweloperskim znacznik czasu, na produkcji wersja modułu, więc cache
+   działa aż do aktualizacji.
 #}
 {% set qcVer = '?v=' ~ (app.debug ? 'now'|date('U') : qcVersion|default('0.1.0')) %}
 
@@ -45,10 +45,10 @@
 {#
    Nawigacja przychodzi z PHP (Quince\Engine\Ui\PanelNavigation), bo pozycje
    modulow zaleza od tego, co sklep ma zainstalowane. Ten sam layout rozszerzaja
-   strony ustawien naszych modulow — dzieki temu maja ten sam sidebar, pasek
-   zapisu i wyglad, zamiast odtwarzac je u siebie.
+   strony ustawien naszych modulow, dzieki czemu maja ten sam sidebar, pasek
+   zapisu i wyglad.
 
-   Pozycje bez klucza `route` sa zaplanowane, ale jeszcze niezbudowane —
+   Pozycje bez klucza `route` sa zaplanowane, ale jeszcze niezbudowane:
    pokazujemy je wyszarzone ze znacznikiem.
 #}
 {% set navSections = nav|default([]) %}
@@ -59,7 +59,7 @@
         {# Na telefonie pasek z ikonami zabiera szerokość i nie mówi, dokąd prowadzą
            pozostałe pozycje. Zastępuje go ten przycisk: nazwa bieżącej strony,
            po dotknięciu pełna lista z nazwami. Na dużym ekranie jest ukryty. #}
-        {# Nazwa bierze się z listy nawigacji, a nie z tytułu strony — tam jest już
+        {# Nazwa bierze się z listy nawigacji, a nie z tytułu strony: tam jest już
            przetłumaczona, więc przycisk mówi to samo co pozycja, którą zastępuje. #}
         {# Pozycję w sidebarze wskazuje quinceNavRoute, a nie quinceRoute: moduł
            z kilkoma widokami ma jedną pozycję w menu, a bieżącą trasą jest ten
@@ -101,13 +101,10 @@
                Zostaje krótka informacja, co da się na tym widoku ustawić. #}
             {% block quince_intro %}{% endblock %}
 
-            {# Widoki jednego ekranu — moduł, który ma ich kilka, wypisuje tu pasek
+            {# Widoki jednego ekranu: moduł, który ma ich kilka, wypisuje tu pasek
                zakładek. Każda zakładka prowadzi do własnej trasy, więc widok da się
                otworzyć wprost z adresu, a filtry i stronicowanie mieszczą się
-               w adresie zamiast w stanie skryptu.
-
-               Pasek stoi w layoucie, a nie w szablonie modułu, żeby wszystkie
-               moduły miały go w jednym miejscu i w jednej postaci. #}
+               w adresie zamiast w stanie skryptu. #}
             {% block quince_tabs %}
                 {% if quinceTabs|default([]) %}
                     <nav class="qc-tabs">
@@ -125,12 +122,10 @@
             {# Pasek akcji przy dolnej krawędzi. Zapis jest zawsze pod ręką, niezależnie
                od długości formularza, i nie konkuruje o górną krawędź z paskiem PrestaShopa.
 
-               Dwie rzeczy naraz, bo dają co innego. Blok `quince_actionbar` pozwala
-               ekranowi świadomie zgasić pasek albo podmienić go na własny — tego
-               samego wzorca używa `quince_cmp`. Sprawdzenie pustki gwarantuje,
-               że pusty pasek nie wyjdzie nawet wtedy, gdy ktoś o bloku zapomni:
-               dziennik cen dostawał go przyklejonego do dna okna i wyglądało to
-               na niedokończony formularz. #}
+               Blok `quince_actionbar` pozwala ekranowi zgasić pasek albo podmienić
+               go na własny (tak robi `quince_cmp`). Sprawdzenie pustki pilnuje,
+               żeby pusty pasek nie wyszedł, gdy ekran nie ma akcji, a bloku
+               nie nadpisał. #}
             {% block quince_actionbar %}
                 {% set qcAkcje %}{% block quince_actions %}{% endblock %}{% endset %}
                 {% set qcAkcjeInfo %}{% block quince_actions_info %}{% endblock %}{% endset %}

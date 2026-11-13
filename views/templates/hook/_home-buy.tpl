@@ -1,9 +1,8 @@
 {**
- * Quince — przycisk zakupu przy dużej zajawce strony głównej.
+ * Quince: przycisk zakupu przy dużej zajawce strony głównej.
  *
- * W makiecie to zwykły odnośnik, bo makieta nie ma sklepu pod spodem. Tutaj
- * ten sam przycisk wkłada produkt do koszyka, dokładnie tak jak na listingu:
- * ten sam formularz, ta sama nazwa akcji, ten sam napis.
+ * Wkłada produkt do koszyka tak jak na listingu: ten sam formularz, ta sama
+ * nazwa akcji, ten sam napis.
  *
  * Produkt, którego nie da się kupić z listy (wariantowy, na zamówienie albo
  * wyprzedany), prowadzi na kartę, gdzie klient zobaczy powód.
@@ -23,8 +22,7 @@
         <button type="submit" class="q-btn q-btn--primary{if $qDuzy|default:false} q-btn--lg{/if}"
                 data-button-action="add-to-cart" data-ps-ref="add-to-cart"
                 aria-label="{l s='Add to cart %product_name%' sprintf=['%product_name%' => $qProdukt.name] d='Shop.Theme.Actions'}">
-            {* Ten sam napis, co na karcie listingu: jeden przycisk zakupu
-               mówi w sklepie jednym głosem. *}
+            {* Ten sam napis, co na karcie listingu. *}
             {l s='To cart' d='Shop.Theme.Actions'}
         </button>
     </form>

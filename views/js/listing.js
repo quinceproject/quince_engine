@@ -1,5 +1,5 @@
 /**
- * Ekran „Układ listingu" — to, czego nie obsługuje wspólny `arrangement.js`.
+ * Ekran „Układ listingu": to, czego nie obsługuje wspólny `arrangement.js`.
  *
  * Dwie rzeczy: wybór miejsca filtrów razem ze skutkiem podanym liczbami oraz
  * tabela miejsc promocyjnych w siatce, spisywana do pola formularza przy
@@ -142,7 +142,7 @@
 
     /* Miejsca spisujemy przy wysyłce, tak jak rozstawienie: stan czytamy wprost
        z drzewa, więc dokładanie i kasowanie wierszy nie musi niczego pilnować.
-       Wiersz bez nazwy hooka wypada — nie ma czego wyświetlić. */
+       Wiersz bez nazwy hooka wypada, bo nie ma czego wyświetlić. */
     formularz.addEventListener('submit', function () {
         var miejsca = [];
 

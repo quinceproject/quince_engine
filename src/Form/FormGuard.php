@@ -19,26 +19,26 @@ use Hook;
 /**
  * Strażnik formularzy sklepu.
  *
- * Każdy formularz w sklepie — kontakt, zapis do newslettera, pytanie o produkt —
+ * Każdy formularz w sklepie (kontakt, zapis do newslettera, pytanie o produkt)
  * dostaje ten sam zestaw zabezpieczeń, zamiast wymyślać go po swojemu:
  *
- *   1. znacznik strony  — dowód, że formularz wyszedł z tego sklepu, a nie ze
- *                         skryptu wysyłającego dane prosto pod adres kontrolera;
- *   2. pułapka          — pole niewidoczne dla człowieka; bot wypełnia wszystko,
- *                         co znajdzie, więc wypełniona pułapka to bot;
- *   3. czas wypełnienia — człowiek potrzebuje kilku sekund, skrypt wysyła od razu;
- *   4. limit powtórzeń  — ten sam adres nie wyśle stu zgłoszeń w minutę.
+ *   1. znacznik strony:  dowód, że formularz wyszedł z tego sklepu, a nie ze
+ *                        skryptu wysyłającego dane prosto pod adres kontrolera;
+ *   2. pułapka:          pole niewidoczne dla człowieka; bot wypełnia wszystko,
+ *                        co znajdzie, więc wypełniona pułapka to bot;
+ *   3. czas wypełnienia: człowiek potrzebuje kilku sekund, skrypt wysyła od razu;
+ *   4. limit powtórzeń:  ten sam adres nie wyśle stu zgłoszeń w minutę.
  *
  * Te cztery zapory działają zawsze i nic nie kosztują odwiedzającego: nie ma
  * zagadki do rozwiązania, nie ma cudzego skryptu, nie ma zgody na ciasteczka.
  *
  * Piąta zapora jest wymienna: moduł captchy zgłasza się na hook HOOK_VERIFY
  * i dostaje ostatnie słowo. Bez takiego modułu formularze działają i są
- * zabezpieczone czwórką powyżej — captcha dokłada warstwę, nie jest warunkiem.
+ * zabezpieczone czwórką powyżej. Captcha dokłada warstwę, nie jest warunkiem.
  *
  * Znacznik celowo nie siedzi w sesji: strona sklepu bywa serwowana z pamięci
  * podręcznej i ten sam kawałek HTML-a trafia do wielu osób. Podpisujemy więc
- * czas wydania kluczem sklepu — to działa niezależnie od tego, kto dostał stronę.
+ * czas wydania kluczem sklepu, co działa niezależnie od tego, kto dostał stronę.
  */
 final class FormGuard
 {
@@ -88,7 +88,7 @@ final class FormGuard
     /**
      * Ocena zgłoszenia.
      *
-     * @param string               $formId nazwa formularza — do limitu i dziennika
+     * @param string               $formId nazwa formularza, do limitu i dziennika
      * @param array<string,mixed>  $values dane z żądania
      */
     public function check(string $formId, array $values, ?string $ip = null): FormVerdict
@@ -117,7 +117,7 @@ final class FormGuard
             return FormVerdict::rejected(FormVerdict::EXPIRED_TOKEN);
         }
 
-        // Ujemny wiek to zegar sklepu przestawiony po wydaniu znacznika — nie wina
+        // Ujemny wiek to zegar sklepu przestawiony po wydaniu znacznika. To nie wina
         // odwiedzającego, więc przepuszczamy, ale progu czasu już nie liczymy.
         if ($wiek >= 0 && $wiek < self::MIN_SECONDS) {
             return FormVerdict::rejected(FormVerdict::TOO_FAST);
@@ -151,8 +151,7 @@ final class FormGuard
             'submitted_at' => (int) time(),
         ], false, true, Db::INSERT_IGNORE);
 
-        // Sprzątanie przy okazji zapisu: osobne zadanie w harmonogramie byłoby
-        // kolejną rzeczą do skonfigurowania w sklepie.
+        // Sprzątanie przy okazji zapisu, bez osobnego zadania w harmonogramie.
         Db::getInstance()->delete(
             'quince_form_hit',
             'submitted_at < ' . (int) (time() - self::RATE_WINDOW)
@@ -215,7 +214,7 @@ final class FormGuard
      * Czy z tego adresu przyszło już za dużo takich żądań.
      *
      * Ten sam licznik obsługuje formularze i punkty wejścia, które kosztują sklep
-     * więcej niż pytającego — na przykład podpowiedzi wyszukiwarki, gdzie każde
+     * więcej niż pytającego, na przykład podpowiedzi wyszukiwarki, gdzie każde
      * naciśnięcie klawisza to zapytanie do bazy. Limit i okno podaje wołający,
      * bo „za dużo" znaczy co innego przy wysyłce formularza, a co innego przy
      * pisaniu w polu.
@@ -262,7 +261,7 @@ final class FormGuard
      * Ostatnie słowo modułów captchy.
      *
      * Każdy zgłoszony moduł zwraca `true` (przepuszczam), `false` (odrzucam) albo
-     * nic (nie mam zdania — np. nie jest skonfigurowany). Jedno „odrzucam"
+     * nic (nie mam zdania, np. nie jest skonfigurowany). Jedno „odrzucam"
      * wystarczy: dostawcy nie głosują, tylko strzegą.
      *
      * @param array<string,mixed> $values
@@ -288,7 +287,7 @@ final class FormGuard
 
         return FormVerdict::ok();
     }
-    /** Licznik zgłoszeń odchodzi razem z modułem — bez niego nie ma czego liczyć. */
+    /** Licznik zgłoszeń odchodzi razem z modułem. */
     public function dropTable(): bool
     {
         return (bool) Db::getInstance()->execute(

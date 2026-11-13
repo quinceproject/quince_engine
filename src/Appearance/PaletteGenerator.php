@@ -19,10 +19,10 @@ namespace Quince\Engine\Appearance;
  *
  * Wynik ma dwie warstwy:
  *
- *   1. SKALE — dwanaście stopni dla koloru głównego, dodatkowego, promocji i neutralnych.
+ *   1. SKALE: dwanaście stopni dla koloru głównego, dodatkowego, promocji i neutralnych.
  *      Stopień oznacza ZADANIE, nie jasność: 1 to tło strony, 9 wypełnienie przycisku,
  *      12 tekst wysokokontrastowy. Kontrakt pochodzi z Radix Colors.
- *   2. ROLE SEMANTYCZNE — nazwy opisujące użycie, wskazujące na stopnie. Tego używa motyw;
+ *   2. ROLE SEMANTYCZNE: nazwy opisujące użycie, wskazujące na stopnie. Tego używa motyw;
  *      warstwę trzecią, tokeny komponentu, trzyma już CSS motywu.
  *
  * Pełną dwunastkę dostają: marka, trzeci kolor, promocja i neutralne. Statusy mają
@@ -39,21 +39,15 @@ final class PaletteGenerator
         'info'    => [212, 0.62, 0.44],
     ];
 
-    /** Odcień i nasycenie neutralnych dla każdego wariantu barwy. */
     /**
-     * Jasności dwunastu stopni skali neutralnej, w procentach.
+     * Jasności dwunastu stopni skali neutralnej, w procentach HSL.
      *
      * Ta skala CELOWO nie jest monotoniczna: powierzchnia karty (3) jest jaśniejsza
-     * od tła strony (1). Biała karta ma odskakiwać od lekko przygaszonego tła — bez tego
+     * od tła strony (1). Biała karta ma odskakiwać od lekko przygaszonego tła, bez tego
      * listing wygląda jak jednolita płachta. Nie „poprawiać" tego na ciąg malejący.
-     */
-    /*
-     * Drabinka jasności szarości, w procentach HSL.
      *
-     * Stopnie 5, 6 i 7 podniesione (92/85/75 na 94/88/77): przy poprzednich
-     * kreska bloków, czyli piąty stopień, wychodziła #ebebeb i była wyraźnie
-     * ciemniejsza od tej z makiety (#f0efee). Kreska ma dzielić, a nie rysować
-     * ramkę wokół każdego bloku.
+     * Piąty stopień to kreska bloków i ma odpowiadać makiecie (#f0efee): kreska
+     * ma dzielić, a nie rysować ramkę wokół każdego bloku.
      */
     private const NEUTRAL_L = [
         1 => 96.0, 2 => 98.0, 3 => 100.0, 4 => 96.5, 5 => 94.0, 6 => 88.0,
@@ -63,21 +57,20 @@ final class PaletteGenerator
     /**
      * Jasność percepcyjna, od której startuje skala barwna, i ta, do której schodzi.
      *
-     * Liczby są w skali OKLCH (0–1), nie w procentach HSL. To nie jest kosmetyczna
-     * zmiana jednostki: w HSL „50%" znaczy co innego dla żółtego niż dla granatu,
-     * przez co jeden wzór dawał raz brąz, raz zmianę niewidoczną.
+     * Liczby są w skali OKLCH (0-1), nie w procentach HSL: w HSL „50%" znaczy co innego
+     * dla żółtego niż dla granatu, więc jeden wzór dawałby raz brąz, raz zmianę niewidoczną.
      */
     private const TONE_TOP = 0.98;
     private const TONE_BOTTOM = 0.32;
 
-    /** Ile nasycenia zostaje przy górnym końcu skali — reszta ginie w bieli. */
+    /** Ile nasycenia zostaje przy górnym końcu skali. Reszta ginie w bieli. */
     private const CHROMA_TOP = 0.07;
 
     /**
      * Charakter szarości: odcień i nasycenie podkładu (prototyp: PODKŁAD).
      *
      * Czyste to zero barwy. Ciepłe ciągną w stronę beżu, chłodne w stronę
-     * błękitu — nasycenie jest śladowe, bo szarość ma zostać szarością.
+     * błękitu. Nasycenie jest śladowe, bo szarość ma zostać szarością.
      */
     private const TINT = [
         'pure' => [0, 0.0],
@@ -126,8 +119,8 @@ final class PaletteGenerator
         $neutral   = $this->neutralScale($input['dark'], $input['tint']);
 
         // Progi czytelności skal barwnych liczymy wobec tła, które sklep NAPRAWDĘ
-        // ma pod tekstem. Stały stopień 1 dawał teksty dociągnięte do jasności,
-        // której na stronie nie było — na ciemniejszym tle wychodziły za jasne.
+        // ma pod tekstem (wybrany stopień skali neutralnej), a nie wobec stałego
+        // stopnia 1. Inaczej na ciemniejszym tle teksty wychodzą za jasne.
         $page      = $neutral['steps'][$input['page']];
         $primary   = $this->colourScale($input['primary'], $page);
         $secondary = $this->colourScale($input['secondary'], $page);
@@ -152,12 +145,11 @@ final class PaletteGenerator
     /**
      * Nakłada nadpisania administratora i przelicza role od nich zależne.
      *
-     * Samo `array_merge` podmienia jedną rolę i zostawia rodzinę starą: przypięty
-     * kolor sukcesu zmieniał plamkę, a tło komunikatu, obrys i tekst zostawały
-     * z barwy wyliczonej. Prototyp mówi inaczej — zmiana koloru statusu daje
-     * nowe tło, obrys, napis na kolorze i tekst, a zmiana plakietki nowy napis.
+     * Samo `array_merge` podmieniłoby jedną rolę i zostawiło rodzinę starą. Zmiana
+     * koloru statusu daje nowe tło, obrys, napis na kolorze i tekst, a zmiana
+     * plakietki nowy napis.
      *
-     * Rola, którą sklep przypiął osobno, zostaje jego — przeliczenie nie nadpisuje
+     * Rola, którą sklep przypiął osobno, zostaje jego: przeliczenie nie nadpisuje
      * świadomych wyborów.
      *
      * @param array<string,string> $computed  pełna wyliczona paleta
@@ -207,10 +199,10 @@ final class PaletteGenerator
     /**
      * Informacje dla panelu: co silnik skorygował i co budzi wątpliwość.
      *
-     * Rozdział jest celowy. Kontrast wewnątrz pary kolorów to problem techniczny bez
-     * pola do dyskusji — silnik go rozwiązuje i mówi, że to zrobił. Podobieństwo dwóch
-     * kolorów to ocena, w której nie ma jednej poprawnej odpowiedzi — więc tylko
-     * ostrzegamy, nigdy nie blokujemy zapisu i nie zmieniamy koloru wybranego świadomie.
+     * Kontrast wewnątrz pary kolorów to problem techniczny: silnik go rozwiązuje
+     * i zgłasza korektę. Podobieństwo dwóch kolorów to ocena bez jednej poprawnej
+     * odpowiedzi, więc tylko ostrzegamy. Nigdy nie blokujemy zapisu i nie zmieniamy
+     * koloru wybranego świadomie.
      *
      * @param array<string,string> $settings
      *
@@ -246,7 +238,7 @@ final class PaletteGenerator
         }
 
         // Kolor dodatkowy pojawia się jako tekst i obrys przycisku konturowego, nie jako
-        // wypełnienie — zbyt jasny przestaje być czytelny na białym tle karty.
+        // wypełnienie. Zbyt jasny przestaje być czytelny na białym tle karty.
         if (Color::contrast($input['secondary'], '#ffffff') < 3.0) {
             $warnings[] = 'secondary_too_light';
         }
@@ -280,9 +272,7 @@ final class PaletteGenerator
             'borderField' => $this->step($settings['BORDER_FIELD'] ?? '6', 6),
             'borderTable' => $this->step($settings['BORDER_TABLE'] ?? '5', 5),
 
-            // Czym pole odpowiada na kursor i na ognisko: atramentem albo barwą
-            // marki. Dwie wartości, bo to jest wybór między „nie zwraca uwagi na
-            // siebie" a „zwraca", a nie miejsce na trzeci odcień szarości.
+            // Czym pole odpowiada na kursor i na ognisko: atramentem albo barwą marki.
             'fieldAccent' => in_array($settings['FIELD_ACCENT'] ?? 'ink', ['ink', 'brand'], true)
                 ? $settings['FIELD_ACCENT']
                 : 'ink',
@@ -310,8 +300,8 @@ final class PaletteGenerator
     /**
      * Skala barwna zakotwiczona na kolorze administratora.
      *
-     * Dziewiątka to jego kolor — stopnie 1–8 interpolują jasność od niemal bieli do niego,
-     * 10–12 schodzą od niego w dół. Dzięki kotwicy wygenerowana skala zawsze zawiera
+     * Dziewiątka to jego kolor: stopnie 1-8 interpolują jasność od niemal bieli do niego,
+     * 10-12 schodzą od niego w dół. Dzięki kotwicy wygenerowana skala zawsze zawiera
      * dokładnie tę barwę, którą wybrał, a nie jej przybliżenie.
      *
      * @return array{steps:array<int,string>,on9:string,adjusted:bool,contrast:float}
@@ -323,7 +313,7 @@ final class PaletteGenerator
         $tone = Color::tone($fill);
         $steps = [];
 
-        // Im bliżej bieli, tym mniej nasycenia — inaczej stopień pierwszy, który ma
+        // Im bliżej bieli, tym mniej nasycenia. Inaczej stopień pierwszy, który ma
         // być tłem strony, wychodzi jaskrawym pastelem. Tak zachowuje się rozbielanie
         // farby i tak wyglądają skale, do których oko jest przyzwyczajone.
         for ($i = 1; $i <= 9; $i++) {
@@ -336,8 +326,8 @@ final class PaletteGenerator
         }
 
         // Dolna granica musi leżeć poniżej wypełnienia. Przy bardzo ciemnej marce
-        // stała granica jest OD NIEJ jaśniejsza i stopnie 10–12 wyszłyby jaśniejsze
-        // od dziewiątki — skala rozjechałaby się w drugą stronę.
+        // stała granica jest OD NIEJ jaśniejsza i stopnie 10-12 wyszłyby jaśniejsze
+        // od dziewiątki, czyli skala rozjechałaby się w drugą stronę.
         $bottom = min(self::TONE_BOTTOM, $tone - 0.06);
 
         for ($i = 10; $i <= 12; $i++) {
@@ -361,21 +351,18 @@ final class PaletteGenerator
     }
 
     /**
-     * Skala neutralna w całości z atramentu: ciemny koniec to on sam, jasny to
-     * jego barwa w śladowej ilości.
+     * Skala neutralna: barwa z wybranego podkładu (`TINT`), jasność ze stałej
+     * drabinki `NEUTRAL_L`.
      *
-     * Barwę całej skali bierzemy z atramentu w śladowej ilości, a jasność ze stałej
-     * drabinki. Wyjątkiem jest stopień dwunasty: to sam atrament, bo
-     * gdyby wychodziły z drabinki jasności, sklep pisałby szarością, której nikt
-     * nie wybrał, a sam atrament nie dałby się nigdzie wskazać.
+     * Wyjątkiem jest stopień dwunasty: to sam atrament. Gdyby wychodził z drabinki
+     * jasności, sklep pisałby szarością, której nikt nie wybrał.
      *
      * @return array{steps:array<int,string>,on9:string,adjusted:bool,contrast:float}
      */
     private function neutralScale(string $ink, string $tint = 'pure'): array
     {
-        // Charakter szarości to osobne pytanie w panelu (prototyp: „Szarości" —
-        // czyste, ciepłe, chłodne), a nie pochodna atramentu. Sklep z czarnym
-        // tekstem może chcieć kremowych teł i odwrotnie.
+        // Charakter szarości (czyste, ciepłe, chłodne) to osobne ustawienie, a nie
+        // pochodna atramentu: sklep z czarnym tekstem może chcieć kremowych teł.
         [$hue, $sat] = self::TINT[$tint] ?? self::TINT['pure'];
         $steps = [];
 
@@ -383,13 +370,13 @@ final class PaletteGenerator
             $steps[$step] = Color::fromHsl($hue, $sat, $lightness / 100);
         }
 
-        // Atrament zbyt jasny na tekst schodzi do progu 7:1 wobec tła strony —
-        // ten sam sprawdzian, który skala barwna stosuje do swoich stopni tekstowych.
+        // Atrament zbyt jasny na tekst schodzi do progu 7:1 wobec tła strony. To ten
+        // sam sprawdzian, który skala barwna stosuje do swoich stopni tekstowych.
         $atrament = Color::shiftToContrast($ink, $steps[1], 7.0, -0.02);
 
-        // Tylko dwunasty. Dziesiąty i jedenasty to tekst drugoplanowy i kreski —
-            // liczone od atramentu robiły się niemal tak ciemne jak on i hierarchia
-            // tekstu znikała.
+        // Tylko dwunasty. Dziesiąty i jedenasty to tekst drugoplanowy i kreski:
+        // liczone od atramentu byłyby niemal tak ciemne jak on i hierarchia
+        // tekstu by znikała.
         $steps[12] = $atrament;
 
         return [
@@ -419,9 +406,9 @@ final class PaletteGenerator
     }
 
     /**
-     * Statusy zachowują kanoniczny odcień — zieleń zawsze znaczy sukces, więc nie
-     * przesuwamy ich w stronę marki. Każdy dostaje pięć ról: tło, obramowanie,
-     * wypełnienie, wypełnienie pod kursorem, tekst i parę do wypełnienia.
+     * Statusy zachowują kanoniczny odcień (zieleń zawsze znaczy sukces), więc nie
+     * przesuwamy ich w stronę marki. Każdy dostaje tło, obramowanie, wypełnienie,
+     * wypełnienie pod kursorem, tekst i napis na wypełnieniu.
      *
      * @return array<string,string>
      */
@@ -449,15 +436,14 @@ final class PaletteGenerator
     /**
      * Plakietki handlowe: nowość, bestseller, promocja, pakiet, wyprzedaż.
      *
-     * Osobna rodzina od statusów, bo odpowiada na inne pytanie. Status mówi
-     * o STANIE SYSTEMU — udało się, nie udało, uwaga. Plakietka wyróżnia TOWAR
-     * i nie niesie żadnego uniwersalnego znaczenia. Mieszanie ich kończy się
-     * tym, że „Wycofany" dostaje czerwień błędu, choć nic złego się nie stało.
+     * Osobna rodzina od statusów. Status mówi o STANIE SYSTEMU (udało się, nie udało,
+     * uwaga), plakietka wyróżnia TOWAR i nie niesie żadnego uniwersalnego znaczenia.
+     * Mieszanie ich kończy się tym, że „Wycofany" dostaje czerwień błędu, choć nic
+     * złego się nie stało.
      *
      * Wartości domyślne pochodzą z palety sklepu, nie z listy stałych barw:
      * nowość i pakiet z neutralnych, bestseller z marki, promocja i wyprzedaż
-     * z koloru promocji. Napis dobiera `resolveFillPair` — czerń albo biel,
-     * zależnie od tego, którą widać lepiej.
+     * z koloru promocji. Napis dobiera `paraPlakietki()`.
      *
      * @param array<string,string> $s
      *
@@ -486,18 +472,10 @@ final class PaletteGenerator
     }
 
     /**
-     * Pas strony z jednej decyzji: sześć wartości z gwarantowanym kontrastem.
-     *
-     * @param array<string,string> $settings
-     * @param array<string,string> $scales
-     *
-     * @return array<string,string>
-     */
-    /**
      * Tekst przygaszony na pasie: ten sam kolor, tylko bliżej tła jasnością.
      *
-     * Mieszanie z tłem w RGB ciągnie barwę w stronę tła — na żółtym pasie czerń
-     * wychodziła zgniłym złotem. Przesunięcie tonu zostawia barwę tekstu w spokoju.
+     * Mieszanie z tłem w RGB ciągnie barwę w stronę tła (na żółtym pasie czerń
+     * wychodzi zgniłym złotem). Przesunięcie tonu zostawia barwę tekstu w spokoju.
      */
     private function mutedOn(string $text, string $bg): string
     {
@@ -509,7 +487,7 @@ final class PaletteGenerator
     /**
      * Odnośnik na pasie: barwa marki tylko wtedy, gdy naprawdę działa.
      *
-     * Marka schodząca do progu kontrastu przestaje być marką — żółć przyciemniona
+     * Marka schodząca do progu kontrastu przestaje być marką: żółć przyciemniona
      * do 4,5:1 to brudne złoto. Kiedy nie przechodzi bez poprawek, odnośnik bierze
      * kolor tekstu; rozpoznaje się wtedy po pozycji i po stanie pod kursorem.
      */
@@ -523,11 +501,10 @@ final class PaletteGenerator
     /**
      * Role pasa wyprowadzone z dowolnego tła.
      *
-     * `bandRoles()` zna trzy gotowe odpowiedzi — jasny, ciemny, w barwie marki.
-     * Pasy topbara wybiera się dziś inaczej: właściciel sklepu wskazuje stopień
-     * skali, więc tłem bywa każdy z czterdziestu ośmiu odcieni palety i schematu
-     * nie ma jak zgadnąć. Reszta ról musi więc wynikać z policzonego kontrastu,
-     * a nie z założenia „to jest ciemne".
+     * `bandRoles()` zna trzy gotowe odpowiedzi: jasny, ciemny, w barwie marki.
+     * Tło topbara wskazuje się stopniem skali, więc bywa nim każdy odcień palety
+     * i schematu nie ma jak zgadnąć. Reszta ról musi wynikać z policzonego
+     * kontrastu, a nie z założenia „to jest ciemne".
      *
      * @param array<string,string> $scales
      *
@@ -539,17 +516,14 @@ final class PaletteGenerator
         $link = $this->linkOn($bg, $text, $scales);
 
         // Czy pas stoi w barwie marki. Nie pytamy o równość kodów, tylko o to, czy
-        // barwa marki daje się na nim jeszcze odróżnić — pas ustawiony na odcień
+        // barwa marki daje się na nim jeszcze odróżnić: pas ustawiony na odcień
         // obok marki ma się zachować tak samo jak pas ustawiony na nią dokładnie.
         $naMarce = Color::contrast($bg, $scales['primary-9']) < self::STATE_MIN_CONTRAST;
 
         // Kreska pasa zostaje w barwie pasa: przesuwamy ton tła, zamiast mieszać
-        // je z kolorem tekstu. Mieszanie dawało na jasnym pasie szarą obwódkę,
-        // widoczną bardziej niż to, co miała oddzielać.
-        //
-        // Jedno przesunięcie dla każdego pasa znaczy jedną grubość kreski w całym
-        // sklepie — na jasnym, ciemnym i na barwie marki tak samo. Stopień skali
-        // marki wypadał tu dwa razy mocniej niż kreski pozostałych pasów.
+        // je z kolorem tekstu. Mieszanie daje na jasnym pasie szarą obwódkę,
+        // widoczną bardziej niż to, co ma oddzielać. Jedno przesunięcie dla
+        // każdego pasa daje jedną grubość kreski w całym sklepie.
         $kreska = Color::shiftTone($bg, Color::tone($bg) > 0.5 ? -0.05 : 0.07);
 
         // Barwa marki przestaje być wyróżnieniem, kiedy pas sam ją nosi.
@@ -564,15 +538,14 @@ final class PaletteGenerator
             'border'     => $kreska,
             // Najechanie na akcje pasa.
             //
-            // ODSTĘPSTWO OD PROTOTYPU, świadome i na polecenie właściciela sklepu.
-            // Prototyp nagłówka (widoki/header/naglowek.html:216) ma tu welon:
-            // `color-mix(in srgb, var(--q-band-header-fg) 8%, transparent)`.
-            // Na jasnym pasie daje on jasną szarość, a ta ma być ciemna.
+            // Świadome odstępstwo od prototypu, na polecenie właściciela sklepu.
+            // Prototyp nagłówka (widoki/header/naglowek.html:216) ma tu welon
+            // `color-mix(in srgb, var(--q-band-header-fg) 8%, transparent)`,
+            // który na jasnym pasie daje jasną szarość, a ta ma być ciemna.
             //
-            // Stąd pełne odwrócenie: na jasnym pasie tło najechania bierze barwę
-            // pisma, a napis barwę tła. Na ciemnym pasie odwrócenie dałoby jasny
-            // prostokąt nie do odróżnienia od tła sąsiadów, więc wchodzi barwa
-            // marki — tak samo jak zachowuje się przycisk koszyka.
+            // Na jasnym pasie tło najechania bierze barwę pisma, a napis barwę tła.
+            // Na ciemnym pasie odwrócenie dałoby jasny prostokąt nie do odróżnienia
+            // od tła sąsiadów, więc wchodzi barwa marki, tak jak w przycisku koszyka.
             'hover'      => Color::tone($bg) > 0.5
                 ? $text
                 : $scales['primary-9'],
@@ -582,7 +555,7 @@ final class PaletteGenerator
                 : $scales['primary-on-9'],
             // Wypełnienie elementu, który ma się z pasa wyróżniać: przycisk
             // katalogu i koszyka. Gdy pas STOI JUŻ w barwie marki, ta sama barwa
-            // na przycisku w nim ginie — wtedy przycisk bierze kolor ciemny
+            // na przycisku w nim ginie, więc przycisk bierze kolor ciemny
             // sklepu, dokładnie tak jak na pasie ustawionym na „kolor marki".
             'solid'      => $wyroznienie,
             'on-solid'   => Color::resolveFillPair($wyroznienie)['on'],
@@ -591,17 +564,17 @@ final class PaletteGenerator
     }
 
     /**
-     * Powierzchnia pola formularza leżącego na pasie — wyszukiwarka w nagłówku.
+     * Powierzchnia pola formularza leżącego na pasie (wyszukiwarka w nagłówku).
      *
      * Pole na pasie nie może brać tła karty: ten sam pas bywa jasny, ciemny albo
      * w barwie marki, a po przewinięciu zmienia się w locie. Tło karty działałoby
-     * w jednym z trzech przypadków, a przy okazji ustawienie „Tło kart"
-     * przemalowywałoby wyszukiwarkę, z którą nie ma nic wspólnego.
+     * w jednym z trzech przypadków, a ustawienie „Tło kart" przemalowywałoby
+     * wyszukiwarkę, z którą nie ma nic wspólnego.
      *
-     * Reguła (makieta, zmierzone na `makiety/strona-produktu.html`): pole jest
-     * ZAWSZE kartką — stopniem papieru skali. Na pasie ciemnym i na barwie marki
-     * odcina je samo tło, na pasie jasnym odcina je kreska. Odcień ciemniejszy
-     * od jasnego nagłówka daje szarą bryłę, której w makiecie nie ma.
+     * Reguła (makieta `makiety/strona-produktu.html`): pole jest ZAWSZE kartką,
+     * czyli stopniem papieru skali. Na pasie ciemnym i na barwie marki odcina je
+     * samo tło, na pasie jasnym kreska. Odcień ciemniejszy od jasnego nagłówka
+     * daje szarą bryłę, której w makiecie nie ma.
      *
      * @param array<string,string> $scales
      *
@@ -617,7 +590,7 @@ final class PaletteGenerator
             'field-fg'          => $napis,
             'field-placeholder' => $this->mutedOn($napis, $tlo),
             // Zakres wyszukiwania stoi wewnątrz pola i ma w makiecie własne,
-            // ledwie odróżnialne tło — jeden krok od kartki, nie osobna bryła.
+            // ledwie odróżnialne tło: jeden krok od kartki, nie osobna bryła.
             'field-sunken'      => Color::shiftTone($tlo, -0.02),
             // Kreska pola to kreska pasa: na jasnym nagłówku jest jedynym, co
             // oddziela białe pole od białego tła, więc musi się liczyć od tego
@@ -630,10 +603,9 @@ final class PaletteGenerator
      * Role toasta: tło, napis i akcent każdego rodzaju komunikatu.
      *
      * Akcenty liczone OD TŁA TOASTA, a nie brane wprost ze skal stanów. Skale są
-     * dobrane pod jasne tło strony i na ciemnym pudełku część z nich znika —
-     * zmierzone na palecie sklepu: „informacja" ma na ciemnym tle kontrast 1,15,
-     * a „ostrzeżenie" na jasnym 2,61. Dociągamy je w stronę czytelności, tak samo
-     * jak robią to stany przycisków.
+     * dobrane pod jasne tło strony i na ciemnym pudełku część z nich znika
+     * (np. „informacja" ma na ciemnym tle kontrast 1,15, „ostrzeżenie" na jasnym
+     * 2,61). Dociągamy je w stronę czytelności, tak samo jak stany przycisków.
      *
      * @param array<string,string> $scales
      *
@@ -686,6 +658,15 @@ final class PaletteGenerator
         return $kolor;
     }
 
+    /**
+     * Role każdego pasa strony z jednej decyzji (jasny, ciemny, w barwie marki),
+     * z gwarantowanym kontrastem.
+     *
+     * @param array<string,string> $settings
+     * @param array<string,string> $scales
+     *
+     * @return array<string,string>
+     */
     private function bandRoles(array $settings, array $scales, string $dark): array
     {
         $out = [];
@@ -719,8 +700,7 @@ final class PaletteGenerator
             'fg'         => $s['neutral-12'],
             'fg-muted'   => $s['neutral-9'],
             // Odnośnik bierze barwę marki tylko wtedy, gdy ta trzyma próg bez
-            // przyciemniania. Przyciemniona żółć to brudne złoto — odrzuciliśmy je
-            // przy ustalaniu palety i nie wraca tylnymi drzwiami.
+            // przyciemniania. Przyciemniona żółć to brudne złoto.
             'link'       => $this->linkOn($s['neutral-1'], $s['neutral-12'], $s),
             'link-hover' => Color::shiftTone($this->linkOn($s['neutral-1'], $s['neutral-12'], $s), -0.12),
             // Pas jasny leży na jasnej stronie, więc granicę niesie wyłącznie ta linia.
@@ -739,8 +719,8 @@ final class PaletteGenerator
 
     /**
      * Pas ciemny: tło wprost z koloru administratora, reszta wyliczona wobec niego.
-     * Odnośnik to kolor główny rozjaśniony dokładnie tyle, ile trzeba do czytelności —
-     * marka zostaje rozpoznawalna, zamiast zamieniać się w białą etykietę.
+     * Odnośnik bierze barwę marki, gdy ta trzyma próg kontrastu, inaczej kolor
+     * tekstu (`linkOn()`).
      *
      * @param array<string,string> $s
      *
@@ -786,8 +766,8 @@ final class PaletteGenerator
             'hover'      => Color::mix($bg, $text, 0.12),
             // Pas JEST już w barwie marki, więc wypełnienie w tej samej barwie
             // zniknęłoby w tle, a jej ciemniejszy stopień wygląda jak barwa marki
-            // przybrudzona. Przycisk bierze wtedy po prostu kolor ciemny sklepu —
-            // ten sam, na którym stoi pas informacyjny i stopka.
+            // przybrudzona. Przycisk bierze wtedy kolor ciemny sklepu, ten sam,
+            // na którym stoi pas informacyjny i stopka.
             'solid'      => $dark,
             'on-solid'   => Color::resolveFillPair($dark)['on'],
         ] + $this->fieldOnBand($bg, $s, $s['primary-10'])
@@ -806,11 +786,9 @@ final class PaletteGenerator
      * @param array<string,string> $s
      * @param int $page stopień skali neutralnej wybrany na tło strony
      * @param int $card stopień skali neutralnej wybrany na powierzchnię karty
+     * @param array<string,mixed> $input wejście panelu; stąd stopnie kresek
      *
      * @return array<string,string>
-     */
-    /**
-     * @param array<string,mixed> $input wejście panelu; stąd stopnie kresek
      */
     private function semanticRoles(array $s, int $page = 1, int $card = 3, array $input = []): array
     {
@@ -819,14 +797,13 @@ final class PaletteGenerator
 
         // Wgłębienie, najechanie i wciśnięcie liczą się OD KARTY, bo to na karcie
         // leżą: szare pudełko pod zdjęciem, pas tabeli, wiersz pod kursorem.
-        // Na stałych stopniach 2/4/5 przestawały być czymkolwiek względem karty,
-        // gdy sklep przesunął ją ze stopnia trzeciego — „wgłębienie" wychodziło
-        // jaśniejsze od powierzchni, w którą miało być wpuszczone.
+        // Stałe stopnie przestają działać, gdy sklep przesunie kartę ze stopnia
+        // trzeciego: „wgłębienie" wychodzi jaśniejsze od powierzchni, w którą
+        // ma być wpuszczone.
         //
         // Kierunek bierze się z karty: od jasnej odchodzimy w dół, od ciemnej
-        // w górę. Odstępy dobrane tak, żeby od białej karty dały dokładnie te
-        // barwy, które wychodziły ze stopni 2, 4 i 5 — sklep przy ustawieniach
-        // domyślnych nie zobaczy żadnej zmiany.
+        // w górę. Odstępy dobrane tak, żeby od białej karty dały dokładnie barwy
+        // stopni 2, 4 i 5.
         $wDol = Color::tone($tloKarty) > 0.5 ? -1 : 1;
 
         $roles = [
@@ -841,25 +818,23 @@ final class PaletteGenerator
             'text-muted'      => $s['neutral-11'],
             'text-disabled'   => $s['neutral-9'],
 
-            // Kreska dzieli, a nie rysuje — stąd stopnie lżejsze, niż podpowiadałby
+            // Kreska dzieli, a nie rysuje, stąd stopnie lżejsze, niż podpowiadałby
             // kontrakt skali. Twardsza linia jest w `border-hover` i w `border-field`,
             // gdzie ma coś zasygnalizować, a nie tylko oddzielić.
             'border-subtle'   => $s['neutral-5'],
             'border'          => $s['neutral-6'],
             'border-hover'    => $s['neutral-7'],
 
-            // Kreski ustawiane przez sklep. Trzy, bo dotyczą trzech różnych
-            // rzeczy: bloku, kontrolki i siatki tabeli. Bez tego sklep, który
-            // chciał mocniejszej siatki w tabelach, musiał pociemnić wszystko.
+            // Kreski ustawiane przez sklep, osobno dla bloku, kontrolki i siatki tabeli.
             'border-card'     => $s['neutral-' . ($input['borderCard'] ?? 5)],
             'border-input'    => $s['neutral-' . ($input['borderField'] ?? 6)],
             'border-table'    => $s['neutral-' . ($input['borderTable'] ?? 5)],
             // Obramowanie pola bywa jedynym sygnałem, że pole tam jest, więc WCAG 1.4.11
             // wymaga dla niego 3:1 wobec tła. Stopień 7 kontraktu tyle nie daje.
             //
-            // Krok schodzenia jest drobny (0,01 zamiast 0,02): pętla zatrzymuje się
-            // przy pierwszym przekroczeniu progu, więc grubszy krok przeskakiwał go
-            // z zapasem i kreska wychodziła ciemniejsza, niż wymaga tego reguła.
+            // Krok schodzenia jest drobny (0,01): pętla zatrzymuje się przy pierwszym
+            // przekroczeniu progu, więc grubszy krok przeskakiwałby go z zapasem
+            // i kreska wychodziłaby ciemniejsza, niż wymaga reguła.
             'border-field'    => Color::shiftToContrast($s['neutral-7'], $tloStrony, 3.0, -0.01),
             'focus-ring'      => $s['primary-7'],
 
@@ -868,14 +843,11 @@ final class PaletteGenerator
             // skali: z jasnych stopni w mocne.
             //
             // Kursor dostaje stopień słabszy od ogniska, a nie tę samą barwę.
-            // Grubość też się różni (kreska kontra pierścień), ale sama grubość
-            // nie wystarcza: na liście kilku pól obok siebie różnicę jednego
-            // piksela widać dopiero po porównaniu dwóch pól, a różnicę barwy
-            // od razu.
+            // Różnicę grubości (kreska kontra pierścień) na liście kilku pól widać
+            // dopiero po porównaniu, a różnicę barwy od razu.
             //
-            // Barwa marki znaczy tu barwę marki: ten sam stopień, który wypełnia
-            // przyciski. Pole podświetlone na kolor przycisku i przycisk obok
-            // niego mają wyglądać na tę samą barwę.
+            // Barwa marki to ten sam stopień, który wypełnia przyciski: pole
+            // podświetlone i przycisk obok mają wyglądać na tę samą barwę.
             'field-hover'     => $input['fieldAccent'] === 'brand'
                 ? $s['primary-9']
                 : $s['neutral-10'],
@@ -883,13 +855,11 @@ final class PaletteGenerator
                 ? $s['primary-9']
                 : $s['neutral-12'],
 
-            // Gwiazdka oceny to BARWA MARKI, nie kolor ostrzeżenia. Bursztyn
-            // ostrzeżenia był pożyczką pod konwencję handlową, ale jest w panelu
-            // edytowalny — sklep, który przemalował ostrzeżenie na czerwień,
-            // dostawał czerwone gwiazdki, choć ocena nie jest ostrzeżeniem.
+            // Gwiazdka oceny to BARWA MARKI, nie kolor ostrzeżenia: ostrzeżenie jest
+            // w panelu edytowalne, a ocena nie jest ostrzeżeniem.
             //
             // Barwa marki, ale dociągnięta do 3,0 wobec tła karty. Gwiazdka jest
-            // mała i ma cienkie ramiona — jasna marka rozlewa się na niej w plamę,
+            // mała i ma cienkie ramiona: jasna marka rozlewa się na niej w plamę,
             // z której nie widać, ile ramion jest wypełnionych. Marka trzymająca
             // próg zostaje nietknięta; dociąganie dotyka tylko jasnych.
             'star'            => $this->zeSkaliMarki($s, $tloKarty, 3.0),
@@ -899,8 +869,8 @@ final class PaletteGenerator
             'surface-primary'      => $s['primary-3'],
             'surface-primary-active' => $s['primary-5'],
             // Barwa marki jako tekst tylko wtedy, gdy trzyma próg bez przesuwania.
-            // Zjeżdżanie w dół skali robi z żółci brudne złoto — wyróżnienie niesie
-            // wtedy grubsze pismo, nie barwa.
+            // Zjeżdżanie w dół skali robi z żółci brudne złoto, więc wyróżnienie
+            // niesie wtedy grubsze pismo, nie barwa.
             'text-primary'         => $this->linkOn($s['neutral-1'], $s['neutral-12'], $s),
 
             'fill-secondary'       => $s['secondary-9'],
@@ -912,15 +882,14 @@ final class PaletteGenerator
             'on-fill-promo'   => $s['promo-on-9'],
 
             // Odnośnik nie ma własnej barwy: bierze kolor tekstu, a rozpoznaje się po
-            // pogrubieniu i kresce w barwie marki. Barwa w gęstym akapicie robi cętki,
-            // a nasza żółć na kreskę i tak by się nie nadała sama — patrz docs/18.
-            // Pod kursorem odnośnik w treści dostaje tło marki; napis na nim bierze
-            // wtedy `on-fill-primary`, więc osobnej roli na to nie ma.
+            // pogrubieniu i kresce w barwie marki. Barwa w gęstym akapicie robi cętki
+            // (patrz docs/18). Pod kursorem odnośnik w treści dostaje tło marki; napis
+            // na nim bierze wtedy `on-fill-primary`, więc osobnej roli na to nie ma.
             'link'            => $s['neutral-12'],
             'link-hover'      => $s['neutral-11'],
         ];
 
-        // Stany wypełnień liczone osobno dla każdego koloru — patrz `interactiveStates()`.
+        // Stany wypełnień liczone osobno dla każdego koloru, patrz `interactiveStates()`.
         foreach (['primary', 'secondary', 'promo'] as $rola) {
             $roles += $this->interactiveStates('fill-' . $rola, $roles['fill-' . $rola]);
         }
@@ -943,8 +912,8 @@ final class PaletteGenerator
      *
      * Idziemy OD barwy marki w stronę przeciwną do podłoża i zatrzymujemy się
      * DOKŁADNIE na progu, zamiast skakać do najbliższego stopnia skali. Stopnie
-     * są zgrubne: dla żółtej marki pierwszy, który trzyma 3,0, dawał 6,02 —
-     * z bursztynu robił się brąz. Marka trzymająca próg zostaje nietknięta.
+     * są zgrubne: dla żółtej marki pierwszy, który trzyma 3,0, daje 6,02,
+     * czyli z bursztynu robi się brąz. Marka trzymająca próg zostaje nietknięta.
      *
      * @param array<string,string> $s
      */
@@ -964,14 +933,13 @@ final class PaletteGenerator
      *
      * Różni się od `resolveFillPair()` jednym: napis wybiera JASNOŚĆ tła, a nie
      * większy kontrast. Na średniej czerwieni rabatu biel daje 3,60, a czerń 4,74,
-     * więc reguła „większy kontrast wygrywa" stawiała czarny napis na czerwonym
-     * prostokącie — formalnie poprawny, w czytaniu brudny i wbrew temu, jak
-     * plakietka rabatu wygląda w każdym sklepie.
+     * więc reguła „większy kontrast wygrywa" postawiłaby czarny napis na czerwonym
+     * prostokącie: formalnie poprawny, w czytaniu brudny.
      *
      * Przy ciemnym tle bierzemy biel i DOCIĄGAMY TŁO, żeby próg padł; przy jasnym
      * zostaje czerń. Granica jest na jasności, bo to ona decyduje, czy prostokąt
-     * czyta się jako kolorowy (biały napis), czy jako jasny (czarny napis) —
-     * żółty bestseller ma zostać żółty, a nie zbrązowieć pod biel.
+     * czyta się jako kolorowy (biały napis), czy jako jasny (czarny napis).
+     * Żółty bestseller ma zostać żółty, a nie zbrązowieć pod biel.
      *
      * @return array{fill:string,on:string}
      */
@@ -1001,16 +969,13 @@ final class PaletteGenerator
     /**
      * Najechanie i wciśnięcie dla jednego wypełnienia, wraz z kolorem napisu.
      *
-     * Trzy decyzje, każda była wcześniej podjęta źle:
-     *
      * 1. Stan liczony jest OD KOLORU WYPEŁNIENIA, a nie brany jako kolejny stopień
-     *    skali. Stopień skali ma inne zadanie — tło, obramowanie, tekst — i wypadał
-     *    o całą jedną trzecią drogi na dno, czyli o wiele za daleko.
+     *    skali. Stopień skali ma inne zadanie (tło, obramowanie, tekst) i wypada
+     *    o wiele za daleko.
      * 2. Kierunek zależy od jasności koloru: jasne przyciemniamy, ciemne rozjaśniamy.
      *    Granatowy przycisk przyciemniony wchodzi w czerń i nie widać, że zareagował.
      * 3. Kolor napisu liczony jest dla KAŻDEGO stanu osobno. Napis wzięty raz, od
-     *    koloru spoczynku, potrafił spaść poniżej progu czytelności na stanie
-     *    wciśniętym — i spadał, mierzalnie.
+     *    koloru spoczynku, potrafi spaść poniżej progu czytelności na stanie wciśniętym.
      *
      * @return array<string,string>
      */
@@ -1067,7 +1032,7 @@ final class PaletteGenerator
      * Dociąga kolor stanu, jeśli utknął w pułapce środka skali.
      *
      * Barwa o jasności około 0.6 jest jednocześnie za ciemna na czarny napis
-     * i za jasna na biały — żaden nie osiąga progu. Spoczynek jest przed tym
+     * i za jasna na biały: żaden nie osiąga progu. Spoczynek jest przed tym
      * chroniony, bo `resolveFillPair()` poprawia kolor administratora. Stany
      * liczone od niego mogą jednak w tę pułapkę wejść z powrotem.
      *

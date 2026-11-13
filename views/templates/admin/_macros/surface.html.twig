@@ -28,8 +28,8 @@
         <div class="qc-wyglad-pole">
             <span class="qc-label">{{ 'Background'|trans }}</span>
             {# Wartość z zapisu, nie wpisana tutaj: próbnik z wartością na sztywno
-               pokazywał zawsze pierwszy odcień palety i przy każdym zapisie
-               ekranu nadpisywał nim to, co sklep wybrał wcześniej. #}
+               pokazuje zawsze pierwszy odcień palety i przy każdym zapisie
+               ekranu nadpisuje nim wcześniejszy wybór. #}
             {{ fields.colorpicker('wyglad[' ~ nazwa ~ '][bg]', wyglad.bg|default(''), palette, {
                 'neutral': 'Greys'|trans, 'primary': 'Brand'|trans,
                 'secondary': 'Third colour'|trans, 'promo': 'Promotion'|trans

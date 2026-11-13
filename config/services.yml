@@ -5,17 +5,15 @@ services:
     # Kontroler bez tych trzech rzeczy nie dostaje swojego lokalizatora usług
     # i `render()` zgłasza, że nie ma Twiga.
     #
-    # Wcześniej robił to za nas PrestaShop, ale w sposób, na którym nie da się
-    # polegać: ModuleControllerRegisterPass szuka kontrolerów **wyrażeniem
-    # regularnym po treści pliku** — `class X extends FrameworkBundleAdminController`.
-    # Nasza wspólna klasa bazowa sprawiła, że w pliku stoi teraz
-    # `extends QuinceController`, więc wzorzec przestał pasować i kontroler
-    # zniknął z listy. Deklarujemy to więc sami i nie zgadujemy, co rdzeń wykryje.
+    # Nie zostawiać tego rdzeniowi: ModuleControllerRegisterPass szuka kontrolerów
+    # wyrażeniem regularnym po treści pliku (`class X extends
+    # FrameworkBundleAdminController`). Kontroler dziedziczący po
+    # `QuinceController` do wzorca nie pasuje i wypada z listy.
     autoconfigure: true
     autowire: true
     tags: ['controller.service_arguments']
 
-  # Kontrolery muszą być publiczne — Symfony pobiera je z kontenera po nazwie klasy.
+  # Kontrolery muszą być publiczne: Symfony pobiera je z kontenera po nazwie klasy.
   Quince\Engine\Controller\Admin\AppearanceController:
     class: Quince\Engine\Controller\Admin\AppearanceController
     arguments:
@@ -62,7 +60,7 @@ services:
       - '@Quince\Engine\Settings\TopbarSettings'
       - '@Quince\Engine\Settings\AppearanceSettings'
 
-  # Wybór wariantu kasy: krokowa czy jednostronicowa. Bez zależności —
+  # Wybór wariantu kasy: krokowa czy jednostronicowa. Bez zależności,
   # opakowuje tylko istniejący przełącznik rdzenia.
   Quince\Engine\Settings\CheckoutSettings:
     class: Quince\Engine\Settings\CheckoutSettings
@@ -128,7 +126,7 @@ services:
   Quince\Engine\Settings\NavigationSettings:
     class: Quince\Engine\Settings\NavigationSettings
 
-  # Przegląd naszych modułów. Bez zależności — stan czyta wprost z PrestaShopa.
+  # Przegląd naszych modułów. Bez zależności: stan czyta wprost z PrestaShopa.
   Quince\Engine\Controller\Admin\ModulesController:
     class: Quince\Engine\Controller\Admin\ModulesController
 
@@ -145,7 +143,7 @@ services:
     arguments:
       - '@Quince\Engine\Ui\IconPackManager'
 
-  # Treści i widoczność topbara. Bez zależności — czyta wprost z konfiguracji.
+  # Treści i widoczność topbara. Bez zależności: czyta wprost z konfiguracji.
   Quince\Engine\Settings\TopbarSettings:
     class: Quince\Engine\Settings\TopbarSettings
 

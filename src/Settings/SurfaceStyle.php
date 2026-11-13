@@ -15,15 +15,13 @@ namespace Quince\Engine\Settings;
  * Styl bloku: tło, ramka, cień i zaokrąglenie jednej powierzchni.
  *
  * Ten sam zestaw czterech ustawień opisuje kartę na stronie produktu, belkę
- * narzędzi na listingu i panel filtrów. Dlatego liczy je jedna klasa, a nie
- * każdy silnik po swojemu: inaczej „miękki cień" znaczyłby na dwóch ekranach
- * dwie różne rzeczy, a kreska liczona od tła rozjechałaby się między nimi.
+ * narzędzi na listingu i panel filtrów, więc liczy je jedna klasa, żeby
+ * wartości znaczyły to samo na każdym ekranie.
  *
- * Powierzchnie i przedrostek tokenów podaje silnik, bo to jedyne, czym te dwa
- * ekrany się tu różnią.
+ * Powierzchnie i przedrostek tokenów podaje wywołujący.
  *
  * Pusta wartość znaczy „jak w ustawieniach globalnych" i nie wypisujemy dla
- * niej tokenu — motyw ma wtedy zostać przy swojej wartości domyślnej.
+ * niej tokenu: motyw zostaje wtedy przy swojej wartości domyślnej.
  * Zapisanie dziedziczenia jako konkretnej barwy zamroziłoby blok na tym, co
  * akurat było globalnie w chwili zapisu.
  */
@@ -121,10 +119,9 @@ final class SurfaceStyle
         foreach ($powierzchnie as $nazwa => $wyglad) {
             $klucz = $przedrostek . $nazwa . '-';
 
-            // Kreski bloku liczone od JEGO tła, a nie od globalnego. Sklep ustawia
-            // w Wyglądzie różnicę stopni, a nie odcień: blok z ciemniejszym tłem
-            // dostaje wtedy proporcjonalnie ciemniejszą kreskę i nie zdarza się,
-            // żeby kreska wypadła dokładnie w kolorze tła i zniknęła.
+            // Kreski bloku liczone od JEGO tła, a nie od globalnego. Ustawienie
+            // w Wyglądzie to różnica stopni, a nie odcień, więc kreska nigdy nie
+            // wypada w kolorze tła bloku.
             $stopien = self::stopienZeSkali((string) $wyglad['bg']);
 
             if ($stopien !== null) {
@@ -168,10 +165,8 @@ final class SurfaceStyle
                     : '0';
             }
 
-            // Blok, który dostał widoczną skórę, dostaje też odstęp od krawędzi.
-            // Bez tego pierwsze włączenie ramki albo tła w panelu przykleja treść
-            // do kreski, a sklep nie ma osobnego pola „wcięcie" i nie ma tego
-            // jak naprawić.
+            // Blok z tłem albo ramką dostaje też odstęp od krawędzi, bo bez
+            // niego treść przykleja się do kreski. Osobnego pola na wcięcie nie ma.
             if ($wyglad['bg'] !== '' || $wyglad['border'] === 'on') {
                 $tokeny[$klucz . 'pad'] = 'var(--q-space-md)';
             }

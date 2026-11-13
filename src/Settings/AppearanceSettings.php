@@ -18,8 +18,8 @@ use Quince\Engine\Appearance\PaletteGenerator;
 /**
  * Ustawienia globalne wyglądu.
  *
- * Przechowuje WYŁĄCZNIE dwanaście decyzji administratora oraz ewentualne ręczne
- * nadpisania wyliczonych ról. Sama paleta (30 kolorów) nie jest zapisywana —
+ * Przechowuje WYŁĄCZNIE decyzje administratora oraz ewentualne ręczne
+ * nadpisania wyliczonych ról. Sama paleta (30 kolorów) nie jest zapisywana,
  * powstaje z tych wartości przy każdym odczycie. Dzięki temu zmiana reguły
  * wyliczania nie wymaga migracji danych.
  */
@@ -28,7 +28,7 @@ final class AppearanceSettings
     private const PREFIX = 'QUINCE_';
 
     /**
-     * Dziewiętnaście decyzji administratora — pełna lista, patrz docs/07-co-ustawiamy.md.
+     * Decyzje administratora (pełna lista: docs/07-co-ustawiamy.md).
      * Wszystko poza nimi jest wyliczane albo stałe w motywie.
      *
      * @var array<string,string> klucz => wartość domyślna
@@ -39,9 +39,9 @@ final class AppearanceSettings
         'SECONDARY'       => '#5678bd',   // przycisk drugorzędny, ikona ulubionych
         'DARK'            => '#262a33',   // pasy ustawione na „ciemny"
         'PROMO'           => '#1f8a78',   // plakietka rabatu, cena po obniżce
-        'NEUTRAL_TINT'    => 'pure',      // pure | warm | cool — charakter szarości
+        'NEUTRAL_TINT'    => 'pure',      // pure | warm | cool: charakter szarości
 
-        // Pasy strony (6–9) — jedna decyzja na pas, sześć kolorów wylicza silnik
+        // Pasy strony (6–9): jedna decyzja na pas, sześć kolorów wylicza silnik
         'BAND_TOPBAR'     => 'dark',      // light | dark | brand
         'BAND_HEADER'     => 'light',
         'BAND_NAV'        => 'dark',
@@ -65,19 +65,18 @@ final class AppearanceSettings
         'SURFACE_PAGE'    => '1',         // tło strony
         'SURFACE_CARD'    => '3',         // karty produktów, panele, formularze
 
-        // Obramowania: też numer stopnia skali, z tego samego powodu co powierzchnie.
-        // Kreska ma iść za paletą, a nie stać obok niej wpisana kodem barwy.
+        // Obramowania: też numer stopnia skali, żeby kreska szła za paletą.
         'BORDER_CARD'     => '5',         // kreska bloków i linie dzielące
         'BORDER_FIELD'    => '6',         // pola formularzy, listy rozwijane
         'BORDER_TABLE'    => '5',         // siatka tabel, także tych z opisu
-        'FIELD_ACCENT'    => 'ink',       // ink | brand — czym pole odpowiada na kursor i ognisko
+        'FIELD_ACCENT'    => 'ink',       // ink | brand: czym pole odpowiada na kursor i ognisko
 
         'RADIUS'          => 'round',     // sharp | round
         'RADIUS_BASE'     => '6',         // px; ile wynosi zaokrąglenie przy 'round'
-        'BLOCK_BORDERS'   => 'on',        // on | off — kreska wokół karty, akordeonu, zestawów
+        'BLOCK_BORDERS'   => 'on',        // on | off: kreska wokół karty, akordeonu, zestawów
         'SECTION_SPACING' => 'normal',    // tight | normal | loose
         'SHADOW'          => 'subtle',    // flat | subtle | strong
-        'GRID_COLUMNS'    => '4',         // 3 | 4 | 5 — kolumny listingu na desktopie
+        'GRID_COLUMNS'    => '4',         // 3 | 4 | 5: kolumny listingu na desktopie
         'CONTAINER_WIDTH' => '1200',      // px
     ];
 
@@ -93,10 +92,9 @@ final class AppearanceSettings
     /**
      * Czy właściciel sklepu przygotował już kolory.
      *
-     * Silnik umie policzyć paletę zawsze, bo schemat ma wartości domyślne — ale
-     * dopóki nikt nie zapisał ustawień podstawowych, ta paleta jest zgadywanką
-     * silnika, a nie decyzją sklepu. Ekrany, które każą wybierać Z palety, mają
-     * o tym wiedzieć i nie udawać, że jest z czego wybierać.
+     * Silnik umie policzyć paletę zawsze, bo schemat ma wartości domyślne. Dopóki
+     * nikt nie zapisał ustawień podstawowych, ta paleta nie jest decyzją sklepu,
+     * więc ekrany każące wybierać Z palety sprawdzają tę metodę.
      */
     public function isPrepared(): bool
     {
@@ -108,8 +106,8 @@ final class AppearanceSettings
     {
         $out = [];
         // Wartość domyślna wchodzi wyłącznie wtedy, gdy klucza nie ma w konfiguracji.
-        // Pusty napis jest wyborem administratora — tak zapisuje się „bez ikony" —
-        // i podmiana go na wartość domyślną przywracałaby skasowaną ikonę przy odczycie.
+        // Pusty napis jest wyborem administratora (tak zapisuje się „bez ikony"),
+        // a podmiana go na wartość domyślną przywracałaby skasowaną ikonę przy odczycie.
         foreach (self::SCHEMA as $key => $default) {
             $value = Configuration::get(self::PREFIX . $key);
             $out[$key] = ($value === false || $value === null) ? $default : (string) $value;
@@ -137,7 +135,7 @@ final class AppearanceSettings
     }
 
     /**
-     * Wyłącznie wyliczone wartości, bez nadpisań — potrzebne, żeby panel mógł pokazać
+     * Wyłącznie wyliczone wartości, bez nadpisań. Potrzebne, żeby panel mógł pokazać
      * „przywróć wyliczony" i żeby dało się porównać, co administrator zmienił.
      *
      * @return array<string,string>
@@ -148,7 +146,7 @@ final class AppearanceSettings
     }
 
     /**
-     * Paleta dla wartości jeszcze niezapisanych — używana przez podgląd w panelu.
+     * Paleta dla wartości jeszcze niezapisanych, dla podglądu w panelu.
      * Braki uzupełniane są bieżącymi ustawieniami, więc wystarczy przesłać zmienione pola.
      *
      * @param array<string,mixed> $values
@@ -164,7 +162,7 @@ final class AppearanceSettings
 
     /**
      * Komplet tokenów do wypisania w sklepie: role kolorystyczne z nadpisaniami
-     * oraz wartości bazowe. Nazwy bez prefiksu — dokłada go warstwa wypisująca.
+     * oraz wartości bazowe. Nazwy bez prefiksu, dokłada go warstwa wypisująca.
      *
      * @return array<string,string>
      */
@@ -174,7 +172,7 @@ final class AppearanceSettings
     }
 
     /**
-     * Co silnik skorygował i co budzi wątpliwość — dla bieżących ustawień.
+     * Co silnik skorygował i co budzi wątpliwość (dla bieżących ustawień).
      *
      * @return array{adjustments:array<string,array{from:string,to:string,contrast:float}>,warnings:string[]}
      */
@@ -184,7 +182,7 @@ final class AppearanceSettings
     }
 
     /**
-     * To samo dla wartości jeszcze niezapisanych — używane przez podgląd w panelu.
+     * To samo dla wartości jeszcze niezapisanych, dla podglądu w panelu.
      *
      * @param array<string,mixed> $values
      *
@@ -216,7 +214,7 @@ final class AppearanceSettings
     }
 
     /**
-     * Zapisuje wyłącznie klucze obecne w schemacie — nieznane pola formularza są ignorowane.
+     * Zapisuje wyłącznie klucze obecne w schemacie. Nieznane pola formularza są ignorowane.
      *
      * @param array<string,mixed> $values
      */
@@ -236,8 +234,7 @@ final class AppearanceSettings
 
     /**
      * Przyjmuje JSON z panelu. Odrzuca role spoza wyliczonej palety oraz wartości,
-     * które są identyczne z wyliczonymi — nie ma sensu przypinać czegoś,
-     * co i tak by wyszło.
+     * które są identyczne z wyliczonymi.
      */
     private function saveOverrides(string $json): void
     {

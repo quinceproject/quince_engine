@@ -1,10 +1,8 @@
 {# Dane organizacji dla Schema.org, domyślne meta i llms.txt.
 
    PS9 już wypisuje podstawowy Organization JSON-LD na każdej stronie
-   (nazwa, adres, logo z motywu) — ten ekran nie dubluje tego wpisu, tylko
-   go wzbogaca. Puste pole = zachowanie rdzenia.
-
-   Wyłącznie klasy z paczki silnika. #}
+   (nazwa, adres, logo z motywu). Ten ekran nie dubluje tego wpisu, tylko
+   go wzbogaca. Puste pole = zachowanie rdzenia. #}
 {% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
 {% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
 {% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
@@ -79,7 +77,7 @@
                     <label class="qc-label" for="q-org-contact-type">{{ 'Contact type'|trans }}</label>
                     <div class="qc-select-wrap">
                         <select id="q-org-contact-type" name="org_contact_type" class="qc-field-base qc-select qc-focusable">
-                            {# Słownictwo Schema.org (ContactPoint.contactType), nie fraza UI — bez |trans,
+                            {# Słownictwo Schema.org (ContactPoint.contactType), nie fraza UI: bez |trans,
                                tak samo jak wartości `default_robots` niżej. #}
                             {% for value in ['customer service', 'sales', 'technical support', 'billing support', 'reservations'] %}
                                 <option value="{{ value }}" {{ value == settings.ORG_CONTACT_TYPE ? 'selected' }}>

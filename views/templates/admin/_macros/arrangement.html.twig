@@ -1,17 +1,15 @@
 {# Domena tłumaczeń musi stać TUTAJ. Plik z makrami nie dziedziczy jej po
-   szablonie, który go importuje, więc bez tego `|trans` sięgał do domeny
-   domyślnej, nie znajdował nic i wypisywał napisy źródłowe. Objawiało się to
-   polskimi nazwami stref i angielskimi nazwami elementów pod nimi. #}
+   szablonie, który go importuje, więc bez tego `|trans` sięga do domeny
+   domyślnej, nie znajduje nic i wypisuje napisy źródłowe. #}
 {% trans_default_domain 'Modules.Quinceengine.Admin' %}
 
 {# Układ elementów po strefach: wspólne dla każdego ekranu, który rozstawia
    elementy przeciąganiem. Strona produktu i listing mają tę samą mechanikę,
-   więc mają też ten sam kod — dwie kopie rozjechałyby się przy pierwszej
-   poprawce, a poprawiono by tylko jedną.
+   więc mają też ten sam kod.
 
-     obszar  — miejsce na wiersze wewnątrz karty,
-     wiersz  — pojemnik na jedno albo kilka miejsc,
-     miejsce — element silnika albo hook modułu. #}
+     obszar:  miejsce na wiersze wewnątrz karty,
+     wiersz:  pojemnik na jedno albo kilka miejsc,
+     miejsce: element silnika albo hook modułu. #}
 
 
 {# `jedenWWierszu` znaczy, ze w tej strefie miejsce zajmuje caly wiersz i nie da
@@ -23,7 +21,7 @@
     {# Wiersz jest pojemnikiem na jedno albo kilka miejsc. Przy kilku stoją jedno
        pod drugim, bo kolumna „Opis" i panel zakupu mają około 370 px.
 
-       Chwyt ma każdy wiersz — kolejność da się zmienić zawsze. Kłódka stoi tam,
+       Chwyt ma każdy wiersz: kolejność da się zmienić zawsze. Kłódka stoi tam,
        gdzie przy hooku byłby krzyżyk, i mówi jedno: tego elementu nie da się
        usunąć. Element silnika należy do motywu, więc się go wyłącza, a nie kasuje. #}
     <div class="qc-wiersz" x-sort:item="'{{ miejsca|first.id }}'">
@@ -42,8 +40,7 @@
                         <span class="qc-chwyt" x-sort:handle>&#8942;&#8942;</span>
                     {% endif %}
                     {# Nazwa hooka zostaje po angielsku: to identyfikator, a nie napis.
-                       Etykieta elementu idzie przez tłumacza — bez tego ekran miał
-                       polskie nazwy stref i angielskie nazwy elementów pod nimi. #}
+                       Etykieta elementu idzie przez tłumacza. #}
                     <span class="qc-nazwa{{ el.hook ? ' qc-nazwa--hook' }}">{{ el.hook ? el.label : el.label|trans }}
                         {% if el.available is defined and not el.available %}
                             <small>{{ 'waits for the module'|trans }} {{ el.requires }}</small>
@@ -71,9 +68,8 @@
         </div>
 
         {# Szczegóły siedzą WEWNĄTRZ wiersza, a nie obok niego. Jako rodzeństwo
-           trafiały do listy sortowalnej i Alpine traktował je jak kolejne wiersze
-           — po pierwszym przestawieniu opcje odklejały się od swojego elementu
-           i przy „Dostępności" wyświetlały się ustawienia cen. #}
+           trafiają do listy sortowalnej i Alpine traktuje je jak kolejne wiersze:
+           po pierwszym przestawieniu opcje odklejają się od swojego elementu. #}
         {% for el in miejsca %}
             {% if el.options|length %}
                 <div class="qc-rozwiniete" hidden>
@@ -105,8 +101,7 @@
 {% endmacro %}
 
 {# `bezHookow` gasi pole dodawania hooka. Tak jest w siatce zajawek: hook
-   wstawiony MIĘDZY kafle ma własny mechanizm z numerem rzędu, a to pole
-   obiecywałoby drugą, gorszą drogę do tego samego. #}
+   wstawiony MIĘDZY kafle ma własny mechanizm z numerem rzędu. #}
 {% macro obszar(klucz, nazwa, opis, elementy, katalog, nazwyOpcji, jedenWWierszu = false, bezHookow = false, powierzchnia = null, palette = {}, wyglad = {}, skoraUkryta = false, przedLista = null) %}
     {% import _self as m %}
     {% import '@Modules/quince_engine/views/templates/admin/_macros/surface.html.twig' as skora %}
@@ -116,20 +111,16 @@
             {% set miejsca = elementy|reduce((suma, w) => suma|merge(w), []) %}
             <span class="qc-licznik">{{ miejsca|filter(e => e.on)|length }} / {{ miejsca|length }}</span>
 
-            {# Zebatka wygladu stoi w naglowku strefy, ktorej dotyczy. Postawiona
-               luzem miedzy strefami wisiala w powietrzu i nie bylo widac, co
-               ustawia. #}
-            {# Zebatka i jej panel ida WPROST do paska naglowka, bez owijki:
-               panel ma `flex: 1 0 100%`, wiec lamie sie do nowego wiersza tylko
-               wtedy, gdy jest dzieckiem tego samego paska. W owijce rozpychal
-               strefe i wchodzil miedzy nia a nastepna. #}
+            {# Zebatka wygladu stoi w naglowku strefy, ktorej dotyczy. Zebatka
+               i jej panel ida WPROST do paska naglowka, bez owijki: panel ma
+               `flex: 1 0 100%`, wiec lamie sie do nowego wiersza tylko wtedy,
+               gdy jest dzieckiem tego samego paska. #}
             {% if powierzchnia %}
                 {{ skora.powierzchnia(powierzchnia, palette, wyglad, 'end', skoraUkryta) }}
             {% endif %}
         </div>
         {# Wlasne pola strefy stoja miedzy jej naglowkiem a lista pozycji: to
-           ustawienia CALEJ strefy, wiec naleza do niej, a nie do osobnego paska
-           na gorze ekranu. #}
+           ustawienia CALEJ strefy. #}
         {% if przedLista %}{{ przedLista|raw }}{% endif %}
 
         <div x-sort x-sort:group="{{ klucz }}"{{ jedenWWierszu ? ' data-jeden-w-wierszu' : '' }}>

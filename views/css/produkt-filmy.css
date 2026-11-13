@@ -27,7 +27,7 @@
 
 /* Wyrównanie do górnej krawędzi, nie do środka: pod polem stoi podpis
    z nazwą dostawcy, więc kolumna z polem jest wyższa od reszty i przy
-   wyrównaniu do środka pole podnosiło się ponad select i przyciski. */
+   wyrównaniu do środka pole podnosi się ponad select i przyciski. */
 .quince-videos__row {
     display: flex;
     align-items: flex-start;
@@ -83,7 +83,7 @@
 }
 
 /* Wybór języka przy wierszu. Bez klasy `form-control` PrestaShopa: ta ustawia
-   szerokość na całą wolną przestrzeń, przez co pole na adres zapadało się do zera.
+   szerokość na całą wolną przestrzeń, przez co pole na adres zapada się do zera.
    Wygląd bierzemy z panelu, ale szerokość zostaje przy treści. */
 .quince-videos__lang {
     flex: none;

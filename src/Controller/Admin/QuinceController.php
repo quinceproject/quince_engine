@@ -33,11 +33,8 @@ abstract class QuinceController extends FrameworkBundleAdminController
      */
     protected function renderPanel(string $template, array $parameters): Response
     {
-        // Nawigacja dokłada się tutaj raz, zamiast w każdym kontrolerze osobno.
-        // Pozycje modułów zależą od tego, co sklep ma zainstalowane, więc muszą
-        // powstać przy każdym żądaniu — zapamiętana lista szybko kłamie.
         // PrestaShop wstawia layoutTitle do nagłówka strony bez tłumaczenia,
-        // więc robimy to tutaj — inaczej sklep ma polski sidebar i angielski
+        // więc tłumaczymy go tutaj. Inaczej panel ma polski sidebar i angielski
         // tytuł nad nim.
         if (isset($parameters['layoutTitle'])) {
             $parameters['layoutTitle'] = $this->trans(
@@ -49,7 +46,7 @@ abstract class QuinceController extends FrameworkBundleAdminController
         }
 
         // Nazwy zakładek tłumaczy kontroler, bo to on zna domenę modułu. Layout
-        // je wypisuje — jedna zasada zamiast domeny przekazywanej do szablonu.
+        // tylko je wypisuje.
         if (!empty($parameters['quinceTabs'])) {
             $domena = (string) ($parameters['quinceTabsDomain'] ?? 'Modules.Quinceengine.Admin');
 
@@ -59,9 +56,11 @@ abstract class QuinceController extends FrameworkBundleAdminController
             );
         }
 
-        // Router idzie z kontrolera, bo tylko tu jest pewny: menu sprawdza nim,
-        // czy trasa zgłoszona przez moduł w ogóle istnieje, zamiast wywracać
-        // cały panel na module z literówką albo bez kontrolera.
+        // Nawigacja powstaje przy każdym żądaniu, bo pozycje modułów zależą od
+        // tego, co sklep ma zainstalowane. Router idzie z kontrolera, bo tylko
+        // tu jest pewny: menu sprawdza nim, czy trasa zgłoszona przez moduł
+        // istnieje, zamiast wywracać cały panel na module z literówką albo bez
+        // kontrolera.
         return $this->render($template, $parameters + [
             'nav' => (new PanelNavigation(null, $this->container->get('router')))->groups(),
         ]);

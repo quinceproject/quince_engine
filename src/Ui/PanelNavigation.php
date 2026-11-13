@@ -17,14 +17,11 @@ use Symfony\Component\Routing\RouterInterface;
 /**
  * Nawigacja panelu Quince.
  *
- * Powstaje w PHP, a nie w szablonie, z dwóch powodów. Po pierwsze pozycje modułów
- * zależą od tego, co jest zainstalowane — a tego szablon sam nie sprawdzi.
- * Po drugie sięgają po nią także nasze moduły: strona ustawień modułu ma mieć
- * ten sam sidebar co silnik, więc bierze go stąd, zamiast odtwarzać u siebie.
+ * Powstaje w PHP, a nie w szablonie, bo pozycje modułów zależą od tego, co jest
+ * zainstalowane. Z tej klasy bierze sidebar także strona ustawień każdego
+ * modułu Quince.
  *
- * Pozycje bez trasy są zaplanowane, ale jeszcze niezbudowane — pokazujemy je
- * wyszarzone, żeby od razu było widać docelowy kształt panelu zamiast jednej
- * samotnej pozycji.
+ * Pozycja bez trasy jest pokazywana wyszarzona.
  */
 final class PanelNavigation
 {
@@ -40,8 +37,7 @@ final class PanelNavigation
      */
     public function groups(): array
     {
-        // Grupa bez pozycji nie ma czego pokazać. Sam nagłówek „Modules" nad pustką
-        // wygląda jak coś, co się nie doczytało.
+        // Grupa bez pozycji wypada razem z nagłówkiem.
         return array_values(array_filter($this->allGroups(), static fn (array $g): bool => $g['items'] !== []));
     }
 
@@ -78,9 +74,8 @@ final class PanelNavigation
                 ],
             ],
             [
-                // Ustawienia modułów, które sklep faktycznie ma u siebie. Moduł
-                // niezainstalowany nie zostawia tu pustej pozycji — jest za to
-                // widoczny na stronie zarządzania modułami razem z opisem.
+                // Tylko zainstalowane moduły. Niezainstalowane widać na stronie
+                // „Quince modules".
                 'label' => 'Modules',
                 'items' => $this->catalogue->navItems(),
             ],

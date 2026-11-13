@@ -6,14 +6,13 @@
  * elementu i wyglądu karty, dokładanie wierszy i miejsc, usuwanie hooków oraz
  * spisanie rozstawienia do pola formularza przed wysłaniem.
  *
- * Formularz znajdujemy po znaczniku, a nie po identyfikatorze: mechanika jest
- * ta sama na obu ekranach, a drugi skrypt z tą samą treścią rozjechałby się
- * przy pierwszej poprawce. Gałęzie, których dany ekran nie ma — wybór układu,
- * szerokość panelu zakupu, koło zębate wyglądu — po prostu się nie odpalają,
- * bo nie ma tam takich przycisków.
+ * Formularz znajdujemy po znaczniku, a nie po identyfikatorze, bo mechanika
+ * jest ta sama na obu ekranach. Gałęzie, których dany ekran nie ma (wybór
+ * układu, szerokość panelu zakupu, koło zębate wyglądu), po prostu się nie
+ * odpalają, bo nie ma tam takich przycisków.
  *
  * Przestawianie kolejności robi Alpine (`x-sort` z paczki alpine-sort), tak samo
- * jak w stopce i w nawigacji — nie dokładamy do tego drugiego mechanizmu.
+ * jak w stopce i w nawigacji.
  */
 (function () {
     'use strict';
@@ -24,25 +23,20 @@
         return;
     }
 
-    /* Napisy bierzemy z ekranu, a nie z kodu: inaczej powstalby drugi zestaw
-       tekstow poza tlumaczeniem panelu. */
+    /* Napisy bierzemy z ekranu, a nie z kodu, zeby przechodzily przez
+       tlumaczenie panelu. */
     var napisy = formularz.dataset;
 
     /**
-     * Pole na nazwe hooka, wstawiane w miejsce, ktore ma powstac.
-     *
-     * Wczesniej stala tu martwa zaslepka z napisem „wybierz element, hook albo
-     * przycisk". Nie robila nic — kliknieta nie otwierala niczego, a przy zapisie
-     * i tak wypadala, bo nie miala wlasnego przelacznika. Obiecywala tez trzeci
-     * rodzaj miejsca, ktorego w tym modelu nie ma: przyciski dokladamy jako hooki
-     * albo jako elementy z modulu, nigdy jako osobny byt.
+     * Pole na nazwe hooka, wstawiane w miejsce, ktore ma powstac. Przyciski
+     * dokladamy jako hooki albo jako elementy z modulu, nigdy jako osobny
+     * rodzaj miejsca.
      */
     function poleHooka() {
         return '<div class="qc-miejsce qc-miejsce--nowe">' +
             '<input type="text" class="qc-field-base qc-field-sm qc-focusable" data-nowy-hook ' +
             'placeholder="' + (napisy.napisNazwaHooka || '') + '">' +
-            /* Przycisk z napisem, nie znaczek: „Add" mowi, co sie stanie,
-               a ptaszek trzeba zgadnac. Ten sam napis co przy dodawaniu wiersza. */
+            /* Ten sam napis co przy dodawaniu wiersza. */
             '<button type="button" class="qc-btn qc-btn-sm" data-zatwierdz>' +
             (napisy.napisZatwierdz || '') + '</button>' +
             '<button type="button" class="qc-ikonka" data-poniechaj title="' +
@@ -114,7 +108,7 @@
 
     /**
      * Wiersz z jednym miejscem. Bez nazwy hooka wiersz powstaje od razu z polem
-     * na nia — sklep nie dostaje pustego wiersza, ktorego nie ma czym wypelnic.
+     * na nia, zeby nie zostal pusty wiersz.
      */
     function nowyWiersz(nazwaHooka, jedenWWierszu) {
         var wiersz = document.createElement('div');
@@ -151,7 +145,7 @@
             return;
         }
 
-        /* szerokość panelu zakupu — cztery wartości ze spisu, nie suwak */
+        /* szerokość panelu zakupu: cztery wartości ze spisu, nie suwak */
         if (cel.dataset.split) {
             formularz.querySelectorAll('[data-split]').forEach(function (przycisk) {
                 przycisk.classList.toggle('is-active', przycisk === cel);
@@ -261,7 +255,7 @@
             return;
         }
 
-        /* usunięcie miejsca, a przy ostatnim — całego wiersza */
+        /* usunięcie miejsca, a przy ostatnim całego wiersza */
         if (cel.hasAttribute('data-usun')) {
             var miejsce = cel.closest('.qc-miejsce');
             var caly = cel.closest('.qc-wiersz');
@@ -282,8 +276,7 @@
         }
     });
 
-    /* Enter zatwierdza, Escape poniecha. Bez tego wpisanie nazwy konczy sie
-       siegnieciem po mysz, a nazwa hooka to kilkanascie znakow z klawiatury. */
+    /* Enter zatwierdza, Escape poniecha. */
     formularz.addEventListener('keydown', function (zdarzenie) {
         if (!zdarzenie.target.hasAttribute('data-nowy-hook')) {
             return;
@@ -316,7 +309,7 @@
     formularz.addEventListener('submit', function () {
         var rozstawienie = {};
 
-        /* Przełączenie układu tylko go otwiera — rozstawienia nie ruszamy,
+        /* Przełączenie układu tylko go otwiera. Rozstawienia nie ruszamy,
            bo na ekranie stoi jeszcze poprzedni układ. */
         if (formularz.dataset.tylkoUklad === '1') {
             formularz.querySelector('[name="ARRANGEMENT"]').value = '';

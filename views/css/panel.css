@@ -1,15 +1,14 @@
 /* ===================================================================
-   Quince — szkielet panelu
+   Quince: szkielet panelu
 
    Zawiera WYŁĄCZNIE to, czego nie ma w paczce design systemu:
-   układ powłoki (w prototypie siedział inline w Shell.jsx) i neutralizację
-   stylów back-office PrestaShopa.
+   układ powłoki i neutralizację stylów back-office PrestaShopa.
 
-   Nic tu nie powiela reguł z tokens/components.css — hover pozycji nawigacji,
+   Nic tu nie powiela reguł z tokens/components.css: hover pozycji nawigacji,
    stan aktywny, zwijanie i wygląd pól pochodzą stamtąd i mają tak zostać.
    =================================================================== */
 
-/* Wysokość przyklejonego nagłówka PrestaShopa. Wartość startowa — panel.js mierzy
+/* Wysokość przyklejonego nagłówka PrestaShopa. Wartość startowa: panel.js mierzy
    ją po załadowaniu i nadpisuje na <html>, bo zmienia się z długością tytułu strony.
    Definicja musi być na :root, nie na .qc-root: korzystają z niej także toasty,
    renderowane w <body> poza naszym drzewem. */
@@ -36,7 +35,7 @@
 
 /* Bez tego przyklejony sidebar nie działa.
    PrestaShop nadaje `.content-div { overflow: hidden }`, a `position: sticky` przestaje
-   działać, gdy KTÓRYKOLWIEK przodek ma overflow inny niż visible — element zachowuje się
+   działać, gdy KTÓRYKOLWIEK przodek ma overflow inny niż visible. Element zachowuje się
    wtedy jak zwykły blok i przewija się razem ze stroną, mimo poprawnych reguł.
 
    Zawężone przez :has() do stron Quince, żeby nie zmieniać zachowania reszty panelu.
@@ -48,9 +47,8 @@
 
 /* --- neutralizacja back-office ---
    PrestaShop podkreśla odnośniki i narzuca im własny kolor, a robi to selektorami
-   o wyższej specyficzności niż `.qc-root a` (m.in. `#content a`). Stąd !important —
-   to jedyne miejsce w projekcie, gdzie jest uzasadniony: przegrywamy z cudzym
-   arkuszem, na który nie mamy wpływu. */
+   o wyższej specyficzności niż `.qc-root a` (m.in. `#content a`). Stąd !important:
+   przegrywamy z cudzym arkuszem, na który nie mamy wpływu. */
 .qc-root a,
 .qc-root a:hover,
 .qc-root a:focus,
@@ -66,7 +64,7 @@
     color: var(--accent-active);
 }
 
-/* Odnośnik stojący w zdaniu — w pasku informacyjnym albo w podpowiedzi. Bez tego
+/* Odnośnik stojący w zdaniu (w pasku informacyjnym albo w podpowiedzi). Bez tego
    dziedziczy kolor tekstu i nic nie mówi, że da się w niego kliknąć. */
 .qc-root .qc-alert a,
 .qc-root .qc-hint a,
@@ -81,7 +79,7 @@
     color: var(--accent);
 }
 
-/* PS ustawia globalnie font-family dla pól — przywracamy dziedziczenie */
+/* PS ustawia globalnie font-family dla pól, przywracamy dziedziczenie */
 .qc-root input,
 .qc-root select,
 .qc-root textarea,
@@ -114,14 +112,13 @@
 
     /* Przyklejona pod paskiem PrestaShopa.
        align-self: flex-start jest tu konieczne: w kontenerze flex z align-items: stretch
-       element rozciąga się na całą wysokość i sticky nie ma się o co zaczepić — wygląda
+       element rozciąga się na całą wysokość i sticky nie ma się o co zaczepić. Wygląda
        wtedy tak, jakby przewijał się razem ze stroną. */
     position: sticky;
     top: var(--qc-top-offset);
     align-self: flex-start;
 
-    /* Własne przewijanie: docelowo pozycji będzie kilkanaście i przy niższym oknie
-       nie zmieszczą się wszystkie. Odejmujemy offset u góry i prześwit u dołu,
+    /* Własne przewijanie: przy niższym oknie nie wszystkie pozycje się mieszczą. Odejmujemy offset u góry i prześwit u dołu,
        żeby ostatnia pozycja nie kleiła się do krawędzi ekranu. */
     max-height: calc(100vh - var(--qc-top-offset) - 16px);
     overflow-y: auto;
@@ -150,8 +147,7 @@
 
 /* --- elementy spoza paczki --- */
 
-/* Znacznik przy pozycjach jeszcze niezbudowanych — czytelny sygnał, że to
-   zaplanowane miejsce, a nie zepsuty odnośnik. */
+/* Znacznik przy pozycjach jeszcze niezbudowanych. */
 .qc-nav-soon {
     margin-left: auto;
     font-size: 10px;
@@ -166,11 +162,11 @@
     pointer-events: none;
 }
 
-/* Pasek informacyjny nad treścią korzysta z komponentu .qc-alert z paczki —
-   dokładamy tylko odstęp, bo w prototypie alerty stały wewnątrz kart. */
+/* Pasek informacyjny nad treścią korzysta z komponentu .qc-alert z paczki,
+   dokładamy tylko odstęp. */
 .qc-content > .qc-alert,
 /* Ten sam odstęp, gdy pasek stoi wewnątrz formularza ekranu, a nie bezpośrednio
-   w treści — inaczej klei się do pierwszej karty pod nim. */
+   w treści. Inaczej klei się do pierwszej karty pod nim. */
 .qc-content form > .qc-alert {
     margin-bottom: 18px;
 }
@@ -181,8 +177,7 @@
    z zakładki przeglądarki, a stronicowanie i filtry dziennika mieszczą się
    w adresie zamiast w stanie skryptu.
 
-   Do wyboru wartości służy przełącznik segmentowy (.qc-seg) — dwa różne
-   działania nie mogą wyglądać tak samo.
+   Do wyboru wartości służy przełącznik segmentowy (.qc-seg).
 
    Wygląd przeniesiony znakowo z prototypu panelu (widoki/panel-kolory.html). */
 .qc-tabs {
@@ -217,7 +212,7 @@
 
 /* --- tabela ---
    Wiersze danych: dziennik zmian cen, listy pozycji. Przeniesiona znakowo
-   z prototypu panelu. Nagłówek nie jest klikalny sam z siebie — kursor łapki
+   z prototypu panelu. Nagłówek nie jest klikalny sam z siebie: kursor łapki
    dostaje tylko kolumna, po której faktycznie da się sortować. */
 .qc-table-wrap {
     border: 1px solid var(--border);
@@ -421,8 +416,7 @@
 .qc-actionbar {
     position: sticky;
     /* Odstęp od dołu musi przeskoczyć pasek debugowania PrestaShopa (~40 px w trybie
-       deweloperskim). Na produkcji paska nie ma, więc jedna zmienna zamiast dwóch
-       zestawów reguł — do skorygowania w jednym miejscu. */
+       deweloperskim). Na produkcji paska nie ma; odstęp niesie jedna zmienna. */
     bottom: calc(var(--qc-bottom-offset) + env(safe-area-inset-bottom, 0px));
     z-index: 20;
 
@@ -431,7 +425,7 @@
     justify-content: flex-end;
     gap: 10px;
 
-    /* Ta sama szerokość co karty — pasek jest częścią formularza, nie belką
+    /* Ta sama szerokość co karty: pasek jest częścią formularza, nie belką
        rozpiętą przez cały ekran. */
     max-width: 1600px;
     margin: 24px 0 0;
@@ -459,8 +453,7 @@
 }
 
 /* Rozszerzenie siatki paczki (ma 2 i 3 kolumny). Cztery kolory komunikatów
-   układają się naturalnie w jeden rząd — w trzech kolumnach czwarty spada
-   sam pod spód i wygląda jak pomyłka. */
+   układają się w jeden rząd. */
 .qc-form-grid-4 {
     grid-template-columns: repeat(4, 1fr);
 }
@@ -470,23 +463,23 @@
 }
 
 /* PrestaShop dokłada własny pasek zakładek na stronach trzeciego poziomu menu.
-   Nawigację po panelu prowadzi sidebar — drugi zestaw zakładek nad nim tylko
+   Nawigację po panelu prowadzi sidebar, a drugi zestaw zakładek nad nim
    powiela te same pozycje. Arkusz wchodzi wyłącznie na stronach Quince,
    więc reszta back-office zostaje nietknięta. */
 #head_tabs {
     display: none;
 }
 
-/* Alpine ukrywa elementy z x-show dopiero po inicjalizacji — bez tego zwinięta
+/* Alpine ukrywa elementy z x-show dopiero po inicjalizacji. Bez tego zwinięta
    karta mignęłaby rozwinięta przy każdym wejściu na stronę. */
 [x-cloak] {
     display: none !important;
 }
 
 /* Wyłączona sekcja. Treść zostaje na ekranie, żeby dało się ją przejrzeć, ale
-   przygasa i przestaje reagować — widać, że te ustawienia dziś nic nie robią.
-   Pola nie dostają atrybutu `disabled`, bo przeglądarka nie wysyła wyłączonych
-   pól i zapisanie formularza wyczyściłoby wszystko, co sprzedawca tu wpisał. */
+   przygasa i przestaje reagować. Pola nie dostają atrybutu `disabled`, bo
+   przeglądarka nie wysyła wyłączonych pól i zapisanie formularza wyczyściłoby
+   wszystko, co sprzedawca tu wpisał. */
 .qc-disabled-area {
     transition: opacity var(--dur) var(--ease);
 }
@@ -508,7 +501,7 @@
     flex: none;
 }
 
-/* Bryły podglądu kształtu — neutralne, żeby czytać z nich wyłącznie zaokrąglenie. */
+/* Bryły podglądu kształtu: neutralne, żeby czytać z nich wyłącznie zaokrąglenie. */
 .qc-shape-demo {
     display: inline-flex;
     align-items: center;
@@ -526,7 +519,7 @@
     min-width: 120px;
 }
 
-/* Podgląd pasów: cztery paski jeden pod drugim, bez odstępów — tak leżą na stronie. */
+/* Podgląd pasów: cztery paski jeden pod drugim, bez odstępów, tak jak leżą na stronie. */
 .qc-band-preview {
     display: block;
     padding: 0;
@@ -545,7 +538,7 @@
     border-bottom: 0 !important;
 }
 
-/* Lista korekt kontrastu — jedna pod drugą, wyrównane do lewej. */
+/* Lista korekt kontrastu: jedna pod drugą, wyrównane do lewej. */
 .qc-adjustments {
     display: flex;
     flex-direction: column;
@@ -619,7 +612,7 @@
     white-space: nowrap;
 }
 
-/* Nazwa zmiennej CSS — potrzebna przy szukaniu koloru w kodzie motywu */
+/* Nazwa zmiennej CSS, potrzebna przy szukaniu koloru w kodzie motywu */
 .qc-var {
     display: block;
     font-size: 10.5px;
@@ -667,7 +660,7 @@
 }
 
 /* Wskaźnik kontrastu odnośnika wobec tła strony (WCAG AA = 4.5:1).
-   Informuje, nie blokuje — decyzja należy do sklepikarza. */
+   Informuje, nie blokuje. */
 .qc-contrast {
     margin-left: auto;
     display: inline-flex;
@@ -701,8 +694,7 @@
 
 /* --- telefon ---
    Nagłówek zwija się do jednej linii: tytuł plus akcja. Opis znika, bo przy
-   przyklejonym pasku zabierałby na stałe jedną trzecią ekranu, a jest tekstem
-   wprowadzającym — czyta się go raz, nie przy każdym przewinięciu. */
+   przyklejonym pasku zabierałby na stałe jedną trzecią ekranu. */
 @media (max-width: 767px) {
     .qc-page-desc {
         display: none;
@@ -727,7 +719,7 @@
     .qc-content {
         padding: 20px 20px 48px;
     }
-    /* Podgląd i tak jest orientacyjny — na wąskim ekranie ważniejsze,
+    /* Podgląd i tak jest orientacyjny: na wąskim ekranie ważniejsze,
        żeby elementy się nie zlewały niż żeby stały w jednym rzędzie. */
     .qc-preview {
         gap: 12px;
@@ -761,9 +753,7 @@
 }
 
 /* --- nawigacja na telefonie ---
-   Pasek z ikonami zabierał 56 px z 390 px szerokości i nie mówił, dokąd
-   prowadzą pozostałe pozycje — widać było tylko, która jest aktywna.
-   Zastępuje go przycisk z nazwą bieżącej strony; lista rozwija się pod nim
+   Przycisk z nazwą bieżącej strony zamiast paska z ikonami; lista rozwija się pod nim
    z pełnymi nazwami i nagłówkami grup, tak jak na dużym ekranie. */
 .qc-nav-mobile {
     display: none;
@@ -774,15 +764,12 @@
         flex-direction: column;
         align-items: stretch;
 
-        /* Linia pionowa oddzielała nawigację od treści — w układzie pionowym
-           nie ma czego oddzielać. */
+        /* W układzie pionowym linia oddzielająca nawigację od treści znika. */
         background: none;
     }
 
-    /* Wygląda jak pole wyboru, a nie jak pas na całą szerokość. Pas w bieli
-       stykał się z białym nagłówkiem PrestaShopa i czytał się jak drugi tytuł
-       strony; obwiedziona kontrolka na tle strony mówi wprost, że da się ją
-       dotknąć, i ma widoczny początek oraz koniec. */
+    /* Wygląda jak pole wyboru, a nie jak pas na całą szerokość: biały pas
+       zlewałby się z białym nagłówkiem PrestaShopa. */
     .qc-nav-mobile {
         display: flex;
         align-items: center;
@@ -819,10 +806,9 @@
         transform: rotate(180deg);
     }
 
-    /* Lista wchodzi w przepływ zamiast nakładać się na treść — nie zasłania
-       tego, co sprzedawca właśnie ustawiał, i nie potrzebuje przyciemnienia tła. */
-    /* Rozwinięta lista trzyma się kontrolki: te same marginesy, ta sama obwódka.
-       Widać, że to jej zawartość, a nie kolejna sekcja strony. */
+    /* Lista wchodzi w przepływ zamiast nakładać się na treść, więc nie
+       potrzebuje przyciemnienia tła. */
+    /* Rozwinięta lista trzyma się kontrolki: te same marginesy, ta sama obwódka. */
     .qc-shell > .qc-sidenav {
         display: none;
         position: static;
@@ -841,8 +827,8 @@
         display: block;
     }
 
-    /* Reguły zwiniętego paska z zakresu ≤1180 px trzeba tu odwołać — w rozwiniętej
-       liście nazwy i nagłówki grup są całym sensem tego rozwiązania. */
+    /* Reguły zwiniętego paska z zakresu ≤1180 px trzeba tu odwołać: w rozwiniętej
+       liście nazwy i nagłówki grup mają być widoczne. */
     .qc-shell > .qc-sidenav .qc-nav-label,
     .qc-shell > .qc-sidenav .qc-nav-soon {
         display: inline;
@@ -861,10 +847,9 @@
 
 
 /* Komunikat PrestaShopa chowamy od razu arkuszem, a nie dopiero skryptem:
-   przeglądarka zdążyła go narysować, zanim panel.js zamienił go na toast,
-   więc przy każdym zapisie mrugał pasek nad treścią. Treść nie ginie, bo
-   panel.js czyta ją z ukrytego elementu. Arkusz wczytują wyłącznie ekrany
-   Quince, więc reszta panelu ma swoje komunikaty jak wcześniej. */
+   inaczej przeglądarka rysuje go, zanim panel.js zamieni go na toast, i pasek
+   mruga nad treścią. Treść nie ginie, bo panel.js czyta ją z ukrytego
+   elementu. Arkusz wczytują wyłącznie ekrany Quince. */
 .content-div > .alert { display: none; }
 
 /* ===================================================================
@@ -877,12 +862,11 @@
 .qc-toasts {
     position: fixed;
     right: 20px;
-    /* Pod przyklejonym nagłówkiem PrestaShopa — wysokość mierzy panel.js */
+    /* Pod przyklejonym nagłówkiem PrestaShopa; wysokość mierzy panel.js */
     top: calc(var(--qc-top-offset, 85px) + 14px);
 
     /* Wysokość pasków PrestaShopa zmienia się w trakcie przewijania, a toast
-       liczy od nich swoje miejsce. Bez przejścia przeskakiwał skokowo przy
-       każdym pomiarze; z przejściem nadąża płynnie. */
+       liczy od nich swoje miejsce. Przejście wygładza skoki przy każdym pomiarze. */
     transition: top .18s var(--ease);
     z-index: 1200;
     display: flex;
@@ -899,9 +883,8 @@
        rogu (`position: fixed; right: 20px; bottom: 20px` w tokens/components.css).
        U nas toasty układają się jeden pod drugim w pojemniku `.qc-toasts`, który
        sam stoi pod przyklejonym nagłówkiem PrestaShopa. Bez zdjęcia tamtej pozycji
-       pojemnik stał u góry pusty, a komunikaty lądowały u dołu — każdy osobno
-       przyklejony do krawędzi okna i każdy w tym samym miejscu, więc drugi
-       przykrywał pierwszy. */
+       każdy komunikat ląduje osobno w tym samym miejscu u dołu okna i drugi
+       przykrywa pierwszy. */
     position: static;
     inset: auto;
 
@@ -928,7 +911,7 @@
 .qc-toast-icon { flex: none; margin-top: 1px; }
 .qc-toast-text { flex: 1; min-width: 0; line-height: 1.45; }
 
-/* Komunikat przychodzi z PrestaShopa w oryginalnej strukturze — bywa listą błędów
+/* Komunikat przychodzi z PrestaShopa w oryginalnej strukturze: bywa listą błędów
    walidacji albo zdaniem z odnośnikiem. Zdejmujemy tylko marginesy back-office,
    które w wąskim toaście robią pustkę. */
 .qc-toast-text > :first-child { margin-top: 0; }
@@ -938,8 +921,8 @@
 .qc-toast-text ol { margin: 0; padding-left: 18px; }
 .qc-toast-text li + li { margin-top: 3px; }
 
-/* Odnośnik w komunikacie odróżnia się kolorem, nie podkreśleniem — w projekcie
-   nie podkreślamy linków. Przebija neutralizację `color: inherit` z sekcji wyżej. */
+/* Odnośnik w komunikacie odróżnia się kolorem, nie podkreśleniem. Przebija
+   neutralizację `color: inherit` z sekcji wyżej. */
 .qc-toast-text a {
     color: var(--accent-active) !important;
     font-weight: var(--weight-medium);
@@ -981,7 +964,7 @@
 
 
 /* ===================================================================
-   Ustawienia ogólne — komponenty odwzorowane z prototypu
+   Ustawienia ogólne: komponenty odwzorowane z prototypu
    (docs/delivery3/Quince Panel - Ustawienia ogolne.dc.html)
    =================================================================== */
 
@@ -993,7 +976,7 @@
     margin-bottom: 16px;
 }
 
-/* Wyjaśnienie pod grupą pól — mówi, na co dana decyzja wpływa w sklepie. */
+/* Wyjaśnienie pod grupą pól: mówi, na co dana decyzja wpływa w sklepie. */
 .qc-field-note {
     font-size: var(--text-sm);
     line-height: 1.55;
@@ -1026,8 +1009,7 @@
     margin-bottom: 11px;
 }
 
-/* Informacja o automatycznej korekcie kontrastu — stoi przy etykiecie podglądu,
-   żeby administrator zobaczył ją tam, gdzie widzi skutek. */
+/* Informacja o automatycznej korekcie kontrastu, przy etykiecie podglądu. */
 .qc-preview-note {
     text-transform: none;
     letter-spacing: 0;
@@ -1131,7 +1113,7 @@
     border-color: var(--border-strong);
 }
 
-/* Próbnik koloru schowany pod ikoną ołówka — natywne pole zajmuje całą powierzchnię
+/* Próbnik koloru schowany pod ikoną ołówka: natywne pole zajmuje całą powierzchnię
    przycisku, ale jest niewidoczne, więc kliknięcie w ikonę otwiera systemowy wybór barwy. */
 .qc-chip-color {
     position: absolute;
@@ -1302,11 +1284,10 @@
 
 
 /* ===================================================================
-   Tabela widoczności — ekran topbara
+   Tabela widoczności: ekran topbara
 
-   Treść po lewej, dwie kolumny przełączników po prawej. Dwie, nie trzy:
-   sprzedawca myśli kategoriami „komputer i telefon", a tablet dziedziczy
-   po komputerze — patrz widoki/header/ustalenia-topbar.md.
+   Treść po lewej, dwie kolumny przełączników po prawej (komputer i telefon;
+   tablet dziedziczy po komputerze).
    =================================================================== */
 
 .qc-vis-table {
@@ -1328,9 +1309,8 @@
 .qc-vis-table td {
     padding-block: 14px;
 
-    /* Jedno wyrównanie dla wszystkich komórek wiersza. Przy „top" w jednych
-       i „middle" w innych nazwa akcji stała u góry, a ikona i przełącznik
-       na środku — nic nie schodziło się w jednej linii. */
+    /* Jedno wyrównanie dla wszystkich komórek wiersza, żeby nazwa akcji,
+       ikona i przełącznik stały w jednej linii. */
     vertical-align: middle;
     border-block-end: 1px solid var(--border);
 }
@@ -1339,17 +1319,17 @@
     border-block-end: 0;
 }
 
-/* Kolumny przełączników mają stałą szerokość i wyśrodkowaną zawartość —
-   inaczej pola tekstowe po lewej rozpychałyby je na każdym wierszu inaczej. */
+/* Kolumny przełączników mają stałą szerokość i wyśrodkowaną zawartość.
+   Inaczej pola tekstowe po lewej rozpychałyby je na każdym wierszu inaczej. */
 .qc-vis-table__screen {
     inline-size: 110px;
     text-align: center;
 }
 
 /* Podział szerokości: nazwa akcji to dwa słowa i nie potrzebuje więcej niż 200 px,
-   a całą resztę bierze kolumna z polem tekstowym — bo to jedyna, w której miejsce
-   przekłada się na cokolwiek. Bez tego wolną przestrzeń zagarniała pierwsza kolumna
-   (jedyna bez ustalonego rozmiaru), a pole i ikona ściskały się przy prawej krawędzi. */
+   a całą resztę bierze kolumna z polem tekstowym. Bez tego wolną przestrzeń
+   zagarnia pierwsza kolumna (jedyna bez ustalonego rozmiaru), a pole i ikona
+   ściskają się przy prawej krawędzi. */
 .qc-vis-table th:first-child,
 .qc-vis-table td:first-child {
     inline-size: 200px;
@@ -1360,7 +1340,7 @@
     padding-inline-end: 20px;
 }
 
-/* Etykieta pola w wierszu tabeli jest tylko podpisem — odstęp pod nią bierze
+/* Etykieta pola w wierszu tabeli jest tylko podpisem: odstęp pod nią bierze
    już samo pole, a wiersze bez pola (selektory) nie mają czego odsuwać. */
 .qc-vis-table .qc-field {
     margin-block: 0;
@@ -1368,8 +1348,7 @@
 
 /* --- wybór ikony ---
    Stoi przed polem, bo tam stanie w sklepie. Wygląd wzięty z selektora języka
-   po drugiej stronie pola: to dwie kontrolki tej samej rangi i mają wyglądać
-   jak para, a nie jak dwa różne pomysły. */
+   po drugiej stronie pola. */
 .qc-iconpick {
     position: relative;
     flex: none;
@@ -1420,24 +1399,24 @@
    Karta zawierająca listę przestaje obcinać. Rogi nie tracą przez to nic:
    obcinanie ma znaczenie tylko dla elementu dotykającego krawędzi, a treść karty
    stoi w odstępie od niej. Zawężone przez :has() do kart, które faktycznie
-   coś rozwijają — reszta zostaje bez zmian. */
+   coś rozwijają. */
 .qc-card:has(.qc-iconpick-menu),
 .qc-card:has(.qc-colorpick-menu),
 .qc-card:has(.qc-lang-menu),
 .qc-card:has(.qc-multipick-menu),
 .qc-card:has(.qc-dropdown),
 .qc-card:has(.qc-tags-menu),
-/* Drzewo kategorii rozwijane pod przyciskiem — ta sama sprawa co wyżej. */
+/* Drzewo kategorii rozwijane pod przyciskiem: ta sama sprawa co wyżej. */
 .qc-card:has(.qc-tree),
 /* To samo dotyczy kart mapy strony produktu: `.qc-karta` ma własne obcinanie
-   dla zaokrąglonych rogów, więc paleta barw otwarta w jej nagłówku ginęła
+   dla zaokrąglonych rogów, więc paleta barw otwarta w jej nagłówku ginie
    za krawędzią karty. */
 .qc-karta:has(.qc-colorpick-menu),
 .qc-karta:has(.qc-iconpick-menu) {
     overflow: visible;
 }
 
-/* Lista rozwijana w lewo — dla selektorów stojących przy prawej krawędzi karty.
+/* Lista rozwijana w lewo, dla selektorów stojących przy prawej krawędzi karty.
    Karta przycina zawartość, więc lista wychodząca w prawo znika za krawędzią,
    a ognisko w polu szukania przewija przyciętą treść i przesuwa całą sekcję. */
 .qc-iconpick--end .qc-iconpick-menu {
@@ -1446,20 +1425,20 @@
 }
 
 /* To samo dla palety barw. Paleta ma 520 px i przy próbniku stojącym w prawej
-   kolumnie panelu wychodziła poza okno — otwarta w lewo mieści się zawsze. */
+   kolumnie panelu wychodzi poza okno. Otwarta w lewo mieści się zawsze. */
 .qc-colorpick--end .qc-colorpick-menu {
     inset-inline-start: auto;
     inset-inline-end: 0;
 }
 
-/* Nad listą języków, gdy obie są otwarte — kliknięta jest ta, którą widać. */
+/* Nad listą języków, gdy obie są otwarte: kliknięta jest ta, którą widać. */
 .qc-iconpick-menu {
     position: absolute;
     inset-inline-start: 0;
     inset-block-start: calc(100% + 4px);
 
     /* Nad paskiem zapisu (20). Pasek jest przyklejony do dołu ekranu, a lista
-       rozwinięta w ostatnim wierszu karty sięga właśnie tam — bez tego wybór
+       rozwinięta w ostatnim wierszu karty sięga właśnie tam. Bez tego wybór
        ikony chowa się pod przyciskiem zapisu. */
     z-index: 30;
 
@@ -1472,7 +1451,7 @@
     box-shadow: var(--shadow-md);
 }
 
-/* Pole szukania zostaje na wierzchu, przewija się tylko lista pod nim —
+/* Pole szukania zostaje na wierzchu, przewija się tylko lista pod nim:
    przy dwóch tysiącach pozycji zjechanie na dół nie może zabierać wyszukiwarki. */
 .qc-iconpick-search {
     padding: 4px 4px 8px;
@@ -1510,7 +1489,7 @@
     color: var(--accent-active);
 }
 
-/* Kolumna z wyborem ikony — szerokość z zawartości, żeby nie odpychała
+/* Kolumna z wyborem ikony: szerokość z zawartości, żeby nie odpychała
    nazwy akcji na lewo. */
 .qc-vis-table__icon {
     inline-size: 90px;
@@ -1522,10 +1501,10 @@
 }
 
 /* --- tabela widoczności na telefonie ---
-   Trzy kolumny na szerokości 390 px zostawiają polu tekstowemu ok. 150 px —
+   Trzy kolumny na szerokości 390 px zostawiają polu tekstowemu ok. 150 px:
    numer telefonu i adres e-mail urywają się w połowie. Wiersz idzie więc
    jeden pod drugim: pole na pełną szerokość, pod nim para przełączników.
-   Nagłówek kolumn znika, bo nie ma już kolumn — jego rolę przejmują podpisy
+   Nagłówek kolumn znika, bo nie ma już kolumn; jego rolę przejmują podpisy
    przy samych przełącznikach. */
 @media (max-width: 767px) {
     .qc-vis-table,
@@ -1561,7 +1540,7 @@
         inline-size: auto;
     }
 
-    /* Na telefonie kolumny nie ma — podpis idzie pod nazwą akcji, na pełną
+    /* Na telefonie kolumny nie ma: podpis idzie pod nazwą akcji, na pełną
        szerokość, a para „ikona + widoczność" schodzi pod niego. */
     .qc-vis-table td.qc-vis-table__caption {
         flex: 1 0 100%;
@@ -1577,7 +1556,7 @@
     }
 
     /* Selektor z nazwą komórki, bo `.qc-vis-table td` jest bardziej swoiste niż
-       sama klasa — inaczej `display: block` z reguły wyżej bierze górę. */
+       sama klasa. Inaczej `display: block` z reguły wyżej bierze górę. */
     .qc-vis-table td.qc-vis-table__screen {
         display: flex;
         align-items: center;
@@ -1609,8 +1588,7 @@
 }
 
 /* --- pola wielojęzyczne ---
-   Kod języka obok pola, nie zakładki nad nim: przy dwóch językach zakładki
-   to więcej klikania niż treści, a wszystkie wartości i tak trzeba wpisać. */
+   Kod języka obok pola, nie zakładki nad nim. */
 
 .qc-lang-row {
     display: flex;
@@ -1660,8 +1638,7 @@
 }
 
 /* Stan modułu: słowo, nie sama kropka. „Zainstalowany, wyłączony" i „nie
-   zainstalowany" to dwie różne sytuacje i dwie różne czynności do wykonania,
-   więc muszą się różnić treścią, a nie odcieniem. */
+   zainstalowany" muszą się różnić treścią, a nie odcieniem. */
 .qc-mod-state {
     flex: none;
     padding: 3px 9px;
@@ -1691,7 +1668,7 @@
 
 /* Pole wielolinijkowe.
 
-   Paczka opisuje `qc-field-base` jako kontrolkę o stałej wysokości 36 px — to jest
+   Paczka opisuje `qc-field-base` jako kontrolkę o stałej wysokości 36 px. To jest
    poprawne dla pola jednolinijkowego i błędne dla obszaru tekstowego, któremu ta
    wysokość unieważnia atrybut `rows`. Bez tej reguły pole na pięć wierszy wygląda
    jak zwykły input i nie widać, że wpisuje się w nie listę. */
@@ -1706,7 +1683,7 @@ textarea.qc-field-base {
     resize: vertical;
 }
 
-/* Lista języków też musi przejść nad pasek zapisu — paczka daje jej warstwę 10,
+/* Lista języków też musi przejść nad pasek zapisu: paczka daje jej warstwę 10,
    czyli poniżej paska. Widać to dopiero przy polu w ostatnim wierszu karty. */
 .qc-lang-menu,
 .qc-multipick-menu {
@@ -1715,8 +1692,8 @@ textarea.qc-field-base {
 
 /* --- rozróżnienie pasków informacyjnego i ostrzegawczego ---
    Paczka daje obu zbliżone tła: akcent panelu jest pomarańczowy, ostrzeżenie
-   bursztynowe. Postawione jeden pod drugim czytają się jak dwa razy to samo,
-   a różnią się rangą — jeden opisuje stronę, drugi zgłasza problem do naprawy.
+   bursztynowe, a paski różnią się rangą: jeden opisuje stronę, drugi zgłasza
+   problem do naprawy.
 
    Informacja schodzi na powierzchnię neutralną, ostrzeżenie zatrzymuje barwę
    i dostaje pasek przy krawędzi. Kolor nie jest wtedy jedynym nośnikiem różnicy. */
@@ -1739,8 +1716,8 @@ textarea.qc-field-base {
 }
 
 /* Lista uwag wewnątrz paska komunikatu. Każda uwaga w osobnym wierszu, bo
-   każda dotyczy innego ustawienia — ale bez wcięcia: panel kasuje znaczniki
-   punktów, więc samo wcięcie wyglądało jak przypadkowy odstęp. */
+   każda dotyczy innego ustawienia, ale bez wcięcia: panel kasuje znaczniki
+   punktów, więc samo wcięcie wygląda jak przypadkowy odstęp. */
 .qc-alert-list {
     margin: 6px 0 0;
     padding-inline-start: 0;
@@ -1753,8 +1730,7 @@ textarea.qc-field-base {
 
 /* Znacznik języka przy polu, które dzieli przełącznik z sąsiednim polem.
    Wygląda jak przełącznik obok, ale nie jest przyciskiem: język wybiera się
-   raz, przy nazwie, i obowiązuje dla całego wiersza — dwa przełączniki obok
-   siebie kazałyby zgadywać, czy działają na to samo. */
+   raz, przy nazwie, i obowiązuje dla całego wiersza. */
 .qc-lang-static {
     cursor: default;
     pointer-events: none;
@@ -1763,7 +1739,7 @@ textarea.qc-field-base {
 /* ── przygotowanie palety ────────────────────────────────────────────
    Przycisk dzieli ekran na dwie części: nad nim ustawia się kolory, pod nim
    wybiera z tego, co z nich powstało. Karty pod spodem są wygaszone, dopóki
-   paleta nie jest aktualna — inaczej dałoby się wskazać odcień, którego
+   paleta nie jest aktualna. Inaczej dałoby się wskazać odcień, którego
    jeszcze nie ma. */
 .qc-generuj {
     display: flex;
@@ -1791,14 +1767,13 @@ textarea.qc-field-base {
 .qc-scale-wybor .qc-scale-step.jest { outline: 2px solid var(--fg-1); outline-offset: 1px; z-index: 1; }
 
 /* Atrybut `hidden` przegrywa z każdą regułą `display`, a panel nadaje ją
-   niemal wszystkiemu — bez tego `qc-pin` i przyciski powrotu były widoczne
+   niemal wszystkiemu. Bez tego `qc-pin` i przyciski powrotu są widoczne
    mimo ustawionego `hidden`. */
 [hidden] { display: none !important; }
 
 /* ── selektor koloru ──────────────────────────────────────────────────
    Układ wzięty z selektora ikon: wąski przycisk z wybraną wartością, a lista
-   wychodzi dopiero na żądanie. Cztery skale rozłożone na stałe zabierały pół
-   karty na jedno ustawienie. */
+   wychodzi dopiero na żądanie. */
 .qc-colorpick {
     position: relative;
     /* Blok, nie element liniowy: próbnik ma wypełnić komórkę, w której stoi,
@@ -1812,10 +1787,8 @@ textarea.qc-field-base {
     align-items: center;
     gap: 10px;
 
-    /* Szerokość z kontenera, z górnym ograniczeniem. Sztywne 260 px rozpychało
-       próbnik poza wąską komórkę — w ustawieniach wyglądu karty wychodził na
-       sąsiednie pole i przykrywał jego początek. Tam, gdzie miejsca starcza,
-       wygląda jak dotąd. */
+    /* Szerokość z kontenera, z górnym ograniczeniem: w wąskiej komórce
+       sztywna szerokość wypycha próbnik na sąsiednie pole. */
     inline-size: 100%;
     max-inline-size: 260px;
     min-inline-size: 0;
@@ -1917,7 +1890,7 @@ textarea.qc-field-base {
 }
 
 /* Wiersz własnego koloru odcięty kreską: to wyjątek od palety, nie kolejna
-   skala — i tylko przy nim silnik nie liczy kontrastu. */
+   skala, i tylko przy nim silnik nie liczy kontrastu. */
 .qc-colorpick-wlasny {
     margin-block-start: 4px;
     padding-block-start: 12px;
@@ -1938,7 +1911,7 @@ textarea.qc-field-base {
    Struktura odwzorowuje strone sklepu: sekcja idzie od krawedzi do krawedzi
    i niesie tlo, karta ma ramke i cien, obszar grupuje wiersze, wiersz mieści
    jedno albo kilka miejsc. Style przeniesione z makiety
-   quince/makiety/panel-karta-produktu.html — jeden do jednego.
+   quince/makiety/panel-karta-produktu.html, jeden do jednego.
    =================================================================== */
 
 /* --- wybór układu --- */
@@ -1968,18 +1941,11 @@ textarea.qc-field-base {
 
 /* --- SEKCJA: tło i odstęp, nic więcej --- */
 
-/* Sekcja nie ma własnego tła.
-
-   Miała je wcześniej — pas w kolorze zagłębionej powierzchni, żeby było widać,
-   gdzie jedna sekcja się kończy. Skutek był taki, że pas przechodził tuż przy
-   zaokrąglonych rogach kart i wyglądało to, jakby rogi były ścięte. Do tego
-   opis sekcji stał na barwnym tle, a od wyjaśnień jest w panelu pasek
-   informacyjny i nie ma dwóch sposobów na to samo.
-
-   Granicę między sekcjami niesie teraz sama kreska. */
+/* Sekcja nie ma własnego tła: pas tła przy zaokrąglonych rogach kart wygląda
+   jak ścięte rogi. Granicę między sekcjami niesie sama kreska. */
 .qc-sekcja { padding-block: var(--space-4); }
 
-/* Pasek informacyjny otwierający sekcję — ten sam komponent co u góry ekranu,
+/* Pasek informacyjny otwierający sekcję: ten sam komponent co u góry ekranu,
    więc i ten sam odstęp do treści pod nim. */
 .qc-sekcja > .qc-alert { margin-block-end: var(--space-3); }
 
@@ -1987,14 +1953,11 @@ textarea.qc-field-base {
 
 /* Dwie karty jedna pod drugą w tej samej sekcji. Na mapie strony produktu
    odstęp niesie kolumna `.qc-lewy`, ale listing stawia karty wprost w sekcji
-   i bez tej reguły zlewały się w jeden blok. */
+   i bez tej reguły zlewają się w jeden blok. */
 .qc-sekcja > .qc-karta + .qc-karta { margin-block-start: var(--space-3); }
 
 
-/* Tła wszystkich sekcji stoją w jednej tabeli nad mapą. Rozrzucone po sekcjach
-   ginęły: trudno było wtedy zobaczyć, gdzie jedna sekcja się kończy, a druga
-   zaczyna, a w wąskim oknie panelu byłoby jeszcze ciaśniej. Zebrane razem
-   pokazują cały rytm strony naraz. */
+/* Tła wszystkich sekcji stoją w jednej tabeli nad mapą. */
 .qc-tla { display: grid; grid-template-columns: auto 1fr 1fr; gap: var(--space-2) var(--space-4); align-items: center; }
 
 .qc-tla-glowa { font-size: 11px; font-weight: var(--weight-semibold); color: var(--fg-2); text-transform: uppercase; letter-spacing: .03em; }
@@ -2015,18 +1978,16 @@ textarea.qc-field-base {
 }
 
 .qc-karta-glowa {
-    /* Nagłówek zaokrągla się SAM, a nie przez obcinanie karty.
-
-       Karta obcinała zawartość, więc kwadratowe rogi nagłówka były niewidoczne.
-       Gdy karta przestaje obcinać — a przestaje, kiedy coś w niej rozwija paletę
-       barw — tło nagłówka zamalowywało zaokrąglone rogi karty i wyglądało to
-       jak ścięte narożniki. Własny promień działa niezależnie od obcinania. */
+    /* Nagłówek zaokrągla się SAM, a nie przez obcinanie karty: karta przestaje
+       obcinać, kiedy coś w niej rozwija paletę barw, i wtedy tło nagłówka
+       zamalowuje jej zaokrąglone rogi. Własny promień działa niezależnie od
+       obcinania. */
     border-start-start-radius: var(--radius-lg);
     border-start-end-radius: var(--radius-lg);
 
     display: flex;
     align-items: center;
-    /* Ustawienia wyglądu schodzą do własnego wiersza — patrz .qc-wyglad niżej. */
+    /* Ustawienia wyglądu schodzą do własnego wiersza (patrz .qc-wyglad niżej). */
     flex-wrap: wrap;
     gap: var(--space-2);
     padding: var(--space-2) var(--space-3);
@@ -2063,13 +2024,11 @@ textarea.qc-field-base {
 /* Wygląd karty: WIERSZ pod jej nagłówkiem, nie kolumna obok nazwy.
 
    Nagłówek karty jest wąskim paskiem flex, więc panel wstawiony w niego jako
-   sąsiad nazwy dostawał resztkę szerokości — a przy 180 px na pole siatka
-   auto-fit składała się do jednej kolumny i cztery pola stawały jedno pod
-   drugim, jak druga kolumna karty.
+   sąsiad nazwy dostaje resztkę szerokości, a przy 180 px na pole siatka
+   auto-fit składa się do jednej kolumny.
 
    `flex-basis: 100%` przenosi panel do własnego wiersza na pełną szerokość
-   karty. Wtedy pola mieszczą się obok siebie i czytają się jako jedna grupa
-   ustawień tej karty, a nie jako jej treść. */
+   karty. */
 .qc-wyglad {
     flex: 1 0 100%;
     /* Panel jest pod nagłówkiem, więc odsuwamy go od jego wyściółki. */
@@ -2083,7 +2042,7 @@ textarea.qc-field-base {
     background: var(--bg);
 }
 
-/* min-inline-size: 0 — bez tego komórka siatki nie schodzi poniżej szerokości
+/* min-inline-size: 0, bo bez tego komórka siatki nie schodzi poniżej szerokości
    swojej zawartości i pola nachodzą na siebie zamiast się zwężać. */
 .qc-wyglad-pole { display: grid; gap: var(--space-1); min-inline-size: 0; }
 
@@ -2119,7 +2078,7 @@ textarea.qc-field-base {
 
 /* Proporcja torów jest stała i dobrana pod pracę w panelu, a nie pod podgląd
    sklepu. Ustawienie „szerokość panelu zakupu" zmienia stronę produktu, nie ten
-   ekran — zwężanie kolumny, w której się klika, tylko utrudniałoby robotę. */
+   ekran. */
 .qc-mapa {
     display: grid;
     grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
@@ -2128,8 +2087,7 @@ textarea.qc-field-base {
 }
 
 /* Dwie kolumny o równej szerokości. Mapa strony produktu ma 2:1, bo lewy tor
-   niesie kartę, a prawy panel zakupu. Przy dwóch rodzajach zajawki żaden nie
-   jest ważniejszy i nierówne kolumny sugerowałyby, że jeden jest dodatkiem.
+   niesie kartę, a prawy panel zakupu; dwa rodzaje zajawki są równorzędne.
    Poniżej 1280 px schodzą pod siebie, tak jak reszta ekranów panelu. */
 .qc-mapa--rowne {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2142,8 +2100,7 @@ textarea.qc-field-base {
 /* --- OBSZAR: część karty, bez własnej ramki i bez własnego wyglądu --- */
 
 /* Druga i kazda kolejna strefa w karcie odsunieta od poprzedniej: bez tego
-   ostatnia pozycja jednej strefy kleila sie do naglowka nastepnej i czytalo sie
-   to jak jedna lista. */
+   ostatnia pozycja jednej strefy klei sie do naglowka nastepnej. */
 .qc-obszar + .qc-obszar { margin-block-start: var(--space-6); }
 
 /* Wlasne pola strefy: odsuniete od naglowka i od listy pozycji, zeby bylo
@@ -2170,8 +2127,7 @@ textarea.qc-field-base {
 
    Wiersz jest POJEMNIKIEM, nie elementem. Mieści dowolną liczbę miejsc obok
    siebie, a w każdym może stać element silnika, hook modułu albo przycisk
-   z wstawki. Sklep bez modułu ofertowego nie zostaje z pustym miejscem po
-   przycisku, którego nie ma czym wypełnić. */
+   z wstawki. */
 
 /* Ramkę ma WIERSZ, nie miejsce w środku. Dzięki temu przycisk dokładania
    miejsca siedzi wewnątrz tej samej ramki i nie urywa jej z prawej strony. */
@@ -2184,14 +2140,10 @@ textarea.qc-field-base {
 
 .qc-wiersz + .qc-wiersz, .qc-wiersz + .qc-rozwiniete, .qc-rozwiniete + .qc-wiersz { margin-block-start: var(--space-2); }
 
-/* Kolumna „Opis" i panel zakupu mają około 370 px — dwa miejsca obok siebie
-   już się tam ściskają, a trzy nie mieszczą się wcale. Dlatego miejsca w wierszu
-   stoją jedno pod drugim, w ramce tego wiersza: każde ma wtedy pełną szerokość,
-   własny chwyt do zmiany kolejności w obrębie wiersza i własny przełącznik.
-   Na stronie i tak wyjdą obok siebie — mówi o tym znacznik przy wierszu. */
 /* Wiersz z jednym miejscem: nazwa, przełącznik i plus stoją w jednej linii.
    Wiersz z kilkoma: miejsca idą jedno pod drugim (kolumna „Opis" i panel zakupu
-   mają około 370 px), a plus ląduje pod ostatnim z nich. */
+   mają około 370 px), a plus ląduje pod ostatnim z nich. Na stronie i tak
+   wychodzą obok siebie, o czym mówi znacznik przy wierszu. */
 .qc-miejsca {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -2243,7 +2195,7 @@ textarea.qc-field-base {
 .qc-miejsce--wylaczone .qc-nazwa { color: var(--fg-3); text-decoration: line-through; }
 
 /* Element czekający na moduł: widoczny, ale martwy. Nie chowamy go, bo sklep
-   ma wiedzieć, co przyjdzie razem z modułem — po instalacji ożywa sam. */
+   ma wiedzieć, co przyjdzie razem z modułem. Po instalacji ożywa sam. */
 .qc-miejsce--czeka, .qc-szczegol--czeka { opacity: .55; }
 .qc-miejsce--czeka .qc-toggle, .qc-szczegol--czeka .qc-toggle { pointer-events: none; }
 .qc-miejsce--czeka .qc-nazwa small, .qc-szczegol--czeka small { display: block; font-size: 11px; color: var(--fg-3); font-family: var(--font-mono); }
@@ -2251,7 +2203,7 @@ textarea.qc-field-base {
 .qc-chwyt { inline-size: 12px; flex: none; color: var(--fg-3); cursor: grab; font-size: 11px; line-height: 1; }
 
 /* Element o ustalonym miejscu: kłódka zamiast chwytu. Nie da się go przestawić,
-   bo pozycja wynika z projektu strony — sklep decyduje tylko, czy jest. */
+   bo pozycja wynika z projektu strony; sklep decyduje tylko, czy jest. */
 .qc-chwyt--stale { cursor: default; color: var(--border-strong); }
 
 .qc-nazwa { flex: 1; min-inline-size: 0; font-size: var(--text-sm); }
@@ -2276,8 +2228,7 @@ textarea.qc-field-base {
 .qc-ikonka:hover { background: var(--bg); color: var(--fg-1); }
 
 /* Plus dokladajacy miejsce obok stoi WEWNATRZ ramki wiersza, wiec jej nie
-   urywa. Stoi w niej na stale: chowany przezroczystoscia i tak zajmowal swoje
-   miejsce w ukladzie, wiec z prawej strony zostawala pusta luka. */
+   urywa. Stoi w niej na stale. */
 .qc-plus {
     justify-self: end;
     inline-size: 26px;
@@ -2297,7 +2248,7 @@ textarea.qc-field-base {
 /* --- dokładanie --- */
 
 /* Pole na nazwę hooka i przycisk stoją w jednym rzędzie, przy prawej krawędzi
-   obszaru. Pole nie rozpycha rzędu na całą szerokość — nazwa hooka jest krótka. */
+   obszaru. Pole nie rozpycha rzędu na całą szerokość, bo nazwa hooka jest krótka. */
 .qc-dodaj {
     display: flex;
     justify-content: flex-end;
@@ -2310,11 +2261,8 @@ textarea.qc-field-base {
 
 /* --- szczegóły elementu --- */
 
-/* Rozwinięte ustawienia elementu mają własną ramkę — osobną, nie zrośniętą
-   z ramką wiersza nad nimi. Każdy wiersz ma swoją i one też mają swoją. */
-/* Szczegóły leżą wewnątrz wiersza, więc nie mają własnej ramki — od reszty
-   wiersza oddziela je kreska. Wcześniej stały obok jako osobne pudełko i przy
-   przestawianiu odklejały się od swojego elementu. */
+/* Szczegóły leżą wewnątrz wiersza, więc nie mają własnej ramki: od reszty
+   wiersza oddziela je kreska. */
 .qc-rozwiniete {
     margin-block-start: var(--space-2);
     padding-block-start: var(--space-2);
@@ -2322,7 +2270,7 @@ textarea.qc-field-base {
     border-block-start: 1px solid var(--border);
 }
 
-/* Kłódka nie jest przyciskiem — mówi, że w tym miejscu nie ma czego kliknąć,
+/* Kłódka nie jest przyciskiem: mówi, że w tym miejscu nie ma czego kliknąć,
    bo elementu motywu nie da się usunąć. */
 .qc-klodka {
     inline-size: 22px;
@@ -2340,8 +2288,7 @@ textarea.qc-field-base {
 
 .qc-szczegol span:first-child { flex: 1; color: var(--fg-2); }
 
-/* Lista danych to zwykle wiersze — nie ma powodu, zeby wygladala inaczej niz
-   reszta ekranu. Kazdy wiersz pokazuje PARE: nazwe parametru i jego wartosc,
+/* Lista danych to zwykle wiersze. Kazdy wiersz pokazuje PARE: nazwe parametru i jego wartosc,
    bo tak wychodzi na stronie („Marka – Jaltest", a nie samo „Jaltest"). */
 .qc-dane { display: grid; gap: var(--space-2); padding-block-start: var(--space-1); }
 
@@ -2387,7 +2334,7 @@ textarea.qc-field-base {
 
 
 /* ===================================================================
-   KASKADA USTAWIEŃ — strona główna
+   KASKADA USTAWIEŃ: strona główna
 
    Sama lista sekcji stoi na `qc-repeater` i `qc-rep-row`, tak samo jak
    bloki odnośników. Tutaj zostaje wyłącznie to, czego w panelu nie było:

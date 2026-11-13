@@ -16,22 +16,20 @@ use Configuration;
 /**
  * Układ strony produktu: strefy, elementy, kolejność, włączniki szczegółów.
  *
- * Nie ma dwóch stron produktu — jest jeden model stref i dwa sposoby ich
- * rozstawienia. W układzie trzykolumnowym `opis` jest środkową kolumną;
- * w dwukolumnowym nie ma jej wcale, a jej elementy wchodzą do `zakup`, nad blok
- * cen. To nie jest ta sama strona ze zwiniętą kolumną, tylko inne przypisanie
- * elementów do stref — dlatego rozstawienie trzymamy osobno dla każdego układu.
+ * Jeden model stref, dwa sposoby ich rozstawienia. W układzie trzykolumnowym
+ * `opis` jest środkową kolumną; w dwukolumnowym nie ma jej wcale, a jej elementy
+ * wchodzą do `zakup`, nad blok cen. To inne przypisanie elementów do stref,
+ * dlatego rozstawienie trzymamy osobno dla każdego układu.
  *
  * Strefy nazywamy rolą, nigdy pozycją. „Kolumna druga" po przełączeniu układu
  * wskazywałaby na nic.
  *
- * Trzy rzeczy, które sklep ustawia dla każdego elementu:
- *  — czy jest w ogóle (włącznik),
- *  — w której strefie i na którym miejscu stoi (przeciąganie),
- *  — co dokładnie pokazuje (włączniki szczegółów, np. czy w kodach ma być EAN).
+ * Dla każdego elementu zapisujemy:
+ *  - włącznik,
+ *  - strefę i miejsce w niej,
+ *  - włączniki szczegółów (np. czy w kodach ma być EAN).
  *
- * Między elementy można wstawić hook — wtedy blok modułu staje dokładnie tam,
- * gdzie sklep chce, a nie tam, gdzie akurat wypadł w szablonie.
+ * Między elementy można wstawić hook modułu.
  *
  * Spis elementów pochodzi z makiet `quince/makiety/strona-produktu*.html`
  * oraz z docs/17-strefy-i-elementy-strony-produktu.md.
@@ -46,8 +44,8 @@ final class ProductPageSettings
     /**
      * Strefy w kolejności, w jakiej stoją na stronie.
      *
-     * `opis` nie istnieje w układzie dwukolumnowym — panel nie pokazuje jej jako
-     * miejsca docelowego, bo nie miałaby się gdzie wyświetlić.
+     * `layouts` mówi, w których układach strefa istnieje. Panel nie pokazuje
+     * strefy jako miejsca docelowego w układzie, w którym jej nie ma.
      *
      * @var array<string,array{label:string,note:string,layouts:string[]}>
      */
@@ -71,12 +69,8 @@ final class ProductPageSettings
             'layouts' => [self::LAYOUT_THREE],
         ],
         // Odbicie strefy `naglowek`: pas przez całą kartę, tyle że pod galerią
-        // i opisem. Silnik nie stawia tu nic własnego — miejsce jest po to, żeby
-        // sklep wpiął tam hooka ze swoją treścią.
-        //
-        // Na razie tylko układ trzykolumnowy. W dwukolumnowym karta niesie samą
-        // galerię, więc „szerokość dwóch kolumn" znaczy tam co innego i wraca
-        // do rozstrzygnięcia osobno.
+        // i opisem. Silnik nie stawia tu nic własnego; strefa przyjmuje hooki.
+        // Tylko układ trzykolumnowy.
         'stopka' => [
             'label' => 'Footer',
             'note' => 'Full width under the gallery and the description.',
@@ -88,9 +82,8 @@ final class ProductPageSettings
             'layouts' => [self::LAYOUT_THREE, self::LAYOUT_TWO],
         ],
         'zapewnienia' => [
-            // Nazwa od MIEJSCA, nie od treści: pas bierze to, co sklep w niego
-            // wstawi — zwrot, dostawę, płatności, a przez hooka cokolwiek innego.
-            // „Zapewnienia" opisywały jeden moduł, a nie strefę.
+            // Etykieta od miejsca, nie od treści: pas przyjmuje dowolne
+            // elementy i hooki.
             'label' => 'Strip under the card',
             'note' => 'Runs under the card, as wide as the gallery and the description together. Shop-wide content: it says the same thing at every product.',
             'layouts' => [self::LAYOUT_THREE, self::LAYOUT_TWO],
@@ -108,7 +101,7 @@ final class ProductPageSettings
             'jedenWWierszu' => true,
         ],
         // Zestawy mówią o tym produkcie, więc dzielą powierzchnię z kartą.
-        // Zajawki to oferta obok — dostają własną sekcję i własne tło.
+        // Zajawki to oferta obok, więc dostają własną sekcję i własne tło.
         'zestawy' => [
             'label' => 'Packs',
             'note' => 'What this product comes in and what it consists of.',
@@ -124,7 +117,7 @@ final class ProductPageSettings
     /**
      * Katalog elementów.
      *
-     * `zone` to strefa domyślna, `zones` to miejsca dozwolone — pusta tablica znaczy
+     * `zone` to strefa domyślna, `zones` to miejsca dozwolone. Pusta tablica znaczy
      * „tylko tam, gdzie stoi domyślnie". Blok cen, warianty i przyciski zakupu nie mają
      * stref dozwolonych: przeniesienie ich poza `zakup` psuje stronę, a nie zmienia
      * jej wyglądu.
@@ -151,7 +144,6 @@ final class ProductPageSettings
         ],
 
         // Plakietki stoją domyślnie przy opisie, bo na kadrze leżałyby na zdjęciu.
-        // Sklep z jasnymi zdjęciami może je przenieść na kadr.
         'badges' => ['label' => 'Badges', 'zone' => 'opis', 'zones' => ['galeria', 'opis', 'zakup']],
 
         // --- nagłówek karty ---
@@ -188,9 +180,8 @@ final class ProductPageSettings
         ],
         'availability' => [
             'label' => 'Availability and shipping',
-            // Domyślnie w panelu zakupu, nad przyciskiem: stan i termin są
-            // częścią decyzji o zakupie, a nie opisem produktu. W wąskiej kolumnie
-            // idą jedną zwartą linijką zamiast wierszami tabeli.
+            // W wąskiej kolumnie zakupu szablon rysuje jedną zwartą linijkę
+            // zamiast wierszy tabeli.
             'zone' => 'zakup',
             'zones' => ['opis', 'zakup'],
             'options' => [
@@ -200,9 +191,8 @@ final class ProductPageSettings
             ],
         ],
 
-        // Przyciski, za którymi stoi osobny moduł. Silnik zna ich miejsce, ale
-        // dopóki modułu nie ma, pole jest martwe — po instalacji ożywa samo,
-        // bez ruszania ustawień sklepu.
+        // Przyciski, za którymi stoi osobny moduł (`requires`). Dopóki modułu
+        // nie ma, pole jest martwe; po instalacji ożywa bez zmiany ustawień.
         'offer' => [
             'label' => 'Download a quote',
             'zone' => 'opis',
@@ -225,8 +215,7 @@ final class ProductPageSettings
             'options' => [
                 'days' => 365,       // na ile dni przed końcem promocji pas się pojawia
             ],
-            // Zakres pola liczbowego na ekranie. Bez niego panel wziąłby zakres
-            // liczby cech i nie dałby wpisać więcej niż dziesięciu dni.
+            // Zakres pola liczbowego. Bez niego obowiązuje zakres domyślny z zakres().
             'ranges' => ['days' => [1, 365]],
         ],
         'price' => [
@@ -269,10 +258,8 @@ final class ProductPageSettings
 
         // --- sekcje ---
         'section_description' => ['label' => 'Full description', 'zone' => 'sekcje', 'zones' => []],
-        // Jedna pozycja akordeonu, dwa bloki w środku. To dwa różne źródła
-        // w PrestaShopie — stałe pola produktu i tabela cech z katalogu — ale
-        // dla kupującego jest to jedno pytanie: „co to dokładnie jest". Osobne
-        // zakładki kazały mu szukać w dwóch miejscach.
+        // Jedna pozycja akordeonu, dwa bloki w środku z dwóch źródeł
+        // PrestaShopa: stałe pola produktu i tabela cech z katalogu.
         'section_spec' => [
             'label' => 'Product details',
             'zone' => 'sekcje',
@@ -283,8 +270,8 @@ final class ProductPageSettings
                 'features' => true,  // tabela cech z katalogu
             ],
         ],
-        // Składniki zestawu stoją w panelu zakupu: pytanie „co dostanę w pudełku"
-        // pada przy cenie. W panelu jeden wiersz, pełna lista w szufladzie.
+        // Składniki zestawu stoją w panelu zakupu: jeden wiersz, pełna lista
+        // w szufladzie.
         'section_pack_items' => [
             'label' => 'Pack contents',
             'zone' => 'zakup',
@@ -323,18 +310,16 @@ final class ProductPageSettings
         'section_faq' => ['label' => 'Questions and answers', 'zone' => 'sekcje', 'zones' => [], 'requires' => 'quince_qa'],
 
         // Zakładki dokładane przez moduły (`$product.extraContent`). Jedna pozycja
-        // na wszystkie — sklep decyduje, czy w ogóle się pojawiają i w którym miejscu
-        // akordeonu, a nie który moduł co dokłada.
+        // na wszystkie: włącznik i miejsce w akordeonie dotyczą ich łącznie.
         'section_modules' => ['label' => 'Tabs added by modules', 'zone' => 'sekcje', 'zones' => []],
 
         // --- zestawy ---
         'bundles' => ['label' => 'Packs with this product', 'zone' => 'zestawy', 'zones' => []],
 
         // --- zajawki ---
-        // Każda karuzela pod kartą jest tu elementem i każda ma zawsze tytuł:
-        // bez niego na stronie nie da się rozpoznać, który rząd jest którym.
+        // Każda karuzela pod kartą jest osobnym elementem i zawsze ma tytuł.
         // `note` stoi w panelu pod nazwą: karuzela bez treści znika ze strony,
-        // więc sklep musi wiedzieć, kiedy ją w ogóle zobaczy.
+        // a notka mówi, kiedy się pojawia.
         'related' => [
             'label' => 'Accessories and related products',
             'note' => 'Shows at products that have related products picked in the catalogue.',
@@ -360,8 +345,7 @@ final class ProductPageSettings
             ],
             'ranges' => ['count' => [2, 20]],
         ],
-        // Listę daje natywny moduł kategorii. Wcześniej doklejał się sam pod
-        // kartą, poza panelem, więc sklep nie mógł go ani przestawić, ani wyłączyć.
+        // Listę daje natywny moduł ps_categoryproducts.
         'category_products' => [
             'label' => 'Products from the same category',
             'note' => 'Shows when the main category of the product has other products.',
@@ -388,7 +372,7 @@ final class ProductPageSettings
     ];
 
     /**
-     * Kolejność elementów w obszarach po instalacji — wprost z makiety panelu
+     * Kolejność elementów w obszarach po instalacji, wprost z makiety panelu
      * `quince/makiety/panel-karta-produktu.html`.
      *
      * Wpisana, a nie wyliczana z porządku deklaracji w katalogu: katalog grupuje
@@ -403,8 +387,7 @@ final class ProductPageSettings
         'opis' => ['badges', 'short_description', 'key_features', 'brand_sku', ['offer', 'ask_expert']],
         // Pusto z zamiaru: strefa czeka na hooka sklepu, nie na element silnika.
         'stopka' => [],
-        // Dostępność po wariantach, a przed przyciskiem: stan zależy od wybranego
-        // wariantu, a decyduje o tym, czy w ogóle kliknąć.
+        // Dostępność po wariantach: stan zależy od wybranego wariantu.
         'zakup' =>['promo_bar', 'price', 'tier_prices', 'section_pack_items', 'variants', 'availability', 'customization', 'add_to_cart', 'buy_now'],
         'zapewnienia' => ['reassurance'],
         'sekcje' => [
@@ -421,10 +404,7 @@ final class ProductPageSettings
      * Elementy opisu wchodzą tu NAD blok cen, więc to nie jest ta sama lista
      * z dołożonymi pozycjami.
      *
-     * Kolejność wprost z makiety `quince/makiety/strona-produktu.html`: nazwa
-     * i ocena stoją w panelu, nad kodami, a dostępność z terminem wysyłki pod
-     * przyciskami zakupu, jako odpowiedź na pytanie „kiedy to dostanę", zadane
-     * po decyzji o kupnie.
+     * Kolejność wprost z makiety `quince/makiety/strona-produktu.html`.
      *
      * @var array<int,string|string[]>
      */
@@ -438,8 +418,7 @@ final class ProductPageSettings
     /**
      * Elementy, które przy dwóch kolumnach mają inne miejsce domyślne niż zwykle.
      *
-     * Plakietki leżą wtedy na zdjęciu, tak jak w makiecie: panel niesie decyzję
-     * o zakupie, a „nowość" czy „−25%" należą do kadru produktu. Poza tą listą
+     * Plakietki leżą wtedy na zdjęciu, tak jak w makiecie. Poza tą listą
      * elementy strefy `opis` przechodzą w tym układzie do panelu zakupu, bo
      * strefy `opis` tam nie ma.
      *
@@ -453,8 +432,7 @@ final class ProductPageSettings
      * Włączniki szczegółów, za którymi stoi osobny moduł.
      *
      * Ta sama zasada co przy elementach: pole jest widoczne od początku, ale
-     * martwe, dopóki modułu nie ma. Dzięki temu sklep wie, co dostanie, a po
-     * instalacji nie musi niczego szukać.
+     * martwe, dopóki modułu nie ma.
      *
      * @var array<string,array<string,string>> element => włącznik => moduł
      */
@@ -466,7 +444,6 @@ final class ProductPageSettings
      * Nazwy włączników szczegółów, którymi panel mówi do sklepikarza.
      *
      * Klucze w katalogu są krótkie, bo trafiają do konfiguracji i do szablonu.
-     * Na ekranie muszą stać zdaniem, a nie skrótem: „stock" nikomu nic nie mówi.
      *
      * @var array<string,string>
      */
@@ -528,7 +505,7 @@ final class ProductPageSettings
         'SURFACES' => '',
 
         // Ile procent szerokości strony bierze panel zakupu. Wartość ze spisu
-        // SPLITS, nie dowolna liczba — patrz komentarz przy tej stałej.
+        // SPLITS albo SPLITS_TWO, nie dowolna liczba.
         'SPLIT' => '33',
     ];
 
@@ -548,9 +525,8 @@ final class ProductPageSettings
      * Sklepy, które pokazują inną stronę produktu niż ta na ekranie panelu.
      *
      * Panel otwarty na „Wszystkie sklepy" albo na grupę pokazuje ustawienie
-     * wspólne. Sklep, któremu ktoś zapisał układ z jego własnego kontekstu, czyta
-     * swój wiersz i wygląda inaczej, a ekran nic o tym nie mówi. Przy jednym
-     * sklepie ekran pokazuje dokładnie jego ustawienia, więc lista jest pusta.
+     * wspólne. Sklep z własnym wierszem w `ps_configuration` czyta swój wiersz
+     * i wygląda inaczej. W kontekście jednego sklepu lista jest pusta.
      *
      * Porównujemy odczytane dane, a nie napisy: ten sam układ zapisany w innej
      * kolejności kluczy nie jest różnicą.
@@ -590,8 +566,7 @@ final class ProductPageSettings
     /**
      * Nazwa włącznika szczegółów do pokazania na ekranie.
      *
-     * @return string klucz, gdy nazwy jeszcze nie spisano — lepiej pokazać klucz
-     *                niż puste miejsce
+     * @return string sam klucz, gdy nazwy nie ma w OPTION_LABELS
      */
     public function optionLabel(string $klucz): string
     {
@@ -610,9 +585,8 @@ final class ProductPageSettings
     /**
      * Szerokości panelu zakupu, do wyboru w panelu.
      *
-     * Cztery wartości, nie suwak: szerokość prawej kolumny wynika z tego, ile
-     * miejsca potrzebuje wiersz „ilość + do koszyka", żeby się nie łamał, a nie
-     * z dowolnego upodobania. Spis pochodzi ze stanów widoku w prototypie.
+     * Stały spis, nie suwak: przy węższej kolumnie łamie się wiersz „ilość +
+     * do koszyka". Spis pochodzi ze stanów widoku w prototypie.
      *
      * @var string[]
      */
@@ -642,10 +616,9 @@ final class ProductPageSettings
     /**
      * Ile procent szerokości strony bierze panel zakupu.
      *
-     * Wartość jest osobna dla każdego układu, tak jak rozstawienie elementów:
-     * połowa strony ma sens przy dwóch kolumnach, a przy trzech już nie, więc
-     * jedna wspólna liczba przenosiłaby ustawienie tam, gdzie nie wolno go użyć.
-     * Zapis sprzed rozdzielenia jest jedną liczbą i wtedy dotyczy obu układów.
+     * Wartość jest osobna dla każdego układu (JSON z kluczem układu), bo spisy
+     * dozwolonych szerokości się różnią. Starszy zapis jest jedną liczbą i wtedy
+     * dotyczy obu układów.
      */
     public function split(?string $layout = null): string
     {
@@ -661,9 +634,9 @@ final class ProductPageSettings
      * Strefy układu wraz z elementami w kolejności wyświetlania.
      *
      * Źródłem jest zapisane rozstawienie, ale katalog rozstrzyga: element, którego
-     * w katalogu nie ma, wypada (bo zniknął z motywu), a element, którego nie ma
-     * w zapisie, dochodzi na koniec swojej strefy domyślnej (bo właśnie go dodaliśmy).
-     * Dzięki temu aktualizacja motywu nie wymaga od sklepu żadnego ruchu.
+     * w katalogu nie ma, wypada, a element, którego nie ma w zapisie, dochodzi na
+     * koniec swojej strefy domyślnej. Dzięki temu aktualizacja motywu nie wymaga
+     * ponownego zapisu ustawień.
      *
      * @return array<string,array<int,array{id:string,hook:string,on:bool,label:string,options:array<string,bool>}>>
      */
@@ -696,9 +669,8 @@ final class ProductPageSettings
             }
         }
 
-        // Elementy, których zapis nie zna — nowe w katalogu albo takie, które
-        // dopiero co zmieniły strefę — dochodzą tam, gdzie stoją domyślnie,
-        // każdy w osobnym wierszu.
+        // Elementy, których zapis nie zna (nowe w katalogu albo odrzucone wyżej),
+        // dochodzą tam, gdzie stoją domyślnie.
         foreach ($this->defaultArrangement($layout) as $strefa => $wiersze) {
             foreach ($wiersze as $identyfikatory) {
                 $wiersz = [];
@@ -724,8 +696,8 @@ final class ProductPageSettings
     /**
      * Jedno miejsce w wierszu: element silnika albo hook modułu.
      *
-     * Zwraca null dla pozycji, której nie wolno tu postawić — element spoza
-     * katalogu (zniknął z motywu), powtórzony albo w niedozwolonej strefie.
+     * Zwraca null dla pozycji, której nie wolno tu postawić: element spoza
+     * katalogu, powtórzony albo w niedozwolonej strefie.
      *
      * @param array<string,mixed>              $pozycja
      * @param array<string,array<string,bool>> $opcje
@@ -805,7 +777,7 @@ final class ProductPageSettings
     }
 
     /**
-     * Rozstawienie po instalacji — i punkt odniesienia dla elementów, których
+     * Rozstawienie po instalacji. Także punkt odniesienia dla elementów, których
      * zapisane rozstawienie nie zna.
      *
      * @return array<string,string[]>
@@ -815,7 +787,7 @@ final class ProductPageSettings
         $strefy = array_fill_keys($this->zonesFor($layout), []);
         $ustawione = [];
 
-        // Pozycja spisu może być tablicą — wtedy te elementy stoją w jednym
+        // Pozycja spisu może być tablicą: wtedy te elementy stoją w jednym
         // wierszu, obok siebie. Stąd wynik jest listą WIERSZY, nie elementów.
         $dopisz = function (string $strefa, array $identyfikatory) use (&$strefy, &$ustawione): void {
             $wiersz = [];
@@ -855,8 +827,8 @@ final class ProductPageSettings
             }
         }
 
-        // Element, którego w spisie nie ma — nowy w katalogu — dochodzi na koniec
-        // swojego obszaru domyślnego, żeby nie zniknął z ekranu.
+        // Element katalogu, którego nie ma w spisie, dochodzi na koniec swojego
+        // obszaru domyślnego.
         foreach (self::CATALOGUE as $id => $element) {
             if (isset($ustawione[$id])) {
                 continue;
@@ -870,7 +842,7 @@ final class ProductPageSettings
 
     /**
      * Co silnik podaje szablonowi: strefy z włączonymi elementami w kolejności
-     * wyświetlania. Szablon nie wie, skąd się wzięły — przechodzi je po kolei.
+     * wyświetlania. Szablon przechodzi je po kolei.
      *
      * @return array<string,mixed>
      */
@@ -915,9 +887,8 @@ final class ProductPageSettings
             'rows' => $wierszeStref,
             // Włączniki szczegółów osobno, kluczem elementu. Strefy niosą je już
             // przy elementach, ale PrestaShop po zmianie wariantu renderuje same
-            // kawałki karty — cenę, warianty, dostępność — bez strefy dookoła.
-            // Kawałek, który dostawał ustawienia od strefy, po takim odświeżeniu
-            // wracał do wartości domyślnych.
+            // kawałki karty (cenę, warianty, dostępność) bez strefy dookoła.
+            // Bez tej mapy takie kawałki wracałyby do wartości domyślnych.
             'options' => $this->options(),
             // Siatka strony ma dwa tory, więc proporcja jest jedną liczbą: ile
             // zabiera panel zakupu. Podział na galerię i opis dzieje się wewnątrz
@@ -934,8 +905,8 @@ final class ProductPageSettings
      * Zapisuje układ, podział szerokości, rozstawienie i włączniki szczegółów.
      *
      * Rozstawienie przychodzi jako JSON, bo panel przestawia elementy przeciąganiem
-     * i wysyła cały stan strefy naraz. Zapisujemy je pod układem, którego dotyczy —
-     * drugi układ zostaje nietknięty i czeka ze swoim własnym ustawieniem.
+     * i wysyła cały stan strefy naraz. Zapisujemy je pod układem, którego dotyczy;
+     * drugi układ zostaje nietknięty.
      *
      * @param array<string,mixed> $values
      */
@@ -947,9 +918,9 @@ final class ProductPageSettings
 
         ConfigStore::set(self::PREFIX . 'LAYOUT', $layout);
 
-        // Szerokość panelu zapisujemy pod układem, którego dotyczy — tak samo
-        // jak rozstawienie. Zapis sprzed rozdzielenia jest jedną liczbą, więc
-        // przy pierwszym zapisie staje się wartością obu układów.
+        // Szerokość panelu zapisujemy pod układem, którego dotyczy, tak samo
+        // jak rozstawienie. Starszy zapis jest jedną liczbą, więc przy
+        // pierwszym zapisie staje się wartością obu układów.
         $split = (string) ($values['SPLIT'] ?? '');
         $zapisane = (string) Configuration::get(self::PREFIX . 'SPLIT');
         $mapa = json_decode($zapisane, true);
@@ -963,9 +934,9 @@ final class ProductPageSettings
 
         ConfigStore::set(self::PREFIX . 'SPLIT', (string) json_encode($mapa), true);
 
-        // Puste pole znaczy „nie ruszaj rozstawienia" — tak wysyła je przełącznik
-        // układu, który tylko otwiera drugi układ. Nadpisanie zapisanego układu
-        // tym, co akurat stało na ekranie, zabrałoby sklepowi jego ustawienia.
+        // Puste pole znaczy „nie ruszaj rozstawienia". Tak wysyła je przełącznik
+        // układu, który tylko otwiera drugi układ; nadpisanie zapisu stanem
+        // ekranu skasowałoby rozstawienie tego układu.
         if (trim((string) ($values['ARRANGEMENT'] ?? '')) !== '') {
             $rozstawienie = $this->arrangement();
             $rozstawienie[$layout] = $this->readArrangement($values, $layout);
@@ -976,9 +947,9 @@ final class ProductPageSettings
         //
         // Każdy przełącznik ma przed sobą pole ukryte z zerem, więc formularz
         // ekranu przysyła komplet i te warunki są zawsze spełnione. Chronią
-        // przed czymś innym: wywołaniem `save()` z niepełnym zestawem pól —
-        // z konsoli, z testu, z przyszłego ekranu, który ustawia tylko układ.
-        // Bez nich taki zapis po cichu gasi wszystkie włączniki naraz.
+        // przed wywołaniem `save()` z niepełnym zestawem pól (konsola, test,
+        // ekran ustawiający tylko układ). Bez nich taki zapis gasi wszystkie
+        // włączniki naraz.
         if (array_key_exists('option', $values)) {
             ConfigStore::set(self::PREFIX . 'OPTIONS', (string) json_encode($this->readOptions($values)), true);
         }
@@ -996,8 +967,7 @@ final class ProductPageSettings
      * Wygląd powierzchni z wysyłki formularza.
      *
      * Pola przychodzą jako `wyglad[karta][bg]`, `wyglad[karta][border]` i tak
-     * dalej. Wartości spoza spisu wypadają — do CSS trafia tylko to, co sami
-     * przewidzieliśmy.
+     * dalej. Wartości spoza spisu wypadają, bo wynik trafia do CSS.
      *
      * @param array<string,mixed> $values
      *
@@ -1040,8 +1010,8 @@ final class ProductPageSettings
      * Pola przychodzą jako `telefon[pasek]`, `telefon[pasek_cena]` i tak dalej.
      * Brak pola znaczy „wyłączone": przeglądarka nie wysyła niezaznaczonego
      * pola wyboru, a każdy przełącznik ma przed sobą pole ukryte z zerem,
-     * więc wartość przychodzi zawsze — poza listą warstwy, którą liczymy
-     * z tego, co przyszło.
+     * więc wartość przychodzi zawsze. Wyjątkiem jest lista warstwy, którą
+     * liczymy z tego, co przyszło.
      *
      * @param array<string,mixed> $values
      *
@@ -1073,10 +1043,7 @@ final class ProductPageSettings
     }
 
     /**
-     * Powierzchnie strony produktu — nazwa w panelu => klucz tokenu.
-     *
-     * Nazwa jest jednocześnie nazwą strefy, więc panel i silnik mówią o tym
-     * samym jednym słowem.
+     * Powierzchnie strony produktu: nazwa w panelu i zarazem część klucza tokenu.
      *
      * @var string[]
      */
@@ -1086,7 +1053,7 @@ final class ProductPageSettings
      * Wygląd powierzchni: tło, ramka, cień i zaokrąglenie każdej karty.
      *
      * Pusta wartość znaczy „jak w ustawieniach globalnych" i nie wypisujemy dla
-     * niej tokenu — motyw ma wtedy zostać przy swojej wartości domyślnej.
+     * niej tokenu: motyw zostaje wtedy przy swojej wartości domyślnej.
      * Zapisanie „dziedziczenia" jako konkretnej barwy zamroziłoby kartę na tym,
      * co akurat było globalnie w chwili zapisu.
      *
@@ -1114,8 +1081,8 @@ final class ProductPageSettings
      * Tokeny powierzchni do wypisania w nagłówku strony.
      *
      * Wypisujemy WYŁĄCZNIE to, co sklep ustawił. Motyw czyta je z wartością
-     * zapasową (`var(--q-pdp-karta-bg, …)`), więc brak tokenu to nie brak
-     * wyglądu — to wygląd domyślny.
+     * zapasową (`var(--q-pdp-karta-bg, …)`), więc brak tokenu daje wygląd
+     * domyślny.
      *
      * @param array<string,string> $paleta stopnie skali z generatora palety
      *
@@ -1128,10 +1095,9 @@ final class ProductPageSettings
         foreach ($this->surfaces() as $nazwa => $wyglad) {
             $przedrostek = 'pdp-' . $nazwa . '-';
 
-            // Kreski bloku liczone od JEGO tła, a nie od globalnego. Sklep ustawia
-            // w Wyglądzie różnicę stopni, a nie odcień: blok z ciemniejszym tłem
-            // dostaje wtedy proporcjonalnie ciemniejszą kreskę i nie zdarza się,
-            // żeby kreska wypadła dokładnie w kolorze tła i zniknęła.
+            // Kreski bloku liczone od JEGO tła, a nie od globalnego. Ustawienie
+            // w Wyglądzie to różnica stopni, a nie odcień, więc kreska nigdy nie
+            // wypada w kolorze tła bloku.
             $stopien = $this->stopienZeSkali($wyglad['bg']);
 
             if ($stopien !== null) {
@@ -1175,10 +1141,8 @@ final class ProductPageSettings
                     : '0';
             }
 
-            // Blok, który dostał widoczną skórę, dostaje też odstęp od krawędzi.
-            // Bez tego pierwsze włączenie ramki albo tła w panelu przykleja treść
-            // do kreski — a sklep nie ma osobnego pola „wcięcie" i nie ma tego
-            // jak naprawić.
+            // Blok z tłem albo ramką dostaje też odstęp od krawędzi, bo bez
+            // niego treść przykleja się do kreski. Osobnego pola na wcięcie nie ma.
             if ($wyglad['bg'] !== '' || $wyglad['border'] === 'on') {
                 $tokeny[$przedrostek . 'pad'] = 'var(--q-space-md)';
             }
@@ -1221,7 +1185,7 @@ final class ProductPageSettings
             return '';
         }
 
-        // Stopnie 1–3 to najjaśniejsze tła, 12 to atrament. Ciemne zaczynają się
+        // Stopnie 1-3 to najjaśniejsze tła, 12 to atrament. Ciemne zaczynają się
         // mniej więcej od dziewiątki i tam kreska ma iść ku jaśniejszym.
         $kierunek = $stopienTla >= 9 ? -1 : 1;
         $cel = $stopienTla + ($kierunek * abs($przeskok));
@@ -1235,14 +1199,9 @@ final class ProductPageSettings
      * z niego wysuwa.
      *
      * Warstwa jest DUBLEM panelu zakupu, nie osobnym układem: kolejność bierze
-     * z panelu, a osobna jest tylko decyzja, co do niej wchodzi. Powód jest
-     * praktyczny — na telefonie miejsca jest mało, więc hook z leasingiem albo
-     * warunkami hurtowymi ma sens w panelu na komputerze, a w wysuwanej warstwie
-     * zajmowałby połowę ekranu. Druga, niezależna kolejność znaczyłaby dwa
-     * rozstawienia tego samego panelu do pilnowania.
+     * z panelu, a osobna jest tylko lista elementów wyłączonych z warstwy.
      *
-     * Element, o którym sklep jeszcze nie zdecydował, wchodzi do warstwy —
-     * bo w panelu też jest włączony i nie ma powodu, żeby zniknął z telefonu.
+     * Element spoza tej listy wchodzi do warstwy.
      *
      * @return array{bar:bool,bar_price:bool,bar_button:bool,sheet:bool,sheet_off:string[]}
      */
@@ -1257,9 +1216,7 @@ final class ProductPageSettings
             'bar_button' => (bool) ($zapisane['bar_button'] ?? true),
             'sheet' => (bool) ($zapisane['sheet'] ?? true),
             // Trzymamy to, co WYŁĄCZONE, a nie to, co włączone: element dołożony
-            // do panelu później ma się pojawić także na telefonie, bez wracania
-            // na ten ekran. Lista wyjątków jest krótka, lista wszystkiego rośnie
-            // z każdym hookiem.
+            // do panelu później pojawia się także na telefonie bez ponownego zapisu.
             'sheet_off' => array_values(array_filter(
                 array_map('strval', (array) ($zapisane['sheet_off'] ?? [])),
                 static fn (string $id): bool => $id !== ''
@@ -1277,11 +1234,9 @@ final class ProductPageSettings
      * Szczegóły elementów z nałożonymi wartościami domyślnymi.
      *
      * Rodzaj wartości poznajemy po katalogu, tak samo jak przy zapisie: liczba
-     * zostaje liczbą, reszta staje się włącznikiem. Rzutowanie wszystkiego na
-     * wartość logiczną zamieniało „pokaż 3 cechy" na „tak": panel rysował wtedy
-     * przełącznik zamiast pola liczbowego, a karta produktu porównywała liczbę
-     * cech z wartością logiczną i wypisywała wszystkie, bez odnośnika do
-     * specyfikacji.
+     * zostaje liczbą, reszta staje się włącznikiem. Nie rzutować wszystkiego na
+     * bool: panel rysuje po typie przełącznik albo pole liczbowe, a szablon
+     * porównuje liczbę cech z liczbą.
      *
      * @return array<string,array<string,bool|int>>
      */
@@ -1334,8 +1289,7 @@ final class ProductPageSettings
      * Pełne nazwy kluczy konfiguracji tej klasy.
      *
      * Potrzebne przy odinstalowaniu: moduł kasuje dokładnie to, co założył. Nazwy
-     * wyliczane ze schematu, a nie wypisane drugi raz — inaczej dołożenie pola
-     * zostawiałoby po sobie klucz na zawsze.
+     * wyliczane ze schematu, żeby nowe pole nie zostawało w bazie po odinstalowaniu.
      *
      * @return string[]
      */
@@ -1380,8 +1334,7 @@ final class ProductPageSettings
             'label' => self::CATALOGUE[$id]['label'],
             'options' => $szczegoly,
 
-            // Czego moduł nie obsługuje, tego sklep nie włączy — pole zostaje
-            // widoczne, żeby było wiadomo, co przyjdzie razem z modułem.
+            // Bez modułu pole zostaje widoczne, ale nieaktywne.
             'requires' => $modul,
             'available' => $modul === '' || self::moduleActive($modul),
             'optionRequires' => $wymagania,
@@ -1454,8 +1407,8 @@ final class ProductPageSettings
                     }
 
                     if (str_starts_with($id, 'hook:')) {
-                        // Nazwa hooka trafia do `Hook::exec`, więc przepuszczamy wyłącznie
-                        // to, co może nią być — litery i cyfry, nic poza tym.
+                        // Nazwa hooka trafia do `Hook::exec`, więc przepuszczamy
+                        // wyłącznie litery i cyfry.
                         if (!preg_match('/^hook:[a-zA-Z][a-zA-Z0-9]{2,63}$/', $id)) {
                             continue;
                         }
@@ -1477,12 +1430,10 @@ final class ProductPageSettings
     }
 
     /**
-     * Wartość liczbowej opcji elementu, przycięta do rozsądnego zakresu.
+     * Wartość liczbowej opcji elementu, przycięta do zakresu z katalogu.
      *
-     * Poniżej trzech lista przestaje być listą, powyżej dziesięciu staje się
-     * specyfikacją przepisaną w drugie miejsce — a specyfikacja jest niżej, w swojej
-     * własnej sekcji. Puste pole wraca do wartości domyślnej, a nie do zera:
-     * zero znaczyłoby „nie pokazuj nic", a od tego jest wyłączenie elementu.
+     * Puste pole wraca do wartości domyślnej, a nie do zera: do ukrycia
+     * elementu służy jego włącznik.
      *
      * @param mixed $wartosc
      */
@@ -1498,9 +1449,7 @@ final class ProductPageSettings
     /**
      * Dolna i górna granica opcji liczbowej.
      *
-     * Każda liczba w katalogu znaczy co innego: liczba cech mieści się w kilku,
-     * a próg dni przed końcem promocji może sięgać roku. Bez własnego zakresu
-     * wszystkie brałyby granice pierwszej z nich.
+     * Zakres z klucza `ranges` w katalogu, bez niego 0-999.
      *
      * @return array{0:int,1:int}
      */
@@ -1528,9 +1477,7 @@ final class ProductPageSettings
 
             foreach ($element['options'] as $klucz => $domyslna) {
                 // Rodzaj opcji poznajemy po wartości domyślnej w katalogu: liczba
-                // znaczy pole liczbowe, wszystko inne — przełącznik. Dzięki temu
-                // dołożenie kolejnej opcji liczbowej nie wymaga niczego poza
-                // wpisaniem jej domyślnej wartości.
+                // znaczy pole liczbowe, wszystko inne przełącznik.
                 if (is_int($domyslna)) {
                     $wynik[$id][$klucz] = $this->liczbaOpcji(
                         $przyslane[$id][$klucz] ?? null,

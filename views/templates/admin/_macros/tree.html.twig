@@ -1,11 +1,11 @@
 {#
- # Drzewo kategorii — jedno na cały panel.
+ # Drzewo kategorii, jedno na cały panel.
  #
  # Dwie odmiany: `picker()` wybiera jedną kategorię i przechodzi pod jej adres,
  # `checks()` zaznacza wiele i wysyła je z formularzem. Obie stoją na tym samym
  # `qc-tree` i na `views/js/drzewo.js`.
  #
- # Ekran, który tego używa, musi wczytać Alpine i `drzewo.js` — patrz `assets()`.
+ # Ekran, który tego używa, musi wczytać Alpine i `drzewo.js` (patrz `assets()`).
  #
  # Kategorie podajemy jako tablicę z `id`, `name`, `depth`, `parent`, `sciezka`
  # i `dzieci`. Dla `picker()` dochodzi `url`, bo adres niesie token panelu i musi
@@ -23,7 +23,7 @@
 
 {#
  # Dane drzewa jako zmienna JavaScriptu, a NIE w atrybucie `x-data`: JSON ma
- # w środku cudzysłowy, a atrybut HTML jest nimi ograniczony — kategoria z calem
+ # w środku cudzysłowy, a atrybut HTML jest nimi ograniczony: kategoria z calem
  # w nazwie („Klucze 1/2\"") rozrywa znacznik i komponent w ogóle nie powstaje.
  #}
 {% macro dane(zmienna, kategorie, trasa) %}
@@ -48,8 +48,8 @@
 {#
  # Wybór jednej kategorii.
  #
- # `zmienna` — nazwa zmiennej z danymi, `wybrana` — id bieżącej, `etykieta` — co
- # to za pole, `szerokosc` — szerokość panelu drzewa.
+ # `zmienna`: nazwa zmiennej z danymi, `wybrana`: id bieżącej, `etykieta`: co
+ # to za pole, `szerokosc`: szerokość panelu drzewa.
  #}
 {% macro picker(zmienna, wybrana, etykieta, szerokosc) %}
     <div class="qc-field" style="margin:0;position:relative;min-inline-size:{{ szerokosc|default('320px') }}"
@@ -80,7 +80,7 @@
  # Wybór jednej kategorii do pola formularza.
  #
  # `model` to wyrażenie Alpine wskazujące zmienną, w której ma wylądować wybór
- # (np. `link.id_category`), a `nazwaPola` — wyrażenie budujące atrybut `name`.
+ # (np. `link.id_category`), a `nazwaPola` to wyrażenie budujące atrybut `name`.
  # Oba przychodzą jako tekst, bo w powtarzalniku zależą od indeksu wiersza.
  #}
 {% macro pickerField(zmienna, model, nazwaPola, etykieta, pusty) %}
@@ -115,26 +115,19 @@
 {% endmacro %}
 
 {#
- # Zaznaczanie wielu kategorii. Wartości lecą jako `nazwaPola[]`.
- #
- # Drzewo stoi otwarte, bez przycisku: to nie jest wybór jednej rzeczy, tylko
- # lista do przejrzenia, a schowanie jej za przyciskiem kazałoby otwierać go po
- # każdym zaznaczeniu, żeby sprawdzić, co się zaznaczyło.
- #}
-{#
- # Pole wyszukiwania kategorii — po nazwie albo po numerze.
+ # Pole wyszukiwania kategorii, po nazwie albo po numerze.
  #
  # Odmiana dla miejsc, gdzie rozwinięte drzewo zabiera pół ekranu: wierszy
  # powtarzalnika i list wykluczeń. `wiele` przełącza na zaznaczanie wielu,
  # wtedy wybrane stoją pod polem i każde da się zdjąć.
  #
  # `nazwaPola` przy jednym wyborze to wyrażenie Alpine (nazwa zależy od indeksu
- # wiersza), przy wielu — zwykły napis.
+ # wiersza), przy wielu zwykły napis.
  #}
 {#
- # `wybraneWyr` — wyrażenie Alpine z początkowym wyborem, gdy przychodzi
+ # `wybraneWyr`: wyrażenie Alpine z początkowym wyborem, gdy przychodzi
  # z powtarzalnika (np. `link.id_category`); wtedy `wybrane` się pomija.
- # `dynamiczna` — nazwa pola jest wyrażeniem Alpine, nie napisem: w powtarzalniku
+ # `dynamiczna`: nazwa pola jest wyrażeniem Alpine, nie napisem: w powtarzalniku
  # zależy od indeksu wiersza, więc idzie przez `:name`, a nie `name`.
  #}
 {% macro szukajka(zmienna, wybrane, nazwaPola, etykieta, wiele, pusty, dynamiczna, wybraneWyr) %}
@@ -167,9 +160,8 @@
         <div class="qc-tags" @click="$refs.wpis && $refs.wpis.focus()">
             <template x-for="id in wybrane" :key="id">
                 <span class="qc-tag">
-                    {# Numer przy nazwie, bo dwie kategorie mogą nazywać się tak samo —
-                       „Mercedes" pod filtrami i pod olejami. Bez numeru żeton nie mówi,
-                       która z nich została wybrana. #}
+                    {# Numer przy nazwie, bo dwie kategorie mogą nazywać się tak samo
+                       („Mercedes" pod filtrami i pod olejami). #}
                     <span x-text="nazwaDla(id)"></span>
                     <span class="qc-tag-id" x-text="id"></span>
                     <button type="button" class="qc-tag-x" @click.stop="zdejmij(id)"
@@ -177,10 +169,8 @@
                 </span>
             </template>
 
-            {# Przy wyborze POJEDYNCZYM pole wpisu znika, gdy kategoria jest już wskazana:
-               inaczej obok wybranej stoi zaproszenie „wybierz kategorię" i pole wygląda
-               jak lista, do której można dołożyć kolejne — a jeden odnośnik prowadzi
-               do jednej kategorii. Zdjęcie krzyżykiem wraca do pola wpisu. #}
+            {# Przy wyborze POJEDYNCZYM pole wpisu znika, gdy kategoria jest już
+               wskazana. Zdjęcie krzyżykiem wraca do pola wpisu. #}
             <input type="search" class="qc-tags-input" x-ref="wpis" x-model="fraza"
                    x-show="{{ wiele ? 'true' : '!wybrane.length' }}"
                    @focus="otworz($el)"
@@ -199,6 +189,10 @@
     </div>
 {% endmacro %}
 
+{#
+ # Zaznaczanie wielu kategorii. Wartości lecą jako `nazwaPola[]`. Drzewo stoi
+ # otwarte, bez przycisku.
+ #}
 {% macro checks(zmienna, zaznaczone, nazwaPola, etykieta) %}
     <div class="qc-field" x-data="quinceDrzewoWiele({{ zmienna }}, {{ zaznaczone|json_encode|raw }})">
         <label class="qc-label">{{ etykieta }}</label>

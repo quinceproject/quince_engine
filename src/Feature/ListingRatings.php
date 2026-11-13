@@ -24,7 +24,7 @@ use DbQuery;
  *
  * Liczymy więc sami, jednym zapytaniem dla całej strony listingu, i podajemy
  * gotowe wartości do szablonu. Czytamy tabelę modułu opinii wprost, bo to on
- * jest źródłem danych — gdy modułu nie ma, tabeli też nie ma i zwracamy pustkę.
+ * jest źródłem danych. Gdy modułu nie ma, tabeli też nie ma i zwracamy pustkę.
  */
 final class ListingRatings
 {
@@ -37,7 +37,7 @@ final class ListingRatings
     /**
      * Średnia i liczba opinii dla podanych produktów.
      *
-     * Liczymy tylko opinie zatwierdzone i nieskasowane — dokładnie te, które
+     * Liczymy tylko opinie zatwierdzone i nieskasowane, czyli dokładnie te, które
      * moduł pokazuje na karcie produktu. Inaczej listing chwaliłby się oceną,
      * której nigdzie indziej nie widać.
      *
@@ -80,8 +80,8 @@ final class ListingRatings
      * Sklep bez modułu opinii ma działać dalej, tylko bez ocen.
      *
      * `executeS`, a nie `getValue`: to drugie dokleja do zapytania `LIMIT 1`,
-     * czego `SHOW TABLES` nie przyjmuje — całe wyszukiwanie wywracało się wtedy
-     * błędem składni SQL i strona kategorii nie renderowała się wcale.
+     * czego `SHOW TABLES` nie przyjmuje. Błąd składni SQL wywraca wtedy całą
+     * stronę kategorii.
      */
     private static function tabelaIstnieje(): bool
     {

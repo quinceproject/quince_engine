@@ -15,22 +15,18 @@ namespace Quince\Engine\Ui;
  * Zestaw ikon dostępnych w ustawieniach.
  *
  * Komplet Bootstrap Icons 1.11.3 (licencja MIT, https://icons.getbootstrap.com) leży
- * w `views/icons/` jako osobne pliki. Trzymamy je u siebie, a nie ładujemy fontu
- * z cudzego serwera: sklep nie wysyła wtedy adresu IP odwiedzającego na zewnątrz
- * i nie pobiera stukilkudziesięciu kilobajtów pliku, żeby narysować trzy znaczki.
+ * w `views/icons/` jako osobne pliki, bez fontu z cudzego serwera (adres IP
+ * odwiedzającego nie wychodzi na zewnątrz).
  *
- * Osobne pliki, a nie jedna wielka tablica: strona sklepu potrzebuje trzech ikon,
- * więc czyta trzy pliki po ok. 600 bajtów zamiast wczytywać komplet 1,2 MB.
- * Panel czyta tylko to, co pasuje do wpisanej frazy.
+ * Osobne pliki, a nie jedna tablica: strona czyta tylko potrzebne ikony
+ * (ok. 600 bajtów każda) zamiast kompletu 1,2 MB.
  *
- * Pliki wgrywa `tools/build-icons.php` — ręcznie się ich nie edytuje.
+ * Pliki wgrywa `tools/build-icons.php` albo IconPackManager; nie edytować ręcznie.
  */
 final class IconLibrary
 {
     /**
-     * Propozycje pokazywane, zanim sprzedawca zacznie pisać. Pas informacyjny
-     * to kontakt, czas i dostawa — od tego zwykle się zaczyna, a pusta lista
-     * na starcie nie podpowiada, czego w ogóle można tu szukać.
+     * Propozycje pokazywane przy pustej frazie: kontakt, czas i dostawa.
      *
      * @var string[]
      */
@@ -42,7 +38,7 @@ final class IconLibrary
         'patch-check', 'arrow-counterclockwise', 'credit-card',
     ];
 
-    /** Ile wyników najwyżej wraca z wyszukiwania — tyle mieści się na liście bez przewijania w nieskończoność. */
+    /** Najwyższa liczba wyników wyszukiwania. */
     private const LIMIT = 60;
 
     /**
@@ -80,9 +76,8 @@ final class IconLibrary
     /**
      * Ikony pasujące do frazy. Pusta fraza zwraca propozycje.
      *
-     * Dopasowanie jest po nazwie, bo nazwy w Bootstrap Icons opisują rzecz
-     * („truck", „envelope"), a nie kształt — wpisanie tego, czego się szuka,
-     * zwykle trafia.
+     * Dopasowanie jest po nazwie; nazwy w Bootstrap Icons opisują rzecz
+     * („truck", „envelope"), a nie kształt.
      *
      * @return array<int,array{name:string,svg:string}>
      */
@@ -109,8 +104,7 @@ final class IconLibrary
         }
 
         // Kolejność: trafienie co do znaku, potem początek nazwy, na końcu środek.
-        // Kto pisze „telephone", chce „telephone", a nie „telephone-fill" tylko
-        // dlatego, że myślnik wypada w alfabecie przed kropką.
+        // Sortowanie alfabetyczne stawiałoby „telephone-fill" przed „telephone".
         return self::withSvg(array_slice(array_merge($exact, $starts, $contains), 0, self::LIMIT));
     }
 
@@ -148,8 +142,7 @@ final class IconLibrary
     }
 
     /**
-     * Nazwy wszystkich ikon. Wynik zapamiętany na czas żądania — wyszukiwanie
-     * przy każdym wciśniętym klawiszu nie ma powodu skanować katalogu od nowa.
+     * Nazwy wszystkich ikon. Wynik zapamiętany na czas żądania.
      *
      * @return string[]
      */

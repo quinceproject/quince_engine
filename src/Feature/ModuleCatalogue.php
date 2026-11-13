@@ -15,11 +15,11 @@ use Module;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
- * Spis naszych modułów — co istnieje, niezależnie od tego, co sklep ma u siebie.
+ * Spis naszych modułów: co istnieje, niezależnie od tego, co sklep ma u siebie.
  *
  * Rejestr możliwości (FeatureRegistry) mówi, co jest zainstalowane i zgłoszone.
- * Ten spis mówi, co w ogóle powstało. Różnica jest potrzebna, bo sprzedawca ma
- * widzieć także to, czego jeszcze nie ma — inaczej nie wie, że może mieć więcej.
+ * Ten spis mówi, co w ogóle powstało, więc panel może pokazać także moduły,
+ * których sklep jeszcze nie ma.
  *
  * Wersje i adresy paczek świadomie NIE są tutaj: przyjdą z pliku z listą wydań,
  * który silnik pobiera raz na dobę. Spis wkompilowany w moduł nigdy nie wiedziałby
@@ -136,12 +136,10 @@ final class ModuleCatalogue
             'description' => 'Decide which crawlers and AI agents may enter the shop, and see which of them actually come.',
         ],
         // quince_withdrawal NIE jest tu wpisany celowo: to moduł obsługi zamówień
-        // (odstąpienie od umowy), nie wyglądu ani informacji o produkcie — żyje
-        // jako natywna zakładka PrestaShopa pod Customer Service, siostra
-        // "Zwrotów towaru", a nie pozycja w tym katalogu.
+        // (odstąpienie od umowy), nie wyglądu ani informacji o produkcie. Żyje
+        // jako natywna zakładka PrestaShopa pod Customer Service, obok
+        // "Zwrotów towaru", a nie jako pozycja w tym katalogu.
         // Menu i lista życzeń nie mają tu wpisu, bo są częścią silnika, nie dodatkiem.
-        // Nawigacja to nie jest opcja — sklep bez menu nie istnieje, a wybór „menu
-        // wbudowane albo moduł" oferowałby decyzję, której nikt nie podejmie na „nie".
         // Listę życzeń silnik prowadzi jako nakładkę na tabele blockwishlista:
         // jego frontend to aplikacja Vue, której nie da się ostylować, ale dane
         // i model zostają jego.
@@ -150,9 +148,9 @@ final class ModuleCatalogue
     private FeatureRegistry $registry;
 
     /**
-     * Router panelu. Podaje go kontroler, bo tylko on ma go na pewno pod ręką —
+     * Router panelu. Podaje go kontroler, bo tylko on ma go na pewno pod ręką:
      * `SymfonyContainer::getInstance()` w kontekście panelu zwraca `null`, więc
-     * szukanie routera przez kontener kasowało wszystkie pozycje modułów naraz.
+     * szukanie routera przez kontener gubi wszystkie pozycje modułów naraz.
      */
     private ?RouterInterface $router;
 
@@ -204,15 +202,12 @@ final class ModuleCatalogue
     /**
      * Pozycje do nawigacji silnika: moduły, które zgłosiły własny ekran.
      *
-     * Źródłem jest ZGŁOSZENIE MODUŁU, nie spis `MODULES`. Te dwie rzeczy pełniły
-     * wcześniej jedną rolę i to była wada: żeby nowy moduł linii pokazał się
-     * w menu, trzeba było dopisać go do spisu w silniku i wydać silnik u wszystkich
-     * sklepów. Moduł wie o sobie wszystko, co jest tu potrzebne — nazwę, ikonę
-     * i trasę — więc niech to poda.
+     * Źródłem jest ZGŁOSZENIE MODUŁU, nie spis `MODULES`, żeby nowy moduł linii
+     * pokazał się w menu bez wydawania nowej wersji silnika. Moduł sam podaje
+     * nazwę, ikonę i trasę.
      *
-     * Spis `MODULES` zostaje przy swojej właściwej robocie: opisuje moduły, których
-     * w sklepie NIE MA, żeby sprzedawca wiedział, co jeszcze może dołożyć. Tam
-     * sztywna lista jest konieczna, bo silnik nie zapyta modułu, którego nie ma.
+     * Spis `MODULES` opisuje moduły, których w sklepie NIE MA. Tam sztywna lista
+     * jest konieczna, bo silnik nie zapyta modułu, którego nie ma.
      *
      * Nazwa z modułu ma pierwszeństwo, ale spis służy jako zapas: nasze starsze
      * moduły zgłaszają się bez ikony i mają dostać swoją, a nie kółko zastępcze.
@@ -249,20 +244,20 @@ final class ModuleCatalogue
     /**
      * Czy trasa o tej nazwie w ogóle istnieje.
      *
-     * Odkąd pozycje menu biorą się ze zgłoszeń modułów, trasę podaje moduł —
-     * a moduł może ją podać z literówką albo zgłosić się, zanim doda kontroler.
+     * Trasę podaje moduł w zgłoszeniu, a może ją podać z literówką albo zgłosić
+     * się, zanim doda kontroler.
      * Bez tego sprawdzenia szablon próbuje zbudować odnośnik i **kładzie cały
      * panel**, łącznie z ekranami, które z tym modułem nie mają nic wspólnego.
      *
      * Rejestr obiecuje, że moduł napisany pod nowszy silnik nie wywróci starszego.
      * Ta metoda jest miejscem, w którym ta obietnica jest dotrzymywana po stronie
-     * menu — pominięta pozycja to brak jednego odnośnika, a nie martwy panel.
+     * menu: pominięta pozycja to brak jednego odnośnika, a nie martwy panel.
      */
     private function trasaIstnieje(string $nazwa): bool
     {
-        // Bez routera nie umiemy sprawdzić — wtedy POKAZUJEMY pozycję. Ukrycie
-        // wszystkiego, czego nie dało się zweryfikować, kasowało całą grupę
-        // „Moduły" w miejscach, gdzie routera akurat nie podano.
+        // Bez routera nie umiemy sprawdzić, więc POKAZUJEMY pozycję. Ukrycie
+        // wszystkiego, czego nie dało się zweryfikować, kasuje całą grupę
+        // „Moduły" w miejscach, gdzie routera nie podano.
         if ($this->router === null) {
             return true;
         }
@@ -270,7 +265,7 @@ final class ModuleCatalogue
         return $this->router->getRouteCollection()->get($nazwa) !== null;
     }
 
-    /** Nazwa repozytorium jest zawsze nazwą modułu — jedna zasada zamiast tabeli wyjątków. */
+    /** Nazwa repozytorium jest zawsze nazwą modułu. */
     public static function repositoryFor(string $moduleName): string
     {
         return 'https://github.com/' . self::REPOSITORY_OWNER . '/' . $moduleName;

@@ -50,7 +50,7 @@ class HomepageController extends QuinceController
             // szerokości kolumn, więc musi dostać tę samą liczbę co listing.
             'gridColumns' => HomepageSettings::gridColumns(),
 
-            // Słowniki do kontrolek. Ekran nie zna wartości na pamięć — bierze
+            // Słowniki do kontrolek. Ekran nie zna wartości na pamięć, bierze
             // je stąd, więc dołożenie skóry albo źródła produktów pokazuje się
             // w panelu bez ruszania szablonu ani skryptu.
             'modes' => HomepageSettings::MODES,
@@ -94,7 +94,7 @@ class HomepageController extends QuinceController
      * Sekcje z kodem SVG zapisanej ikony.
      *
      * Wybierak pokazuje ikonę od razu po otwarciu ekranu, a nie dopiero po
-     * dopytaniu serwera — inaczej pole wyglądałoby na puste przy każdym wejściu.
+     * dopytaniu serwera. Inaczej pole wyglądałoby na puste przy każdym wejściu.
      *
      * @param array<int,array<string,mixed>> $sekcje
      *
@@ -115,10 +115,10 @@ class HomepageController extends QuinceController
      * Źródła produktów dostępne w dropdownie.
      *
      * „Najczęściej szukane" znika z listy, gdy `quince_search_score` nie jest
-     * zainstalowany — wybranie trybu, który i tak nic by nie pokazał, tylko
-     * myli sprzedawcę. Sekcja zapisana wcześniej, zanim moduł odinstalowano,
-     * dalej działa (gaśnie po cichu — patrz `HomeProducts::najczesciejSzukane()`),
-     * po prostu nie da się jej wybrać od nowa z tego ekranu.
+     * zainstalowany, bo bez niego to źródło nic nie zwraca. Sekcja zapisana
+     * wcześniej, zanim moduł odinstalowano, dalej istnieje i gaśnie po cichu
+     * (patrz `HomeProducts::najczesciejSzukane()`). Nie da się jej tylko wybrać
+     * od nowa z tego ekranu.
      *
      * @return array<string,string>
      */

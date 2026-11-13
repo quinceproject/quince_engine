@@ -16,14 +16,12 @@ use Quince\Engine\Settings\BrandSchemaSettings;
 /**
  * Treść `llms.txt`, liczona na żądanie.
  *
- * Sklep w tej instalacji ma kilka adresów (wielosklepowość) i kilka języków —
- * część sklepów dzieli nawet ten sam katalog na dysku (`virtual_uri`), więc
- * zapisany PLIK nie mógłby być różny dla każdego z nich: jest jeden korzeń,
- * jeden plik. Dlatego `llms.txt` NIE jest zapisywany na dysk — serwuje go
+ * Instalacja może mieć kilka sklepów i kilka języków, a część sklepów dzieli
+ * ten sam katalog na dysku (`virtual_uri`). Zapisany plik byłby jeden dla
+ * wszystkich, dlatego `llms.txt` NIE jest zapisywany na dysk. Serwuje go
  * `QuinceEngineLlmstxtModuleFrontController` pod adresem `/llms.txt`,
  * zarejestrowanym hookiem `moduleRoutes` (PS liczy tę trasę osobno dla
- * każdego sklepu i każdego jego języka — patrz `Dispatcher::loadRoutes()`),
- * tym samym mechanizmem, co Organization JSON-LD w `<head>`.
+ * każdego sklepu i każdego jego języka, patrz `Dispatcher::loadRoutes()`).
  */
 final class LlmsTxtManager
 {

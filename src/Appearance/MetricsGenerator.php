@@ -15,27 +15,25 @@ namespace Quince\Engine\Appearance;
  * Wylicza niekolorystyczne wartości bazowe motywu: typografię, przestrzeń, kształt,
  * cień i siatkę.
  *
- * Wydajemy WYŁĄCZNIE wartości bazowe. Pochodne — rozmiary nagłówków, stopnie promieni,
- * skala odstępów — liczy `tokens.css` przez `calc()`:
+ * Wydajemy WYŁĄCZNIE wartości bazowe. Pochodne (rozmiary nagłówków, stopnie promieni,
+ * skala odstępów) liczy `tokens.css` przez `calc()`:
  *
  *     --q-fs-h6: calc(var(--q-base-size) * var(--q-scale));
  *     --q-radius-sm: calc(var(--q-radius-base) * 0.6);
  *
- * Powód jest praktyczny: przeglądarka przelicza to sama przy zmianie zmiennej, więc
- * podmiana rozmiaru bazowego natychmiast przestawia całą hierarchię nagłówków bez
- * generowania dwudziestu wartości po stronie serwera.
+ * Przeglądarka przelicza to sama przy zmianie zmiennej, więc podmiana rozmiaru
+ * bazowego przestawia całą hierarchię nagłówków bez generowania wartości po
+ * stronie serwera.
  *
  * Odwzorowuje kontrakt z mapy tokenów (docs/delivery/quince-token-map.html).
  */
 final class MetricsGenerator
 {
-    /** Promień bazowy w pikselach dla każdego wyboru zaokrąglenia. */
     /**
      * Zaokrąglenie bazowe w pikselach dla dawnych wartości nazwanych.
      *
-     * Panel podaje dziś `sharp` albo `round` plus wartość bazową. Te trzy nazwy
-     * zostają wyłącznie po to, żeby sklep zapisany przed zmianą wyglądał po
-     * aktualizacji tak samo — nowe zapisy ich nie używają.
+     * Panel zapisuje `sharp` albo `round` plus wartość bazową. Te trzy nazwy
+     * obsługują sklepy zapisane starszą wersją modułu; nowe zapisy ich nie używają.
      */
     private const RADIUS_LEGACY = [
         'soft' => 6,
@@ -45,14 +43,10 @@ final class MetricsGenerator
 
 
     /**
-     * Jednostka odstępu w pikselach. Wszystkie odstępy w sklepie są jej wielokrotnością,
-     * więc jedna decyzja przestawia rytm całej strony.
-     */
-    /**
      * Odstęp między sekcjami strony, w pikselach.
      *
-     * Wartości odpowiadają dawnym 3 × jednostka (16/20/28), żeby sklepy nie
-     * drgnęły po zmianie mechanizmu.
+     * Wartości to 3 × jednostka 16/20/28, czyli to, co sklepy miały przed
+     * wprowadzeniem stałej `SPACE_UNIT`.
      */
     private const SPACING = [
         'tight'  => 48,
@@ -61,15 +55,14 @@ final class MetricsGenerator
     ];
 
     /**
-     * Jednostka odstępów. STAŁA motywu, nie ustawienie: panel obiecuje „ile
-     * miejsca dzieli kolejne sekcje", a jednostka niesie też wcięcia kart,
-     * odstępy pól i światło w nagłówku — skalowanie jej ustawieniem sekcji
-     * zmieniało cały sklep, czego nikt nie zamawiał.
+     * Jednostka odstępów. STAŁA motywu, nie ustawienie: jednostka niesie też
+     * wcięcia kart, odstępy pól i światło w nagłówku, więc skalowanie jej
+     * ustawieniem odstępu sekcji zmieniałoby cały sklep.
      */
     private const SPACE_UNIT = 20;
 
     /**
-     * Trzy poziomy wyniesienia. Wartości są stałe, nie wyliczane — cień zależy od tego,
+     * Trzy poziomy wyniesienia. Wartości są stałe, nie wyliczane: cień zależy od tego,
      * jak daleko element „unosi się" nad tłem, a to jest decyzja projektowa, nie funkcja
      * jakiejkolwiek zmiennej.
      */
@@ -80,8 +73,8 @@ final class MetricsGenerator
             'lg' => 'none',
         ],
         // Rozmyt jest tym, co decyduje o miękkości. Cień ciasny i twardy czyta się
-        // jak druga ramka, a nie jak uniesienie — dlatego przy tej samej sile
-        // kryjącej promień jest duży. Wartości sprawdzone na Flavorze.
+        // jak druga ramka, a nie jak uniesienie, dlatego przy tej samej sile
+        // kryjącej promień jest duży.
         'subtle' => [
             'sm' => '0 1px 3px rgba(16, 24, 40, .06)',
             'md' => '0 4px 16px rgba(16, 24, 40, .08)',
@@ -99,7 +92,7 @@ final class MetricsGenerator
 
     /**
      * Wysokość celu dotykowego. Stała motywu, nie ustawienie: WCAG 2.1 wymaga 44 × 44 px
-     * dla przycisków i odnośników, a sprzedawca nie ma powodu markowego, by to zmieniać.
+     * dla przycisków i odnośników.
      */
     private const TOUCH_TARGET = 44;
 
@@ -115,29 +108,27 @@ final class MetricsGenerator
         $shadow  = self::SHADOW[$settings['SHADOW'] ?? 'subtle'] ?? self::SHADOW['subtle'];
 
         $out = [
-            // typografia — z tych dwóch wartości tokens.css liczy h1–h6 i rozmiar drobny
+            // typografia: z tych dwóch wartości tokens.css liczy h1-h6 i rozmiar drobny
             'font-heading' => $this->fontStack($settings['FONT_HEADING'] ?? 'Lexend'),
             'font-body'    => $this->fontStack($settings['FONT_BODY'] ?? 'Nunito Sans'),
             'base-size'    => $this->px($settings['TEXT_BASE'] ?? '15', 12, 20),
             'scale'        => $this->ratio($settings['TEXT_SCALE'] ?? '1.2'),
 
-            // kształt — stopnie sm/md/lg wynikają z bazy przez calc()
+            // kształt: stopnie sm/md/lg wynikają z bazy przez calc()
             // Kreska wokół bloków jako jedna decyzja na całą stronę. `1px solid
             // transparent` zamiast `0`: blok zachowuje wymiar, więc przełączenie
-            // niczego nie przesuwa i porównanie dotyczy samej kreski.
+            // niczego nie przesuwa.
             'blok-ramka'   => ($settings['BLOCK_BORDERS'] ?? 'on') === 'off'
                 ? '1px solid transparent'
                 : '1px solid var(--q-border-card)',
 
             'radius-base'  => $radius . 'px',
 
-            // Pigułka też słucha wyboru „ostre rogi". Sklep, który wybrał kanty,
-            // dostawał je wszędzie poza plakietkami i polami z tym promieniem —
-            // a wtedy licznik zdjęć w galerii i znaczniki wyglądały jak wstawka
-            // z innego motywu.
+            // Pigułka też słucha wyboru „ostre rogi", inaczej licznik zdjęć
+            // w galerii i znaczniki wyglądają jak wstawka z innego motywu.
             'radius-pill'  => $radius === 0 ? '0px' : '999px',
 
-            // przestrzeń — jednostka, z której wynika cała skala odstępów,
+            // przestrzeń: jednostka, z której wynika cała skala odstępów,
             // oraz odstęp między sekcjami sterowany z panelu
             'space-unit'   => self::SPACE_UNIT . 'px',
             'section-gap'  => $spacing . 'px',
@@ -157,7 +148,7 @@ final class MetricsGenerator
 
         // Wyłączone kreski gaszą też składniki piszące własne `1px solid`
         // z własną barwą: kartę, akordeon, pasek narzędzi. Token istnieje
-        // WYŁĄCZNIE przy wyłączonych — przy włączonych każdy składnik zostaje
+        // WYŁĄCZNIE przy wyłączonych. Przy włączonych każdy składnik zostaje
         // przy swojej barwie przez wartość zapasową w `var()`. Token pusty
         // albo z barwą „domyślną" nie umie tego oddać: jedna barwa nie może
         // znaczyć „u każdego inna".
@@ -169,13 +160,9 @@ final class MetricsGenerator
     }
 
     /**
-     * Krój z zapasem. Nazwa z ustawień idzie w cudzysłowie, bo bywa dwuczłonowa
-     * („Space Grotesk") i bez niego przeglądarka odczyta ją jako dwa kroje.
-     */
-    /**
      * Zaokrąglenie bazowe: zero przy ostrych rogach, wartość z panelu przy
      * zaokrąglonych. Reszta promieni wychodzi z niej w stałych proporcjach
-     * (patrz `radius-sm` i `radius-lg` niżej), bo ten sam piksel na przycisku
+     * (`radius-sm` i `radius-lg` w `tokens.css`), bo ten sam piksel na przycisku
      * i na karcie daje zupełnie inny efekt.
      *
      * @param array<string,string> $settings
@@ -195,6 +182,10 @@ final class MetricsGenerator
         return max(0, min(24, (int) ($settings['RADIUS_BASE'] ?? 6)));
     }
 
+    /**
+     * Krój z zapasem. Nazwa z ustawień idzie w cudzysłowie, bo bywa dwuczłonowa
+     * („Space Grotesk") i bez niego przeglądarka odczyta ją jako dwa kroje.
+     */
     private function fontStack(string $font): string
     {
         $font = trim($font);
@@ -213,7 +204,7 @@ final class MetricsGenerator
         return ($n < $min || $n > $max ? $min : $n) . 'px';
     }
 
-    /** Mnożnik skali nagłówków — poza dopuszczonym zakresem hierarchia się rozjeżdża. */
+    /** Mnożnik skali nagłówków. Poza dopuszczonym zakresem hierarchia się rozjeżdża. */
     private function ratio(string $value): string
     {
         $n = (float) str_replace(',', '.', $value);
