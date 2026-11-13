@@ -4,6 +4,14 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.2] - 2026-11-13
+
+### Fixed
+
+- After **Install** or **Update** on the Quince modules screen, the screen shows the new
+  version right away. On servers with OPcache it showed the old one for up to a minute,
+  although the update had worked.
+
 ## [0.6.1] - 2026-11-13
 
 ### Fixed

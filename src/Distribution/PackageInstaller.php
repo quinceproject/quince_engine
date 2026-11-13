@@ -61,12 +61,39 @@ final class PackageInstaller
             @unlink($zip);
         }
 
+        $this->forgetCompiledCode(_PS_MODULE_DIR_ . $name);
+
         if (!$ok) {
             $errors = $this->modules->getError($name);
             throw new \RuntimeException($errors !== '' ? $errors : 'PrestaShop could not install the module.');
         }
 
         return $release['version'];
+    }
+
+    /**
+     * Unieważnia OPcache dla plików PHP podmienionego modułu.
+     *
+     * Serwer z `opcache.validate_timestamps` sprawdza zmiany co
+     * `opcache.revalidate_freq` sekund (często 60). Do tego czasu następne żądania
+     * wykonują stary kod modułu, a ekran modułów pokazuje starą wersję, choć
+     * aktualizacja się udała.
+     */
+    private function forgetCompiledCode(string $dir): void
+    {
+        if (!function_exists('opcache_invalidate') || !is_dir($dir)) {
+            return;
+        }
+
+        $files = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS)
+        );
+
+        foreach ($files as $file) {
+            if ($file->isFile() && $file->getExtension() === 'php') {
+                @opcache_invalidate($file->getPathname(), true);
+            }
+        }
     }
 
     /**
