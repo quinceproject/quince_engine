@@ -68,6 +68,24 @@ quince_modules:
     _legacy_controller: 'AdminQuince'
     _legacy_link: 'AdminQuince'
 
+# Instalacja albo aktualizacja modułu lub motywu z listy wydań Quince.
+quince_modules_install:
+  path: quince/modules/install
+  methods: [POST]
+  defaults:
+    _controller: Quince\Engine\Controller\Admin\ModulesController::installAction
+    _legacy_controller: 'AdminQuince'
+    _legacy_link: 'AdminQuince'
+
+# Pobranie listy wydań od nowa, z pominięciem dobowego cache.
+quince_modules_refresh:
+  path: quince/modules/refresh
+  methods: [POST]
+  defaults:
+    _controller: Quince\Engine\Controller\Admin\ModulesController::refreshAction
+    _legacy_controller: 'AdminQuince'
+    _legacy_link: 'AdminQuince'
+
 # Ustawienia nagłówka: logo, wyszukiwanie, akcje klienta.
 quince_header:
   path: quince/header

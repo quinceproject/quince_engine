@@ -83,7 +83,7 @@ overrides the same method; the Module Manager then names the conflict.
 ## Installation
 
 The release ZIP already contains everything the module needs. Composer and the
-command line are not required.
+command line are not required, though both work.
 
 **From the back office**
 
@@ -98,10 +98,38 @@ command line are not required.
 2. Upload that folder to the `modules/` directory of the shop, for example by FTP.
 3. In **Modules → Module Manager** find Quince Engine and click **Install**.
 
-**With Composer** *(coming soon)*
+**With Composer**
 
-Installing with `composer require quinceproject/engine` will work once the package is
-published on Packagist.
+A PrestaShop shop ships without a `composer.json` of its own, so Quince packages are
+installed from a separate folder next to the shop. Once, in the shop's root directory:
+
+```sh
+mkdir quince && cd quince
+echo '{}' > composer.json
+composer config repositories.quince composer https://quinceproject.github.io
+composer config allow-plugins.composer/installers true
+composer config extra.installer-paths --json '{"../modules/{$name}/": ["type:prestashop-module"], "../themes/{$name}/": ["type:prestashop-theme"]}'
+```
+
+Then, from the same folder:
+
+```sh
+composer require "quinceproject/engine:*"
+php ../bin/console prestashop:module install quince_engine
+```
+
+Composer puts the release ZIP in `modules/quince_engine`. Installing the module, and
+running `prestashop:module upgrade quince_engine` after `composer update`, is still
+done by PrestaShop.
+
+**The other Quince modules and the theme, from the engine**
+
+With the engine installed, **Quince project → Quince modules** lists every Quince
+module and the Quince theme with the installed and the latest version. **Install** and
+**Update** download the release ZIP, check it against the SHA-256 from the
+[release list](https://quinceproject.github.io/manifest.json) and hand it to
+PrestaShop, the same way as an upload in the Module Manager. The shop needs to reach
+github.com, and the `modules/` and `themes/` folders need to be writable.
 
 > ⚠️ **Do not** use the green **Code → Download ZIP** button on this page. That
 > archive contains the source only and is **missing the `vendor/` folder**, so the

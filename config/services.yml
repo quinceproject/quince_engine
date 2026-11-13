@@ -126,9 +126,23 @@ services:
   Quince\Engine\Settings\NavigationSettings:
     class: Quince\Engine\Settings\NavigationSettings
 
-  # Przegląd naszych modułów. Bez zależności: stan czyta wprost z PrestaShopa.
+  # Lista wydań Quince i instalacja paczek z niej.
+  Quince\Engine\Distribution\ReleaseManifest:
+    class: Quince\Engine\Distribution\ReleaseManifest
+
+  Quince\Engine\Distribution\PackageInstaller:
+    class: Quince\Engine\Distribution\PackageInstaller
+    arguments:
+      - '@Quince\Engine\Distribution\ReleaseManifest'
+      - '@PrestaShop\PrestaShop\Core\Module\ModuleManager'
+      - '@prestashop.core.addon.theme.theme_manager'
+
+  # Przegląd naszych modułów, instalacja i aktualizacja z listy wydań.
   Quince\Engine\Controller\Admin\ModulesController:
     class: Quince\Engine\Controller\Admin\ModulesController
+    arguments:
+      - '@Quince\Engine\Distribution\ReleaseManifest'
+      - '@Quince\Engine\Distribution\PackageInstaller'
 
   # Wyszukiwanie ikon dla pola wyboru ikony w ustawieniach.
   Quince\Engine\Controller\Admin\IconController:

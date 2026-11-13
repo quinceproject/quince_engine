@@ -28,7 +28,23 @@ use Symfony\Component\Routing\RouterInterface;
 final class ModuleCatalogue
 {
     /** Konto, pod którym leżą wszystkie nasze moduły. */
-    private const REPOSITORY_OWNER = 'GajewskiMarcin';
+    private const REPOSITORY_OWNER = 'quinceproject';
+
+    /**
+     * Nazwa i opis modułów, które są na liście wydań, a nie ma ich w `MODULES`.
+     * Opisy to pierwsze zdanie z README modułu.
+     *
+     * @var array<string,array{0:string,1:string}>
+     */
+    private const OTHER_LABELS = [
+        'quince_api' => ['API', 'Admin API endpoints for PrestaShop data the native API does not expose.'],
+        'quince_cmp' => ['Consents and cookies', 'Consents, cookies and terms in one place.'],
+        'quince_events' => ['Events', 'Shop event log and outgoing delivery to external systems.'],
+        'quince_gpsr' => ['Product safety', 'Product safety and the responsible economic operator on the product page.'],
+        'quince_insight' => ['Insight', 'Google Analytics, Tag Manager, Merchant Center and Search Console in one place.'],
+        'quince_search_score' => ['Search Score', 'What customers search for, and what they click after searching.'],
+        'quince_withdrawal' => ['Withdrawal', 'The right of withdrawal from a distance contract.'],
+    ];
 
     /**
      * @var array<int,array{name:string,label:string,icon:string,type:?string,description:string}>
@@ -175,9 +191,50 @@ final class ModuleCatalogue
      */
     public function all(): array
     {
+        return $this->describe(self::MODULES);
+    }
+
+    /**
+     * Moduły z listy wydań, których nie ma w spisie `MODULES`, np. wydane po
+     * tej wersji silnika albo celowo spoza menu (Withdrawal). Do instalacji
+     * muszą być widoczne wszystkie.
+     *
+     * @param string[] $names nazwy modułów z listy wydań
+     *
+     * @return array<int,array<string,mixed>>
+     */
+    public function others(array $names): array
+    {
+        $known = array_column(self::MODULES, 'name');
+        $entries = [];
+
+        foreach ($names as $name) {
+            if ($name === 'quince_engine' || in_array($name, $known, true)) {
+                continue;
+            }
+            $entries[] = [
+                'name' => $name,
+                'label' => self::OTHER_LABELS[$name][0] ?? ucwords(str_replace('_', ' ', (string) preg_replace('/^quince_/', '', $name))),
+                'icon' => 'box',
+                'type' => null,
+                'description' => self::OTHER_LABELS[$name][1] ?? '',
+            ];
+        }
+
+        // Ekranu ustawień tych modułów silnik nie zna, więc nie twierdzi, że go nie ma.
+        return array_map(static fn (array $m): array => $m + ['listed' => false], $this->describe($entries));
+    }
+
+    /**
+     * @param array<int,array{name:string,label:string,icon:string,type:?string,description:string}> $entries
+     *
+     * @return array<int,array<string,mixed>>
+     */
+    private function describe(array $entries): array
+    {
         $out = [];
 
-        foreach (self::MODULES as $entry) {
+        foreach ($entries as $entry) {
             $module = Module::getInstanceByName($entry['name']);
             $installed = $module instanceof Module && Module::isInstalled($entry['name']);
             $active = $installed && Module::isEnabled($entry['name']);

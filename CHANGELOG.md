@@ -4,6 +4,21 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-11-13
+
+### Added
+
+- Quince modules screen: installs and updates every Quince module and the Quince theme
+  from the Quince release list. The package is checked against its SHA-256 before
+  PrestaShop installs it.
+- The screen lists all modules on the release list, also the ones released after this
+  version of the engine, with the installed and the latest version.
+- **Check for updates** downloads the release list again instead of waiting a day.
+
+### Fixed
+
+- Links to module repositories point to github.com/quinceproject.
+
 ## [0.5.10] - 2026-11-10
 
 ### Changed

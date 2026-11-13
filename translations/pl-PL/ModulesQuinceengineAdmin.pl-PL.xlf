@@ -1241,8 +1241,132 @@
         <target>Moduły Quince</target>
       </trans-unit>
       <trans-unit id="quince.mod.intro">
-        <source>Modules built for this engine. Each one adds a section to the menu on the left once it is running.</source>
-        <target>Moduły napisane pod ten silnik. Każdy dokłada pozycję w menu po lewej, kiedy zacznie działać.</target>
+        <source>Modules built for this engine. Each one adds a section to the menu on the left once it is running. Install and update them here from the Quince release list.</source>
+        <target>Moduły napisane pod ten silnik. Każdy dokłada pozycję w menu po lewej, kiedy zacznie działać. Instalujesz je i aktualizujesz tutaj, z listy wydań Quince.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.manifest_error_intro">
+        <source>The release list could not be downloaded, so installing and updating is not available right now.</source>
+        <target>Nie udało się pobrać listy wydań, więc instalacja i aktualizacje są teraz niedostępne.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.engine_theme">
+        <source>Engine and theme</source>
+        <target>Silnik i motyw</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.checked_on">
+        <source>Release list checked on %date%.</source>
+        <target>Lista wydań sprawdzona %date%.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.not_downloaded">
+        <source>The release list has not been downloaded yet.</source>
+        <target>Lista wydań nie została jeszcze pobrana.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.check_updates">
+        <source>Check for updates</source>
+        <target>Sprawdź aktualizacje</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.version_available">
+        <source>Version %version% is available.</source>
+        <target>Dostępna jest wersja %version%.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.theme">
+        <source>Quince theme</source>
+        <target>Motyw Quince</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.theme_missing">
+        <source>Not in this shop yet. After installing, switch it on in Design → Theme &amp; Logo.</source>
+        <target>Sklep jeszcze go nie ma. Po instalacji włącz go w Wygląd → Szablony.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.theme_update">
+        <source>Version %version% is available. Files of the theme are replaced; files the shop added are kept.</source>
+        <target>Dostępna jest wersja %version%. Pliki motywu zostaną podmienione, a pliki dodane przez sklep zostaną.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.install">
+        <source>Install</source>
+        <target>Zainstaluj</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.ready">
+        <source>Version %version% is ready to install.</source>
+        <target>Wersja %version% jest gotowa do instalacji.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.installed">
+        <source>%name% %version% is installed.</source>
+        <target>Zainstalowano %name% %version%.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.refresh_failed">
+        <source>The release list could not be downloaded.</source>
+        <target>Nie udało się pobrać listy wydań.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.refresh_ok">
+        <source>The release list is up to date.</source>
+        <target>Lista wydań jest aktualna.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.err_module">
+        <source>This module is not on the release list.</source>
+        <target>Tego modułu nie ma na liście wydań.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.err_theme">
+        <source>This theme is not on the release list.</source>
+        <target>Tego motywu nie ma na liście wydań.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.err_core">
+        <source>PrestaShop could not install the module.</source>
+        <target>PrestaShop nie zdołał zainstalować modułu.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.err_address">
+        <source>The package address is not a Quince release.</source>
+        <target>Adres paczki nie wskazuje wydania Quince.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.err_temp">
+        <source>Could not create a temporary file for the package.</source>
+        <target>Nie udało się utworzyć pliku tymczasowego na paczkę.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.err_checksum">
+        <source>The downloaded package does not match its checksum. Nothing was installed.</source>
+        <target>Pobrana paczka nie zgadza się z sumą kontrolną. Niczego nie zainstalowano.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.err_unpack">
+        <source>The theme package could not be unpacked.</source>
+        <target>Nie udało się rozpakować paczki motywu.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.err_theme_yml">
+        <source>The theme package has no config/theme.yml.</source>
+        <target>W paczce motywu brakuje pliku config/theme.yml.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.label_cmp">
+        <source>Consents and cookies</source>
+        <target>Zgody i ciasteczka</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.label_gpsr">
+        <source>Product safety</source>
+        <target>Bezpieczeństwo produktów</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.desc_api">
+        <source>Admin API endpoints for PrestaShop data the native API does not expose.</source>
+        <target>Punkty Admin API dla danych PrestaShopa, których nie udostępnia natywne API.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.desc_cmp">
+        <source>Consents, cookies and terms in one place.</source>
+        <target>Zgody, ciasteczka i regulaminy w jednym miejscu.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.desc_events">
+        <source>Shop event log and outgoing delivery to external systems.</source>
+        <target>Dziennik zdarzeń sklepu i wysyłka do systemów zewnętrznych.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.desc_gpsr">
+        <source>Product safety and the responsible economic operator on the product page.</source>
+        <target>Bezpieczeństwo produktu i odpowiedzialny podmiot gospodarczy na stronie produktu.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.desc_insight">
+        <source>Google Analytics, Tag Manager, Merchant Center and Search Console in one place.</source>
+        <target>Google Analytics, Tag Manager, Merchant Center i Search Console w jednym miejscu.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.desc_search_score">
+        <source>What customers search for, and what they click after searching.</source>
+        <target>Czego szukają klienci i co klikają po wyszukaniu.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.desc_withdrawal">
+        <source>The right of withdrawal from a distance contract.</source>
+        <target>Prawo odstąpienia od umowy zawartej na odległość.</target>
       </trans-unit>
       <trans-unit id="quince.mod.running">
         <source>Running</source>

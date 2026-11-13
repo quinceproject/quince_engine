@@ -3,17 +3,97 @@
 
 {% trans_default_domain 'Modules.Quinceengine.Admin' %}
 
+{# Przycisk instalacji albo aktualizacji: jeden formularz na paczkę. #}
+{% macro install_button(name, kind, label, icon) %}
+    {% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+    <form method="post" action="{{ path('quince_modules_install') }}" style="display:inline">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_modules_install') }}">
+        <input type="hidden" name="module" value="{{ name }}">
+        <input type="hidden" name="kind" value="{{ kind }}">
+        <button type="submit" class="qc-btn qc-btn-primary">
+            {{ icons.icon(icon, 14) }} {{ label }}
+        </button>
+    </form>
+{% endmacro %}
+
 {% block quince_intro %}
     <div class="qc-alert qc-alert-info">
         {{ icons.icon('info', 18, 'qc-alert-icon') }}
         <div>
-            {{ 'Modules built for this engine. Each one adds a section to the menu on the left once it is running.'|trans }}
+            {{ 'Modules built for this engine. Each one adds a section to the menu on the left once it is running. Install and update them here from the Quince release list.'|trans }}
         </div>
     </div>
+    {% if manifestError %}
+        <div class="qc-alert qc-alert-warning">
+            {{ icons.icon('info', 18, 'qc-alert-icon') }}
+            <div>{{ 'The release list could not be downloaded, so installing and updating is not available right now.'|trans }}</div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block quince_body %}
+{% import _self as self %}
 <div class="qc-stack">
+
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Engine and theme'|trans }}</div>
+                <div class="qc-card-desc">
+                    {% if manifestFetchedAt %}
+                        {{ 'Release list checked on %date%.'|trans({'%date%': manifestFetchedAt|date('Y-m-d H:i')}) }}
+                    {% else %}
+                        {{ 'The release list has not been downloaded yet.'|trans }}
+                    {% endif %}
+                </div>
+            </div>
+            <form method="post" action="{{ path('quince_modules_refresh') }}">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_modules_refresh') }}">
+                <button type="submit" class="qc-btn qc-btn-outline">{{ 'Check for updates'|trans }}</button>
+            </form>
+        </div>
+
+        <div class="qc-card-body qc-mod-body">
+            <div class="qc-mod-head" style="justify-content:space-between; align-items:center">
+                <div>
+                    <div class="qc-card-title">
+                        Quince Engine
+                        {% if engine.version %}<span class="qc-mod-version">{{ engine.version }}</span>{% endif %}
+                    </div>
+                    {% if engine.update %}
+                        <div class="qc-card-desc">{{ 'Version %version% is available.'|trans({'%version%': engine.release.version}) }}</div>
+                    {% endif %}
+                </div>
+                {% if engine.update %}
+                    {{ self.install_button('quince_engine', 'module', 'Update'|trans, 'refresh') }}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="qc-card-body qc-mod-body">
+            <div class="qc-mod-head" style="justify-content:space-between; align-items:center">
+                <div>
+                    <div class="qc-card-title">
+                        {{ 'Quince theme'|trans }}
+                        {% if theme.version %}<span class="qc-mod-version">{{ theme.version }}</span>{% endif %}
+                    </div>
+                    <div class="qc-card-desc">
+                        {% if theme.version is null %}
+                            {{ 'Not in this shop yet. After installing, switch it on in Design → Theme & Logo.'|trans }}
+                        {% elseif theme.update %}
+                            {{ 'Version %version% is available. Files of the theme are replaced; files the shop added are kept.'|trans({'%version%': theme.release.version}) }}
+                        {% endif %}
+                    </div>
+                </div>
+                {% if theme.release and theme.version is null %}
+                    {{ self.install_button(theme.name, 'theme', 'Install'|trans, 'plus') }}
+                {% elseif theme.update %}
+                    {{ self.install_button(theme.name, 'theme', 'Update'|trans, 'refresh') }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
     {% for module in modules %}
         <div class="qc-card">
             <div class="qc-card-head">
@@ -24,7 +104,7 @@
                             {{ module.label|trans }}
                             {% if module.version %}<span class="qc-mod-version">{{ module.version }}</span>{% endif %}
                         </div>
-                        <div class="qc-card-desc">{{ module.description|trans }}</div>
+                        {% if module.description %}<div class="qc-card-desc">{{ module.description|trans }}</div>{% endif %}
                     </div>
                 </div>
 
@@ -41,18 +121,37 @@
                 {% endif %}
             </div>
 
-            <div class="qc-card-body qc-mod-body">
-                {% if module.active and module.route %}
-                    <a class="qc-btn qc-btn-outline" href="{{ path(module.route) }}">
-                        {{ 'Open settings'|trans }}
-                    </a>
-                {% elseif module.active %}
-                    <div class="qc-hint">{{ 'This module has no settings of its own.'|trans }}</div>
-                {% elseif module.installed %}
-                    <div class="qc-hint">{{ 'Switch it on in Module Manager to use it.'|trans }}</div>
-                {% else %}
-                    <div class="qc-hint">{{ 'Not available in this store yet.'|trans }}</div>
-                {% endif %}
+            <div class="qc-card-body qc-mod-body" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; justify-content:space-between">
+                <div>
+                    {% if module.update %}
+                        <div class="qc-hint">{{ 'Version %version% is available.'|trans({'%version%': module.release.version}) }}</div>
+                    {% elseif module.active and module.route %}
+                        <a class="qc-btn qc-btn-outline" href="{{ path(module.route) }}">
+                            {{ 'Open settings'|trans }}
+                        </a>
+                    {% elseif module.active %}
+                        {% if module.listed ?? true %}
+                            <div class="qc-hint">{{ 'This module has no settings of its own.'|trans }}</div>
+                        {% endif %}
+                    {% elseif module.installed %}
+                        <div class="qc-hint">{{ 'Switch it on in Module Manager to use it.'|trans }}</div>
+                    {% elseif module.release %}
+                        <div class="qc-hint">{{ 'Version %version% is ready to install.'|trans({'%version%': module.release.version}) }}</div>
+                    {% else %}
+                        <div class="qc-hint">{{ 'Not available in this store yet.'|trans }}</div>
+                    {% endif %}
+                </div>
+
+                <div style="display:flex; gap:8px">
+                    {% if module.update %}
+                        {% if module.active and module.route %}
+                            <a class="qc-btn qc-btn-outline" href="{{ path(module.route) }}">{{ 'Open settings'|trans }}</a>
+                        {% endif %}
+                        {{ self.install_button(module.name, 'module', 'Update'|trans, 'refresh') }}
+                    {% elseif module.release and not module.installed %}
+                        {{ self.install_button(module.name, 'module', 'Install'|trans, 'plus') }}
+                    {% endif %}
+                </div>
             </div>
         </div>
     {% endfor %}
