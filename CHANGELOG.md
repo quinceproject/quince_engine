@@ -4,6 +4,16 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.1] - 2026-11-13
+
+### Fixed
+
+- A fresh installation puts the **Quince project** branch in the back office menu.
+  PrestaShop refused to register the branch because it has no screen of its own, so
+  the entries of the engine and of the modules ended up outside it. Shops installed
+  with 0.6.0 or earlier get the branch, and their entries are moved into it, when the
+  engine is updated.
+
 ## [0.6.0] - 2026-11-13
 
 ### Added

@@ -38,7 +38,7 @@ class Quince_Engine extends Module
     {
         $this->name = 'quince_engine';
         $this->tab = 'front_office_features';
-        $this->version = '0.6.0';
+        $this->version = '0.6.1';
         $this->author = 'Quince Project';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = ['min' => '9.0.0', 'max' => '9.99.99'];
@@ -50,32 +50,10 @@ class Quince_Engine extends Module
         // Gałąź menu i wpisy modułów. Każdy nasz moduł zgłasza jeden wpis
         // prowadzący na swój ekran; podstrony ma we własnym bocznym pasku.
         // Kolejność wpisów ustala silnik, patrz `Quince\Engine\Feature\MenuOrder`.
+        // Gałąź „Quince project” i ukrytą zakładkę uprawnień `AdminQuince` zakłada
+        // `Quince\Engine\Feature\MenuBranch` w install(): rejestr zakładek rdzenia
+        // odrzuca gałąź, bo nie ma ona własnego ekranu.
         $this->tabs = [
-            [
-                // IMPROVE = sekcja „Ulepszanie" w głównym menu, na równi z Modułami,
-                // Wyglądem i Wysyłką.
-                'class_name' => \Quince\Engine\Feature\MenuOrder::PARENT,
-                'visible' => true,
-                'name' => 'Quince project',
-                'parent_class_name' => 'IMPROVE',
-                // Menu PrestaShopa rysuje ikonę czcionką Material Icons: w kolumnie
-                // `icon` siedzi sama nazwa znaku.
-                'icon' => 'nutrition',
-                'wording' => 'Quince project',
-                'wording_domain' => 'Modules.Quinceengine.Admin',
-            ],
-            [
-                // Zakładka od uprawnień, nie od menu: wszystkie nasze trasy mają
-                // `_legacy_controller: AdminQuince` i to po tej nazwie PrestaShop
-                // sprawdza, czy pracownik ma prawo wejść. Niewidoczna, bo jako
-                // pozycja menu dublowałaby wpis silnika.
-                'class_name' => 'AdminQuince',
-                'visible' => false,
-                'name' => 'Quince',
-                'parent_class_name' => \Quince\Engine\Feature\MenuOrder::PARENT,
-                'wording' => 'Quince',
-                'wording_domain' => 'Modules.Quinceengine.Admin',
-            ],
             [
                 'class_name' => 'AdminQuinceEngine',
                 'visible' => true,
@@ -99,6 +77,11 @@ class Quince_Engine extends Module
 
     public function install(): bool
     {
+        // Gałąź menu musi istnieć, zanim rdzeń zarejestruje zakładki z `$this->tabs`.
+        if (\Quince\Engine\Feature\MenuBranch::ensure() === 0) {
+            return false;
+        }
+
         return parent::install()
             && $this->registerHook('displayHeader')
             && $this->registerHook('displayHome')
@@ -191,6 +174,8 @@ class Quince_Engine extends Module
      */
     public function hookActionModuleInstallAfter(): void
     {
+        // Wpis modułu zainstalowanego, gdy gałęzi jeszcze nie było, trafia do niej tutaj.
+        \Quince\Engine\Feature\MenuBranch::adoptOrphans();
         \Quince\Engine\Feature\MenuOrder::apply();
     }
 
