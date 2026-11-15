@@ -38,6 +38,7 @@ final class ModuleCatalogue
      */
     private const OTHER_LABELS = [
         'quince_api' => ['API', 'Admin API endpoints for PrestaShop data the native API does not expose.'],
+        'quince_block' => ['Blocks', 'Content blocks with display rules, a schedule and A/B tests, shown in hooks of your own.'],
         'quince_cmp' => ['Consents and cookies', 'Consents, cookies and terms in one place.'],
         'quince_events' => ['Events', 'Shop event log and outgoing delivery to external systems.'],
         'quince_gpsr' => ['Product safety', 'Product safety and the responsible economic operator on the product page.'],

@@ -32,6 +32,9 @@ final class CartSettings
      */
     private const BELOW_SUGGEST_HOOK_CONFIG_KEY = 'QUINCE_CART_BELOW_SUGGEST_HOOK';
 
+    /** Nazwa hooka w szufladzie koszyka, pod dokupką. Ten sam mechanizm. */
+    private const DRAWER_HOOK_CONFIG_KEY = 'QUINCE_CART_DRAWER_HOOK';
+
     public function showReassurance(): bool
     {
         $raw = Configuration::get(self::SHOW_REASSURANCE_CONFIG_KEY);
@@ -44,6 +47,11 @@ final class CartSettings
         return (string) Configuration::get(self::BELOW_SUGGEST_HOOK_CONFIG_KEY);
     }
 
+    public function drawerHook(): string
+    {
+        return (string) Configuration::get(self::DRAWER_HOOK_CONFIG_KEY);
+    }
+
     /** @param array<string,mixed> $values */
     public function save(array $values): void
     {
@@ -51,6 +59,10 @@ final class CartSettings
 
         $hook = trim((string) ($values['BELOW_SUGGEST_HOOK'] ?? ''));
         ConfigStore::set(self::BELOW_SUGGEST_HOOK_CONFIG_KEY, $hook);
+
+        // Nazwa hooka trafia do {hook h=...}: zostają tylko znaki nazwy hooka.
+        $drawer = (string) preg_replace('/[^A-Za-z0-9_]/', '', (string) ($values['DRAWER_HOOK'] ?? ''));
+        ConfigStore::set(self::DRAWER_HOOK_CONFIG_KEY, $drawer);
     }
 
     /**
@@ -64,6 +76,7 @@ final class CartSettings
         return [
             'showReassurance' => $this->showReassurance(),
             'belowSuggestHook' => $this->belowSuggestHook(),
+            'drawerHook' => $this->drawerHook(),
         ];
     }
 }

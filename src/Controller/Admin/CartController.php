@@ -31,6 +31,7 @@ class CartController extends QuinceController
         return $this->renderPanel('@Modules/quince_engine/views/templates/admin/cart.html.twig', [
             'showReassurance' => $this->settings->showReassurance(),
             'belowSuggestHook' => $this->settings->belowSuggestHook(),
+            'drawerHook' => $this->settings->drawerHook(),
             'layoutTitle' => 'Cart',
             'quinceRoute' => 'quince_cart',
         ]);

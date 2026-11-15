@@ -68,6 +68,14 @@
         <source>Hook below "You might also need"</source>
         <target>Hook pod „Może Ci się przydać"</target>
       </trans-unit>
+      <trans-unit id="quince.cart.drawer_hook_label">
+        <source>Hook in the cart drawer, below "You might also need"</source>
+        <target>Hook w szufladzie koszyka, pod „Może Ci się przydać"</target>
+      </trans-unit>
+      <trans-unit id="quince.cart.drawer_hook_hint">
+        <source>The same kind of spot in the cart drawer that opens after adding a product, under its suggested products. Leave it empty and nothing shows there.</source>
+        <target>Takie samo miejsce w szufladzie koszyka, która otwiera się po dodaniu produktu, pod podpowiadanymi produktami. Zostaw puste i nic się tam nie pokaże.</target>
+      </trans-unit>
       <trans-unit id="quince.cart.below_suggest_hint">
         <source>A spot at the bottom of the cart column, under the suggested products. It takes the same free name you give a hook anywhere in the product page layout. Leave it empty and nothing shows there. A module (WiseBlock, or any other) registers to whatever name you type here.</source>
         <target>Miejsce na dole kolumny koszyka, pod podpowiedzianymi produktami. Przyjmuje tę samą dowolną nazwę, co przy hooku gdziekolwiek w układzie strony produktu. Zostaw puste i nic się tam nie pokaże. Moduł (WiseBlock albo dowolny inny) rejestruje się pod nazwą, którą tu wpiszesz.</target>
@@ -1343,6 +1351,14 @@
       <trans-unit id="quince.dist.label_gpsr">
         <source>Product safety</source>
         <target>Bezpieczeństwo produktów</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.label_block">
+        <source>Blocks</source>
+        <target>Bloki</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.desc_block">
+        <source>Content blocks with display rules, a schedule and A/B tests, shown in hooks of your own.</source>
+        <target>Bloki treści z regułami wyświetlania, harmonogramem i testami A/B, pokazywane we własnych hookach.</target>
       </trans-unit>
       <trans-unit id="quince.dist.desc_api">
         <source>Admin API endpoints for PrestaShop data the native API does not expose.</source>
