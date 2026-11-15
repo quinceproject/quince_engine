@@ -299,14 +299,11 @@ final class HomepageSettings
     public function sections(): array
     {
         $zapis = (string) Configuration::get(self::PREFIX . 'SECTIONS');
+        $dane = trim($zapis) === '' ? null : json_decode($zapis, true);
 
-        if (trim($zapis) === '') {
-            return self::defaults();
-        }
-
-        $dane = json_decode($zapis, true);
-
-        return is_array($dane) ? $this->sanitizeSections($dane) : self::defaults();
+        // Wartości domyślne przechodzą przez to samo czyszczenie co zapis, żeby
+        // szablon dostawał zawsze komplet kluczy (`bleed`, barwy pasa i inne).
+        return $this->sanitizeSections(is_array($dane) ? $dane : self::defaults());
     }
 
     /**
