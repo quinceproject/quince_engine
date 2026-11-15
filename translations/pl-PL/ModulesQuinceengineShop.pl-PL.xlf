@@ -37,6 +37,10 @@
         <source>We could not find this number. Fill the company details in by hand.</source>
         <target>Nie znaleźliśmy tego numeru. Wpisz dane firmy ręcznie.</target>
       </trans-unit>
+      <trans-unit id="quince.checkout.zbytczesto">
+        <source>Too many lookups in a short time. Fill the company details in by hand or try again in a few minutes.</source>
+        <target>Zbyt wiele zapytań w krótkim czasie. Wpisz dane firmy ręcznie albo spróbuj ponownie za kilka minut.</target>
+      </trans-unit>
       <trans-unit id="quince.checkout.znaleziony">
         <source>Company name and registered address taken from VIES. Check them.</source>
         <target>Nazwa firmy i adres siedziby pobrane z VIES. Sprawdź je.</target>

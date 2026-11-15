@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Quince\Engine\Settings;
 
 use Configuration;
+use Quince\Engine\Ui\SafeUrl;
 
 /**
  * Strona główna: lista sekcji, z których sklep ją składa.
@@ -438,7 +439,8 @@ final class HomepageSettings
                 // te nazwy są zbudowane.
                 'icon' => preg_replace('/[^a-z0-9-]/', '', strtolower((string) ($wpis['icon'] ?? ''))),
                 'title' => $this->sanitizeI18n($wpis['title'] ?? []),
-                'link' => trim((string) ($wpis['link'] ?? '')),
+                // Adres trafia do `href` nagłówka sekcji: tylko bezpieczne schematy.
+                'link' => SafeUrl::clean((string) ($wpis['link'] ?? '')),
                 'link_label' => $this->sanitizeI18n($wpis['link_label'] ?? []),
                 'columns' => $kolumny,
             ];

@@ -34,6 +34,9 @@ final class IconPackManager
     /** Jedyna paczka, którą przyjmujemy: inna nie ma ikon pod tymi samymi nazwami. */
     private const NAZWA_PACZKI = 'bootstrap-icons';
 
+    /** Pliki pominięte przy ostatnim wgraniu, bo niosły kod. */
+    private int $skipped = 0;
+
     public function version(): string
     {
         return (string) Configuration::get(self::KEY_VERSION);
@@ -104,9 +107,60 @@ final class IconPackManager
         return $wersja;
     }
 
+    /**
+     * Ile plików z ostatniego wgrania pominięto, bo niosły kod.
+     */
+    public function skipped(): int
+    {
+        return $this->skipped;
+    }
+
+    /**
+     * Czy plik ikony nie niesie kodu.
+     *
+     * Ikona idzie na front bez oczyszczania, wprost do HTML-a strony, więc
+     * zmieniona paczka mogłaby uruchomić skrypt u każdego klienta. Prawdziwe
+     * Bootstrap Icons to same kształty: nie mają skryptów, zdarzeń ani odnośników.
+     */
+    private function isSafeSvg(string $file): bool
+    {
+        $raw = (string) file_get_contents($file);
+
+        // Encje dekodujemy przed sprawdzeniem: `&#106;avascript:` też jest skryptem.
+        $text = html_entity_decode($raw, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        foreach ([$raw, $text] as $tresc) {
+            if (preg_match('/<\s*script|<\s*foreignObject|javascript\s*:/i', $tresc)
+                || preg_match('/(?:^|[\s"\'\/])on[a-z]+\s*=/i', $tresc)
+                // Odnośnik dozwolony tylko w obrębie pliku (`#id`).
+                || preg_match('/(?:^|[\s"\'\/])(?:xlink:)?href\s*=(?!\s*["\']?\s*#)/i', $tresc)
+            ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /** @param string[] $icons */
     private function replace(array $icons): void
     {
+        $bezpieczne = array_values(array_filter($icons, fn (string $icon): bool => $this->isSafeSvg($icon)));
+        $this->skipped = count($icons) - count($bezpieczne);
+
+        if ($this->skipped > 0) {
+            \PrestaShopLogger::addLog(
+                'Quince: icon pack upload skipped ' . $this->skipped . ' SVG file(s) with unsafe content.',
+                2
+            );
+        }
+
+        // Paczka bez ani jednej czystej ikony: stary zestaw zostaje na dysku.
+        if (!$bezpieczne) {
+            throw new \RuntimeException('Every icon in this package contains code. Nothing was changed.');
+        }
+
+        $icons = $bezpieczne;
         $target = $this->directory();
 
         if (!is_dir($target)) {

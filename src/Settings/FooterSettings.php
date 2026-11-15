@@ -14,6 +14,7 @@ namespace Quince\Engine\Settings;
 use Configuration;
 use Quince\Engine\Appearance\PaletteGenerator;
 use Quince\Engine\Ui\IconLibrary;
+use Quince\Engine\Ui\SafeUrl;
 
 /**
  * Ustawienia stopki: kolumny, dane firmy, pas dolny.
@@ -169,7 +170,9 @@ final class FooterSettings
 
             $out[] = [
                 'icon' => trim((string) ($wpis['icon'] ?? '')),
-                'url' => trim((string) ($wpis['url'] ?? '')),
+                // Także przy odczycie: wpis zapisany przed sprawdzaniem schematu
+                // nie może dotrzeć do `href`.
+                'url' => SafeUrl::clean((string) ($wpis['url'] ?? '')),
             ];
         }
 
@@ -486,7 +489,8 @@ final class FooterSettings
             }
 
             foreach (is_array($wpis['urls'] ?? null) ? $wpis['urls'] : [] as $idLang => $adres) {
-                $adresy[(int) $idLang] = (string) $adres;
+                // Adres trafia do `href` w pasie dolnym: tylko bezpieczne schematy.
+                $adresy[(int) $idLang] = SafeUrl::clean((string) $adres);
             }
 
             $out[] = ['labels' => $etykiety, 'urls' => $adresy];
@@ -547,7 +551,8 @@ final class FooterSettings
 
             $out[] = [
                 'icon' => trim((string) ($wpis['icon'] ?? '')),
-                'url' => trim((string) ($wpis['url'] ?? '')),
+                // Adres trafia do `href` w stopce: tylko bezpieczne schematy.
+                'url' => SafeUrl::clean((string) ($wpis['url'] ?? '')),
             ];
         }
 

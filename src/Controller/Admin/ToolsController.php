@@ -64,6 +64,16 @@ class ToolsController extends QuinceController
                 'Modules.Quinceengine.Admin',
                 ['%version%' => $wersja]
             ));
+
+            // Pominięte pliki niosły kod: właściciel sklepu ma wiedzieć, że ich
+            // ikon brakuje.
+            if ($this->icons->skipped() > 0) {
+                $this->addFlash('warning', $this->trans(
+                    '%count% icon files were skipped because they contain code. They will not show in the shop.',
+                    'Modules.Quinceengine.Admin',
+                    ['%count%' => $this->icons->skipped()]
+                ));
+            }
         } catch (\RuntimeException $e) {
             $this->addFlash('error', $this->trans($e->getMessage(), 'Modules.Quinceengine.Admin'));
         }

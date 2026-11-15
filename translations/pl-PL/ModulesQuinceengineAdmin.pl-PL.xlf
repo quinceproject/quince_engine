@@ -3154,6 +3154,14 @@
         <source>Icon pack updated to version %version%.</source>
         <target>Pakiet ikon zaktualizowany do wersji %version%.</target>
       </trans-unit>
+      <trans-unit id="quince.icons.skipped">
+        <source>%count% icon files were skipped because they contain code. They will not show in the shop.</source>
+        <target>Pominięto pliki ikon zawierające kod (%count%). Nie pojawią się w sklepie.</target>
+      </trans-unit>
+      <trans-unit id="quince.icons.all_unsafe">
+        <source>Every icon in this package contains code. Nothing was changed.</source>
+        <target>Każda ikona w tej paczce zawiera kod. Nic nie zostało zmienione.</target>
+      </trans-unit>
       <trans-unit id="quince.tree.search">
         <source>Search categories</source>
         <target>Szukaj kategorii</target>

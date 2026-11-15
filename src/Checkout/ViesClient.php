@@ -43,7 +43,9 @@ final class ViesClient
             'powod' => '',
         ];
 
-        $odpowiedz = $this->zapytaj(sprintf(self::ADRES, $nip->kraj(), $nip->numer()));
+        // Obie części wchodzą w ścieżkę adresu: zakodowane nie zmienią jej
+        // na inną ścieżkę rejestru.
+        $odpowiedz = $this->zapytaj(sprintf(self::ADRES, rawurlencode($nip->kraj()), rawurlencode($nip->numer())));
 
         if ($odpowiedz === null) {
             return array_merge($pusty, ['powod' => 'rejestr_niedostepny']);

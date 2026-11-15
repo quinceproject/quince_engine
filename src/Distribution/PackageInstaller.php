@@ -31,6 +31,22 @@ if (!defined('_PS_VERSION_')) {
  */
 final class PackageInstaller
 {
+    /** Host adresu paczki z listy wydań. */
+    private const RELEASE_HOST = 'github.com';
+
+    /**
+     * Hosty, przez które GitHub oddaje załączniki wydań. Przekierowanie gdzie
+     * indziej przerywa pobieranie.
+     */
+    private const DOWNLOAD_HOSTS = [
+        'github.com',
+        'objects.githubusercontent.com',
+        'release-assets.githubusercontent.com',
+    ];
+
+    /** Paczka modułu czy motywu waży kilka MB; 50 MB to zapas, nie norma. */
+    private const MAX_PACKAGE_BYTES = 52428800;
+
     public function __construct(
         private readonly ReleaseManifest $manifest,
         private readonly ModuleManager $modules,
@@ -168,7 +184,7 @@ final class PackageInstaller
      */
     private function download(string $url, string $sha256, string $name): string
     {
-        if (!str_starts_with($url, 'https://github.com/quinceproject/')) {
+        if (!$this->isReleaseUrl($url)) {
             throw new \RuntimeException('The package address is not a Quince release.');
         }
 
@@ -183,9 +199,20 @@ final class PackageInstaller
 
         try {
             $client = HttpClient::create(['timeout' => 60, 'max_redirects' => 5]);
-            $response = $client->request('GET', $url);
+            $response = $client->request('GET', $url, [
+                // Przerywa pobieranie, gdy przekierowanie wyprowadzi poza serwery
+                // wydań GitHuba albo paczka urośnie ponad limit.
+                'on_progress' => function (int $dlNow, int $dlSize, array $info): void {
+                    $this->guardTransfer((string) ($info['url'] ?? ''), $dlNow, $dlSize);
+                },
+            ]);
+            $written = 0;
             foreach ($client->stream($response) as $chunk) {
-                fwrite($handle, $chunk->getContent());
+                $content = $chunk->getContent();
+                $written += strlen($content);
+                // Druga zapora na rozmiar: liczymy to, co naprawdę trafia na dysk.
+                $this->guardTransfer((string) $response->getInfo('url'), $written, 0);
+                fwrite($handle, $content);
             }
         } catch (\Throwable $e) {
             fclose($handle);
@@ -200,5 +227,53 @@ final class PackageInstaller
         }
 
         return $file;
+    }
+
+    /**
+     * Adres paczki z listy wydań: tylko wydanie w repozytorium organizacji Quince.
+     *
+     * Sam przedrostek nie wystarcza: `https://github.com/quinceproject/../obcy/`
+     * zaczyna się tak samo, a prowadzi do cudzego repozytorium.
+     */
+    private function isReleaseUrl(string $url): bool
+    {
+        $parts = parse_url($url);
+
+        if (!is_array($parts)
+            || strtolower((string) ($parts['scheme'] ?? '')) !== 'https'
+            || strtolower((string) ($parts['host'] ?? '')) !== self::RELEASE_HOST
+            || array_intersect_key($parts, array_flip(['port', 'user', 'pass', 'query', 'fragment'])) !== []
+        ) {
+            return false;
+        }
+
+        $path = (string) ($parts['path'] ?? '');
+
+        if (str_contains($path, '..') || stripos($path, '%2e') !== false) {
+            return false;
+        }
+
+        return preg_match(
+            '#^/quinceproject/[A-Za-z0-9_.-]+/releases/download/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\.zip$#',
+            $path
+        ) === 1;
+    }
+
+    /**
+     * Zapora w trakcie pobierania: host bieżącego adresu (także po
+     * przekierowaniu) i rozmiar paczki.
+     */
+    private function guardTransfer(string $url, int $dlNow, int $dlSize): void
+    {
+        $host = strtolower((string) parse_url($url, PHP_URL_HOST));
+        $scheme = strtolower((string) parse_url($url, PHP_URL_SCHEME));
+
+        if ($url !== '' && ($scheme !== 'https' || !in_array($host, self::DOWNLOAD_HOSTS, true))) {
+            throw new \RuntimeException('The package was redirected outside GitHub release servers.');
+        }
+
+        if ($dlNow > self::MAX_PACKAGE_BYTES || $dlSize > self::MAX_PACKAGE_BYTES) {
+            throw new \RuntimeException('The package is larger than allowed.');
+        }
     }
 }

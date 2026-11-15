@@ -47,6 +47,11 @@ class Quince_EngineReviewsModuleFrontController extends ModuleFrontController
         $idProduct = (int) Tools::getValue('id_product');
         $strona = (int) Tools::getValue('page');
 
+        // Produkt wyłączony albo ukryty: odpowiedź jak dla produktu bez opinii.
+        if (!Reviews::productVisible($idProduct)) {
+            return ['ok' => true, 'html' => '', 'hasMore' => false, 'page' => 1];
+        }
+
         $porcja = Reviews::forProduct($idProduct, $strona);
 
         if ($porcja === null) {

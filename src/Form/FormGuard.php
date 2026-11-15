@@ -15,6 +15,7 @@ use Configuration;
 use Quince\Engine\Settings\ConfigStore;
 use Db;
 use Hook;
+use Tools;
 
 /**
  * Strażnik formularzy sklepu.
@@ -248,7 +249,9 @@ final class FormGuard
      */
     private function hashIp(?string $ip): ?string
     {
-        $ip = $ip ?? ($_SERVER['REMOTE_ADDR'] ?? '');
+        // Adres klienta tak, jak liczy go rdzeń: za proxy albo CDN `REMOTE_ADDR`
+        // to adres pośrednika i wszyscy klienci dzieliliby jeden limit.
+        $ip = $ip ?? (string) Tools::getRemoteAddr();
 
         if ($ip === '') {
             return null;

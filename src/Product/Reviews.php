@@ -38,6 +38,31 @@ final class Reviews
      */
     private const NA_STRONE = 5;
 
+    /** Najdalsza porcja, o którą można zapytać. */
+    private const MAX_STRONA = 1000;
+
+    /**
+     * Czy produkt jest widoczny w bieżącym sklepie: aktywny i nie ukryty
+     * (widoczność `none`). Opinie produktu, którego klient nie zobaczy,
+     * nie wychodzą przez doładowanie.
+     */
+    public static function productVisible(int $idProduct): bool
+    {
+        if ($idProduct <= 0) {
+            return false;
+        }
+
+        $wiersz = Db::getInstance()->getRow(
+            'SELECT active, visibility FROM ' . _DB_PREFIX_ . 'product_shop
+             WHERE id_product = ' . $idProduct . '
+               AND id_shop = ' . (int) Context::getContext()->shop->id
+        );
+
+        return is_array($wiersz)
+            && (int) $wiersz['active'] === 1
+            && (string) $wiersz['visibility'] !== 'none';
+    }
+
     /**
      * Porcja opinii wraz z informacją, czy jest co doładowywać.
      *
@@ -49,7 +74,9 @@ final class Reviews
             return null;
         }
 
-        $strona = max(1, $strona);
+        // Górna granica: ogromny numer strony przepełniał przesunięcie w LIMIT
+        // i psuł zapytanie.
+        $strona = min(max(1, $strona), self::MAX_STRONA);
         $naStrone = self::naStrone();
         $warunekProsty = self::warunek($idProduct);
         $warunekZlaczenia = self::warunek($idProduct, 'c.');

@@ -13,6 +13,7 @@ namespace Quince\Engine\Settings;
 
 use Configuration;
 use Quince\Engine\Ui\IconLibrary;
+use Quince\Engine\Ui\SafeUrl;
 
 /**
  * Ustawienia topbara: treści, widoczność i pasek komunikatu.
@@ -208,7 +209,10 @@ final class TopbarSettings
 
             foreach ($values as $name => $value) {
                 if (preg_match('/^' . $key . '_(\d+)$/', (string) $name, $m)) {
-                    $collected[(int) $m[1]] = (string) $value;
+                    // Odnośnik paska promocji trafia do `href`: tylko bezpieczne schematy.
+                    $collected[(int) $m[1]] = $key === 'PROMO_LINK'
+                        ? SafeUrl::clean((string) $value)
+                        : (string) $value;
                 }
             }
 

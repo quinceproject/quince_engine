@@ -15,6 +15,7 @@ if (!defined('_PS_VERSION_')) {
 
 use Quince\Engine\Checkout\VatNumber;
 use Quince\Engine\Checkout\ViesClient;
+use Quince\Engine\Form\FormGuard;
 use Quince\Engine\Settings\CheckoutSettings;
 
 /**
@@ -29,6 +30,14 @@ class Quince_EngineViesModuleFrontController extends ModuleFrontController
 {
     /** @var bool nie ma tu nic do wyrenderowania poza JSON-em */
     public $ajax = true;
+
+    /**
+     * Limit zapytań do VIES z jednego adresu. Okno nie może przekroczyć 600 s:
+     * FormGuard sprząta starsze wpisy licznika.
+     */
+    private const LIMIT_KEY = 'vies';
+    private const LIMIT = 20;
+    private const LIMIT_WINDOW = 600;
 
     public function initContent(): void
     {
@@ -57,6 +66,20 @@ class Quince_EngineViesModuleFrontController extends ModuleFrontController
                     : $this->trans('Enter the full VAT number.', [], 'Modules.Quinceengine.Shop'),
             ]);
         }
+
+        // Każde zapytanie trzyma proces PHP do kilku sekund, a zalew zapytań
+        // z jednego adresu może sklepowi zamknąć dostęp do VIES. Liczymy tylko
+        // zapytania, które naprawdę wychodzą do rejestru.
+        $straznik = new FormGuard();
+
+        if ($straznik->tooOften(self::LIMIT_KEY, self::LIMIT, self::LIMIT_WINDOW)) {
+            $this->oddaj([
+                'stan' => 'zbyt_czesto',
+                'komunikat' => $this->trans('Too many lookups in a short time. Fill the company details in by hand or try again in a few minutes.', [], 'Modules.Quinceengine.Shop'),
+            ]);
+        }
+
+        $straznik->accept(self::LIMIT_KEY);
 
         $dane = (new ViesClient())->pobierz($nip);
 
@@ -104,7 +127,9 @@ class Quince_EngineViesModuleFrontController extends ModuleFrontController
 
         $podany = strtoupper(trim((string) Tools::getValue('country')));
 
-        if ($podany !== '') {
+        // Kod kraju trafia do adresu zapytania: tylko dwie litery, inaczej
+        // traktujemy go jak niepodany.
+        if (preg_match('/^[A-Z]{2}$/', $podany) === 1) {
             return $podany;
         }
 

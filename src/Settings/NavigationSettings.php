@@ -16,6 +16,7 @@ use Quince\Engine\Catalog\CategoryTree;
 use Quince\Engine\Catalog\CategoryTreeCache;
 use Quince\Engine\Feature\FeatureRegistry;
 use Quince\Engine\Ui\IconLibrary;
+use Quince\Engine\Ui\SafeUrl;
 
 /**
  * Ustawienia paska nawigacji: kategorie i odnośniki własne.
@@ -468,7 +469,8 @@ final class NavigationSettings
             $urls = [];
 
             foreach ((array) ($row['urls'] ?? []) as $idLang => $url) {
-                $urls[(int) $idLang] = trim((string) $url);
+                // Adres trafia do `href` w menu: tylko bezpieczne schematy.
+                $urls[(int) $idLang] = SafeUrl::clean((string) $url);
             }
 
             $style = (string) ($row['style'] ?? 'normal');

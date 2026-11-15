@@ -4,6 +4,27 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.3] - 2026-11-15
+
+### Security
+
+- **Links typed in the back office accept only safe addresses**: `http`, `https`,
+  `mailto`, `tel` and addresses within the shop. This covers the main menu, the footer,
+  social icons, home page section links and the promo bar. A `javascript:` address
+  is no longer saved, so it cannot run a script for a customer who clicks it.
+- **The VAT number lookup (VIES) has a limit** of 20 requests in 10 minutes per
+  visitor, and the country code is checked. Before, anyone could use it without limit
+  and keep PHP processes busy, and VIES could block the shop.
+- **Packages are downloaded only from Quince releases on GitHub**: the address is
+  parsed and checked (host, path, no `..`), redirects may go only to GitHub's download
+  hosts, and a package may not exceed 50 MB. The SHA-256 check stays.
+- **Icons from an uploaded icon pack are checked**: an SVG with a script, event
+  attributes or external links is skipped, and the back office says how many.
+- Loading more reviews returns nothing for a product that is inactive or hidden, and
+  the page number is capped.
+- Form limits count each visitor behind a proxy or CDN separately
+  (`Tools::getRemoteAddr()`), instead of all visitors together.
+
 ## [0.8.2] - 2026-11-15
 
 ### Security
