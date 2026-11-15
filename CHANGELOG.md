@@ -4,6 +4,22 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1] - 2026-11-15
+
+### Security
+
+- The form guard can no longer be skipped by leaving its fields out. The offer,
+  specialist, product question, review, registration and checkout forms are accepted
+  only as a POST that carries the guard's token; a request without it, or with the
+  data in the address, is rejected before the module or PrestaShop handles it. Before,
+  a script that did not send the token bypassed the honeypot, the time check, the
+  rate limit and reCAPTCHA. Review, registration and checkout forms are checked this
+  way only while the Quince theme is active, as only the Quince theme adds the fields.
+- The rate limit counts per form name chosen by the shop, not the name sent with the
+  request, so renaming the form on every request no longer resets the counter.
+- Adding a product to the quote list, removing it and refreshing the list no longer
+  count against the offer form's limit.
+
 ## [0.8.0] - 2026-11-15
 
 ### Added

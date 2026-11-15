@@ -38,7 +38,7 @@ class Quince_Engine extends Module
     {
         $this->name = 'quince_engine';
         $this->tab = 'front_office_features';
-        $this->version = '0.8.0';
+        $this->version = '0.8.1';
         $this->author = 'Quince Project';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = ['min' => '9.0.0', 'max' => '9.99.99'];
@@ -728,19 +728,40 @@ class Quince_Engine extends Module
         $this->zapisKwot();
         $this->zapiszOgladany();
 
-        if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
+        $post = ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST';
+        $motyw = (string) $this->context->shop->theme_name;
+        $quinceTheme = $motyw === 'quince' || (defined('_PARENT_THEME_NAME_') && _PARENT_THEME_NAME_ === 'quince');
+        $chroniony = \Quince\Engine\Form\GuardedEndpoint::formFor($this->context->controller, $quinceTheme);
+
+        if ($chroniony === \Quince\Engine\Form\GuardedEndpoint::SKIP) {
             return;
         }
 
         $straznik = new \Quince\Engine\Form\FormGuard();
-        $token = (string) ($_POST[\Quince\Engine\Form\FormGuard::FIELD_TOKEN] ?? '');
 
-        if ($token === '') {
-            return;
+        if ($chroniony !== null) {
+            // Formularz z listy: przyjmujemy go tylko jako POST z polami strażnika.
+            // GET z danymi w adresie albo POST bez znacznika to nie nasza strona.
+            $formularz = $chroniony;
+            $wynik = $post
+                ? $straznik->check($formularz, $_POST)
+                : \Quince\Engine\Form\FormVerdict::rejected(\Quince\Engine\Form\FormVerdict::NO_TOKEN);
+        } else {
+            if (!$post) {
+                return;
+            }
+
+            $token = (string) ($_POST[\Quince\Engine\Form\FormGuard::FIELD_TOKEN] ?? '');
+
+            if ($token === '') {
+                return;
+            }
+
+            $formularz = \Quince\Engine\Form\GuardedEndpoint::knownForm(
+                (string) ($_POST[\Quince\Engine\Form\FormGuard::FIELD_FORM] ?? '')
+            );
+            $wynik = $straznik->check($formularz, $_POST);
         }
-
-        $formularz = (string) ($_POST[\Quince\Engine\Form\FormGuard::FIELD_FORM] ?? 'form');
-        $wynik = $straznik->check($formularz, $_POST);
 
         if ($wynik->passed) {
             $straznik->accept($formularz);
@@ -750,8 +771,11 @@ class Quince_Engine extends Module
 
         PrestaShopLogger::addLog($wynik->logLine($formularz), 2, null, 'Quince', null, true);
 
+        // Kontroler czyta dane przez Tools::getValue(), czyli także z adresu,
+        // więc czyścimy oba źródła. Routing jest już za nami.
         $_POST = [];
-        $_REQUEST = $_GET;
+        $_GET = [];
+        $_REQUEST = [];
 
         $this->context->controller->errors[] = $this->trans(
             'We could not accept this form. Please reload the page and try again.',
