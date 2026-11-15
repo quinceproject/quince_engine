@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Quince\Engine\Controller\Admin;
 
+use PrestaShopBundle\Security\Attribute\AdminSecurity;
 use Quince\Engine\Settings\AppearanceSettings;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -74,6 +75,7 @@ class AppearanceController extends QuinceController
     {
     }
 
+    #[AdminSecurity("is_granted('read', request.get('_legacy_controller'))", message: 'You do not have permission to view this.')]
     public function indexAction(): Response
     {
         return $this->renderPanel('@Modules/quince_engine/views/templates/admin/appearance.html.twig', [
@@ -98,6 +100,7 @@ class AppearanceController extends QuinceController
      * Ta sama klasa liczy kolory tutaj i przy zapisie, więc przycisk „Generate palette"
      * pokazuje dokładnie to, co zobaczy sklep.
      */
+    #[AdminSecurity("is_granted('read', request.get('_legacy_controller'))", message: 'You do not have permission to view this.')]
     public function previewAction(Request $request): JsonResponse
     {
         if (!$this->isCsrfTokenValid('quince_appearance_preview', $request->request->get('_csrf_token'))) {
@@ -115,6 +118,7 @@ class AppearanceController extends QuinceController
         ]);
     }
 
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", message: 'You do not have permission to change this.')]
     public function saveAction(Request $request): RedirectResponse
     {
         if (!$this->isCsrfTokenValid('quince_appearance_save', $request->request->get('_csrf_token'))) {

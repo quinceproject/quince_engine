@@ -4,6 +4,17 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.2] - 2026-11-15
+
+### Security
+
+- Every back-office screen of the engine checks the employee's permissions. Before,
+  any logged-in employee, whatever their profile, could open and save every Quince
+  Engine screen and install or update Quince modules. The screens now belong to the
+  engine's menu tab, **Quince Engine** (`AdminQuinceEngine`): grant it to a profile under
+  **Advanced Parameters → Team → Permissions**. SuperAdmin needs nothing. A profile that
+  had access through the hidden `AdminQuince` tab needs access to this tab now.
+
 ## [0.8.1] - 2026-11-15
 
 ### Security

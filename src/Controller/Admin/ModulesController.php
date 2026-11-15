@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Quince\Engine\Controller\Admin;
 
 use Module;
+use PrestaShopBundle\Security\Attribute\AdminSecurity;
 use Quince\Engine\Distribution\PackageInstaller;
 use Quince\Engine\Distribution\ReleaseManifest;
 use Quince\Engine\Feature\ModuleCatalogue;
@@ -37,6 +38,7 @@ class ModulesController extends QuinceController
     ) {
     }
 
+    #[AdminSecurity("is_granted('read', request.get('_legacy_controller'))", message: 'You do not have permission to view this.')]
     public function indexAction(): Response
     {
         $releases = $this->manifest->modules();
@@ -67,6 +69,7 @@ class ModulesController extends QuinceController
         ]);
     }
 
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", message: 'You do not have permission to change this.')]
     public function installAction(Request $request): RedirectResponse
     {
         if (!$this->isCsrfTokenValid('quince_modules_install', $request->request->get('_csrf_token'))) {
@@ -107,6 +110,7 @@ class ModulesController extends QuinceController
         return $this->redirectToRoute('quince_modules');
     }
 
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", message: 'You do not have permission to change this.')]
     public function refreshAction(Request $request): RedirectResponse
     {
         if (!$this->isCsrfTokenValid('quince_modules_refresh', $request->request->get('_csrf_token'))) {

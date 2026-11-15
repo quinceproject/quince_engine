@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Quince\Engine\Controller\Admin;
 
+use PrestaShopBundle\Security\Attribute\AdminSecurity;
 use Quince\Engine\Ui\IconLibrary;
 use Quince\Engine\Ui\IconPackManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -27,6 +28,7 @@ class ToolsController extends QuinceController
     {
     }
 
+    #[AdminSecurity("is_granted('read', request.get('_legacy_controller'))", message: 'You do not have permission to view this.')]
     public function indexAction(): Response
     {
         return $this->renderPanel('@Modules/quince_engine/views/templates/admin/tools.html.twig', [
@@ -37,6 +39,7 @@ class ToolsController extends QuinceController
         ]);
     }
 
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", message: 'You do not have permission to change this.')]
     public function iconsUpdateAction(Request $request): RedirectResponse
     {
         if (!$this->isCsrfTokenValid('quince_tools_icons_update', $request->request->get('_csrf_token'))) {

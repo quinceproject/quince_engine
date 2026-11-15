@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Quince\Engine\Controller\Admin;
 
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
+use PrestaShopBundle\Security\Attribute\AdminSecurity;
 use Quince\Engine\Ui\IconLibrary;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class IconController extends FrameworkBundleAdminController
 {
+    #[AdminSecurity("is_granted('read', request.get('_legacy_controller'))", message: 'You do not have permission to view this.')]
     public function searchAction(Request $request): JsonResponse
     {
         $icons = IconLibrary::search((string) $request->query->get('q', ''));

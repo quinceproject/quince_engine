@@ -13,6 +13,7 @@ namespace Quince\Engine\Controller\Admin;
 
 use Configuration;
 use Context;
+use PrestaShopBundle\Security\Attribute\AdminSecurity;
 use Quince\Engine\Seo\LlmsTxtManager;
 use Quince\Engine\Settings\BrandSchemaSettings;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -35,6 +36,7 @@ class BrandSchemaController extends QuinceController
     ) {
     }
 
+    #[AdminSecurity("is_granted('read', request.get('_legacy_controller'))", message: 'You do not have permission to view this.')]
     public function indexAction(): Response
     {
         $ustawienia = $this->settings->all();
@@ -59,6 +61,7 @@ class BrandSchemaController extends QuinceController
         ]);
     }
 
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", message: 'You do not have permission to change this.')]
     public function saveAction(Request $request): RedirectResponse
     {
         if (!$this->isCsrfTokenValid('quince_brand_schema_save', $request->request->get('_csrf_token'))) {

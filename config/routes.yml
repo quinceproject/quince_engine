@@ -9,7 +9,7 @@ quince_appearance:
   methods: [GET]
   defaults:
     _controller: Quince\Engine\Controller\Admin\AppearanceController::indexAction
-    _legacy_controller: 'AdminQuinceAppearance'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuinceAppearance'
 
 quince_appearance_save:
@@ -17,7 +17,7 @@ quince_appearance_save:
   methods: [POST]
   defaults:
     _controller: Quince\Engine\Controller\Admin\AppearanceController::saveAction
-    _legacy_controller: 'AdminQuinceAppearance'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuinceAppearance:save'
 
 # Podgląd palety bez zapisu. Paleta liczona jest wyłącznie w PHP (PaletteGenerator),
@@ -28,7 +28,7 @@ quince_appearance_preview:
   methods: [POST]
   defaults:
     _controller: Quince\Engine\Controller\Admin\AppearanceController::previewAction
-    _legacy_controller: 'AdminQuinceAppearance'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuinceAppearance'
 
 # Ustawienia topbara: treści i widoczność. Kolory pasa wylicza silnik
@@ -38,7 +38,7 @@ quince_topbar:
   methods: [GET]
   defaults:
     _controller: Quince\Engine\Controller\Admin\TopbarController::indexAction
-    _legacy_controller: 'AdminQuinceTopbar'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuinceTopbar'
 
 quince_topbar_save:
@@ -46,7 +46,7 @@ quince_topbar_save:
   methods: [POST]
   defaults:
     _controller: Quince\Engine\Controller\Admin\TopbarController::saveAction
-    _legacy_controller: 'AdminQuinceTopbar'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuinceTopbar:save'
 
 # Wyszukiwanie ikon dla selektora w panelu. Zestaw liczy ponad dwa tysiące pozycji,
@@ -56,7 +56,7 @@ quince_icons_search:
   methods: [GET]
   defaults:
     _controller: Quince\Engine\Controller\Admin\IconController::searchAction
-    _legacy_controller: 'AdminQuinceTopbar'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuinceTopbar'
 
 # Przegląd naszych modułów: stan instalacji i przejście do ustawień każdego z nich.
@@ -65,7 +65,7 @@ quince_modules:
   methods: [GET]
   defaults:
     _controller: Quince\Engine\Controller\Admin\ModulesController::indexAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince'
 
 # Instalacja albo aktualizacja modułu lub motywu z listy wydań Quince.
@@ -74,7 +74,7 @@ quince_modules_install:
   methods: [POST]
   defaults:
     _controller: Quince\Engine\Controller\Admin\ModulesController::installAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince'
 
 # Pobranie listy wydań od nowa, z pominięciem dobowego cache.
@@ -83,7 +83,7 @@ quince_modules_refresh:
   methods: [POST]
   defaults:
     _controller: Quince\Engine\Controller\Admin\ModulesController::refreshAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince'
 
 # Ustawienia nagłówka: logo, wyszukiwanie, akcje klienta.
@@ -92,7 +92,7 @@ quince_header:
   methods: [GET]
   defaults:
     _controller: Quince\Engine\Controller\Admin\HeaderController::indexAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince'
 
 quince_header_save:
@@ -100,7 +100,7 @@ quince_header_save:
   methods: [POST]
   defaults:
     _controller: Quince\Engine\Controller\Admin\HeaderController::saveAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince:save'
 
 # Ustawienia stopki: dane firmy, kolumny, ikony społecznościowe, pas dolny.
@@ -109,7 +109,7 @@ quince_footer:
   methods: [GET]
   defaults:
     _controller: Quince\Engine\Controller\Admin\FooterController::indexAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince'
 
 quince_footer_save:
@@ -117,7 +117,7 @@ quince_footer_save:
   methods: [POST]
   defaults:
     _controller: Quince\Engine\Controller\Admin\FooterController::saveAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince:save'
 
 # Dane organizacji dla Schema.org, domyślne meta i llms.txt.
@@ -126,7 +126,7 @@ quince_brand_schema:
   methods: [GET]
   defaults:
     _controller: Quince\Engine\Controller\Admin\BrandSchemaController::indexAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince'
 
 quince_brand_schema_save:
@@ -134,7 +134,7 @@ quince_brand_schema_save:
   methods: [POST]
   defaults:
     _controller: Quince\Engine\Controller\Admin\BrandSchemaController::saveAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince:save'
 
 # Ustawienia paska nawigacji: kategorie i odnośniki własne.
@@ -143,7 +143,7 @@ quince_navigation:
   methods: [GET]
   defaults:
     _controller: Quince\Engine\Controller\Admin\NavigationController::indexAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince'
 
 quince_navigation_save:
@@ -151,7 +151,7 @@ quince_navigation_save:
   methods: [POST]
   defaults:
     _controller: Quince\Engine\Controller\Admin\NavigationController::saveAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince:save'
 
 quince_product:
@@ -159,7 +159,7 @@ quince_product:
   methods: [GET]
   defaults:
     _controller: Quince\Engine\Controller\Admin\ProductPageController::indexAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince'
 
 quince_product_save:
@@ -167,7 +167,7 @@ quince_product_save:
   methods: [POST]
   defaults:
     _controller: Quince\Engine\Controller\Admin\ProductPageController::saveAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince:save'
 
 quince_checkout:
@@ -175,7 +175,7 @@ quince_checkout:
   methods: [GET]
   defaults:
     _controller: Quince\Engine\Controller\Admin\CheckoutController::indexAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince'
 
 quince_checkout_save:
@@ -183,7 +183,7 @@ quince_checkout_save:
   methods: [POST]
   defaults:
     _controller: Quince\Engine\Controller\Admin\CheckoutController::saveAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince:save'
 
 quince_cart:
@@ -191,7 +191,7 @@ quince_cart:
   methods: [GET]
   defaults:
     _controller: Quince\Engine\Controller\Admin\CartController::indexAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince'
 
 quince_cart_save:
@@ -199,7 +199,7 @@ quince_cart_save:
   methods: [POST]
   defaults:
     _controller: Quince\Engine\Controller\Admin\CartController::saveAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince:save'
 
 quince_homepage:
@@ -207,7 +207,7 @@ quince_homepage:
   methods: [GET]
   defaults:
     _controller: Quince\Engine\Controller\Admin\HomepageController::indexAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince'
 
 quince_homepage_save:
@@ -215,7 +215,7 @@ quince_homepage_save:
   methods: [POST]
   defaults:
     _controller: Quince\Engine\Controller\Admin\HomepageController::saveAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince:save'
 
 quince_listing:
@@ -223,7 +223,7 @@ quince_listing:
   methods: [GET]
   defaults:
     _controller: Quince\Engine\Controller\Admin\ListingController::indexAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince'
 
 quince_listing_save:
@@ -231,7 +231,7 @@ quince_listing_save:
   methods: [POST]
   defaults:
     _controller: Quince\Engine\Controller\Admin\ListingController::saveAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince:save'
 
 quince_card:
@@ -239,7 +239,7 @@ quince_card:
   methods: [GET]
   defaults:
     _controller: Quince\Engine\Controller\Admin\ProductCardController::indexAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince'
 
 quince_card_save:
@@ -247,7 +247,7 @@ quince_card_save:
   methods: [POST]
   defaults:
     _controller: Quince\Engine\Controller\Admin\ProductCardController::saveAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince:save'
 
 quince_tools:
@@ -255,7 +255,7 @@ quince_tools:
   methods: [GET]
   defaults:
     _controller: Quince\Engine\Controller\Admin\ToolsController::indexAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince'
 
 quince_tools_icons_update:
@@ -263,5 +263,5 @@ quince_tools_icons_update:
   methods: [POST]
   defaults:
     _controller: Quince\Engine\Controller\Admin\ToolsController::iconsUpdateAction
-    _legacy_controller: 'AdminQuince'
+    _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince:save'

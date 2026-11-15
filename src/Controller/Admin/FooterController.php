@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Quince\Engine\Controller\Admin;
 
+use PrestaShopBundle\Security\Attribute\AdminSecurity;
 use Quince\Engine\Settings\AppearanceSettings;
 use Quince\Engine\Settings\FooterSettings;
 use Quince\Engine\Ui\IconLibrary;
@@ -32,6 +33,7 @@ class FooterController extends QuinceController
     ) {
     }
 
+    #[AdminSecurity("is_granted('read', request.get('_legacy_controller'))", message: 'You do not have permission to view this.')]
     public function indexAction(): Response
     {
         return $this->renderPanel('@Modules/quince_engine/views/templates/admin/footer.html.twig', [
@@ -54,6 +56,7 @@ class FooterController extends QuinceController
         ]);
     }
 
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", message: 'You do not have permission to change this.')]
     public function saveAction(Request $request): RedirectResponse
     {
         if (!$this->isCsrfTokenValid('quince_footer_save', $request->request->get('_csrf_token'))) {
