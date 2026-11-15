@@ -4,6 +4,23 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2026-11-15
+
+### Added
+
+- Console command `quince:install`: installs every Quince module found in `modules/`
+  that the shop does not have yet, updates the ones with a newer version on disk, in
+  the order of their dependencies, and refreshes the files of the Quince theme.
+  `--enable-theme` also makes Quince the active theme in every shop. The Composer
+  project `quinceproject/setup` runs it after every download, with `--enable-theme`
+  on the first one only.
+
+### Changed
+
+- Installed from the console (`prestashop:module install quince_engine`), the engine
+  is enabled and hooked in every shop, as when installed from the back office with
+  all shops selected. The console otherwise works in the default shop only.
+
 ## [0.7.2] - 2026-11-15
 
 ### Added

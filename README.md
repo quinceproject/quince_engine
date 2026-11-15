@@ -98,7 +98,22 @@ command line are not required, though both work.
 2. Upload that folder to the `modules/` directory of the shop, for example by FTP.
 3. In **Modules → Module Manager** find Quince Engine and click **Install**.
 
-**With Composer**
+**With Composer, everything at once**
+
+In the shop's root directory, as the user the shop runs as (not root):
+
+```sh
+composer create-project quinceproject/setup quince --repository=https://quinceproject.github.io
+```
+
+This downloads the engine, the Quince theme and every Quince module, installs them in
+PrestaShop in the order of their dependencies, enables every module in every shop and
+makes Quince the active theme in every shop. `composer update` in the `quince/` folder
+downloads new releases and updates the modules in the shop; it does not change the
+active theme. Details in the
+[setup README](https://github.com/quinceproject/setup).
+
+**With Composer, package by package**
 
 A PrestaShop shop ships without a `composer.json` of its own, so Quince packages are
 installed from a separate folder next to the shop. Once, in the shop's root directory:
@@ -120,7 +135,9 @@ php ../bin/console prestashop:module install quince_engine
 
 Composer puts the release ZIP in `modules/quince_engine`. Installing the module, and
 running `prestashop:module upgrade quince_engine` after `composer update`, is still
-done by PrestaShop.
+done by PrestaShop. With the engine installed, `php ../bin/console quince:install`
+installs or updates every Quince module found in `modules/`; with `--enable-theme` it
+also makes Quince the active theme in every shop.
 
 **The other Quince modules and the theme, from the engine**
 

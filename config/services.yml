@@ -137,6 +137,15 @@ services:
       - '@PrestaShop\PrestaShop\Core\Module\ModuleManager'
       - '@prestashop.core.addon.theme.theme_manager'
 
+  # `quince:install`: instalacja wszystkich modułów Quince z modules/ i włączenie
+  # motywu we wszystkich sklepach. Uruchamia je pakiet Composera quinceproject/setup.
+  Quince\Engine\Command\InstallCommand:
+    class: Quince\Engine\Command\InstallCommand
+    arguments:
+      - '@PrestaShop\PrestaShop\Core\Module\ModuleManager'
+      - '@PrestaShop\PrestaShop\Core\Context\ContextBuilderPreparer'
+    tags: ['console.command']
+
   # Przegląd naszych modułów, instalacja i aktualizacja z listy wydań.
   Quince\Engine\Controller\Admin\ModulesController:
     class: Quince\Engine\Controller\Admin\ModulesController

@@ -38,7 +38,7 @@ class Quince_Engine extends Module
     {
         $this->name = 'quince_engine';
         $this->tab = 'front_office_features';
-        $this->version = '0.7.2';
+        $this->version = '0.8.0';
         $this->author = 'Quince Project';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = ['min' => '9.0.0', 'max' => '9.99.99'];
@@ -77,6 +77,14 @@ class Quince_Engine extends Module
 
     public function install(): bool
     {
+        // Konsola PrestaShopa działa w kontekście jednego sklepu, więc
+        // `prestashop:module install` włączyłoby silnik i podpięło jego haki tylko
+        // w sklepie domyślnym. Z konsoli instalujemy więc dla wszystkich sklepów,
+        // tak jak z panelu w kontekście „Wszystkie sklepy”.
+        if (PHP_SAPI === 'cli' && Shop::isFeatureActive()) {
+            Shop::setContext(Shop::CONTEXT_ALL);
+        }
+
         // Gałąź menu musi istnieć, zanim rdzeń zarejestruje zakładki z `$this->tabs`.
         if (\Quince\Engine\Feature\MenuBranch::ensure() === 0) {
             return false;
