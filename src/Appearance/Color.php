@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace Quince\Engine\Appearance;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Konwersje barw i pomiar kontrastu.
  *

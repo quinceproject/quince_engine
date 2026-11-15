@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace Quince\Engine\Appearance;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Tokeny wypisywane przy żądaniu poza generatorami palety i metryk.
  *

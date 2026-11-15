@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace Quince\Engine\Ui;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Daty z bazy w postaci użytecznej dla szablonu.
  *

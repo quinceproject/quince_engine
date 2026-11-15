@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace Quince\Engine\Catalog;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Zapamiętane drzewo kategorii.
  *

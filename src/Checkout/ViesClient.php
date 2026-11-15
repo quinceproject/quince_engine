@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace Quince\Engine\Checkout;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Odpytanie rejestru VIES o dane firmy.
  *

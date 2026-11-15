@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace Quince\Engine\Settings;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Styl bloku: tło, ramka, cień i zaokrąglenie jednej powierzchni.
  *

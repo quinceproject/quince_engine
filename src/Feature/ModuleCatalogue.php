@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace Quince\Engine\Feature;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 use Module;
 use Symfony\Component\Routing\RouterInterface;
 

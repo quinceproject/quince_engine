@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace Quince\Engine\Form;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Wynik sprawdzenia zgłoszenia formularza.
  *

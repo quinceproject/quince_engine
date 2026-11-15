@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace Quince\Engine\Appearance;
 
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 /**
  * Wylicza niekolorystyczne wartości bazowe motywu: typografię, przestrzeń, kształt,
  * cień i siatkę.
