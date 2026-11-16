@@ -4,6 +4,24 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-11-16
+
+### Added
+
+- **Product page → Carousels**: four new carousels built from the Quince Cross-selling
+  product lists: spare parts, spare parts for, set items and in sets. They need Quince
+  Cross-selling 0.3.1 and the Quince theme 0.1.5.
+- Every product page carousel (related products, cross-selling, category products,
+  recently viewed and the four new ones) has its own title for each language. An empty
+  field keeps the default title, which is shown in the field.
+- **Quince modules** screen: every module has its own icon. 13 icons come from Lucide
+  (ISC licence, listed in `THIRD-PARTY-NOTICES.md`).
+
+### Changed
+
+- New module logo: the letter Q in the project gradient.
+- Files in `src/` stop when opened directly instead of through PrestaShop.
+
 ## [0.8.4] - 2026-11-15
 
 ### Fixed
