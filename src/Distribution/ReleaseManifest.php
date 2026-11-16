@@ -115,8 +115,14 @@ final class ReleaseManifest
             return;
         }
 
+        // Przy pobraniu na żądanie („Sprawdź aktualizacje”) adres dostaje
+        // znacznik czasu. GitHub Pages trzyma plik w CDN do 10 minut
+        // (`Cache-Control: max-age=600`), więc kliknięcie tuż po wydaniu
+        // dostawało starą listę i nie widziało nowej wersji.
+        $url = $force ? self::URL . '?t=' . time() : self::URL;
+
         try {
-            $body = HttpClient::create(['timeout' => 10])->request('GET', self::URL)->getContent();
+            $body = HttpClient::create(['timeout' => 10])->request('GET', $url)->getContent();
             $decoded = $this->decode($body);
             if ($decoded === null) {
                 throw new \RuntimeException('The release list is not valid JSON.');

@@ -1309,8 +1309,12 @@
         <target>Nie udało się pobrać listy wydań.</target>
       </trans-unit>
       <trans-unit id="quince.dist.refresh_ok">
-        <source>The release list is up to date.</source>
-        <target>Lista wydań jest aktualna.</target>
+        <source>Release list downloaded. Everything is up to date.</source>
+        <target>Pobrano listę wydań. Wszystko jest aktualne.</target>
+      </trans-unit>
+      <trans-unit id="quince.dist.refresh_updates">
+        <source>Release list downloaded. Updates available: %count%.</source>
+        <target>Pobrano listę wydań. Dostępne aktualizacje: %count%.</target>
       </trans-unit>
       <trans-unit id="quince.dist.err_module">
         <source>This module is not on the release list.</source>
@@ -2678,8 +2682,8 @@
         <target>Opis</target>
       </trans-unit>
       <trans-unit id="quince.listing.el_cover">
-        <source>Category image</source>
-        <target>Zdjęcie kategorii</target>
+        <source>Category image or brand logo</source>
+        <target>Zdjęcie kategorii lub logo marki</target>
       </trans-unit>
       <trans-unit id="quince.listing.el_subcategories">
         <source>Subcategories</source>
@@ -2758,8 +2762,8 @@
         <target>Komunikat o braku wyników</target>
       </trans-unit>
       <trans-unit id="quince.listing.el_pagination">
-        <source>Pagination</source>
-        <target>Stronicowanie</target>
+        <source>Further products</source>
+        <target>Dalsze produkty</target>
       </trans-unit>
       <trans-unit id="quince.listing.el_additional_description">
         <source>Additional description</source>

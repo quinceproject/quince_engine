@@ -45,27 +45,12 @@ class ModulesController extends QuinceController
     #[AdminSecurity("is_granted('read', request.get('_legacy_controller'))", message: 'You do not have permission to view this.')]
     public function indexAction(): Response
     {
-        $releases = $this->manifest->modules();
-        // Router pozwala sprawdzić, czy trasa zgłoszona przez moduł istnieje, zanim
-        // szablon zbuduje z niej odnośnik.
-        $catalogue = new ModuleCatalogue(null, $this->container->get('router'));
-
-        $engine = Module::getInstanceByName('quince_engine');
-        $themeVersion = $this->themeVersion();
-
-        $modules = [];
-        foreach (array_merge($catalogue->all(), $catalogue->others(array_keys($releases))) as $module) {
-            $module['settings_url'] = $module['active'] ? $this->settingsUrl($module['name'], $module['route']) : null;
-            $modules[] = $this->row($module['name'], $module['label'], 'module', $module['installed'], $module['active'],
-                $module['version'], $releases[$module['name']] ?? null) + $module;
-        }
+        $rows = $this->rows();
 
         return $this->renderPanel('@Modules/quince_engine/views/templates/admin/modules.html.twig', [
-            'engine' => $this->row('quince_engine', 'Quince Engine', 'module', true, true,
-                $engine instanceof Module ? (string) $engine->version : null, $releases['quince_engine'] ?? null),
-            'theme' => $this->row(self::THEME, 'Quince theme', 'theme', $themeVersion !== null, true,
-                $themeVersion, $this->manifest->themes()[self::THEME] ?? null),
-            'modules' => $modules,
+            'engine' => $rows['engine'],
+            'theme' => $rows['theme'],
+            'modules' => $rows['modules'],
             'manifestError' => $this->manifest->error(),
             'manifestFetchedAt' => $this->manifest->fetchedAt(),
             'layoutTitle' => 'Quince modules',
@@ -127,11 +112,59 @@ class ModulesController extends QuinceController
 
         if ($this->manifest->error() !== null) {
             $this->addFlash('error', $this->trans('The release list could not be downloaded.', 'Modules.Quinceengine.Admin'));
-        } else {
-            $this->addFlash('success', $this->trans('The release list is up to date.', 'Modules.Quinceengine.Admin'));
+
+            return $this->redirectToRoute('quince_modules');
         }
 
+        // Komunikat mówi wprost, czy jest co aktualizować. Dawne „lista jest
+        // aktualna” znaczyło tylko „pobrano listę” i czytało się jak „nie ma
+        // aktualizacji”, także wtedy, gdy były.
+        $rows = $this->rows();
+        $updates = 0;
+
+        foreach (array_merge([$rows['engine'], $rows['theme']], $rows['modules']) as $row) {
+            if (($row['state'] ?? '') === 'update') {
+                ++$updates;
+            }
+        }
+
+        $this->addFlash('success', $updates === 0
+            ? $this->trans('Release list downloaded. Everything is up to date.', 'Modules.Quinceengine.Admin')
+            : $this->trans('Release list downloaded. Updates available: %count%.', 'Modules.Quinceengine.Admin', ['%count%' => $updates]));
+
         return $this->redirectToRoute('quince_modules');
+    }
+
+    /**
+     * Wiersze ekranu: silnik, motyw i moduły, każdy ze stanem i czynnością.
+     * Wspólne dla ekranu i dla licznika aktualizacji po odświeżeniu listy.
+     *
+     * @return array{engine:array<string,mixed>,theme:array<string,mixed>,modules:array<int,array<string,mixed>>}
+     */
+    private function rows(): array
+    {
+        $releases = $this->manifest->modules();
+        // Router pozwala sprawdzić, czy trasa zgłoszona przez moduł istnieje, zanim
+        // szablon zbuduje z niej odnośnik.
+        $catalogue = new ModuleCatalogue(null, $this->container->get('router'));
+
+        $engine = Module::getInstanceByName('quince_engine');
+        $themeVersion = $this->themeVersion();
+
+        $modules = [];
+        foreach (array_merge($catalogue->all(), $catalogue->others(array_keys($releases))) as $module) {
+            $module['settings_url'] = $module['active'] ? $this->settingsUrl($module['name'], $module['route']) : null;
+            $modules[] = $this->row($module['name'], $module['label'], 'module', $module['installed'], $module['active'],
+                $module['version'], $releases[$module['name']] ?? null) + $module;
+        }
+
+        return [
+            'engine' => $this->row('quince_engine', 'Quince Engine', 'module', true, true,
+                $engine instanceof Module ? (string) $engine->version : null, $releases['quince_engine'] ?? null),
+            'theme' => $this->row(self::THEME, 'Quince theme', 'theme', $themeVersion !== null, true,
+                $themeVersion, $this->manifest->themes()[self::THEME] ?? null),
+            'modules' => $modules,
+        ];
     }
 
     /**

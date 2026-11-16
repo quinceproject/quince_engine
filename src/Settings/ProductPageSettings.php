@@ -1020,6 +1020,7 @@ final class ProductPageSettings
         // włączniki naraz.
         if (array_key_exists('option', $values)) {
             ConfigStore::set(self::PREFIX . 'OPTIONS', (string) json_encode($this->readOptions($values)), true);
+            $this->syncModuleCounts();
         }
 
         if (array_key_exists('telefon', $values)) {
@@ -1028,6 +1029,36 @@ final class ProductPageSettings
 
         if (array_key_exists('wyglad', $values)) {
             ConfigStore::set(self::PREFIX . 'SURFACES', (string) json_encode($this->readSurfaces($values)), true);
+        }
+    }
+
+    /**
+     * Ustawienia modułów rdzenia, które same pobierają produkty do karuzel.
+     *
+     * Element silnika => klucz modułu z liczbą produktów. Moduł pobiera tyle,
+     * ile ma u siebie, a szablon dopiero potem przycina do liczby z silnika.
+     * Przy limicie modułu niższym niż w silniku („ile zajawek” 8, moduł 4)
+     * karuzela miała 4 karty, a pola z silnika nie dawało się podnieść.
+     */
+    public const MODULE_COUNT_KEYS = [
+        'category_products' => 'CATEGORYPRODUCTS_DISPLAY_PRODUCTS',
+        'recently_viewed' => 'PRODUCTS_VIEWED_NBR',
+    ];
+
+    /**
+     * Liczba „ile zajawek” z silnika przepisana do modułów rdzenia, żeby to
+     * ona rządziła karuzelą i nie trzeba było pilnować dwóch miejsc.
+     */
+    public function syncModuleCounts(): void
+    {
+        $opcje = $this->options();
+
+        foreach (self::MODULE_COUNT_KEYS as $element => $klucz) {
+            $ile = (int) ($opcje[$element]['count'] ?? 0);
+
+            if ($ile > 0) {
+                ConfigStore::set($klucz, (string) $ile);
+            }
         }
     }
 

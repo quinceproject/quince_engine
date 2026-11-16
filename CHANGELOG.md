@@ -4,6 +4,28 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.2] - 2026-11-16
+
+### Fixed
+
+- Product page carousels "Products from the same category" and "Recently viewed"
+  show as many products as set in **Product page → Carousels** ("How many
+  products"). The core modules behind them fetch their own number of products
+  first, so a lower number there (for example 4) capped the carousel whatever the
+  engine said. Saving the screen now writes the number to those modules as well,
+  and the update does it once for the current settings.
+- **Check for updates** on the Quince modules screen downloads a fresh release list.
+  The project page keeps the file in a CDN for up to 10 minutes, so a check right
+  after a release still saw the old list. The message now says how many updates
+  are available instead of "The release list is up to date".
+
+### Changed
+
+- Product lists, zone "Below the list": the element "Pagination" is called
+  "Further products". The same element shows page numbers or the load-more button,
+  depending on "How the customer reaches further products", so it is needed in
+  both modes.
+
 ## [0.10.1] - 2026-11-16
 
 ### Fixed

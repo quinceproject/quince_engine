@@ -178,7 +178,8 @@ final class ListingSettings
         // szerokości co kafelek podkategorii pod spodem. Układ:
         // `makiety/kategoria-naglowek-ze-zdjeciem.html`.
         'cover' => [
-            'label' => 'Category image',
+            // Na stronie marki ten sam element pokazuje jej logo.
+            'label' => 'Category image or brand logo',
             'zone' => 'header',
             'zones' => ['header'],
             'off' => true,
@@ -268,7 +269,11 @@ final class ListingSettings
         ],
 
         // --- pod listą ---
-        'pagination' => ['label' => 'Pagination', 'zone' => 'footer', 'zones' => ['footer']],
+        // Jedna nazwa na oba tryby: ten sam element rysuje numery stron albo
+        // przycisk doładowania, zależnie od wyboru „Jak klient dociera do
+        // dalszych produktów”. „Pagination” przy wybranym przycisku czytało się
+        // jak coś zbędnego do wyłączenia.
+        'pagination' => ['label' => 'Further products', 'zone' => 'footer', 'zones' => ['footer']],
 
         'additional_description' => [
             'label' => 'Additional description',
