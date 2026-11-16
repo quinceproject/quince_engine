@@ -516,7 +516,14 @@ final class PaletteGenerator
      */
     public function bandFromBackground(string $bg, array $scales): array
     {
-        $text = Color::readableOn($bg);
+        // Napis pasa to atrament sklepu (stopień 12), jeśli jest na tym tle
+        // czytelny (WCAG AA, 4,5:1). Inaczej czerń albo biel, zależnie od tła:
+        // na ciemnym pasie ciemny atrament zniknąłby. Bez tego napis i tło pod
+        // kursorem na jasnym pasie zostawały stałą czernią i nie szły za zmianą
+        // atramentu, jak cała reszta sklepu.
+        $text = Color::contrast($scales['neutral-12'], $bg) >= 4.5
+            ? $scales['neutral-12']
+            : Color::readableOn($bg);
         $link = $this->linkOn($bg, $text, $scales);
 
         // Czy pas stoi w barwie marki. Nie pytamy o równość kodów, tylko o to, czy

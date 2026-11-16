@@ -4,6 +4,16 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.1] - 2026-11-16
+
+### Fixed
+
+- Bands with a background picked from the palette (header, top bar, menu, footer)
+  follow the ink colour. On a light band the text and the hover background of the
+  actions (for example "Wishlist" in the header) use the ink when it is readable
+  there (contrast 4.5:1 or more); before, they stayed a fixed black whatever the
+  ink. Dark bands are unchanged.
+
 ## [0.10.0] - 2026-11-16
 
 ### Added
