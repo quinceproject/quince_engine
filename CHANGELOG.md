@@ -4,6 +4,20 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.0] - 2026-11-16
+
+### Added
+
+- **Sign-in and registration** screen (Pages group): account benefits shown next to
+  the sign-in form and next to the registration form, a separate list for each page.
+  A benefit has an icon and a title and description in every language; rows can be
+  dragged, added and removed. Until the shop saves the screen, both pages show four
+  default benefits in the customer's language. Needs the Quince theme 0.1.7.
+- Benefit texts are plain text: tags are removed when saving and when reading, and
+  the length is limited. The icon is a name from the engine's icon library.
+- New palette colour `surface-page-sunken`: the page background a shade darker (or
+  lighter on a dark page). For blocks that lie directly on the page next to a card.
+
 ## [0.9.0] - 2026-11-16
 
 ### Added

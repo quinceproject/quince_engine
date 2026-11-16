@@ -79,6 +79,15 @@ services:
     arguments:
       - '@Quince\Engine\Settings\CartSettings'
 
+  # Logowanie i rejestracja: korzyści z konta obok formularza.
+  Quince\Engine\Settings\AuthSettings:
+    class: Quince\Engine\Settings\AuthSettings
+
+  Quince\Engine\Controller\Admin\AuthController:
+    class: Quince\Engine\Controller\Admin\AuthController
+    arguments:
+      - '@Quince\Engine\Settings\AuthSettings'
+
   # Nagłówek: logo, wyszukiwanie, akcje klienta.
   Quince\Engine\Controller\Admin\HeaderController:
     class: Quince\Engine\Controller\Admin\HeaderController

@@ -810,8 +810,18 @@ final class PaletteGenerator
         // stopni 2, 4 i 5.
         $wDol = Color::tone($tloKarty) > 0.5 ? -1 : 1;
 
+        // Wgłębienie na tle STRONY, nie karty: blok, który leży wprost na stronie
+        // obok białej karty (zachęta przy logowaniu), ma się od strony odcinać.
+        // `surface-sunken` liczy się od karty, więc przy tle strony równym albo
+        // ciemniejszym od niego blok zlewał się z tłem. Krok jak przy najechaniu
+        // (około jednego, dwóch stopni skali); liczony od jasności, a nie od
+        // numeru stopnia, bo początek skali nie rośnie po kolei (stopień 1 jest
+        // ciemniejszy od 2, a 3 to biel).
+        $wDolStrony = Color::tone($tloStrony) > 0.5 ? -1 : 1;
+
         $roles = [
             'surface-page'    => $tloStrony,
+            'surface-page-sunken' => Color::shiftTone($tloStrony, $wDolStrony * 0.026),
             'surface-sunken'  => Color::shiftTone($tloKarty, $wDol * 0.014),
             'surface-raised'  => $tloKarty,
             'surface-hover'   => Color::shiftTone($tloKarty, $wDol * 0.026),

@@ -202,6 +202,23 @@ quince_cart_save:
     _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince:save'
 
+# Strony logowania i rejestracji: korzyści z konta obok formularza.
+quince_auth:
+  path: quince/auth
+  methods: [GET]
+  defaults:
+    _controller: Quince\Engine\Controller\Admin\AuthController::indexAction
+    _legacy_controller: 'AdminQuinceEngine'
+    _legacy_link: 'AdminQuince'
+
+quince_auth_save:
+  path: quince/auth/save
+  methods: [POST]
+  defaults:
+    _controller: Quince\Engine\Controller\Admin\AuthController::saveAction
+    _legacy_controller: 'AdminQuinceEngine'
+    _legacy_link: 'AdminQuince:save'
+
 quince_homepage:
   path: quince/homepage
   methods: [GET]

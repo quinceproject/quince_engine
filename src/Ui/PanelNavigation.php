@@ -75,6 +75,7 @@ final class PanelNavigation
                     ['label' => 'Product lists', 'icon' => 'folder', 'route' => 'quince_listing'],
                     ['label' => 'Cart', 'icon' => 'box', 'route' => 'quince_cart'],
                     ['label' => 'Checkout', 'icon' => 'box', 'route' => 'quince_checkout'],
+                    ['label' => 'Sign-in and registration', 'icon' => 'user', 'route' => 'quince_auth'],
                 ],
             ],
             [

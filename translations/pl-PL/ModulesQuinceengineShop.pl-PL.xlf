@@ -60,6 +60,40 @@
         <target>Zobacz wszystkie</target>
       </trans-unit>
 
+      <!-- Domyślne korzyści z konta obok formularza logowania i rejestracji. -->
+      <trans-unit id="quince.auth.order_tracking">
+        <source>Order tracking</source>
+        <target>Śledzenie zamówień</target>
+      </trans-unit>
+      <trans-unit id="quince.auth.order_tracking.text">
+        <source>Track the status of your orders and your purchase history in one place.</source>
+        <target>Monitoruj status swoich zamówień i historię zakupów w jednym miejscu.</target>
+      </trans-unit>
+      <trans-unit id="quince.auth.faster">
+        <source>Faster checkout</source>
+        <target>Szybsze zakupy</target>
+      </trans-unit>
+      <trans-unit id="quince.auth.faster.text">
+        <source>Saved addresses and details: buy in a few clicks without typing everything again.</source>
+        <target>Zapisane adresy i dane, kup w kilka kliknięć bez wpisywania danych od nowa.</target>
+      </trans-unit>
+      <trans-unit id="quince.auth.wishlist">
+        <source>Wishlist</source>
+        <target>Lista życzeń</target>
+      </trans-unit>
+      <trans-unit id="quince.auth.wishlist.text">
+        <source>Save products to compare and buy them later, when you are ready.</source>
+        <target>Zapisuj produkty do porównania i kup je później, gdy będziesz gotowy.</target>
+      </trans-unit>
+      <trans-unit id="quince.auth.discounts">
+        <source>Discounts and offers</source>
+        <target>Rabaty i oferty</target>
+      </trans-unit>
+      <trans-unit id="quince.auth.discounts.text">
+        <source>Get exclusive discount codes and promotion alerts.</source>
+        <target>Otrzymuj ekskluzywne kody rabatowe i powiadomienia o promocjach.</target>
+      </trans-unit>
+
     </body>
   </file>
 </xliff>

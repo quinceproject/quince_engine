@@ -1,0 +1,221 @@
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{# Strony logowania i rejestracji: korzyści z konta obok formularza.
+   Kontrolki skopiowane z listy „Odnośniki własne" (navigation.html.twig):
+   ten sam wiersz, to samo pole wielojęzyczne, ten sam wybór ikony. #}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Wtyczka przeciągania musi wejść przed rdzeniem Alpine. #}
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine-sort.min.js') ~ qcVer }}" defer></script>
+    <script src="{{ asset('../modules/quince_engine/views/js/vendor/alpine.min.js') ~ qcVer }}" defer></script>
+{% endblock %}
+
+{% block quince_intro %}
+    <div class="qc-alert qc-alert-info">
+        {{ icons.icon('info', 18, 'qc-alert-icon') }}
+        <div>{{ 'Account benefits stand next to the sign-in and registration forms. Each page has its own list.'|trans }}</div>
+    </div>
+{% endblock %}
+
+{% block quince_actions %}
+    <button type="submit" form="quince-auth" class="qc-btn qc-btn-primary">
+        {{ icons.icon('check', 14) }} {{ 'Save changes'|trans }}
+    </button>
+{% endblock %}
+
+{% macro lista(page, title, desc, empty) %}
+    {% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+    {% import '@Modules/quince_engine/views/templates/admin/_macros/fields.html.twig' as fields %}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ title }}</div>
+                <div class="qc-card-desc">{{ desc }}</div>
+            </div>
+            <button type="button" class="qc-btn qc-btn-outline" @click="add('{{ page }}')">
+                {{ icons.icon('plus', 14) }} {{ 'Add benefit'|trans({}, 'Modules.Quinceengine.Admin') }}
+            </button>
+        </div>
+
+        <div class="qc-card-body">
+            <div class="qc-repeater" x-sort="move('{{ page }}', $item, $position)">
+                <template x-for="(row, index) in pages.{{ page }}" :key="row.uid">
+                    <div class="qc-rep-row" x-sort:item="row.uid">
+                        <div class="qc-rep-row-head">
+                            <span class="qc-rep-handle" x-sort:handle>{{ icons.icon('drag', 14) }}</span>
+
+                            <span class="qc-rep-name">
+                                <span x-text="label(row)"></span>
+                                <span class="qc-rep-sub" x-text="row.texts[row.lang] || ''"></span>
+                            </span>
+
+                            <div class="qc-rep-actions">
+                                <button type="button" class="qc-icon-btn" @click="row.open = !row.open">
+                                    <svg class="qc-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"
+                                         stroke="currentColor" stroke-width="2" aria-hidden="true"
+                                         :style="row.open && 'transform:rotate(180deg)'"><path d="m4 6 4 4 4-4"/></svg>
+                                </button>
+                                <button type="button" class="qc-icon-btn qc-danger" @click="remove('{{ page }}', index)">
+                                    {{ icons.icon('trash', 14) }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="qc-rep-body" x-show="row.open" x-cloak>
+                            <div class="qc-form-grid qc-form-grid-2">
+                                <div class="qc-field">
+                                    <label class="qc-label">{{ 'Title'|trans({}, 'Modules.Quinceengine.Admin') }}</label>
+                                    <div class="qc-multilang-row">
+                                        <template x-for="lang in languages" :key="lang.id">
+                                            <input type="text" class="qc-field-base qc-focusable" maxlength="80"
+                                                   :name="'benefit[{{ page }}][' + index + '][title][' + lang.id + ']'"
+                                                   x-show="row.lang === lang.id"
+                                                   x-model="row.titles[lang.id]">
+                                        </template>
+
+                                        <button type="button" class="qc-lang-toggle" @click="row.langOpen = !row.langOpen">
+                                            <span class="qc-lang-dot"
+                                                  :class="String(row.titles[row.lang] || '').trim() && 'qc-complete'"></span>
+                                            <span x-text="languages.find(l => l.id === row.lang).iso"></span>
+                                            <svg class="qc-icon" width="12" height="12" viewBox="0 0 16 16" fill="none"
+                                                 stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+                                        </button>
+
+                                        <div class="qc-lang-menu" x-show="row.langOpen" x-cloak
+                                             @click.outside="row.langOpen = false">
+                                            <template x-for="lang in languages" :key="lang.id">
+                                                <div class="qc-lang-row" :class="row.lang === lang.id && 'qc-current'"
+                                                     @click="row.lang = lang.id; row.langOpen = false">
+                                                    <span class="qc-lang-dot"
+                                                          :class="String(row.titles[lang.id] || '').trim() && 'qc-complete'"></span>
+                                                    <span class="qc-lang-row-name" x-text="lang.name"></span>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="qc-field">
+                                    <label class="qc-label">{{ 'Icon'|trans({}, 'Modules.Quinceengine.Admin') }}</label>
+                                    {{ fields.iconpicker(
+                                        '', '', '', path('quince_icons_search'), 'start',
+                                        "'benefit[" ~ page ~ "][' + index + '][icon]'", 'row.icon', 'row.iconSvg'
+                                    ) }}
+                                </div>
+
+                                {# Opis: to samo pole wielojęzyczne, w wersji na kilka wierszy
+                                   (jak makro multilangArea). Język przełącza się razem z tytułem. #}
+                                <div class="qc-field" style="grid-column:1 / -1">
+                                    <label class="qc-label">{{ 'Description'|trans({}, 'Modules.Quinceengine.Admin') }}</label>
+                                    <div class="qc-multilang-row">
+                                        <template x-for="lang in languages" :key="'t' + lang.id">
+                                            <textarea class="qc-field-base qc-focusable" rows="3" maxlength="300"
+                                                      :name="'benefit[{{ page }}][' + index + '][text][' + lang.id + ']'"
+                                                      x-show="row.lang === lang.id"
+                                                      x-model="row.texts[lang.id]"></textarea>
+                                        </template>
+
+                                        <span class="qc-lang-toggle qc-lang-static">
+                                            <span class="qc-lang-dot"
+                                                  :class="String(row.texts[row.lang] || '').trim() && 'qc-complete'"></span>
+                                            <span x-text="languages.find(l => l.id === row.lang).iso"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="qc-empty" x-show="!pages.{{ page }}.length" x-cloak>
+                <div class="qc-empty-text">{{ empty }}</div>
+            </div>
+
+            <div class="qc-field-note">
+                {{ 'The order of the rows is the order in the shop. Drag a row by its handle to change it.'|trans({}, 'Modules.Quinceengine.Admin') }}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% block quince_body %}
+<form id="quince-auth" method="post" action="{{ path('quince_auth_save') }}" class="qc-stack"
+      x-data="quinceAuth()">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_auth_save') }}">
+
+    {{ _self.lista('login',
+        'Benefits on the sign-in page'|trans,
+        'They stand next to the sign-in form, under "No account yet?".'|trans,
+        'No benefits. Next to the form there will only be the heading and the "Create an account" button.'|trans
+    ) }}
+
+    {{ _self.lista('register',
+        'Benefits on the registration page'|trans,
+        'They stand next to the registration form, under "Already have an account?".'|trans,
+        'No benefits. Next to the form there will only be the heading and the "Sign in" button.'|trans
+    ) }}
+</form>
+
+<script>
+/* Korzyści na stronach logowania i rejestracji.
+   Kolejność wierszy jest kolejnością pól w formularzu, więc przeciągnięcie
+   zmienia nazwy pól i zapis dostaje właściwy porządek bez pola z pozycją. */
+function quinceAuth() {
+    {# |raw jest tu konieczne: wewnątrz <script> Twig zamieniłby cudzysłowy na
+       encje i zepsuł JSON. json_encode escapuje znaki, które mogłyby zamknąć
+       znacznik skryptu. #}
+    const LANGUAGES = {{ languages|map(l => {id: l.id_lang, name: l.name, iso: l.iso_code|upper})|json_encode(constant('JSON_HEX_TAG') b-or constant('JSON_HEX_AMP'))|raw }};
+    const SAVED = {{ benefits|json_encode(constant('JSON_HEX_TAG') b-or constant('JSON_HEX_AMP'))|raw }};
+
+    let counter = 0;
+
+    const build = (row) => ({
+        uid: 'benefit-' + (++counter),
+        titles: Object.assign({}, row.titles || {}),
+        texts: Object.assign({}, row.texts || {}),
+        icon: row.icon || '',
+        iconSvg: row.iconSvg || '',
+        open: false,
+        lang: LANGUAGES[0].id,
+        langOpen: false,
+    });
+
+    return {
+        languages: LANGUAGES,
+        pages: {
+            login: (SAVED.login || []).map(build),
+            register: (SAVED.register || []).map(build),
+        },
+
+        label(row) {
+            return row.titles[row.lang] || Object.values(row.titles).find(v => String(v).trim()) || '{{ 'New benefit'|trans|e('js') }}';
+        },
+
+        add(page) {
+            const row = build({});
+            row.open = true;
+            this.pages[page].push(row);
+        },
+
+        remove(page, index) {
+            this.pages[page].splice(index, 1);
+        },
+
+        move(page, uid, position) {
+            const list = this.pages[page];
+            const from = list.findIndex(r => r.uid === uid);
+
+            if (from === -1) { return; }
+
+            list.splice(position, 0, list.splice(from, 1)[0]);
+        },
+    };
+}
+</script>
+{% endblock %}

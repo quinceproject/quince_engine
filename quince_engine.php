@@ -38,7 +38,7 @@ class Quince_Engine extends Module
     {
         $this->name = 'quince_engine';
         $this->tab = 'front_office_features';
-        $this->version = '0.9.0';
+        $this->version = '0.10.0';
         $this->author = 'Quince Project';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = ['min' => '9.0.0', 'max' => '9.99.99'];
@@ -990,6 +990,12 @@ class Quince_Engine extends Module
             // produktu poza kartą produktu.
             'account' => $this->panelKlienta($idLang),
 
+            // Korzyści z konta obok formularza logowania i rejestracji. Tylko
+            // na tych dwóch stronach; poza nimi null, jak panel klienta.
+            'auth' => in_array((string) ($this->context->controller->php_self ?? ''), ['authentication', 'registration'], true)
+                ? (new \Quince\Engine\Settings\AuthSettings())->forTemplate($idLang)
+                : null,
+
             // Układ strony produktu: strefy z listą elementów w kolejności.
             // Szablon renderuje z tych list, więc przestawienie w panelu nie
             // wymaga ruszania motywu.
@@ -1484,6 +1490,7 @@ class Quince_Engine extends Module
             \Quince\Engine\Settings\FooterSettings::class,
             \Quince\Engine\Settings\ProductPageSettings::class,
             \Quince\Engine\Settings\HomepageSettings::class,
+            \Quince\Engine\Settings\AuthSettings::class,
         ] as $klasa) {
             $klucze = array_merge($klucze, $klasa::configurationKeys());
         }

@@ -3892,6 +3892,52 @@
         <source>Shows at products that are an item of a set.</source>
         <target>Pokazuje się przy produktach, które są elementem zestawu.</target>
       </trans-unit>
+
+      <!-- Ekran „Logowanie i rejestracja”: korzyści z konta obok formularza. -->
+      <trans-unit id="quince.engine.auth.title">
+        <source>Sign-in and registration</source>
+        <target>Logowanie i rejestracja</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.auth.intro">
+        <source>Account benefits stand next to the sign-in and registration forms. Each page has its own list.</source>
+        <target>Korzyści z konta stoją obok formularza logowania i rejestracji. Każda strona ma własną listę.</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.auth.add">
+        <source>Add benefit</source>
+        <target>Dodaj korzyść</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.auth.new">
+        <source>New benefit</source>
+        <target>Nowa korzyść</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.auth.order">
+        <source>The order of the rows is the order in the shop. Drag a row by its handle to change it.</source>
+        <target>Kolejność wierszy to kolejność w sklepie. Przeciągnij wiersz za uchwyt, żeby ją zmienić.</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.auth.login">
+        <source>Benefits on the sign-in page</source>
+        <target>Korzyści na stronie logowania</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.auth.login.desc">
+        <source>They stand next to the sign-in form, under "No account yet?".</source>
+        <target>Stoją obok formularza logowania, pod napisem „Nie masz jeszcze konta?”.</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.auth.login.empty">
+        <source>No benefits. Next to the form there will only be the heading and the "Create an account" button.</source>
+        <target>Brak korzyści. Obok formularza zostanie sam napis i przycisk „Załóż konto”.</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.auth.register">
+        <source>Benefits on the registration page</source>
+        <target>Korzyści na stronie rejestracji</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.auth.register.desc">
+        <source>They stand next to the registration form, under "Already have an account?".</source>
+        <target>Stoją obok formularza rejestracji, pod napisem „Masz już konto?”.</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.auth.register.empty">
+        <source>No benefits. Next to the form there will only be the heading and the "Sign in" button.</source>
+        <target>Brak korzyści. Obok formularza zostanie sam napis i przycisk „Zaloguj się”.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
