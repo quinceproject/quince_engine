@@ -1545,8 +1545,10 @@ final class ProductPageSettings
             if ((int) $idLang > 0 && is_scalar($tekst)) {
                 // Zapis z flagą HTML przepuszcza wartość przez filtr PrestaShopa,
                 // który zamienia „&" na „&amp;". Dekodujemy, żeby w polu i na
-                // stronie stał wpisany tekst, a nie encja.
-                $czysty = html_entity_decode(strip_tags((string) $tekst), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                // stronie stał wpisany tekst, a nie encja. Najpierw dekodowanie,
+                // potem wycięcie znaczników: w odwrotnej kolejności wpis
+                // „&lt;img …&gt;" wychodziłby jako prawdziwy znacznik.
+                $czysty = strip_tags(html_entity_decode((string) $tekst, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
                 $wynik[(int) $idLang] = mb_substr(trim($czysty), 0, 120);
             }
         }
