@@ -324,19 +324,72 @@ final class ProductPageSettings
         // Każda karuzela pod kartą jest osobnym elementem i zawsze ma tytuł.
         // `note` stoi w panelu pod nazwą: karuzela bez treści znika ze strony,
         // a notka mówi, kiedy się pojawia.
+        //
+        // `title` to tytuł karuzeli w każdym języku. Pusty znaczy „tytuł domyślny"
+        // (`titleDefault`: napis i domena tłumaczeń), więc po aktualizacji nic się
+        // nie zmienia, a tytuł z liczbą produktów („8 innych produktów…") zostaje,
+        // dopóki sklep nie wpisze własnego.
         'related' => [
             'label' => 'Accessories and related products',
             'note' => 'Shows at products that have related products picked in the catalogue.',
             'zone' => 'zajawki',
             'zones' => [],
             'options' => [
+                'title' => [],
                 'count' => 8,      // ile zajawek wchodzi na taśmę
                 'nav' => true,     // strzałki przewijania
             ],
             'ranges' => ['count' => [2, 20]],
+            'titleDefault' => ['Accessories and related products', 'Shop.Theme.Catalog'],
         ],
-        // Produkty do dokupienia. Dobór i tytuł ustawia moduł cross-sellingu,
-        // tutaj stoi tylko miejsce karuzeli i jej wygląd.
+        // Części zamienne i elementy zestawu wpisane przy produkcie. Listy i dobór
+        // należą do modułu cross-sellingu, tutaj stoi miejsce karuzeli i wygląd.
+        // Liczba kart do 100: części ściągacza bywa kilkadziesiąt i wszystkie
+        // mają się dać przejrzeć.
+        'spare_parts' => [
+            'label' => 'Spare parts',
+            'note' => 'Shows at products that have spare parts entered.',
+            'zone' => 'zajawki',
+            'zones' => [],
+            'requires' => 'quince_crossselling',
+            'options' => ['title' => [], 'count' => 8, 'nav' => true],
+            'ranges' => ['count' => [2, 100]],
+            'titleDefault' => ['Spare parts', 'Modules.Quincecrossselling.Shop'],
+        ],
+        'spare_parts_for' => [
+            'label' => 'Fits',
+            'note' => 'Shows at spare parts: the products this part is entered at.',
+            'zone' => 'zajawki',
+            'zones' => [],
+            'requires' => 'quince_crossselling',
+            'options' => ['title' => [], 'count' => 8, 'nav' => true],
+            'ranges' => ['count' => [2, 100]],
+            'titleDefault' => ['Fits', 'Modules.Quincecrossselling.Shop'],
+        ],
+        'set_items' => [
+            'label' => 'Set items',
+            'note' => 'Shows at sets that have their items entered.',
+            'zone' => 'zajawki',
+            'zones' => [],
+            'requires' => 'quince_crossselling',
+            'options' => ['title' => [], 'count' => 8, 'nav' => true],
+            'ranges' => ['count' => [2, 100]],
+            'titleDefault' => ['Set items', 'Modules.Quincecrossselling.Shop'],
+        ],
+        'in_sets' => [
+            'label' => 'In sets',
+            'note' => 'Shows at products that are an item of a set.',
+            'zone' => 'zajawki',
+            'zones' => [],
+            'requires' => 'quince_crossselling',
+            'options' => ['title' => [], 'count' => 8, 'nav' => true],
+            'ranges' => ['count' => [2, 100]],
+            'titleDefault' => ['In sets', 'Modules.Quincecrossselling.Shop'],
+        ],
+        // Produkty do dokupienia. Dobór ustawia moduł cross-sellingu, tutaj stoi
+        // miejsce karuzeli, jej wygląd i tytuł. Dopóki ten ekran nie zapisał
+        // tytułu, pole pokazuje tytuł zapisany w ustawieniach cross-sellingu
+        // (`titleFrom`), który ten ekran przejął.
         'cross_selling' => [
             'label' => 'Products to add',
             'note' => 'Shows when Cross-selling finds products to suggest from the sources set in its settings.',
@@ -344,10 +397,13 @@ final class ProductPageSettings
             'zones' => [],
             'requires' => 'quince_crossselling',
             'options' => [
+                'title' => [],
                 'count' => 8,
                 'nav' => true,
             ],
             'ranges' => ['count' => [2, 20]],
+            'titleDefault' => ['You might also need', 'Modules.Quincecrossselling.Shop'],
+            'titleFrom' => 'QUINCE_CROSS_PRODUCT_TITLE',
         ],
         // Listę daje natywny moduł ps_categoryproducts.
         'category_products' => [
@@ -357,10 +413,12 @@ final class ProductPageSettings
             'zones' => [],
             'requires' => 'ps_categoryproducts',
             'options' => [
+                'title' => [],
                 'count' => 8,
                 'nav' => true,
             ],
             'ranges' => ['count' => [2, 20]],
+            'titleDefault' => ['%s other products in the same category', 'Shop.Theme.Catalog'],
         ],
         'recently_viewed' => [
             'label' => 'Recently viewed',
@@ -368,10 +426,12 @@ final class ProductPageSettings
             'zone' => 'zajawki',
             'zones' => [],
             'options' => [
+                'title' => [],
                 'count' => 8,
                 'nav' => true,
             ],
             'ranges' => ['count' => [2, 20]],
+            'titleDefault' => ['Recently viewed', 'Shop.Theme.Catalog'],
         ],
     ];
 
@@ -399,7 +459,10 @@ final class ProductPageSettings
             'section_reviews', 'section_faq', 'section_modules',
         ],
         'zestawy' => ['bundles'],
-        'zajawki' => ['related', 'cross_selling', 'category_products', 'recently_viewed'],
+        'zajawki' => [
+            'related', 'spare_parts', 'spare_parts_for', 'set_items', 'in_sets',
+            'cross_selling', 'category_products', 'recently_viewed',
+        ],
     ];
 
     /**
@@ -485,6 +548,7 @@ final class ProductPageSettings
         'thumbnail' => 'Thumbnail',
         'price' => 'Price',
         'availability' => 'Availability',
+        'title' => 'Section title',
         'count' => 'How many products to show',
         'nav' => 'Scroll arrows',
         'in_pack' => 'Quantity in the pack',
@@ -1256,6 +1320,15 @@ final class ProductPageSettings
             }
 
             foreach ($element['options'] as $klucz => $domyslna) {
+                // Tekst w każdym języku (tytuł karuzeli): mapa id języka => tekst.
+                if (is_array($domyslna)) {
+                    $wynik[$id][$klucz] = isset($zapisane[$id][$klucz])
+                        ? self::teksty($zapisane[$id][$klucz])
+                        : self::tekstyPrzejete($element);
+
+                    continue;
+                }
+
                 if (!isset($zapisane[$id][$klucz])) {
                     $wynik[$id][$klucz] = $domyslna;
 
@@ -1346,6 +1419,12 @@ final class ProductPageSettings
 
             // Granice pól liczbowych na ekranie panelu.
             'optionRange' => self::CATALOGUE[$id]['ranges'] ?? [],
+
+            // Pole tekstowe w językach: lista języków i tytuł domyślny jako
+            // podpowiedź. Makra panelu nie widzą kontekstu strony, więc dane
+            // jadą przy elemencie.
+            'optionLanguages' => array_filter($szczegoly, 'is_array') !== [] ? self::jezyki() : [],
+            'optionPlaceholder' => array_filter($szczegoly, 'is_array') !== [] ? $this->tytulDomyslny($id, $opcje) : '',
         ];
     }
 
@@ -1451,6 +1530,89 @@ final class ProductPageSettings
     }
 
     /**
+     * Tekst opcji w językach: id języka => tekst, bez znaczników, do 120 znaków.
+     *
+     * Wynik trafia do tytułu karuzeli na karcie produktu, więc znaczniki
+     * wypadają tu, a szablon i tak wypisuje go z ucieczką.
+     *
+     * @return array<int,string>
+     */
+    private static function teksty($wartosc): array
+    {
+        $wynik = [];
+
+        foreach (is_array($wartosc) ? $wartosc : [] as $idLang => $tekst) {
+            if ((int) $idLang > 0 && is_scalar($tekst)) {
+                // Zapis z flagą HTML przepuszcza wartość przez filtr PrestaShopa,
+                // który zamienia „&" na „&amp;". Dekodujemy, żeby w polu i na
+                // stronie stał wpisany tekst, a nie encja.
+                $czysty = html_entity_decode(strip_tags((string) $tekst), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $wynik[(int) $idLang] = mb_substr(trim($czysty), 0, 120);
+            }
+        }
+
+        return $wynik;
+    }
+
+    /**
+     * Języki sklepu w postaci, której oczekuje makro `fields.multilang` (ta sama
+     * co w `QuinceController::languages()`): pole otwiera się na języku sklepu.
+     *
+     * @return array<int,array{id_lang:int,name:string,iso_code:string,default:bool}>
+     */
+    private static function jezyki(): array
+    {
+        $wynik = [];
+
+        foreach (\Language::getLanguages(true) as $jezyk) {
+            $wynik[] = [
+                'id_lang' => (int) $jezyk['id_lang'],
+                'name' => (string) $jezyk['name'],
+                'iso_code' => (string) $jezyk['iso_code'],
+                'default' => (int) $jezyk['id_lang'] === (int) Configuration::get('PS_LANG_DEFAULT'),
+            ];
+        }
+
+        return $wynik;
+    }
+
+    /**
+     * Tytuł przejęty z modułu, który go dotąd trzymał (`titleFrom`), zanim ten
+     * ekran zapisał własny. Bez tego po aktualizacji sklep straciłby wpisany tytuł.
+     *
+     * @param array<string,mixed> $element
+     *
+     * @return array<int,string>
+     */
+    private static function tekstyPrzejete(array $element): array
+    {
+        $klucz = (string) ($element['titleFrom'] ?? '');
+
+        if ($klucz === '') {
+            return [];
+        }
+
+        return self::teksty(json_decode((string) Configuration::get($klucz), true));
+    }
+
+    /**
+     * Tytuł domyślny karuzeli w języku pracownika, jako podpowiedź w pustym polu.
+     * Liczba produktów w tytule kategorii idzie z opcji liczby kart.
+     */
+    private function tytulDomyslny(string $id, array $opcje): string
+    {
+        [$napis, $domena] = self::CATALOGUE[$id]['titleDefault'] ?? ['', ''];
+
+        if ($napis === '') {
+            return '';
+        }
+
+        $tekst = \Context::getContext()->getTranslator()->trans($napis, [], $domena);
+
+        return str_replace('%s', (string) ($opcje[$id]['count'] ?? 8), $tekst);
+    }
+
+    /**
      * Dolna i górna granica opcji liczbowej.
      *
      * Zakres z klucza `ranges` w katalogu, bez niego 0-999.
@@ -1480,8 +1642,15 @@ final class ProductPageSettings
             }
 
             foreach ($element['options'] as $klucz => $domyslna) {
-                // Rodzaj opcji poznajemy po wartości domyślnej w katalogu: liczba
-                // znaczy pole liczbowe, wszystko inne przełącznik.
+                // Rodzaj opcji poznajemy po wartości domyślnej w katalogu: tablica
+                // znaczy tekst w każdym języku, liczba pole liczbowe, wszystko
+                // inne przełącznik.
+                if (is_array($domyslna)) {
+                    $wynik[$id][$klucz] = self::teksty($przyslane[$id][$klucz] ?? []);
+
+                    continue;
+                }
+
                 if (is_int($domyslna)) {
                     $wynik[$id][$klucz] = $this->liczbaOpcji(
                         $przyslane[$id][$klucz] ?? null,

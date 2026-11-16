@@ -77,11 +77,17 @@
                         {% set modul = el.optionRequires[klucz]|default('') %}
                         {% set gotowy = el.optionAvailable[klucz] ?? true %}
                         <div class="qc-szczegol{{ gotowy ? '' : ' qc-szczegol--czeka' }}">
-                            <span>{{ (nazwyOpcji[klucz]|default(klucz))|trans }}{% if not gotowy %} <small>{{ 'waits for the module'|trans }} {{ modul }}</small>{% endif %}</span>
+                            <span>{{ (nazwyOpcji[klucz]|default(klucz))|trans }}{% if not gotowy %} <small>{{ 'waits for the module'|trans }} {{ modul }}</small>{% endif %}{% if wl is iterable %}<small style="display:block">{{ 'Empty field: the default title, shown in the field.'|trans }}</small>{% endif %}</span>
                             {# Rodzaj kontrolki wynika z rodzaju wartości: liczba daje pole
                                liczbowe, reszta przełącznik. Katalog elementów jest jedynym
                                miejscem, w którym się o tym decyduje. #}
-                            {% if wl is not same as(true) and wl is not same as(false) %}
+                            {% if wl is iterable %}
+                                {# Tekst w każdym języku (tytuł karuzeli). Puste pole
+                                   to tytuł domyślny, pokazany jako podpowiedź. #}
+                                <div style="flex:1;max-inline-size:420px">
+                                    {{ fields.multilang('option[' ~ el.id ~ '][' ~ klucz ~ ']', '', el.optionLanguages, wl, el.optionPlaceholder) }}
+                                </div>
+                            {% elseif wl is not same as(true) and wl is not same as(false) %}
                                 {# Granice bierze katalog elementów: liczba cech mieści się
                                    w kilku, a próg dni przed końcem promocji sięga roku. #}
                                 {% set zakres = el.optionRange[klucz]|default([0, 999]) %}

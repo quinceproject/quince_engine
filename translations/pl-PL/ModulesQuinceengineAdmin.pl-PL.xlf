@@ -3852,6 +3852,46 @@
         <source>Update</source>
         <target>Zaktualizuj</target>
       </trans-unit>
+      <trans-unit id="quince.engine.product.option.title">
+        <source>Section title</source>
+        <target>Tytuł sekcji</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.product.option.title.hint">
+        <source>Empty field: the default title, shown in the field.</source>
+        <target>Puste pole: tytuł domyślny, widoczny w polu.</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.product.spare_parts">
+        <source>Spare parts</source>
+        <target>Części zamienne</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.product.spare_parts.note">
+        <source>Shows at products that have spare parts entered.</source>
+        <target>Pokazuje się przy produktach, które mają wpisane części zamienne.</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.product.spare_parts_for">
+        <source>Fits</source>
+        <target>Pasuje do</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.product.spare_parts_for.note">
+        <source>Shows at spare parts: the products this part is entered at.</source>
+        <target>Pokazuje się przy częściach zamiennych: produkty, przy których ta część jest wpisana.</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.product.set_items">
+        <source>Set items</source>
+        <target>Elementy zestawu</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.product.set_items.note">
+        <source>Shows at sets that have their items entered.</source>
+        <target>Pokazuje się przy zestawach, które mają wpisane elementy.</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.product.in_sets">
+        <source>In sets</source>
+        <target>W zestawach</target>
+      </trans-unit>
+      <trans-unit id="quince.engine.product.in_sets.note">
+        <source>Shows at products that are an item of a set.</source>
+        <target>Pokazuje się przy produktach, które są elementem zestawu.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
