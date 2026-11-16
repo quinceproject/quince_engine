@@ -52,6 +52,23 @@ final class ModuleCatalogue
     ];
 
     /**
+     * Ikony modułów spoza spisu MODULES (nazwy z makra ikon panelu). Moduł,
+     * którego tu nie ma, dostaje ikonę neutralną.
+     *
+     * @var array<string,string>
+     */
+    private const OTHER_ICONS = [
+        'quince_api' => 'plug',
+        'quince_block' => 'blocks',
+        'quince_cmp' => 'cookie',
+        'quince_events' => 'webhook',
+        'quince_gpsr' => 'triangleAlert',
+        'quince_insight' => 'chartLine',
+        'quince_search_score' => 'chartBar',
+        'quince_withdrawal' => 'undo',
+    ];
+
+    /**
      * @var array<int,array{name:string,label:string,icon:string,type:?string,description:string}>
      */
     private const MODULES = [
@@ -86,10 +103,7 @@ final class ModuleCatalogue
         [
             'name' => 'quince_omnibus',
             'label' => 'Price history',
-            // Paczka design systemu nie ma ikony ceny ani historii, a dorysowanie
-            // jej tutaj rozjechałoby zestaw z paczką. Do czasu jej dołożenia
-            // moduł nosi ikonę neutralną.
-            'icon' => 'box',
+            'icon' => 'history',
             'type' => FeatureRegistry::TYPE_PRICE_HISTORY,
             'description' => 'Records every price change and shows the lowest price before a reduction, as the Omnibus Directive requires.',
         ],
@@ -103,7 +117,7 @@ final class ModuleCatalogue
         [
             'name' => 'quince_crossselling',
             'label' => 'Cross-selling',
-            'icon' => 'box',
+            'icon' => 'cart',
             'type' => FeatureRegistry::TYPE_CROSS_SELLING,
             'description' => 'Products to add on the product page, in the cart and after the order, picked from order history, accessories, category and best sellers.',
         ],
@@ -124,14 +138,14 @@ final class ModuleCatalogue
         [
             'name' => 'quince_blog',
             'label' => 'Blog',
-            'icon' => 'file',
+            'icon' => 'newspaper',
             'type' => null,
             'description' => 'Multilingual blog with posts, categories, tags and teasers you can place anywhere in the theme.',
         ],
         [
             'name' => 'quince_dictionaries',
             'label' => 'Dictionaries',
-            'icon' => 'folder',
+            'icon' => 'bookOpen',
             'type' => 'dictionaries',
             'description' => 'Dictionaries for product data shared by many products, with their own levels and fields, shown on the product page as tables.',
         ],
@@ -152,7 +166,7 @@ final class ModuleCatalogue
         [
             'name' => 'quince_robots',
             'label' => 'Robots & AI',
-            'icon' => 'shield',
+            'icon' => 'bot',
             'type' => null,
             'description' => 'Decide which crawlers and AI agents may enter the shop, and see which of them actually come.',
         ],
@@ -220,7 +234,7 @@ final class ModuleCatalogue
             $entries[] = [
                 'name' => $name,
                 'label' => self::OTHER_LABELS[$name][0] ?? ucwords(str_replace('_', ' ', (string) preg_replace('/^quince_/', '', $name))),
-                'icon' => 'box',
+                'icon' => self::OTHER_ICONS[$name] ?? 'box',
                 'type' => null,
                 'description' => self::OTHER_LABELS[$name][1] ?? '',
             ];
