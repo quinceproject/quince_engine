@@ -723,6 +723,11 @@ final class ListingSettings
             // ma skąd wziąć, a potrzebna jest jedna liczba.
             'columns' => $this->gridColumns(self::gridColumnsSetting()),
 
+            // Szerokość strony w pikselach, ta sama co w wyglądzie. Zajawka
+            // liczy z niej i z liczby kolumn atrybut `sizes`, żeby przeglądarka
+            // pobrała plik pod prawdziwą szerokość karty.
+            'container' => self::containerWidthSetting(),
+
             // Miejsca promocyjne zostają nieprzeliczone: numer kafla zależy
             // jeszcze od tego, ile produktów pokazały wcześniejsze strony,
             // a to wie dopiero szablon. Przelicza je modyfikator `qslots`.
@@ -757,6 +762,19 @@ final class ListingSettings
         $zapisane = (int) Configuration::get('QUINCE_GRID_COLUMNS');
 
         return in_array($zapisane, [3, 4, 5], true) ? $zapisane : 4;
+    }
+
+    /**
+     * Szerokość strony z wyglądu, liczona tak samo jak w MetricsGenerator::px():
+     * brak zapisu daje wartość domyślną 1200, liczba spoza 960–1920 daje 960.
+     * Ten sam powód co wyżej: jedna liczba z `AppearanceSettings`, czytana wprost.
+     */
+    private static function containerWidthSetting(): int
+    {
+        $zapisane = Configuration::get('QUINCE_CONTAINER_WIDTH');
+        $n = (int) ($zapisane === false || $zapisane === '' ? 1200 : $zapisane);
+
+        return ($n < 960 || $n > 1920) ? 960 : $n;
     }
 
     /**

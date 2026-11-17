@@ -4,6 +4,13 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.3] - 2026-11-17
+
+### Added
+
+- The theme gets the page width (`listing.container`) next to the number of
+  columns, so product cards can ask the browser for a picture as wide as the card.
+
 ## [0.10.2] - 2026-11-16
 
 ### Fixed
