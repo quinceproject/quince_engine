@@ -70,8 +70,10 @@ final class ProductCardSettings
 
         'badges' => [
             'label' => 'Badges on the photo',
-            'note' => 'Discount, new, bestseller. In the row they move above the name.',
+            'note' => 'Discount, new, pack, condition. In the row they move above the name.',
             'variants' => [],
+            // Rodzaje plakietek do wyboru pod ☰, wszystkie domyślnie włączone.
+            'kinds' => true,
         ],
 
         'quickview' => [
@@ -137,6 +139,34 @@ final class ProductCardSettings
     ];
 
     /**
+     * Rodzaje plakietek, które PrestaShop podaje w `$product.flags`.
+     *
+     * Klucz to nazwa w ustawieniach, `types` to wartości `flag.type` z rdzenia.
+     * Stan towaru zbiera pięć typów, bo sklep wybiera je w jednym polu produktu.
+     *
+     * @var array<string,array{label:string,types:string[]}>
+     */
+    private const BADGE_KINDS = [
+        'new' => ['label' => 'New', 'types' => ['new']],
+        'on_sale' => ['label' => 'On sale', 'types' => ['on-sale']],
+        'discount' => ['label' => 'Discount', 'types' => ['discount']],
+        'pack' => ['label' => 'Pack', 'types' => ['pack']],
+        'out_of_stock' => ['label' => 'Out of stock', 'types' => ['out_of_stock']],
+        'online_only' => ['label' => 'Online only', 'types' => ['online-only']],
+        'condition' => [
+            'label' => 'Condition: used, refurbished, open box, damaged',
+            'types' => ['used', 'refurbished', 'open_box', 'damaged', 'new_with_defects'],
+        ],
+    ];
+
+    /**
+     * Elementy obecne w obu rodzajach zajawki. Ten sam znacznik służy kaflowi
+     * i rzędowi, a widok przełącza się bez przeładowania strony, więc
+     * wyłączenie w jednym rodzaju robi klasa na karcie, nie szablon.
+     */
+    private const SHARED = ['quickview', 'wishlist', 'countdown', 'brand', 'rating', 'omnibus'];
+
+    /**
      * Wartości po instalacji, osobno dla każdego rodzaju.
      *
      * @var array<string,array<string,bool|int>>
@@ -179,6 +209,12 @@ final class ProductCardSettings
     public function catalogue(): array
     {
         return self::CATALOGUE;
+    }
+
+    /** @return array<string,array{label:string,types:string[]}> */
+    public function badgeKinds(): array
+    {
+        return self::BADGE_KINDS;
     }
 
     /** Czy element występuje w tym rodzaju zajawki. */
@@ -230,6 +266,13 @@ final class ProductCardSettings
             $wynik[$id] = (bool) ($zapisane[$id] ?? self::DEFAULTS[$variant][$id] ?? false);
         }
 
+        $rodzaje = is_array($zapisane['badge_kinds'] ?? null) ? $zapisane['badge_kinds'] : [];
+        $wynik['badge_kinds'] = [];
+
+        foreach (array_keys(self::BADGE_KINDS) as $rodzaj) {
+            $wynik['badge_kinds'][$rodzaj] = (bool) ($rodzaje[$rodzaj] ?? true);
+        }
+
         return $wynik;
     }
 
@@ -244,10 +287,35 @@ final class ProductCardSettings
      */
     public function forTemplate(): array
     {
-        return [
-            self::TILE => $this->forVariant(self::TILE),
-            self::ROW => $this->forVariant(self::ROW),
-        ];
+        $wynik = [];
+        $klasy = [];
+
+        foreach (array_keys(self::VARIANTS) as $variant) {
+            $zestaw = $this->forVariant($variant);
+
+            // Typy plakietek rdzenia, których ten rodzaj zajawki nie pokazuje.
+            $zestaw['hidden_flags'] = [];
+
+            foreach (self::BADGE_KINDS as $rodzaj => $opis) {
+                if (!$zestaw['badge_kinds'][$rodzaj]) {
+                    array_push($zestaw['hidden_flags'], ...$opis['types']);
+                }
+            }
+
+            foreach (self::SHARED as $id) {
+                if (array_key_exists($id, $zestaw) && !$zestaw[$id]) {
+                    $klasy[] = 'q-pcard--' . $variant . '-no-' . $id;
+                }
+            }
+
+            $wynik[$variant] = $zestaw;
+        }
+
+        // Gotowy ciąg klas dla <article>: szablon zajawki nie musi go składać
+        // przy każdej karcie.
+        $wynik['classes'] = implode(' ', $klasy);
+
+        return $wynik;
     }
 
     /**
@@ -278,6 +346,13 @@ final class ProductCardSettings
                 }
 
                 $czyste[$id] = !empty($wyslane[$id]);
+            }
+
+            $rodzaje = is_array($wyslane['badge_kinds'] ?? null) ? $wyslane['badge_kinds'] : [];
+            $czyste['badge_kinds'] = [];
+
+            foreach (array_keys(self::BADGE_KINDS) as $rodzaj) {
+                $czyste['badge_kinds'][$rodzaj] = !empty($rodzaje[$rodzaj]);
             }
 
             ConfigStore::set(self::PREFIX . strtoupper($variant), (string) json_encode($czyste), true);

@@ -275,6 +275,14 @@ quince_tools:
     _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince'
 
+quince_tools_images_apply:
+  path: quince/tools/images-apply
+  methods: [POST]
+  defaults:
+    _controller: Quince\Engine\Controller\Admin\ToolsController::imagesApplyAction
+    _legacy_controller: 'AdminQuinceEngine'
+    _legacy_link: 'AdminQuince:save'
+
 quince_tools_icons_update:
   path: quince/tools/icons-update
   methods: [POST]

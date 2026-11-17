@@ -49,6 +49,10 @@
                                             {% endif %}
                                         </span>
 
+                                        {% if element.kinds|default(false) %}
+                                            <button type="button" class="qc-ikonka" data-szczegoly title="{{ 'Details'|trans }}">&#9776;</button>
+                                        {% endif %}
+
                                         {% if element.number is defined %}
                                             {# Liczba, nie przełącznik: zero znaczy „nie pokazuj cech wcale". #}
                                             <input type="number" class="qc-field-base qc-focusable"
@@ -64,6 +68,19 @@
                                         {% endif %}
                                     </div>
                                 </div>
+
+                                {# Rodzaje plakietek: ten sam wzór co szczegóły elementu
+                                   na ekranie strony produktu. #}
+                                {% if element.kinds|default(false) %}
+                                    <div class="qc-rozwiniete" hidden>
+                                        {% for rodzaj, opisRodzaju in badgeKinds %}
+                                            <div class="qc-szczegol">
+                                                <span>{{ opisRodzaju.label|trans }}</span>
+                                                {{ fields.toggle(variant ~ '[badge_kinds][' ~ rodzaj ~ ']', values[variant].badge_kinds[rodzaj] ?? true) }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
                             </div>
                         {% endif %}
                     {% endfor %}

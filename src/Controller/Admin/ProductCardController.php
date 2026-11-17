@@ -46,6 +46,7 @@ class ProductCardController extends QuinceController
         return $this->renderPanel('@Modules/quince_engine/views/templates/admin/card.html.twig', [
             'variants' => $this->settings->variants(),
             'catalogue' => $this->settings->catalogue(),
+            'badgeKinds' => $this->settings->badgeKinds(),
             'values' => $ustawienia,
             'layoutTitle' => 'Product card',
             'quinceRoute' => 'quince_card',

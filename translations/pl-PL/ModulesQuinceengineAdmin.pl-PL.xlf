@@ -2969,8 +2969,28 @@
         <target>Znaczki na zdjęciu</target>
       </trans-unit>
       <trans-unit id="quince.card.new7">
-        <source>Discount, new, bestseller. In the row they move above the name.</source>
-        <target>Rabat, nowość, bestseller. W wierszu przechodzą nad nazwę.</target>
+        <source>Discount, new, pack, condition. In the row they move above the name.</source>
+        <target>Rabat, nowość, pakiet, stan towaru. W wierszu przechodzą nad nazwę.</target>
+      </trans-unit>
+      <trans-unit id="quince.card.badge_on_sale">
+        <source>On sale</source>
+        <target>Wyprzedaż</target>
+      </trans-unit>
+      <trans-unit id="quince.card.badge_discount">
+        <source>Discount</source>
+        <target>Rabat</target>
+      </trans-unit>
+      <trans-unit id="quince.card.badge_out_of_stock">
+        <source>Out of stock</source>
+        <target>Brak na stanie</target>
+      </trans-unit>
+      <trans-unit id="quince.card.badge_online_only">
+        <source>Online only</source>
+        <target>Tylko online</target>
+      </trans-unit>
+      <trans-unit id="quince.card.badge_condition">
+        <source>Condition: used, refurbished, open box, damaged</source>
+        <target>Stan towaru: używany, odnowiony, otwarte opakowanie, uszkodzony</target>
       </trans-unit>
       <trans-unit id="quince.card.new8">
         <source>Quick view</source>
@@ -3941,6 +3961,66 @@
       <trans-unit id="quince.engine.auth.register.empty">
         <source>No benefits. Next to the form there will only be the heading and the "Sign in" button.</source>
         <target>Brak korzyści. Obok formularza zostanie sam napis i przycisk „Zaloguj się”.</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.title">
+        <source>Image sizes and formats</source>
+        <target>Rozmiary i formaty zdjęć</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.desc">
+        <source>The sizes the Quince theme shows photos in, and the file formats. Upload product photos at least 1600 px on the longer side.</source>
+        <target>Rozmiary, w jakich motyw Quince pokazuje zdjęcia, i formaty plików. Zdjęcia produktów wgrywaj co najmniej 1600 px na dłuższym boku.</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.set">
+        <source>Set</source>
+        <target>Ustawione</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.differs">
+        <source>Differs</source>
+        <target>Inne</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.type">
+        <source>Image type</source>
+        <target>Typ zdjęcia</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.current">
+        <source>In the shop</source>
+        <target>W sklepie</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.recommended">
+        <source>Recommended</source>
+        <target>Zalecane</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.missing">
+        <source>missing</source>
+        <target>brak</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.formats">
+        <source>Formats</source>
+        <target>Formaty</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.base">
+        <source>Base file</source>
+        <target>Plik podstawowy</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.no_webp">
+        <source>The server cannot write WebP files, so the photos stay in JPEG only.</source>
+        <target>Serwer nie umie zapisywać plików WebP, więc zdjęcia zostaną tylko w JPEG.</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.regenerate_hint">
+        <source>Afterwards regenerate the thumbnails in %link%.</source>
+        <target>Potem przegeneruj miniatury w %link%.</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.core_link">
+        <source>Design → Image settings</source>
+        <target>Wygląd → Zdjęcia</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.apply">
+        <source>Apply recommended settings</source>
+        <target>Ustaw zalecane</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.applied">
+        <source>Image settings applied. Regenerate the thumbnails in Design → Image settings so that the photos already in the shop get the new sizes.</source>
+        <target>Ustawienia zdjęć zapisane. Przegeneruj miniatury w Wygląd → Zdjęcia, żeby zdjęcia, które już są w sklepie, dostały nowe rozmiary.</target>
       </trans-unit>
     </body>
   </file>

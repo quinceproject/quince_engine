@@ -280,3 +280,30 @@
         });
     });
 })();
+
+/**
+ * Szczegóły elementu (☰) na ekranach bez układania, np. Karta produktu.
+ *
+ * Ekrany z przeciąganiem obsługuje arrangement.js w swoim formularzu
+ * (`data-quince-uklad`), więc tu je pomijamy, żeby klik nie przełączał
+ * dwa razy.
+ */
+(function () {
+    'use strict';
+
+    document.addEventListener('click', function (event) {
+        var button = event.target.closest('[data-szczegoly]');
+
+        if (!button || button.closest('[data-quince-uklad]')) {
+            return;
+        }
+
+        var row = button.closest('.qc-wiersz');
+        var details = row && row.querySelector('.qc-rozwiniete');
+
+        if (details) {
+            details.hidden = !details.hidden;
+            button.setAttribute('aria-expanded', details.hidden ? 'false' : 'true');
+        }
+    });
+})();

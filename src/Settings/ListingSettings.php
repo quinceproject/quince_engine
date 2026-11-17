@@ -253,13 +253,7 @@ final class ListingSettings
             'zone' => 'grid',
             'zones' => [],
             'fixed' => true,
-            'options' => [
-                // Ile cech pokazuje zajawka w widoku listy. Ranking jest ten
-                // sam co w środkowej kolumnie karty produktu. Różni się tylko
-                // limit, bo w rzędzie listy jest na cechy więcej miejsca.
-                'features' => 6,
-            ],
-            'ranges' => ['features' => [0, 12]],
+            // Liczbę cech w zajawce ustawia ekran Karta produktu (rząd).
         ],
         'empty' => [
             'label' => 'No results message',
@@ -323,7 +317,6 @@ final class ListingSettings
         'images' => 'With images',
         'icons' => 'Images as icons in the theme colour',
         'hover' => 'Border lights up on hover',
-        'features' => 'How many features the list view shows',
         'count' => 'With the number of narrowed-down filters',
         'clear_all' => 'With "Clear all"',
         'desktop' => 'On wide screens',

@@ -4,6 +4,34 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.4] - 2026-11-17
+
+### Added
+
+- **Tools → Image sizes and formats**: the image types and file formats the Quince
+  theme needs (small 200, cart 250, home 450, medium 800, large 1600, category 300,
+  JPEG with WebP), next to what the shop has, and a button that sets them. The
+  thumbnails are then regenerated in **Design → Image settings**.
+- Installed in a shop without product photos, the engine sets these image sizes and
+  formats itself.
+
+- **Product card → Badges on the photo** has a list of badge kinds under ☰, separately
+  for the tile and the row: new, on sale, discount, pack, out of stock, online only
+  and condition. All are on until the shop switches one off.
+
+### Changed
+
+- The number of features a product card shows in the list view is set only in
+  **Product card** (row, "Features"). The field on **Product lists** is gone; the
+  update moves a number set there to **Product card** unless that screen already
+  has one.
+
+### Fixed
+
+- The settings of the **Product card** screen reach the shop. The theme now reads
+  them (Quince theme 0.1.12); before, the screen saved them and the cards ignored
+  them.
+
 ## [0.10.3] - 2026-11-17
 
 ### Added

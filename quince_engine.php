@@ -38,7 +38,7 @@ class Quince_Engine extends Module
     {
         $this->name = 'quince_engine';
         $this->tab = 'front_office_features';
-        $this->version = '0.10.3';
+        $this->version = '0.10.4';
         $this->author = 'Quince Project';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = ['min' => '9.0.0', 'max' => '9.99.99'];
@@ -115,7 +115,19 @@ class Quince_Engine extends Module
             && $this->registerHook('actionSubmitCustomerAddressForm')
             && $this->installModuleGroups()
             && $this->installVideoField()
-            && $this->wylaczUdostepnianie();
+            && $this->wylaczUdostepnianie()
+            && $this->ustawZdjecia();
+    }
+
+    /**
+     * Rozmiary i formaty zdjęć dla motywu Quince, gdy sklep nie ma jeszcze
+     * zdjęć produktów. Sklep ze zdjęciami ustawia je przyciskiem w Narzędziach.
+     */
+    private function ustawZdjecia(): bool
+    {
+        (new \Quince\Engine\Catalog\ImageSetup())->applyOnInstall();
+
+        return true;
     }
 
     /**

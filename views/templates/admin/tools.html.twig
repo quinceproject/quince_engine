@@ -13,6 +13,78 @@
 {% block quince_body %}
 <div class="qc-stack">
 
+    {# Rozmiary i formaty zdjęć, których potrzebuje motyw Quince. Przy
+       instalacji silnik ustawia je sam w sklepie bez zdjęć produktów; sklep,
+       który już ma zdjęcia, ustawia je tutaj. #}
+    <div class="qc-card">
+        <div class="qc-card-head">
+            <div>
+                <div class="qc-card-title">{{ 'Image sizes and formats'|trans }}</div>
+                <div class="qc-card-desc">{{ 'The sizes the Quince theme shows photos in, and the file formats. Upload product photos at least 1600 px on the longer side.'|trans }}</div>
+            </div>
+            {% if images.ok %}
+                <span class="qc-badge qc-badge-success">{{ 'Set'|trans }}</span>
+            {% else %}
+                <span class="qc-badge qc-badge-warning">{{ 'Differs'|trans }}</span>
+            {% endif %}
+        </div>
+
+        <div class="qc-card-body">
+            <table class="qc-table">
+                <thead>
+                    <tr>
+                        <th>{{ 'Image type'|trans }}</th>
+                        <th>{{ 'In the shop'|trans }}</th>
+                        <th>{{ 'Recommended'|trans }}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for typ in images.types %}
+                        <tr>
+                            <td>{{ typ.name }}</td>
+                            <td>{{ typ.current ?? 'missing'|trans }}</td>
+                            <td>{{ typ.recommended }}</td>
+                            <td>{% if not typ.ok %}<span class="qc-badge qc-badge-warning">{{ 'Differs'|trans }}</span>{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td>{{ 'Formats'|trans }}</td>
+                        <td>{{ images.formats.current ?: 'jpg' }}</td>
+                        <td>{{ images.formats.recommended }}</td>
+                        <td>{% if not images.formats.ok %}<span class="qc-badge qc-badge-warning">{{ 'Differs'|trans }}</span>{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'Base file'|trans }}</td>
+                        <td>{{ images.base.current }}</td>
+                        <td>{{ images.base.recommended }}</td>
+                        <td>{% if not images.base.ok %}<span class="qc-badge qc-badge-warning">{{ 'Differs'|trans }}</span>{% endif %}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            {% if not images.webp %}
+                <div class="qc-alert qc-alert-warning" style="margin-top:16px">
+                    {{ icons.icon('info', 18, 'qc-alert-icon') }}
+                    <div>{{ 'The server cannot write WebP files, so the photos stay in JPEG only.'|trans }}</div>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if not images.ok %}
+            <div class="qc-card-body" style="padding-top:0">
+                <form method="post" action="{{ path('quince_tools_images_apply') }}"
+                      style="display:flex; justify-content:flex-end; align-items:center; gap:16px; flex-wrap:wrap">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('quince_tools_images_apply') }}">
+                    <span class="qc-card-desc">{{ 'Afterwards regenerate the thumbnails in %link%.'|trans({'%link%': '<a href="' ~ imagesLink ~ '">' ~ ('Design → Image settings'|trans) ~ '</a>'})|raw }}</span>
+                    <button type="submit" class="qc-btn qc-btn-primary">
+                        {{ icons.icon('check', 14) }} {{ 'Apply recommended settings'|trans }}
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+
     <div class="qc-card">
         <div class="qc-card-head">
             <div>
