@@ -70,7 +70,7 @@
         </div>
 
         <div class="qc-tree" x-show="otwarte" x-cloak @click.outside="otwarte = false"
-             style="position:absolute;z-index:20;inline-size:100%;margin-block-start:4px">
+             style="position:absolute;z-index:30;inline-size:100%;margin-block-start:4px">
             {% include '@Modules/quince_engine/views/templates/admin/_macros/_tree-inner.html.twig' with {'wiele': false} only %}
         </div>
     </div>
@@ -107,7 +107,7 @@
         </div>
 
         <div class="qc-tree" x-show="otwarte" x-cloak @click.outside="otwarte = false"
-             style="position:absolute;z-index:20;inline-size:100%;margin-block-start:4px">
+             style="position:absolute;z-index:30;inline-size:100%;margin-block-start:4px">
             {% include '@Modules/quince_engine/views/templates/admin/_macros/_tree-inner.html.twig'
                with {'wiele': false, 'model': model} only %}
         </div>

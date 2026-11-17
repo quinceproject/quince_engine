@@ -4,6 +4,13 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.5] - 2026-11-17
+
+### Fixed
+
+- The category picker (for example on **Feature rank**) opens over the save bar.
+  Before, the bottom of the category list hid under it.
+
 ## [0.10.4] - 2026-11-17
 
 ### Added
