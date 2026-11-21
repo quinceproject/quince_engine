@@ -21,6 +21,7 @@
             <div>
                 <div class="qc-card-title">{{ 'Image sizes and formats'|trans }}</div>
                 <div class="qc-card-desc">{{ 'The sizes the Quince theme shows photos in, and the file formats. Upload product photos at least 1600 px on the longer side.'|trans }}</div>
+                <div class="qc-card-desc">{{ 'Product card and product page sizes follow the page width (%width% px) and the number of listing columns (%columns%) in Appearance. After changing them, set the recommended sizes again and regenerate the thumbnails.'|trans({'%width%': imagesBasis.width, '%columns%': imagesBasis.columns}) }}</div>
             </div>
             {% if images.ok %}
                 <span class="qc-badge qc-badge-success">{{ 'Set'|trans }}</span>

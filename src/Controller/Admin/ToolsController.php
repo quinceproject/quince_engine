@@ -41,6 +41,7 @@ class ToolsController extends QuinceController
             'iconUpdatedAt' => $this->icons->updatedAt(),
             'iconCount' => IconLibrary::count(),
             'images' => (new ImageSetup())->status(),
+            'imagesBasis' => (new ImageSetup())->basis(),
             'imagesLink' => $this->generateUrl('admin_image_settings_index'),
             'layoutTitle' => 'Tools',
         ]);

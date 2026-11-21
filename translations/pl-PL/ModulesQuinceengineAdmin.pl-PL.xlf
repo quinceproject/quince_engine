@@ -3970,6 +3970,10 @@
         <source>The sizes the Quince theme shows photos in, and the file formats. Upload product photos at least 1600 px on the longer side.</source>
         <target>Rozmiary, w jakich motyw Quince pokazuje zdjęcia, i formaty plików. Zdjęcia produktów wgrywaj co najmniej 1600 px na dłuższym boku.</target>
       </trans-unit>
+      <trans-unit id="quince.tools.images.basis">
+        <source>Product card and product page sizes follow the page width (%width% px) and the number of listing columns (%columns%) in Appearance. After changing them, set the recommended sizes again and regenerate the thumbnails.</source>
+        <target>Rozmiary zajawek i zdjęcia na karcie produktu wynikają z szerokości strony (%width% px) i liczby kolumn listingu (%columns%) w ustawieniach Wyglądu. Po ich zmianie ustaw zalecane rozmiary jeszcze raz i wygeneruj miniatury na nowo.</target>
+      </trans-unit>
       <trans-unit id="quince.tools.images.set">
         <source>Set</source>
         <target>Ustawione</target>

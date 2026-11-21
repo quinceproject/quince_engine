@@ -36,16 +36,77 @@ final class ImageSetup
     /**
      * Rozmiary w pikselach (kwadrat) i zakres nowego typu, gdyby sklep go nie miał.
      *
+     * `home_default` i `medium_default` to wartości dla strony 1200 px i 4 kolumn;
+     * faktyczne liczy `sizes()` z ustawień wyglądu. Pozostałe są stałe: miniatury
+     * nie zależą od szerokości strony, a powiększenie po kliknięciu od wysokości
+     * ekranu klienta (ok. 840 px, w dwukrotnej gęstości 1600).
+     *
      * @var array<string,array{size:int,scopes:string[]}>
      */
     private const SIZES = [
         'small_default' => ['size' => 200, 'scopes' => ['products', 'categories', 'manufacturers', 'suppliers']],
         'cart_default' => ['size' => 250, 'scopes' => ['products']],
-        'home_default' => ['size' => 450, 'scopes' => ['products']],
+        'home_default' => ['size' => 300, 'scopes' => ['products']],
         'medium_default' => ['size' => 800, 'scopes' => ['products', 'manufacturers', 'suppliers']],
         'large_default' => ['size' => 1600, 'scopes' => ['products', 'manufacturers', 'suppliers']],
         'category_default' => ['size' => 300, 'scopes' => ['categories']],
     ];
+
+    /** Odstęp między zajawkami w siatce motywu, w pikselach. */
+    private const GRID_GAP = 24;
+
+    /**
+     * Udział zdjęcia głównego w szerokości strony na karcie produktu w układzie
+     * motywu Quince (zmierzone: 455 px przy stronie 1520 px).
+     */
+    private const GALLERY_SHARE = 0.30;
+
+    /**
+     * Rozmiary dopasowane do szerokości strony i liczby kolumn listingu.
+     *
+     * Zajawka (`home_default`) w zwykłej gęstości: szerokość jednej kolumny siatki.
+     * Zdjęcie na karcie produktu i zajawka w dwukrotnej gęstości (`medium_default`):
+     * większa z tych dwóch potrzeb, razy dwa. Zaokrąglamy w górę, żeby obrazek nie
+     * był rozciągany o kilka pikseli. `medium` nigdy nie przerasta `large`.
+     *
+     * @return array<string,array{size:int,scopes:string[]}>
+     */
+    public function sizes(): array
+    {
+        ['width' => $strona, 'columns' => $kolumny] = $this->basis();
+
+        $zajawka = ($strona - ($kolumny - 1) * self::GRID_GAP) / $kolumny;
+        $galeria = $strona * self::GALLERY_SHARE;
+
+        $rozmiary = self::SIZES;
+        $rozmiary['home_default']['size'] = (int) (ceil($zajawka / 50) * 50);
+        $rozmiary['medium_default']['size'] = min(
+            $rozmiary['large_default']['size'],
+            (int) (ceil(max(2 * $zajawka, 2 * $galeria) / 100) * 100)
+        );
+
+        return $rozmiary;
+    }
+
+    /**
+     * Z czego liczymy rozmiary: szerokość strony i kolumny listingu z ustawień Wyglądu.
+     *
+     * Czytamy oba klucze wprost, z tymi samymi granicami co Wygląd (960-1920 px,
+     * 3-5 kolumn), jak robią to ustawienia listingu: do dwóch liczb nie trzeba
+     * budować całego zestawu ustawień wyglądu z jego zależnościami.
+     *
+     * @return array{width:int,columns:int}
+     */
+    public function basis(): array
+    {
+        $szerokosc = (int) Configuration::get('QUINCE_CONTAINER_WIDTH');
+        $kolumny = (int) Configuration::get('QUINCE_GRID_COLUMNS');
+
+        return [
+            'width' => $szerokosc > 0 ? max(960, min(1920, $szerokosc)) : 1200,
+            'columns' => in_array($kolumny, [3, 4, 5], true) ? $kolumny : 4,
+        ];
+    }
 
     /** Plik podstawowy JPEG; PNG tylko tam, gdzie sklep wybrał „PNG dla wszystkich”. */
     private const BASE_FORMAT = 'jpg';
@@ -61,7 +122,7 @@ final class ImageSetup
         $typy = [];
         $wszystkoOk = true;
 
-        foreach (self::SIZES as $nazwa => $opis) {
+        foreach ($this->sizes() as $nazwa => $opis) {
             $teraz = isset($obecne[$nazwa]) ? $obecne[$nazwa]['width'] . ' × ' . $obecne[$nazwa]['height'] : null;
             $ok = isset($obecne[$nazwa])
                 && $obecne[$nazwa]['width'] === $opis['size']
@@ -112,7 +173,7 @@ final class ImageSetup
         $db = Db::getInstance();
         $obecne = $this->currentTypes();
 
-        foreach (self::SIZES as $nazwa => $opis) {
+        foreach ($this->sizes() as $nazwa => $opis) {
             if (isset($obecne[$nazwa])) {
                 $db->update(
                     'image_type',

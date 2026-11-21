@@ -4,6 +4,17 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.6] - 2026-11-21
+
+### Changed
+
+- **Tools → Image sizes and formats**: the recommended sizes of product cards
+  (`home_default`) and of the photo on the product page (`medium_default`) follow the
+  page width and the number of listing columns set in Appearance. For example a page
+  of 1520 px with 4 columns gives 400 and 1000 px, the default 1200 px with 4 columns
+  300 and 800 px. The zoomed photo (`large_default`, 1600 px) and the small types stay
+  fixed. The screen shows which width and columns the sizes come from.
+
 ## [0.10.5] - 2026-11-17
 
 ### Fixed
