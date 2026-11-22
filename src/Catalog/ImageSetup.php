@@ -34,23 +34,36 @@ use Shop;
 final class ImageSetup
 {
     /**
-     * Rozmiary w pikselach (kwadrat) i zakres nowego typu, gdyby sklep go nie miał.
+     * Wszystkie typy zdjęć motywu: rozmiar w pikselach i to, czego dotyczą
+     * (zdjęcia produktów, kategorii, logo marek i dostawców, zdjęcia sklepów).
+     * Ten sam zestaw co `image_types` w `config/theme.yml` motywu.
      *
      * `home_default` i `medium_default` to wartości dla strony 1200 px i 4 kolumn;
      * faktyczne liczy `sizes()` z ustawień wyglądu. Pozostałe są stałe: miniatury
      * nie zależą od szerokości strony, a powiększenie po kliknięciu od wysokości
      * ekranu klienta (ok. 840 px, w dwukrotnej gęstości 1600).
      *
-     * @var array<string,array{size:int,scopes:string[]}>
+     * @var array<string,array{width:int,height:int,scopes:string[]}>
      */
     private const SIZES = [
-        'small_default' => ['size' => 200, 'scopes' => ['products', 'categories', 'manufacturers', 'suppliers']],
-        'cart_default' => ['size' => 250, 'scopes' => ['products']],
-        'home_default' => ['size' => 300, 'scopes' => ['products']],
-        'medium_default' => ['size' => 800, 'scopes' => ['products', 'manufacturers', 'suppliers']],
-        'large_default' => ['size' => 1600, 'scopes' => ['products', 'manufacturers', 'suppliers']],
-        'category_default' => ['size' => 300, 'scopes' => ['categories']],
+        // Miniatury galerii, koszyk, logo marek i dostawców, kategorie w menu.
+        'small_default' => ['width' => 200, 'height' => 200, 'scopes' => ['products', 'categories', 'manufacturers', 'suppliers']],
+        // Szuflada koszyka.
+        'cart_default' => ['width' => 250, 'height' => 250, 'scopes' => ['products']],
+        // Zajawki.
+        'home_default' => ['width' => 300, 'height' => 300, 'scopes' => ['products']],
+        // Zdjęcie na karcie produktu, zajawki w dwukrotnej gęstości, logo marek.
+        'medium_default' => ['width' => 800, 'height' => 800, 'scopes' => ['products', 'manufacturers', 'suppliers']],
+        // Powiększenie, logo w nagłówku strony marki.
+        'large_default' => ['width' => 1600, 'height' => 1600, 'scopes' => ['products', 'manufacturers', 'suppliers']],
+        // Zdjęcie kategorii w nagłówku, kafelki podkategorii.
+        'category_default' => ['width' => 300, 'height' => 300, 'scopes' => ['categories']],
+        // Zdjęcia sklepów stacjonarnych na stronie „Nasze sklepy”.
+        'stores_default' => ['width' => 287, 'height' => 160, 'scopes' => ['stores']],
     ];
+
+    /** Kolumny zakresów w `image_type`. */
+    private const SCOPES = ['products', 'categories', 'manufacturers', 'suppliers', 'stores'];
 
     /** Odstęp między zajawkami w siatce motywu, w pikselach. */
     private const GRID_GAP = 24;
@@ -69,7 +82,7 @@ final class ImageSetup
      * większa z tych dwóch potrzeb, razy dwa. Zaokrąglamy w górę, żeby obrazek nie
      * był rozciągany o kilka pikseli. `medium` nigdy nie przerasta `large`.
      *
-     * @return array<string,array{size:int,scopes:string[]}>
+     * @return array<string,array{width:int,height:int,scopes:string[]}>
      */
     public function sizes(): array
     {
@@ -78,12 +91,15 @@ final class ImageSetup
         $zajawka = ($strona - ($kolumny - 1) * self::GRID_GAP) / $kolumny;
         $galeria = $strona * self::GALLERY_SHARE;
 
-        $rozmiary = self::SIZES;
-        $rozmiary['home_default']['size'] = (int) (ceil($zajawka / 50) * 50);
-        $rozmiary['medium_default']['size'] = min(
-            $rozmiary['large_default']['size'],
+        $home = (int) (ceil($zajawka / 50) * 50);
+        $medium = min(
+            self::SIZES['large_default']['width'],
             (int) (ceil(max(2 * $zajawka, 2 * $galeria) / 100) * 100)
         );
+
+        $rozmiary = self::SIZES;
+        $rozmiary['home_default']['width'] = $rozmiary['home_default']['height'] = $home;
+        $rozmiary['medium_default']['width'] = $rozmiary['medium_default']['height'] = $medium;
 
         return $rozmiary;
     }
@@ -114,7 +130,7 @@ final class ImageSetup
     /**
      * Stan sklepu obok zestawu, dla ekranu Narzędzia.
      *
-     * @return array{types: array<int,array{name:string,current:?string,recommended:string,ok:bool}>, formats: array{current:string,recommended:string,ok:bool}, base: array{current:string,recommended:string,ok:bool}, webp:bool, ok:bool}
+     * @return array{types: array<int,array{name:string,current:?string,recommended:string,currentScopes:string[],scopes:string[],missingScopes:string[],ok:bool}>, formats: array{current:string,recommended:string,ok:bool}, base: array{current:string,recommended:string,ok:bool}, webp:bool, ok:bool}
      */
     public function status(): array
     {
@@ -123,16 +139,25 @@ final class ImageSetup
         $wszystkoOk = true;
 
         foreach ($this->sizes() as $nazwa => $opis) {
-            $teraz = isset($obecne[$nazwa]) ? $obecne[$nazwa]['width'] . ' × ' . $obecne[$nazwa]['height'] : null;
-            $ok = isset($obecne[$nazwa])
-                && $obecne[$nazwa]['width'] === $opis['size']
-                && $obecne[$nazwa]['height'] === $opis['size'];
+            $jest = $obecne[$nazwa] ?? null;
+            $teraz = $jest !== null ? $jest['width'] . ' × ' . $jest['height'] : null;
+            $rozmiarOk = $jest !== null && $jest['width'] === $opis['width'] && $jest['height'] === $opis['height'];
+
+            // Zakresy: typ musi obejmować to, do czego motyw go używa. Zakresów,
+            // które sklep dołożył sam, nie liczymy jako błędu i nie zdejmujemy.
+            $brakZakresow = $jest !== null
+                ? array_values(array_filter($opis['scopes'], static fn (string $z): bool => empty($jest['scopes'][$z])))
+                : $opis['scopes'];
+            $ok = $rozmiarOk && $brakZakresow === [];
             $wszystkoOk = $wszystkoOk && $ok;
 
             $typy[] = [
                 'name' => $nazwa,
                 'current' => $teraz,
-                'recommended' => $opis['size'] . ' × ' . $opis['size'],
+                'recommended' => $opis['width'] . ' × ' . $opis['height'],
+                'currentScopes' => $jest !== null ? array_keys(array_filter($jest['scopes'])) : [],
+                'scopes' => $opis['scopes'],
+                'missingScopes' => $brakZakresow,
                 'ok' => $ok,
             ];
         }
@@ -175,25 +200,28 @@ final class ImageSetup
 
         foreach ($this->sizes() as $nazwa => $opis) {
             if (isset($obecne[$nazwa])) {
-                $db->update(
-                    'image_type',
-                    ['width' => $opis['size'], 'height' => $opis['size']],
-                    '`name` = \'' . pSQL($nazwa) . '\''
-                );
+                // Dokładamy brakujące zakresy, a te, które sklep ma ponad zestaw,
+                // zostawiamy: mogą ich używać moduły albo inny motyw.
+                $zmiana = ['width' => $opis['width'], 'height' => $opis['height']];
+
+                foreach ($opis['scopes'] as $zakres) {
+                    $zmiana[$zakres] = 1;
+                }
+
+                $db->update('image_type', $zmiana, '`name` = \'' . pSQL($nazwa) . '\'');
 
                 continue;
             }
 
             $wiersz = [
                 'name' => pSQL($nazwa),
-                'width' => $opis['size'],
-                'height' => $opis['size'],
-                'products' => (int) in_array('products', $opis['scopes'], true),
-                'categories' => (int) in_array('categories', $opis['scopes'], true),
-                'manufacturers' => (int) in_array('manufacturers', $opis['scopes'], true),
-                'suppliers' => (int) in_array('suppliers', $opis['scopes'], true),
-                'stores' => 0,
+                'width' => $opis['width'],
+                'height' => $opis['height'],
             ];
+
+            foreach (self::SCOPES as $zakres) {
+                $wiersz[$zakres] = (int) in_array($zakres, $opis['scopes'], true);
+            }
 
             $db->insert('image_type', $wiersz);
         }
@@ -241,11 +269,17 @@ final class ImageSetup
     {
         $wynik = [];
         $wiersze = Db::getInstance()->executeS(
-            'SELECT `name`, `width`, `height` FROM `' . _DB_PREFIX_ . 'image_type`'
+            'SELECT * FROM `' . _DB_PREFIX_ . 'image_type`'
         ) ?: [];
 
         foreach ($wiersze as $w) {
-            $wynik[(string) $w['name']] = ['width' => (int) $w['width'], 'height' => (int) $w['height']];
+            $zakresy = [];
+
+            foreach (self::SCOPES as $zakres) {
+                $zakresy[$zakres] = !empty($w[$zakres]);
+            }
+
+            $wynik[(string) $w['name']] = ['width' => (int) $w['width'], 'height' => (int) $w['height'], 'scopes' => $zakresy];
         }
 
         return $wynik;

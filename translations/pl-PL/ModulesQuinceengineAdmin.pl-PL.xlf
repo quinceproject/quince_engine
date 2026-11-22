@@ -2788,6 +2788,10 @@
         <source>Images as icons in the theme colour</source>
         <target>Zdjęcia jako ikony w kolorze motywu</target>
       </trans-unit>
+      <trans-unit id="quince.listing.opt_cover_fallback">
+        <source>Without a thumbnail, show the category image</source>
+        <target>Bez miniatury pokazuj obraz kategorii</target>
+      </trans-unit>
       <trans-unit id="quince.listing.opt_hover">
         <source>Border lights up on hover</source>
         <target>Obramowanie zapala się po najechaniu</target>
@@ -3969,6 +3973,26 @@
       <trans-unit id="quince.tools.images.desc">
         <source>The sizes the Quince theme shows photos in, and the file formats. Upload product photos at least 1600 px on the longer side.</source>
         <target>Rozmiary, w jakich motyw Quince pokazuje zdjęcia, i formaty plików. Zdjęcia produktów wgrywaj co najmniej 1600 px na dłuższym boku.</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.used_for">
+        <source>Used for</source>
+        <target>Dotyczy</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.scope_brands">
+        <source>Brands</source>
+        <target>Marki</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.scope_suppliers">
+        <source>Suppliers</source>
+        <target>Dostawcy</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.scope_stores">
+        <source>Stores</source>
+        <target>Sklepy</target>
+      </trans-unit>
+      <trans-unit id="quince.tools.images.scope_missing">
+        <source>Missing</source>
+        <target>Brak</target>
       </trans-unit>
       <trans-unit id="quince.tools.images.basis">
         <source>Product card and product page sizes follow the page width (%width% px) and the number of listing columns (%columns%) in Appearance. After changing them, set the recommended sizes again and regenerate the thumbnails.</source>

@@ -4,6 +4,23 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.7] - 2026-11-22
+
+### Added
+
+- **Product lists → Subcategories**: new switch "Without a thumbnail, show the category
+  image", on by default. A subcategory without its own thumbnail shows its category
+  image in the tile instead of an empty tile. Needs the Quince theme 0.1.14.
+
+### Changed
+
+- **Tools → Image sizes and formats** covers every image type of the theme, with what
+  each one is used for: products, categories, brands, suppliers and stores (new:
+  `stores_default`, 287 × 160). A type missing one of these shows it, and **Apply
+  recommended settings** adds it. Before, an existing type got only its size, so brand
+  and supplier logos could have no generated sizes. Uses the shop already added
+  outside the set are kept.
+
 ## [0.10.6] - 2026-11-21
 
 ### Changed

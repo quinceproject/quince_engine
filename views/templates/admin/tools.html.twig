@@ -37,6 +37,7 @@
                         <th>{{ 'Image type'|trans }}</th>
                         <th>{{ 'In the shop'|trans }}</th>
                         <th>{{ 'Recommended'|trans }}</th>
+                        <th>{{ 'Used for'|trans }}</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -46,6 +47,9 @@
                             <td>{{ typ.name }}</td>
                             <td>{{ typ.current ?? 'missing'|trans }}</td>
                             <td>{{ typ.recommended }}</td>
+                            <td>
+                                {% for zakres in typ.scopes %}{{ {'products': 'Products', 'categories': 'Categories', 'manufacturers': 'Brands', 'suppliers': 'Suppliers', 'stores': 'Stores'}[zakres]|trans }}{% if zakres in typ.missingScopes %} <span class="qc-badge qc-badge-warning">{{ 'Missing'|trans }}</span>{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+                            </td>
                             <td>{% if not typ.ok %}<span class="qc-badge qc-badge-warning">{{ 'Differs'|trans }}</span>{% endif %}</td>
                         </tr>
                     {% endfor %}
@@ -53,12 +57,14 @@
                         <td>{{ 'Formats'|trans }}</td>
                         <td>{{ images.formats.current ?: 'jpg' }}</td>
                         <td>{{ images.formats.recommended }}</td>
+                        <td></td>
                         <td>{% if not images.formats.ok %}<span class="qc-badge qc-badge-warning">{{ 'Differs'|trans }}</span>{% endif %}</td>
                     </tr>
                     <tr>
                         <td>{{ 'Base file'|trans }}</td>
                         <td>{{ images.base.current }}</td>
                         <td>{{ images.base.recommended }}</td>
+                        <td></td>
                         <td>{% if not images.base.ok %}<span class="qc-badge qc-badge-warning">{{ 'Differs'|trans }}</span>{% endif %}</td>
                     </tr>
                 </tbody>

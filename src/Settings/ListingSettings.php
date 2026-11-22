@@ -200,6 +200,9 @@ final class ListingSettings
                 // barwą marki. Dla jednobarwnych rysunków kategorii zamiast
                 // fotografii.
                 'icons' => false,
+                // Kategoria bez miniatury pokazuje w kafelku swój obraz kategorii
+                // (ten z nagłówka listy). Miniatura, gdy jest, ma pierwszeństwo.
+                'cover_fallback' => true,
                 // Czy kafelek reaguje na najechanie (zmiana barwy obramowania).
                 'hover' => true,
             ],
@@ -316,6 +319,7 @@ final class ListingSettings
         'first_page' => 'Only on the first page',
         'images' => 'With images',
         'icons' => 'Images as icons in the theme colour',
+        'cover_fallback' => 'Without a thumbnail, show the category image',
         'hover' => 'Border lights up on hover',
         'count' => 'With the number of narrowed-down filters',
         'clear_all' => 'With "Clear all"',
