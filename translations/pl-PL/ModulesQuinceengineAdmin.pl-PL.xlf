@@ -2808,6 +2808,10 @@
         <source>With &quot;Clear all&quot;</source>
         <target>Z „Wyczyść wszystko”</target>
       </trans-unit>
+      <trans-unit id="quince.listing.opt_show_limit">
+        <source>Values in a filter before &quot;Show more&quot; (0: all)</source>
+        <target>Wartości w filtrze przed „Pokaż więcej” (0: wszystkie)</target>
+      </trans-unit>
 
       <!-- Listing: miejsca promocyjne -->
       <trans-unit id="quince.listing.slots">

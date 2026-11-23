@@ -226,7 +226,13 @@ final class ListingSettings
             'zone' => 'filters',
             'zones' => [],
             // Treść przychodzi gotowa w `$listing.rendered_facets`, z rdzenia
-            // albo z ps_facetedsearch. Silnik decyduje tylko, gdzie ją postawić.
+            // albo z ps_facetedsearch. Silnik decyduje, gdzie ją postawić,
+            // i ile wartości grupy widać przed „Pokaż więcej”.
+            'options' => [
+                // 0: wszystkie wartości od razu, bez przycisku.
+                'show_limit' => 10,
+            ],
+            'ranges' => ['show_limit' => [0, 100]],
         ],
 
         // --- belka ---
@@ -323,6 +329,7 @@ final class ListingSettings
         'hover' => 'Border lights up on hover',
         'count' => 'With the number of narrowed-down filters',
         'clear_all' => 'With "Clear all"',
+        'show_limit' => 'Values in a filter before "Show more" (0: all)',
         'desktop' => 'On wide screens',
         'mobile' => 'On phones',
     ];
@@ -730,6 +737,19 @@ final class ListingSettings
             // a to wie dopiero szablon. Przelicza je modyfikator `qslots`.
             'placements' => $this->placements(),
         ];
+    }
+
+    /**
+     * Ile wartości grupy filtra widać przed „Pokaż więcej”, 0: wszystkie.
+     *
+     * Modyfikator Smarty, bo panel filtrów renderuje moduł ps_facetedsearch
+     * w trakcie wyszukiwania, zanim PrestaShop przekaże szablonom zmienne
+     * modułów (`$modules`). Tam tego ustawienia po prostu jeszcze nie ma.
+     * Wejście modyfikatora nie ma znaczenia.
+     */
+    public static function facetLimit(mixed $nieuzywane = null): int
+    {
+        return (int) ((new self())->options()['facets']['show_limit'] ?? 10);
     }
 
     /**
@@ -1157,9 +1177,16 @@ final class ListingSettings
 
         foreach (self::CATALOGUE as $id => $element) {
             foreach ($element['options'] ?? [] as $klucz => $domyslna) {
-                $wynik[$id][$klucz] = is_int($domyslna)
-                    ? (int) ($wyslane[$id][$klucz] ?? $domyslna)
-                    : !empty($wyslane[$id][$klucz]);
+                if (!is_int($domyslna)) {
+                    $wynik[$id][$klucz] = !empty($wyslane[$id][$klucz]);
+
+                    continue;
+                }
+
+                // Liczba spoza zakresu z katalogu wraca na najbliższą granicę.
+                $wartosc = (int) ($wyslane[$id][$klucz] ?? $domyslna);
+                [$od, $do] = $element['ranges'][$klucz] ?? [0, 999];
+                $wynik[$id][$klucz] = max($od, min($do, $wartosc));
             }
         }
 

@@ -4,6 +4,17 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.8] - 2026-11-23
+
+### Added
+
+- **Product lists → Filters**: new setting "Values in a filter before "Show more"",
+  10 by default, 0 shows all values. A longer filter group shows its first values and
+  a "Show more" button (Quince theme 0.1.17).
+- Smarty modifier `qfacetlimit` that gives the theme this setting. The filter panel is
+  built before PrestaShop passes the module variables to templates, so the theme asks
+  for the value itself.
+
 ## [0.10.7] - 2026-11-22
 
 ### Added

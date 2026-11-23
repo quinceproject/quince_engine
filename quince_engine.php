@@ -38,7 +38,7 @@ class Quince_Engine extends Module
     {
         $this->name = 'quince_engine';
         $this->tab = 'front_office_features';
-        $this->version = '0.10.7';
+        $this->version = '0.10.8';
         $this->author = 'Quince Project';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = ['min' => '9.0.0', 'max' => '9.99.99'];
@@ -875,6 +875,10 @@ class Quince_Engine extends Module
             // na numer kafla. Zależą od liczby kolumn i od tego, ile produktów
             // pokazały wcześniejsze strony, więc liczy się je dopiero tutaj.
             'qslots' => [\Quince\Engine\Settings\ListingSettings::class, 'slots'],
+
+            // Próg „Pokaż więcej” w grupie filtra. Panel filtrów powstaje,
+            // zanim szablony dostaną zmienne modułów, więc pyta o próg sam.
+            'qfacetlimit' => [\Quince\Engine\Settings\ListingSettings::class, 'facetLimit'],
 
             // Kolejność cech dla JEDNEGO produktu, liczona rankingiem. Na karcie
             // produktu silnik podaje ją raz, w zmiennych strony; na listingu
