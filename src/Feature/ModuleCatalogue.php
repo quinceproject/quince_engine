@@ -47,6 +47,7 @@ final class ModuleCatalogue
         'quince_events' => ['Events', 'Shop event log and outgoing delivery to external systems.'],
         'quince_gpsr' => ['Product safety', 'Product safety and the responsible economic operator on the product page.'],
         'quince_insight' => ['Insight', 'Google Analytics, Tag Manager, Merchant Center and Search Console in one place.'],
+        'quince_notifuse' => ['Notifuse', 'Contacts, newsletter sign-ups and shop events in Notifuse.'],
         'quince_search_score' => ['Search Score', 'What customers search for, and what they click after searching.'],
         'quince_withdrawal' => ['Withdrawal', 'The right of withdrawal from a distance contract.'],
     ];
@@ -64,6 +65,7 @@ final class ModuleCatalogue
         'quince_events' => 'webhook',
         'quince_gpsr' => 'triangleAlert',
         'quince_insight' => 'chartLine',
+        'quince_notifuse' => 'plug',
         'quince_search_score' => 'chartBar',
         'quince_withdrawal' => 'undo',
     ];

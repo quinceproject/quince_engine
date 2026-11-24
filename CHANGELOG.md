@@ -4,6 +4,13 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.9] - 2026-11-24
+
+### Added
+
+- **Quince modules**: Quince Notifuse in the module list, with its name, description
+  and icon, so it can be installed and updated from the engine.
+
 ## [0.10.8] - 2026-11-23
 
 ### Added

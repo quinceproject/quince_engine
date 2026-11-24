@@ -1384,6 +1384,10 @@
         <source>Google Analytics, Tag Manager, Merchant Center and Search Console in one place.</source>
         <target>Google Analytics, Tag Manager, Merchant Center i Search Console w jednym miejscu.</target>
       </trans-unit>
+      <trans-unit id="quince.dist.desc_notifuse">
+        <source>Contacts, newsletter sign-ups and shop events in Notifuse.</source>
+        <target>Kontakty, zapisy na newsletter i zdarzenia ze sklepu w Notifuse.</target>
+      </trans-unit>
       <trans-unit id="quince.dist.desc_search_score">
         <source>What customers search for, and what they click after searching.</source>
         <target>Czego szukają klienci i co klikają po wyszukaniu.</target>
