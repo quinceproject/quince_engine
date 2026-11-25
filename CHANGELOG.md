@@ -4,6 +4,18 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.10] - 2026-11-25
+
+### Fixed
+
+- **Form guard**: the contact form, the newsletter sign-up and the back-in-stock alert
+  were rejected whenever reCAPTCHA was on. Their names were missing from the list of
+  known forms, so the guard checked them as a generic form, and Quince reCAPTCHA
+  rejected the token as one fetched for a different form.
+- **Panel**: in a multi-line field with languages (e.g. the email message in Contacts),
+  the language list opened under the whole text area instead of under the language
+  button.
+
 ## [0.10.9] - 2026-11-24
 
 ### Added

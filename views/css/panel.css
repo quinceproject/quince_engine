@@ -1690,6 +1690,14 @@ textarea.qc-field-base {
     z-index: 30;
 }
 
+/* Przełącznik języka przy polu wielowierszowym: lista otwiera się pod
+   przyciskiem, a nie pod całym polem tekstowym. */
+.qc-lang-picker {
+    position: relative;
+    flex: none;
+    align-self: flex-start;
+}
+
 /* --- rozróżnienie pasków informacyjnego i ostrzegawczego ---
    Paczka daje obu zbliżone tła: akcent panelu jest pomarańczowy, ostrzeżenie
    bursztynowe, a paski różnią się rangą: jeden opisuje stronę, drugi zgłasza

@@ -263,6 +263,9 @@
                           placeholder="{{ placeholder }}">{{ values[language.id_lang]|default('') }}</textarea>
             {% endfor %}
 
+            {# Przycisk i lista we wspólnym pudełku: lista liczy położenie od
+               przycisku, a nie od całego wiersza, który ma wysokość pola. #}
+            <div class="qc-lang-picker">
             <button type="button" class="qc-lang-toggle" @click="open = !open"
                     :aria-expanded="open" aria-haspopup="listbox">
                 <span class="qc-lang-dot" :class="filled(lang) && 'qc-complete'"></span>
@@ -284,6 +287,7 @@
                         </span>
                     </div>
                 {% endfor %}
+            </div>
             </div>
         </div>
 

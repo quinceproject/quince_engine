@@ -36,6 +36,9 @@ final class GuardedEndpoint
 
     /** Nazwy formularzy, które wstawia motyw i moduły Quince (`form_id` w form-guard.tpl). */
     private const KNOWN_FORMS = [
+        'contact',
+        'newsletter',
+        'notify',
         'quince_offer',
         'quince_expert',
         'quince_qa',
