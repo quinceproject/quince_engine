@@ -619,6 +619,12 @@ final class HomepageSettings
                 'direction' => isset(self::TILE_DIRECTIONS[$wpis['direction'] ?? ''])
                     ? (string) $wpis['direction']
                     : 'horizontal',
+                // Opis kategorii pod nazwą. Brak klucza (zapis sprzed 0.10.14)
+                // znaczy „pokazuj”, bo tak kafel działał dotąd.
+                'lead' => !array_key_exists('lead', $wpis) || !empty($wpis['lead']),
+                // Barwa zasłony na zdjęciu: stopień palety albo kod. Pusta daje
+                // czerń, jak dotąd.
+                'veil' => $this->barwa((string) ($wpis['veil'] ?? '')),
             ];
         }
 

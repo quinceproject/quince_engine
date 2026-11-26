@@ -274,9 +274,9 @@ final class HomeProducts
             return '';
         }
 
-        $opis = preg_replace('/\s+/u', ' ', $opis);
-
-        return Tools::substr($opis, 0, 90) . (Tools::strlen($opis) > 90 ? '…' : '');
+        // Cały opis, bez skracania: ucięty na 90 znakach kończył się w połowie
+        // zdania. Za długi opis sklep wyłącza przy kolumnie („Opis kategorii”).
+        return (string) preg_replace('/\s+/u', ' ', $opis);
     }
 
     /** Zdjęcie kategorii, jeśli katalog je ma. */

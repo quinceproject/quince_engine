@@ -171,12 +171,17 @@
     {assign var=qNapis value=$column.button}
     {if !$qNapis}{assign var=qNapis value={l s='See section' d='Modules.Quinceengine.Shop'}}{/if}
 
-    <div class="q-ps__cats" style="--q-cats: {$column.per_row|default:3|intval}">
+    {* Barwa zasłony na zdjęciu: stopień palety zamienia się na odwołanie do
+       zmiennej, kod szesnastkowy wchodzi wprost. Pusta zostawia czerń z motywu. *}
+    {assign var=qZaslona value=$column.veil|default:''}
+    <div class="q-ps__cats" style="--q-cats: {$column.per_row|default:3|intval};{if $qZaslona} --q-cat-veil: {if $qZaslona|substr:0:1 == '#'}{$qZaslona|escape:'html':'UTF-8'}{else}var(--q-{$qZaslona|escape:'html':'UTF-8'}){/if};{/if}">
         {foreach from=$column.tiles item=tile}
             <a class="q-ps__cat q-ps__cat--{if $column.direction == 'vertical'}portrait{else}landscape{/if}"
                href="{$tile.url}"{if $tile.image} style="--q-cat-photo: url('{$tile.image|escape:'html':'UTF-8'}')"{/if}>
                 <h3 class="q-ps__cat-title">{$tile.name|escape:'html':'UTF-8'}</h3>
-                {if $tile.lead}<p class="q-ps__cat-lead">{$tile.lead|escape:'html':'UTF-8'}</p>{/if}
+                {* Bez `|default:true`: Smarty zamienia nim także `false` na
+                   `true` i wyłączony opis i tak by stał. *}
+                {if (!isset($column.lead) || $column.lead) && $tile.lead}<p class="q-ps__cat-lead">{$tile.lead|escape:'html':'UTF-8'}</p>{/if}
                 <span class="q-btn q-btn--primary">{$qNapis|escape:'html':'UTF-8'}</span>
             </a>
         {/foreach}

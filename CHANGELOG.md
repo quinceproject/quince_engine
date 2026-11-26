@@ -4,6 +4,21 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.14] - 2026-11-26
+
+### Added
+
+- **Home page, category tiles**: "Category description" switch on the column. On
+  (as before) shows the category description under the name, off hides it.
+- **Home page, category tiles**: "Photo shade colour" for photo tiles: a step of the
+  shop palette or a hex code. Empty keeps black, as before. Needs the Quince theme
+  0.1.32 or newer.
+
+### Changed
+
+- **Home page, category tiles**: the description is shown in full. It was cut after
+  90 characters and ended in the middle of a sentence.
+
 ## [0.10.13] - 2026-11-26
 
 ### Added

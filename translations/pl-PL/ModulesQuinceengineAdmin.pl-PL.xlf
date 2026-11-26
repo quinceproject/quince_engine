@@ -4158,6 +4158,22 @@
         <source>Half and half</source>
         <target>Pół na pół</target>
       </trans-unit>
+      <trans-unit id="quince.home.cat_lead">
+        <source>Category description</source>
+        <target>Opis kategorii</target>
+      </trans-unit>
+      <trans-unit id="quince.home.cat_lead_toggle">
+        <source>Show under the name</source>
+        <target>Pokazuj pod nazwą</target>
+      </trans-unit>
+      <trans-unit id="quince.home.cat_veil">
+        <source>Photo shade colour</source>
+        <target>Kolor przyciemnienia zdjęcia</target>
+      </trans-unit>
+      <trans-unit id="quince.home.cat_veil_hint">
+        <source>A step of the shop palette (neutral, primary, secondary, promo) or a hex code. Empty gives black.</source>
+        <target>Stopień palety sklepu (neutral, primary, secondary, promo) albo kod szesnastkowy. Puste daje czerń.</target>
+      </trans-unit>
       <trans-unit id="quince.home.extra_pills">
         <source>Pills</source>
         <target>Pigułki</target>

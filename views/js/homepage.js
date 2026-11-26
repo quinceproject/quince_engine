@@ -806,7 +806,9 @@
                         colour: pole(kolumna, 'colour').value,
                         icons: JSON.parse(pojemnik.dataset.ikony || '{}'),
                         button: napisyPola(pole(kolumna, 'button')),
-                        direction: segment(pole(kolumna, 'direction'))
+                        direction: segment(pole(kolumna, 'direction')),
+                        lead: pole(kolumna, 'lead').querySelector('input[type="checkbox"]').checked,
+                        veil: pole(kolumna, 'veil').value.trim()
                     });
 
                     return;

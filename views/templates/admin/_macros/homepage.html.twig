@@ -228,6 +228,22 @@
                 </div>
             </div>
 
+            {# Opis kategorii pod nazwą, w całości: skracanie urywało zdanie
+               w połowie. Kto ma długie opisy, wyłącza go tutaj. #}
+            <div class="qc-uklad-pole">
+                <span class="qc-label">{{ 'Category description'|trans }}</span>
+                <span data-pole="lead">{{ fields.toggle('', kolumna.lead ?? true, 'Show under the name'|trans) }}</span>
+            </div>
+
+            {# Zasłona na zdjęciu, żeby napis był czytelny. Tylko przy zdjęciu:
+               kafel z ikoną zdjęcia nie ma. #}
+            <div class="qc-uklad-pole" data-gdy-kafel="photo"{{ kolumna.image|default('photo') == 'photo' ? '' : ' hidden' }}>
+                <span class="qc-label">{{ 'Photo shade colour'|trans }}</span>
+                <input type="text" class="qc-field-base qc-focusable" data-pole="veil"
+                       style="inline-size:150px" value="{{ kolumna.veil|default('') }}" placeholder="neutral-12">
+                <span class="qc-hint">{{ 'A step of the shop palette (neutral, primary, secondary, promo) or a hex code. Empty gives black.'|trans }}</span>
+            </div>
+
             {# Napis na przycisku jest jeden dla całej kolumny: kafle prowadzą
                do działów tego samego rodzaju, więc i zaproszenie brzmi tak
                samo. Pusty napis daje domyślne „Zobacz dział". #}
