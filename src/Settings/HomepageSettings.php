@@ -100,7 +100,9 @@ final class HomepageSettings
 
     /** @var array<string,string> */
     public const WIDTHS = [
-        self::WIDTH_FULL => 'Full width',
+        // Inny napis niż „Full width” z listingów: tłumaczenie jest jedno na
+        // napis, a tam znaczy „cały rząd siatki”, nie szerokość okna.
+        self::WIDTH_FULL => 'Window width',
         self::WIDTH_BOXED => 'Page width',
     ];
 

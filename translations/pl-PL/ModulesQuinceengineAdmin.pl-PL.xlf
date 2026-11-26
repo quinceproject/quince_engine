@@ -4058,6 +4058,106 @@
         <source>Image settings applied. Regenerate the thumbnails in Design → Image settings so that the photos already in the shop get the new sizes.</source>
         <target>Ustawienia zdjęć zapisane. Przegeneruj miniatury w Wygląd → Zdjęcia, żeby zdjęcia, które już są w sklepie, dostały nowe rozmiary.</target>
       </trans-unit>
+      <trans-unit id="quince.home.mode_grid">
+        <source>By grid columns</source>
+        <target>Według kolumn siatki</target>
+      </trans-unit>
+      <trans-unit id="quince.home.mode_percent">
+        <source>By percent</source>
+        <target>Procentowo</target>
+      </trans-unit>
+      <trans-unit id="quince.home.width_full">
+        <source>Window width</source>
+        <target>Szerokość okna</target>
+      </trans-unit>
+      <trans-unit id="quince.home.width_boxed">
+        <source>Page width</source>
+        <target>Szerokość strony</target>
+      </trans-unit>
+      <trans-unit id="quince.home.skin_mist">
+        <source>Light grey</source>
+        <target>Jasnoszary</target>
+      </trans-unit>
+      <trans-unit id="quince.home.skin_stone">
+        <source>Grey</source>
+        <target>Szary</target>
+      </trans-unit>
+      <trans-unit id="quince.home.skin_gradient">
+        <source>Gradient</source>
+        <target>Gradient</target>
+      </trans-unit>
+      <trans-unit id="quince.home.column_hook">
+        <source>Module block</source>
+        <target>Blok modułu</target>
+      </trans-unit>
+      <trans-unit id="quince.home.column_products">
+        <source>Product tiles</source>
+        <target>Kafle produktów</target>
+      </trans-unit>
+      <trans-unit id="quince.home.column_product">
+        <source>Single product tile</source>
+        <target>Kafel jednego produktu</target>
+      </trans-unit>
+      <trans-unit id="quince.home.column_categories">
+        <source>Category tiles</source>
+        <target>Kafle kategorii</target>
+      </trans-unit>
+      <trans-unit id="quince.home.source_newest">
+        <source>New products</source>
+        <target>Nowe produkty</target>
+      </trans-unit>
+      <trans-unit id="quince.home.source_bestsellers">
+        <source>Best sellers</source>
+        <target>Najczęściej kupowane</target>
+      </trans-unit>
+      <trans-unit id="quince.home.source_viewed">
+        <source>Recently viewed</source>
+        <target>Ostatnio oglądane</target>
+      </trans-unit>
+      <trans-unit id="quince.home.source_searched">
+        <source>Most searched</source>
+        <target>Najczęściej wyszukiwane</target>
+      </trans-unit>
+      <trans-unit id="quince.home.source_category">
+        <source>From a category</source>
+        <target>Z kategorii</target>
+      </trans-unit>
+      <trans-unit id="quince.home.source_manual">
+        <source>Picked by hand</source>
+        <target>Wybrane ręcznie</target>
+      </trans-unit>
+      <trans-unit id="quince.home.display_carousel">
+        <source>Carousel</source>
+        <target>Karuzela</target>
+      </trans-unit>
+      <trans-unit id="quince.home.tile_image_photo">
+        <source>Category photo</source>
+        <target>Zdjęcie kategorii</target>
+      </trans-unit>
+      <trans-unit id="quince.home.icon_colour_text">
+        <source>Text colour</source>
+        <target>Kolor tekstu</target>
+      </trans-unit>
+      <trans-unit id="quince.home.direction_horizontal">
+        <source>Horizontal</source>
+        <target>Poziomo</target>
+      </trans-unit>
+      <trans-unit id="quince.home.direction_vertical">
+        <source>Vertical</source>
+        <target>Pionowo</target>
+      </trans-unit>
+      <trans-unit id="quince.home.product_image_above">
+        <source>Above the name</source>
+        <target>Nad nazwą</target>
+      </trans-unit>
+      <trans-unit id="quince.home.product_image_beside">
+        <source>Beside the name</source>
+        <target>Obok nazwy</target>
+      </trans-unit>
+      <trans-unit id="quince.home.extra_pills">
+        <source>Pills</source>
+        <target>Pigułki</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -4,6 +4,17 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.12] - 2026-11-26
+
+### Fixed
+
+- **Home page sections**: 24 options in the section settings were shown in English
+  on a Polish back office (column types, product sources, tile and photo options,
+  section backgrounds and others). They are translated now.
+- **Home page sections**: the "Full width" section option was shown as "Cały rząd",
+  the Polish name of a listing option with the same English label. It is now
+  called "Window width" ("Szerokość okna").
+
 ## [0.10.11] - 2026-11-26
 
 ### Changed
