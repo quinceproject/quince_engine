@@ -42,6 +42,17 @@
         {assign var=qBohater value=true}
     {/if}
 
+    {* Bohater „pół na pół”: barwę tła sekcji niesie prawa kolumna z treścią,
+       a pas zostaje na tle strony. Inaczej kolumna zlewałaby się z pasem. *}
+    {* Ramka sekcji (`--boxed`) też odpada: blokiem w ramce jest tu sam
+       układ pół na pół, a wyściółka ramki dokładała nad nim pusty pas. *}
+    {assign var=qSkora value=$section.skin}
+    {assign var=qRamka value=($section.width == 'boxed')}
+    {if $qBohater && $section.columns[0].image == 'split'}
+        {assign var=qSkora value='none'}
+        {assign var=qRamka value=false}
+    {/if}
+
     {* Smarty nie liczy wyrażeń warunkowych w parametrach `{include}`, więc to,
        co dostaje taśma, składamy tutaj. *}
     {assign var=qcNaglowek value=false}
@@ -56,8 +67,8 @@
         {assign var=qcWiecej value=$section.link}
     {/if}
 
-    <section class="q-ps q-ps--{$section.skin|escape:'html':'UTF-8'}{if $section.width == 'boxed'} q-ps--boxed{/if}{if $section.bleed} q-ps--bleed{/if}"
-             {if $smarty.capture.tlo|trim}style="{$smarty.capture.tlo|strip|escape:'html':'UTF-8'}"{/if}>
+    <section class="q-ps q-ps--{$qSkora|escape:'html':'UTF-8'}{if $qRamka} q-ps--boxed{/if}{if $section.bleed} q-ps--bleed{/if}"
+             {if $qSkora != 'none' && $smarty.capture.tlo|trim}style="{$smarty.capture.tlo|strip|escape:'html':'UTF-8'}"{/if}>
         <div class="{if !$section.bleed}q-container {/if}q-ps__in">
 
             {if $section.header && $section.title && !$qTasmaSama && !$qBohater}

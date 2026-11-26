@@ -4154,6 +4154,10 @@
         <source>Beside the name</source>
         <target>Obok nazwy</target>
       </trans-unit>
+      <trans-unit id="quince.home.product_image_split">
+        <source>Half and half</source>
+        <target>Pół na pół</target>
+      </trans-unit>
       <trans-unit id="quince.home.extra_pills">
         <source>Pills</source>
         <target>Pigułki</target>

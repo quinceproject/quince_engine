@@ -48,13 +48,9 @@
     {if $qBohater}
 
         {* Bohater pasa: jeden produkt na całej szerokości. Nadpis bierze napis
-           nagłówka sekcji: krótka etykieta nad nazwą, a nie drugi tytuł. *}
-        <div class="q-ps__hero">
-            <div class="q-ps__hero-media">
-                <a href="{$qProdukt.url}"><img src="{$qProdukt.cover.bySize.large_default.url}" alt="{$qProdukt.name|escape:'html':'UTF-8'}" loading="lazy"></a>
-            </div>
-
-            <div>
+           nagłówka sekcji: krótka etykieta nad nazwą, a nie drugi tytuł.
+           Treść jest ta sama w obu układach, więc składamy ją raz. *}
+        {capture name=qTrescBohatera}
                 {if $section.header && $section.title}
                     <span class="q-ps__over">{$section.title|escape:'html':'UTF-8'}</span>
                 {elseif $qProdukt.manufacturer_name}
@@ -83,11 +79,46 @@
 
                     <div class="q-ps__actions">
                         {include file='module:quince_engine/views/templates/hook/_home-buy.tpl' qProdukt=$qProdukt qDuzy=true}
-                        <a class="q-btn q-btn--secondary q-btn--lg" href="{$qProdukt.url}">{l s='See details' d='Shop.Theme.Actions'}</a>
+                        {* Drugi przycisk tylko obok „Do koszyka”. Produkt, którego
+                           nie da się kupić z listy, ma już w pierwszym przycisku
+                           „Zobacz szczegóły” i drugi powtarzałby ten sam napis. *}
+                        {if $qProdukt.add_to_cart_url}
+                            <a class="q-btn q-btn--secondary q-btn--lg" href="{$qProdukt.url}">{l s='See details' d='Shop.Theme.Actions'}</a>
+                        {/if}
                     </div>
                 </div>
+        {/capture}
+
+        {if $column.image == 'split'}
+
+            {* Pół na pół: zdjęcie i treść w dwóch równych kolumnach tej samej
+               wysokości. Kolumna treści bierze barwę tła sekcji (sama sekcja
+               zostaje wtedy na tle strony, patrz homepage.tpl), razem z jej
+               gradientem albo zdjęciem. *}
+            <div class="q-ps__split">
+                <div class="q-ps__split-media">
+                    <a href="{$qProdukt.url}"><img src="{$qProdukt.cover.bySize.large_default.url}" alt="{$qProdukt.name|escape:'html':'UTF-8'}" loading="lazy"></a>
+                </div>
+
+                <div class="q-ps__split-body q-ps--{$section.skin|escape:'html':'UTF-8'}"
+                     {if $smarty.capture.tlo|trim}style="{$smarty.capture.tlo|strip|escape:'html':'UTF-8'}"{/if}>
+                    {$smarty.capture.qTrescBohatera nofilter}
+                </div>
             </div>
-        </div>
+
+        {else}
+
+            <div class="q-ps__hero">
+                <div class="q-ps__hero-media">
+                    <a href="{$qProdukt.url}"><img src="{$qProdukt.cover.bySize.large_default.url}" alt="{$qProdukt.name|escape:'html':'UTF-8'}" loading="lazy"></a>
+                </div>
+
+                <div>
+                    {$smarty.capture.qTrescBohatera nofilter}
+                </div>
+            </div>
+
+        {/if}
 
         {* Argumenty idą pod bohaterem, na całą szerokość pasa: każdy niesie
            wyróżnioną wartość i zdanie pod nią, więc w kolumnie tekstu łamałyby

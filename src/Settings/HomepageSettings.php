@@ -188,10 +188,18 @@ final class HomepageSettings
         'vertical' => 'Vertical',
     ];
 
-    /** Gdzie stoi zdjęcie w dużej zajawce produktu. */
+    /**
+     * Gdzie stoi zdjęcie w dużej zajawce produktu.
+     *
+     * „Nad nazwą” działa tylko przy kilku kolumnach, „pół na pół” tylko przy
+     * produkcie jedynym w sekcji (bohater pasa): dwie równe kolumny, zdjęcie
+     * w jednej, treść w drugiej na barwie tła sekcji. Panel pokazuje te, które
+     * w danym układzie coś zmieniają.
+     */
     public const PRODUCT_IMAGES = [
         'above' => 'Above the name',
         'beside' => 'Beside the name',
+        'split' => 'Half and half',
     ];
 
     /**

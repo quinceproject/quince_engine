@@ -4,6 +4,32 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.13] - 2026-11-26
+
+### Added
+
+- **Home page, single product**: a new photo option, "Half and half", for a product
+  that is the only column of its section. The photo and the content stand in two
+  equal columns of the same height, framed together; the content column takes the
+  section background (colour, gradient or photo) and the section itself stays on
+  the page background. Pills stay in the content column, blocks go below across
+  the full width. With "Edge to edge" the block runs across the whole window.
+  Needs the Quince theme 0.1.30 or newer for its look.
+
+### Changed
+
+- **Home page, single product**: the photo setting shows only the options that
+  change something in the current layout: "Beside the name" and "Half and half"
+  for a product alone in its section, "Above the name" and "Beside the name" when
+  the section has more columns. Before, "Above the name" was offered for a product
+  alone in its section and did nothing.
+
+### Fixed
+
+- **Home page, single product**: a product that cannot be added to the cart from a
+  list showed "See details" twice. The second button now appears only next to
+  "To cart".
+
 ## [0.10.12] - 2026-11-26
 
 ### Fixed

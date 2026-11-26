@@ -366,6 +366,28 @@
         }
 
         if (rodzaj === 'product') {
+            /* Ustawienie zdjęcia zależy od układu: przy produkcie jedynym
+               w sekcji „nad nazwą” nic nie zmienia (zdjęcie i tak stoi obok),
+               a „pół na pół” istnieje tylko tam. Zaznaczona opcja, która
+               w tym układzie znika, przechodzi na „obok nazwy”, żeby to, co
+               widać, było tym, co trafi do zapisu. */
+            var jedynaKolumna = ileKolumn(sekcja) === 1;
+            var zdjecie = pole(kolumna, 'image');
+
+            zdjecie.querySelectorAll('[data-wartosc]').forEach(function (przycisk) {
+                przycisk.hidden = jedynaKolumna
+                    ? przycisk.dataset.wartosc === 'above'
+                    : przycisk.dataset.wartosc === 'split';
+            });
+
+            var wybraneZdjecie = zdjecie.querySelector('.is-active');
+
+            if (!wybraneZdjecie || wybraneZdjecie.hidden) {
+                zdjecie.querySelectorAll('[data-wartosc]').forEach(function (przycisk) {
+                    przycisk.classList.toggle('is-active', przycisk.dataset.wartosc === 'beside');
+                });
+            }
+
             var postac = segment(pole(kolumna, 'extraStyle'));
 
             kolumna.querySelectorAll('[data-gdy-postac]').forEach(function (blok) {
