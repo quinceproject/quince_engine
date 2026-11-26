@@ -16,6 +16,7 @@ if (!defined('_PS_VERSION_')) {
 }
 
 use Configuration;
+use Quince\Engine\Appearance\Color;
 use Quince\Engine\Ui\SafeUrl;
 
 /**
@@ -181,6 +182,26 @@ final class HomepageSettings
         'text' => 'Text colour',
         'neutral' => 'Grey',
     ];
+
+    /**
+     * Przyciemnienie zdjęcia na kaflu kategorii.
+     *
+     * Gotowe style biorą barwy z palety sklepu, „własny” z pól przy kolumnie.
+     * Napisy i przycisk dobiera `tileShade()` pod kontrast z zasłoną.
+     */
+    public const TILE_SHADES = [
+        'dark' => 'Dark',
+        'brand' => 'Brand colour',
+        'light' => 'Light',
+        'custom' => 'Custom',
+    ];
+
+    /** Moc zasłony przy napisach, w procentach: dolna granica i domyślna. */
+    public const SHADE_MIN = 40;
+    public const SHADE_DEFAULT = 88;
+
+    /** Widoczność zdjęcia pod zasłoną, w procentach. */
+    public const PHOTO_MIN = 30;
 
     /** Ułożenie kafla kategorii. */
     public const TILE_DIRECTIONS = [
@@ -622,9 +643,17 @@ final class HomepageSettings
                 // Opis kategorii pod nazwą. Brak klucza (zapis sprzed 0.10.14)
                 // znaczy „pokazuj”, bo tak kafel działał dotąd.
                 'lead' => !array_key_exists('lead', $wpis) || !empty($wpis['lead']),
-                // Barwa zasłony na zdjęciu: stopień palety albo kod. Pusta daje
-                // czerń, jak dotąd.
+                // Przyciemnienie zdjęcia. Zapis sprzed 0.10.15 nie ma stylu:
+                // wpisana barwa zasłony znaczy wtedy styl własny, pusta ciemny.
+                'shade' => $this->styl($wpis),
+                'shade_strength' => max(self::SHADE_MIN, min(
+                    (int) ($wpis['shade_strength'] ?? self::SHADE_DEFAULT),
+                    100
+                )),
+                'photo_strength' => max(self::PHOTO_MIN, min((int) ($wpis['photo_strength'] ?? 100), 100)),
+                // Barwy stylu własnego: stopień palety albo kod.
                 'veil' => $this->barwa((string) ($wpis['veil'] ?? '')),
+                'frame' => $this->barwa((string) ($wpis['frame'] ?? '')),
             ];
         }
 
@@ -641,6 +670,185 @@ final class HomepageSettings
     }
 
     /** Barwa z palety sklepu albo kod szesnastkowy; cokolwiek innego odpada. */
+    /** @param array<string,mixed> $wpis */
+    private function styl(array $wpis): string
+    {
+        $styl = (string) ($wpis['shade'] ?? '');
+
+        if (isset(self::TILE_SHADES[$styl])) {
+            return $styl;
+        }
+
+        return trim((string) ($wpis['veil'] ?? '')) !== '' ? 'custom' : 'dark';
+    }
+
+    /**
+     * Zmienne CSS kafli kategorii z ustawień przyciemnienia.
+     *
+     * Barwy wychodzą jako kody, nie odwołania do palety: kontrast napisu
+     * i przycisku trzeba policzyć tutaj, a CSS nie umie wybrać barwy
+     * po kontraście.
+     *
+     * - Ciemny i jasny: napisy z przeciwnego końca skali neutralnej,
+     *   przycisk w barwie marki.
+     * - Barwa marki: napis jak na przycisku marki (`on-fill-primary`),
+     *   przycisk odwrócony, bo w barwie marki zlałby się z tłem.
+     * - Własny: napis czarny albo biały, który ma większy kontrast; przycisk
+     *   odwrócony, gdy barwa marki ma z zasłoną mniej niż 3:1.
+     *
+     * @param array<string,mixed> $kolumna
+     * @param array<string,string> $paleta
+     *
+     * @return array<string,string> nazwa zmiennej bez `--q-` => wartość
+     */
+    public static function tileShade(array $kolumna, array $paleta): array
+    {
+        $kod = static fn (string $wartosc, string $zapas): string => self::kodBarwy($wartosc, $zapas, $paleta);
+
+        $atrament = $kod('neutral-12', '#141414');
+        $jasny = $kod('neutral-1', '#f5f5f4');
+        $marka = $kod('fill-primary', '#ffb400');
+        $odwrocony = false;
+
+        switch ((string) ($kolumna['shade'] ?? 'dark')) {
+            case 'brand':
+                $zaslona = $marka;
+                $napis = $kod('on-fill-primary', Color::labelFor($marka));
+                $ramka = $napis;
+                $odwrocony = true;
+                break;
+            case 'light':
+                $zaslona = $jasny;
+                $napis = $atrament;
+                $ramka = $marka;
+                break;
+            case 'custom':
+                $zaslona = $kod((string) ($kolumna['veil'] ?? ''), $atrament);
+                $napis = Color::labelFor($zaslona);
+                $ramka = $kod((string) ($kolumna['frame'] ?? ''), $marka);
+                $odwrocony = Color::contrast($marka, $zaslona) < 3;
+                break;
+            default:
+                $zaslona = $atrament;
+                $napis = $jasny;
+                $ramka = $marka;
+        }
+
+        $zmienne = [
+            'cat-veil' => $zaslona,
+            'cat-veil-strength' => (int) ($kolumna['shade_strength'] ?? self::SHADE_DEFAULT) . '%',
+            'cat-photo-strength' => (string) round((int) ($kolumna['photo_strength'] ?? 100) / 100, 2),
+            'cat-text' => $napis,
+            'cat-frame' => $ramka,
+        ];
+
+        // Cień pod napisem pomaga jasnemu na zdjęciu; ciemny z cieniem
+        // wygląda na rozmazany.
+        if (Color::luminance($napis) < 0.5) {
+            $zmienne['cat-shadow'] = 'none';
+        }
+
+        if ($odwrocony) {
+            $etykieta = Color::labelFor($napis);
+
+            // Najechanie: tło przesunięte o 15% w stronę napisu, jak
+            // `--q-neutral-11` przy przycisku na skórze marki.
+            [$r1, $g1, $b1] = Color::toRgb($napis);
+            [$r2, $g2, $b2] = Color::toRgb($etykieta);
+            $najechanie = sprintf(
+                '#%02x%02x%02x',
+                (int) round($r1 * 0.85 + $r2 * 0.15),
+                (int) round($g1 * 0.85 + $g2 * 0.15),
+                (int) round($b1 * 0.85 + $b2 * 0.15)
+            );
+
+            $zmienne['cat-btn-bg'] = $napis;
+            $zmienne['cat-btn-bg-hover'] = $najechanie;
+            $zmienne['cat-btn-label'] = $etykieta;
+        }
+
+        return $zmienne;
+    }
+
+    /**
+     * Napisy na tle sekcji: jasne czy ciemne, i barwa nazwy produktu pod
+     * kursorem.
+     *
+     * - Ciemny styl i zdjęcie: tekst jasny z reguł motywu, tło do liczenia
+     *   to atrament (pod zdjęciem leży ciemna zasłona, zdjęcia nie znamy).
+     * - Gradient: tekst jasny albo ciemny, ten, którego słabszy kontrast
+     *   z dwoma końcami jest wyższy. Jasny daje klasę `q-ps--light`, a z nią
+     *   reguły ciemnego pasa w motywie.
+     * - Nazwa pod kursorem (tylko przy jasnym tekście): barwa marki, gdy ma
+     *   co najmniej 3:1 ze wszystkimi tłami; inaczej marka rozjaśniona do
+     *   3:1 wobec najjaśniejszego tła; gdy i to nie wystarcza, pusto
+     *   i nazwa się nie zmienia.
+     * - Pozostałe style: bez zmian, działa zwykły hover.
+     *
+     * @param array<string,mixed> $sekcja
+     * @param array<string,string> $paleta
+     *
+     * @return array{light:bool,hover:string,readable:bool}
+     */
+    public static function sectionTone(array $sekcja, array $paleta): array
+    {
+        $skora = (string) ($sekcja['skin'] ?? 'none');
+        $jasny = self::kodBarwy('neutral-1', '#f5f5f4', $paleta);
+        $atrament = self::kodBarwy('neutral-12', '#141414', $paleta);
+        $wynik = ['light' => false, 'hover' => '', 'readable' => true];
+
+        if ($skora === 'ink' || $skora === 'photo') {
+            $tla = [$atrament];
+            $jasnyTekst = true;
+        } elseif ($skora === 'gradient') {
+            // Puste końce: te same stopnie, które motyw bierze w zastępstwie.
+            $tla = [
+                self::kodBarwy((string) ($sekcja['skin_from'] ?? '') ?: 'neutral-4', '#f6f6f6', $paleta),
+                self::kodBarwy((string) ($sekcja['skin_to'] ?? '') ?: 'neutral-6', '#e2e1df', $paleta),
+            ];
+            $naJasnym = min(array_map(static fn (string $t): float => Color::contrast($jasny, $t), $tla));
+            $naCiemnym = min(array_map(static fn (string $t): float => Color::contrast($atrament, $t), $tla));
+            $jasnyTekst = $naJasnym > $naCiemnym;
+            $wynik['light'] = $jasnyTekst;
+            $wynik['readable'] = max($naJasnym, $naCiemnym) >= 4.5;
+        } else {
+            return $wynik;
+        }
+
+        if (!$jasnyTekst) {
+            return $wynik;
+        }
+
+        $najslabszy = static fn (string $barwa): float => min(
+            array_map(static fn (string $t): float => Color::contrast($barwa, $t), $tla)
+        );
+        $marka = self::kodBarwy('fill-primary', '#ffb400', $paleta);
+
+        if ($najslabszy($marka) >= 3) {
+            $wynik['hover'] = $marka;
+
+            return $wynik;
+        }
+
+        usort($tla, static fn (string $a, string $b): int => Color::luminance($b) <=> Color::luminance($a));
+        $przesuniety = Color::shiftToContrast($marka, $tla[0], 3.0, 0.02);
+        $wynik['hover'] = $najslabszy($przesuniety) >= 3 ? $przesuniety : '';
+
+        return $wynik;
+    }
+
+    /**
+     * Stopień palety („neutral-12”) albo kod na kod szesnastkowy #rrggbb.
+     *
+     * @param array<string,string> $paleta
+     */
+    private static function kodBarwy(string $wartosc, string $zapas, array $paleta): string
+    {
+        $wartosc = $wartosc === '' || $wartosc[0] === '#' ? $wartosc : ($paleta[$wartosc] ?? '');
+
+        return Color::normalize(substr($wartosc, 0, 7), $zapas);
+    }
+
     private function barwa(string $wartosc): string
     {
         $wartosc = trim($wartosc);

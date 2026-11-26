@@ -100,7 +100,7 @@
                     <a href="{$qProdukt.url}"><img src="{$qProdukt.cover.bySize.large_default.url}" alt="{$qProdukt.name|escape:'html':'UTF-8'}" loading="lazy"></a>
                 </div>
 
-                <div class="q-ps__split-body q-ps--{$section.skin|escape:'html':'UTF-8'}"
+                <div class="q-ps__split-body q-ps--{$section.skin|escape:'html':'UTF-8'}{if isset($section.text_light) && $section.text_light} q-ps--light{/if}"
                      {if $smarty.capture.tlo|trim}style="{$smarty.capture.tlo|strip|escape:'html':'UTF-8'}"{/if}>
                     {$smarty.capture.qTrescBohatera nofilter}
                 </div>
@@ -171,10 +171,9 @@
     {assign var=qNapis value=$column.button}
     {if !$qNapis}{assign var=qNapis value={l s='See section' d='Modules.Quinceengine.Shop'}}{/if}
 
-    {* Barwa zasłony na zdjęciu: stopień palety zamienia się na odwołanie do
-       zmiennej, kod szesnastkowy wchodzi wprost. Pusta zostawia czerń z motywu. *}
-    {assign var=qZaslona value=$column.veil|default:''}
-    <div class="q-ps__cats" style="--q-cats: {$column.per_row|default:3|intval};{if $qZaslona} --q-cat-veil: {if $qZaslona|substr:0:1 == '#'}{$qZaslona|escape:'html':'UTF-8'}{else}var(--q-{$qZaslona|escape:'html':'UTF-8'}){/if};{/if}">
+    {* Przyciemnienie zdjęcia: zmienne policzone w silniku
+       (`HomepageSettings::tileShade()`), z barwami już dobranymi pod kontrast. *}
+    <div class="q-ps__cats" style="--q-cats: {$column.per_row|default:3|intval};{if isset($column.shade_vars) && $column.image|default:'photo' != 'icon'}{foreach from=$column.shade_vars key=qZmienna item=qWartosc} --q-{$qZmienna|escape:'html':'UTF-8'}: {$qWartosc|escape:'html':'UTF-8'};{/foreach}{/if}">
         {foreach from=$column.tiles item=tile}
             <a class="q-ps__cat q-ps__cat--{if $column.direction == 'vertical'}portrait{else}landscape{/if}"
                href="{$tile.url}"{if $tile.image} style="--q-cat-photo: url('{$tile.image|escape:'html':'UTF-8'}')"{/if}>

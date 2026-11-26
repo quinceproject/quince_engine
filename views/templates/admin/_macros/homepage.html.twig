@@ -235,13 +235,57 @@
                 <span data-pole="lead">{{ fields.toggle('', kolumna.lead ?? true, 'Show under the name'|trans) }}</span>
             </div>
 
-            {# Zasłona na zdjęciu, żeby napis był czytelny. Tylko przy zdjęciu:
-               kafel z ikoną zdjęcia nie ma. #}
-            <div class="qc-uklad-pole" data-gdy-kafel="photo"{{ kolumna.image|default('photo') == 'photo' ? '' : ' hidden' }}>
+            {# Przyciemnienie zdjęcia, żeby napis był czytelny. Tylko przy
+               zdjęciu: kafel z ikoną zdjęcia nie ma. Gotowy styl bierze barwy
+               z palety, własny z pól niżej; napisy i przycisk dobiera silnik
+               pod kontrast. Zapis bez stylu z wpisaną barwą to styl własny. #}
+            {% set zdjecie = kolumna.image|default('photo') == 'photo' %}
+            {% set styl = kolumna.shade|default(kolumna.veil|default('') is not empty ? 'custom' : 'dark') %}
+            <div class="qc-uklad-pole" data-gdy-kafel="photo"{{ zdjecie ? '' : ' hidden' }}>
+                <span class="qc-label">{{ 'Photo shade'|trans }}</span>
+                <div class="qc-select-wrap">
+                    <select class="qc-field-base qc-select qc-focusable" data-pole="shade">
+                        {% for wartosc, etykieta in slowniki.tileShades %}
+                            <option value="{{ wartosc }}"{{ styl == wartosc ? ' selected' : '' }}>{{ etykieta|trans }}</option>
+                        {% endfor %}
+                    </select>
+                    {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                </div>
+                <span class="qc-hint">{{ 'Text and button colours are matched to the shade for contrast.'|trans }}</span>
+            </div>
+
+            <div class="qc-uklad-pole" data-gdy-kafel="photo"{{ zdjecie ? '' : ' hidden' }}>
+                <span class="qc-label">{{ 'Shade strength'|trans }}</span>
+                <div class="qc-slider-row">
+                    <input type="range" class="qc-slider" min="{{ slowniki.shadeMin }}" max="100" step="1"
+                           data-pole="shadeStrength" value="{{ kolumna.shade_strength|default(slowniki.shadeDefault) }}">
+                    <span class="qc-slider-val"><span data-suwak-wartosc>{{ kolumna.shade_strength|default(slowniki.shadeDefault) }}</span>%</span>
+                </div>
+                <span class="qc-hint">{{ 'How much the shade covers the photo under the text.'|trans }}</span>
+            </div>
+
+            <div class="qc-uklad-pole" data-gdy-kafel="photo"{{ zdjecie ? '' : ' hidden' }}>
+                <span class="qc-label">{{ 'Photo visibility'|trans }}</span>
+                <div class="qc-slider-row">
+                    <input type="range" class="qc-slider" min="{{ slowniki.photoMin }}" max="100" step="1"
+                           data-pole="photoStrength" value="{{ kolumna.photo_strength|default(100) }}">
+                    <span class="qc-slider-val"><span data-suwak-wartosc>{{ kolumna.photo_strength|default(100) }}</span>%</span>
+                </div>
+                <span class="qc-hint">{{ 'Lower values blend the whole photo into the shade colour.'|trans }}</span>
+            </div>
+
+            <div class="qc-uklad-pole" data-gdy-kafel="photo" data-gdy-cien="custom"{{ zdjecie and styl == 'custom' ? '' : ' hidden' }}>
                 <span class="qc-label">{{ 'Photo shade colour'|trans }}</span>
                 <input type="text" class="qc-field-base qc-focusable" data-pole="veil"
                        style="inline-size:150px" value="{{ kolumna.veil|default('') }}" placeholder="neutral-12">
                 <span class="qc-hint">{{ 'A step of the shop palette (neutral, primary, secondary, promo) or a hex code. Empty gives black.'|trans }}</span>
+            </div>
+
+            <div class="qc-uklad-pole" data-gdy-kafel="photo" data-gdy-cien="custom"{{ zdjecie and styl == 'custom' ? '' : ' hidden' }}>
+                <span class="qc-label">{{ 'Frame colour on hover'|trans }}</span>
+                <input type="text" class="qc-field-base qc-focusable" data-pole="frame"
+                       style="inline-size:150px" value="{{ kolumna.frame|default('') }}" placeholder="fill-primary">
+                <span class="qc-hint">{{ 'A step of the shop palette or a hex code. Empty gives the brand colour.'|trans }}</span>
             </div>
 
             {# Napis na przycisku jest jeden dla całej kolumny: kafle prowadzą
@@ -493,6 +537,16 @@
                             <input type="number" class="qc-field-base qc-focusable" data-pole="skin_angle"
                                    style="inline-size:88px;text-align:center"
                                    value="{{ sekcja.skin_angle|default(120) }}" min="0" max="360" step="5">
+                        </div>
+
+                        {# Ostrzeżenie o czytelności: tekst na gradiencie dobiera
+                           silnik (jasny albo ciemny), ale gdy końce są skrajnie
+                           różne, żaden nie ma 4.5:1 z obydwoma. Liczy skrypt,
+                           pokazuje się tylko wtedy. #}
+                        <div class="qc-uklad-pole" style="flex:1 1 100%" data-gdy-skora="gradient"{{ sekcja.skin|default('none') == 'gradient' ? '' : ' hidden' }}>
+                            <div class="qc-alert qc-alert-warning" data-gradient-ostrzezenie hidden>
+                                {{ 'The two colours differ so much that neither light nor dark text will read well on the whole gradient. Pick colours closer in brightness.'|trans }}
+                            </div>
                         </div>
 
                         <div class="qc-uklad-pole" data-gdy-skora="photo"{{ sekcja.skin|default('none') == 'photo' ? '' : ' hidden' }}>

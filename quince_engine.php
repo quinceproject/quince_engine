@@ -38,7 +38,7 @@ class Quince_Engine extends Module
     {
         $this->name = 'quince_engine';
         $this->tab = 'front_office_features';
-        $this->version = '0.10.14';
+        $this->version = '0.10.15';
         $this->author = 'Quince Project';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = ['min' => '9.0.0', 'max' => '9.99.99'];
@@ -113,6 +113,7 @@ class Quince_Engine extends Module
             && $this->registerHook('actionModuleUninstallAfter')
             && $this->registerHook('actionValidateCustomerAddressForm')
             && $this->registerHook('actionSubmitCustomerAddressForm')
+            && $this->registerHook('actionWatermark')
             && $this->installModuleGroups()
             && $this->installVideoField()
             && $this->wylaczUdostepnianie()
@@ -253,6 +254,26 @@ class Quince_Engine extends Module
 
         $this->context->controller->addCSS($this->_path . 'views/css/produkt-filmy.css');
         $this->context->controller->addJS($this->_path . 'views/js/produkt-filmy.js');
+    }
+
+    /**
+     * Po wgraniu zdjęcia produktu: brakujące formaty miniatur (WebP i inne
+     * z `PS_IMAGE_FORMAT`). Webservice tworzy je tylko w jpg.
+     *
+     * Rdzeń wysyła ten hook po każdym wgraniu (Webservice, panel, import),
+     * a regeneracja miniatur dodatkowo po kolei dla wszystkich zdjęć; wtedy
+     * pliki już są i hook tylko sprawdza ich obecność. Nic tu nie może
+     * przerwać wgrywania, więc każdy błąd kończy się wpisem w dzienniku.
+     *
+     * @param array<string,mixed> $params
+     */
+    public function hookActionWatermark(array $params): void
+    {
+        try {
+            (new \Quince\Engine\Catalog\ThumbnailFormats())->complete((int) ($params['id_image'] ?? 0));
+        } catch (\Throwable $e) {
+            \PrestaShopLogger::addLog('Quince: thumbnail formats: ' . $e->getMessage(), 3, null, 'Image', (int) ($params['id_image'] ?? 0), true);
+        }
     }
 
     /**
@@ -1245,6 +1266,10 @@ class Quince_Engine extends Module
 
         $jezyk = (int) $this->context->language->id;
 
+        // Paleta sklepu, pobierana dopiero wtedy, gdy któraś sekcja jej
+        // potrzebuje (tło z kontrastem, kafle kategorii).
+        $paleta = null;
+
         foreach ($sekcje as $i => $sekcja) {
             $sekcje[$i]['title'] = \Quince\Engine\Settings\HomepageSettings::text($sekcja['title'], $jezyk);
             $sekcje[$i]['link_label'] = \Quince\Engine\Settings\HomepageSettings::text($sekcja['link_label'], $jezyk);
@@ -1257,6 +1282,18 @@ class Quince_Engine extends Module
             $sekcje[$i]['icon_svg'] = ($sekcja['icon'] ?? '') !== ''
                 ? \Quince\Engine\Ui\IconLibrary::svg((string) $sekcja['icon'])
                 : '';
+
+            // Tekst na tle sekcji (jasny na ciemnym gradiencie) i barwa
+            // nazwy produktu pod kursorem, dobrane pod kontrast z tłem.
+            if (in_array($sekcja['skin'] ?? 'none', ['ink', 'photo', 'gradient'], true)) {
+                $paleta ??= (new \Quince\Engine\Settings\AppearanceSettings(
+                    new \Quince\Engine\Appearance\PaletteGenerator(),
+                    new \Quince\Engine\Appearance\MetricsGenerator()
+                ))->palette();
+                $ton = \Quince\Engine\Settings\HomepageSettings::sectionTone($sekcja, $paleta);
+                $sekcje[$i]['text_light'] = $ton['light'];
+                $sekcje[$i]['title_hover'] = $ton['hover'];
+            }
         }
 
         // Kolumny z katalogu dostaja gotowe zajawki w postaci, ktorej oczekuje
@@ -1277,6 +1314,17 @@ class Quince_Engine extends Module
                     $kafle = $produkty->categories($kolumna);
 
                     $sekcje[$i]['columns'][$j]['tiles'] = $kafle;
+
+                    // Przyciemnienie zdjęcia: barwy z palety sklepu, napis
+                    // i przycisk dobrane pod kontrast z zasłoną.
+                    $paleta ??= (new \Quince\Engine\Settings\AppearanceSettings(
+                        new \Quince\Engine\Appearance\PaletteGenerator(),
+                        new \Quince\Engine\Appearance\MetricsGenerator()
+                    ))->palette();
+                    $sekcje[$i]['columns'][$j]['shade_vars'] = \Quince\Engine\Settings\HomepageSettings::tileShade(
+                        $kolumna,
+                        $paleta
+                    );
                     $sekcje[$i]['columns'][$j]['button'] = \Quince\Engine\Settings\HomepageSettings::text(
                         $kolumna['button'] ?? [],
                         $jezyk

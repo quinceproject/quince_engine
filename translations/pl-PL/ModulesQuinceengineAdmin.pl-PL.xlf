@@ -4174,6 +4174,46 @@
         <source>A step of the shop palette (neutral, primary, secondary, promo) or a hex code. Empty gives black.</source>
         <target>Stopień palety sklepu (neutral, primary, secondary, promo) albo kod szesnastkowy. Puste daje czerń.</target>
       </trans-unit>
+      <trans-unit id="quince.home.cat_shade">
+        <source>Photo shade</source>
+        <target>Przyciemnienie zdjęcia</target>
+      </trans-unit>
+      <trans-unit id="quince.home.cat_shade_custom">
+        <source>Custom</source>
+        <target>Własny</target>
+      </trans-unit>
+      <trans-unit id="quince.home.cat_shade_hint">
+        <source>Text and button colours are matched to the shade for contrast.</source>
+        <target>Kolor napisów i przycisku dobiera się do przyciemnienia tak, żeby były czytelne.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.cat_shade_strength">
+        <source>Shade strength</source>
+        <target>Moc przyciemnienia</target>
+      </trans-unit>
+      <trans-unit id="quince.home.cat_shade_strength_hint">
+        <source>How much the shade covers the photo under the text.</source>
+        <target>Jak mocno przyciemnienie zakrywa zdjęcie pod napisami.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.cat_photo_strength">
+        <source>Photo visibility</source>
+        <target>Widoczność zdjęcia</target>
+      </trans-unit>
+      <trans-unit id="quince.home.cat_photo_strength_hint">
+        <source>Lower values blend the whole photo into the shade colour.</source>
+        <target>Im mniej, tym bardziej całe zdjęcie przyjmuje kolor przyciemnienia.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.cat_frame">
+        <source>Frame colour on hover</source>
+        <target>Kolor obramowania po najechaniu</target>
+      </trans-unit>
+      <trans-unit id="quince.home.cat_frame_hint">
+        <source>A step of the shop palette or a hex code. Empty gives the brand colour.</source>
+        <target>Stopień palety sklepu albo kod szesnastkowy. Puste daje kolor marki.</target>
+      </trans-unit>
+      <trans-unit id="quince.home.gradient_contrast">
+        <source>The two colours differ so much that neither light nor dark text will read well on the whole gradient. Pick colours closer in brightness.</source>
+        <target>Kolory różnią się tak bardzo, że ani jasny, ani ciemny tekst nie będzie czytelny na całym gradiencie. Wybierz kolory o bardziej zbliżonej jasności.</target>
+      </trans-unit>
       <trans-unit id="quince.home.extra_pills">
         <source>Pills</source>
         <target>Pigułki</target>

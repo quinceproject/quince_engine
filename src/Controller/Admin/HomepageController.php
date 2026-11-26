@@ -17,6 +17,9 @@ if (!defined('_PS_VERSION_')) {
 
 use Db;
 use PrestaShopBundle\Security\Attribute\AdminSecurity;
+use Quince\Engine\Appearance\MetricsGenerator;
+use Quince\Engine\Appearance\PaletteGenerator;
+use Quince\Engine\Settings\AppearanceSettings;
 use Quince\Engine\Settings\HomepageSettings;
 use Quince\Engine\Ui\IconLibrary;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -48,6 +51,10 @@ class HomepageController extends QuinceController
 
             'sections' => $this->withIcons($this->settings->sections()),
 
+            // Paleta sklepu: ekran liczy z niej kontrast tekstu z gradientem
+            // i ostrzega, gdy ani jasny, ani ciemny tekst nie będzie czytelny.
+            'palette' => (new AppearanceSettings(new PaletteGenerator(), new MetricsGenerator()))->palette(),
+
             // Wybierak ikon dopytuje o pasujące nazwy pod tym adresem, tak samo
             // jak na pozostałych ekranach panelu.
             'iconsRoute' => 'quince_icons_search',
@@ -67,6 +74,10 @@ class HomepageController extends QuinceController
             'displays' => HomepageSettings::DISPLAYS,
             'tileImages' => HomepageSettings::TILE_IMAGES,
             'iconColours' => HomepageSettings::ICON_COLOURS,
+            'tileShades' => HomepageSettings::TILE_SHADES,
+            'shadeMin' => HomepageSettings::SHADE_MIN,
+            'shadeDefault' => HomepageSettings::SHADE_DEFAULT,
+            'photoMin' => HomepageSettings::PHOTO_MIN,
             'tileDirections' => HomepageSettings::TILE_DIRECTIONS,
             'productImages' => HomepageSettings::PRODUCT_IMAGES,
             'percentSteps' => HomepageSettings::PERCENT_STEPS,

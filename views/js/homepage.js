@@ -55,6 +55,63 @@
         return wybrany ? wybrany.textContent.trim() : '';
     }
 
+    // ── kontrast tekstu z gradientem ─────────────────────────────────────
+    // Ta sama rachuba co w silniku (`HomepageSettings::sectionTone()`):
+    // tekst jasny albo ciemny, a ostrzeżenie, gdy lepszy z nich ma z którymś
+    // końcem mniej niż 4.5:1.
+
+    var paleta = JSON.parse(formularz.dataset.paleta || '{}');
+
+    /** Stopień palety albo kod na [r, g, b]; nieznane: null. */
+    function rgb(wartosc) {
+        var kod = wartosc.charAt(0) === '#' ? wartosc : (paleta[wartosc] || '');
+        // Sześć znaków przed trzema: inaczej „#0b2a5b” dopasowuje się jako „#0b2”.
+        var m = /^#([0-9a-f]{6}|[0-9a-f]{3})\b/i.exec(kod);
+
+        if (!m) {
+            return null;
+        }
+
+        var h = m[1].length === 3 ? m[1].replace(/./g, '$&$&') : m[1];
+
+        return [0, 2, 4].map(function (i) { return parseInt(h.substr(i, 2), 16); });
+    }
+
+    function luminancja(kanaly) {
+        var l = kanaly.map(function (v) {
+            v /= 255;
+
+            return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+        });
+
+        return 0.2126 * l[0] + 0.7152 * l[1] + 0.0722 * l[2];
+    }
+
+    function kontrast(a, b) {
+        var la = luminancja(a);
+        var lb = luminancja(b);
+
+        return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+    }
+
+    /** Czy jasny albo ciemny tekst ma co najmniej 4.5:1 z oboma końcami. */
+    function gradientCzytelny(od, doBarwy) {
+        var konce = [rgb(od), rgb(doBarwy)];
+        var jasny = rgb('neutral-1');
+        var ciemny = rgb('neutral-12');
+
+        // Wpisu, którego nie da się odczytać, nie oceniamy: bez ostrzeżenia.
+        if (!konce[0] || !konce[1] || !jasny || !ciemny) {
+            return true;
+        }
+
+        var najslabszy = function (tekst) {
+            return Math.min(kontrast(tekst, konce[0]), kontrast(tekst, konce[1]));
+        };
+
+        return Math.max(najslabszy(jasny), najslabszy(ciemny)) >= 4.5;
+    }
+
     function wybranyNapis(select) {
         return select && select.selectedIndex >= 0 ? select.options[select.selectedIndex].text.trim() : '';
     }
@@ -328,6 +385,13 @@
             blok.hidden = blok.dataset.gdySkora !== skora;
         });
 
+        if (skora === 'gradient') {
+            sekcja.querySelector('[data-gradient-ostrzezenie]').hidden = gradientCzytelny(
+                pole(sekcja, 'skin_from').value.trim() || 'neutral-4',
+                pole(sekcja, 'skin_to').value.trim() || 'neutral-6'
+            );
+        }
+
         sekcja.querySelector('[data-krok-oprawa]')
             .classList.toggle('qc-krok--gotowy', skora !== 'none');
 
@@ -422,8 +486,22 @@
         if (rodzaj === 'categories') {
             var naKaflu = segment(pole(kolumna, 'tileImage'));
 
+            var cien = pole(kolumna, 'shade').value;
+
+            /* Barwy zasłony i obramowania tylko przy stylu własnym; gotowy
+               styl bierze je z palety. */
             kolumna.querySelectorAll('[data-gdy-kafel]').forEach(function (blok) {
-                blok.hidden = blok.dataset.gdyKafel !== naKaflu;
+                blok.hidden = blok.dataset.gdyKafel !== naKaflu
+                    || (blok.dataset.gdyCien !== undefined && blok.dataset.gdyCien !== cien);
+            });
+
+            kolumna.querySelectorAll('.qc-slider-row').forEach(function (wiersz) {
+                var suwak = wiersz.querySelector('input[type="range"]');
+                var wartosc = wiersz.querySelector('[data-suwak-wartosc]');
+
+                if (suwak && wartosc) {
+                    wartosc.textContent = suwak.value;
+                }
             });
 
             kolumna.querySelector('[data-kafel-opis]').textContent =
@@ -808,7 +886,11 @@
                         button: napisyPola(pole(kolumna, 'button')),
                         direction: segment(pole(kolumna, 'direction')),
                         lead: pole(kolumna, 'lead').querySelector('input[type="checkbox"]').checked,
-                        veil: pole(kolumna, 'veil').value.trim()
+                        shade: pole(kolumna, 'shade').value,
+                        shade_strength: parseInt(pole(kolumna, 'shadeStrength').value, 10),
+                        photo_strength: parseInt(pole(kolumna, 'photoStrength').value, 10),
+                        veil: pole(kolumna, 'veil').value.trim(),
+                        frame: pole(kolumna, 'frame').value.trim()
                     });
 
                     return;

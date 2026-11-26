@@ -4,6 +4,34 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.15] - 2026-11-26
+
+### Added
+
+- **Product images**: after a product photo is uploaded, the engine creates the
+  thumbnail formats that are missing (WebP, and AVIF or PNG when they are switched on
+  in the image settings). The Webservice (`POST /api/images/products/{id}`) creates
+  thumbnails only as JPEG, so photos sent by an integration had no WebP until the next
+  thumbnail regeneration. Runs on the `actionWatermark` hook, which every upload
+  sends (Webservice, back office, CSV import). It creates only files that do not exist,
+  never overwrites or deletes; a failure goes to the shop log and does not stop the
+  upload.
+- **Home page, category tiles**: "Photo shade" with four styles: Dark, Brand colour,
+  Light and Custom, plus "Shade strength" (40-100%) and "Photo visibility" (30-100%).
+  Custom adds the shade colour and the frame colour on hover. Text and button colours
+  are matched to the shade for contrast: on the brand colour the button turns dark.
+  A column saved earlier with a shade colour opens as Custom and looks the same.
+- **Home page, gradient background**: text on a gradient is light or dark, whichever
+  reads better on both ends; with light text the section takes the dark-section look
+  (label, features, secondary button). The panel warns when the two colours are so far
+  apart that neither reads well on the whole gradient.
+- **Home page, product name on a dark background** (dark, photo, gradient with light
+  text): on hover the name takes the brand colour, or the brand colour lightened to a
+  3:1 contrast when the brand is too dark; when no colour reaches 3:1, the name stays
+  as it is.
+
+Needs the Quince theme 0.1.33 or newer.
+
 ## [0.10.14] - 2026-11-26
 
 ### Added

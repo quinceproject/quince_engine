@@ -25,7 +25,14 @@
         {elseif $section.skin == 'photo' && $section.skin_image}
             --q-ps-photo: url('{$section.skin_image|escape:'html':'UTF-8'}');
         {/if}
+        {* Nazwa produktu pod kursorem na ciemnym tle: barwa policzona
+           w silniku (`HomepageSettings::sectionTone()`). Pusta: bez zmiany. *}
+        {if isset($section.title_hover) && $section.title_hover}--q-ps-title-hover: {$section.title_hover};{/if}
     {/capture}
+
+    {* Jasny tekst na gradiencie: silnik wybrał go pod kontrast z końcami. *}
+    {assign var=qJasnyTekst value=false}
+    {if isset($section.text_light) && $section.text_light}{assign var=qJasnyTekst value=true}{/if}
 
     {* ── co pas pokazuje ───────────────────────────────────────────────
        Dwa układy oddają nagłówek pasa swojej treści, bo ta niesie go lepiej:
@@ -67,7 +74,7 @@
         {assign var=qcWiecej value=$section.link}
     {/if}
 
-    <section class="q-ps q-ps--{$qSkora|escape:'html':'UTF-8'}{if $qRamka} q-ps--boxed{/if}{if $section.bleed} q-ps--bleed{/if}"
+    <section class="q-ps q-ps--{$qSkora|escape:'html':'UTF-8'}{if $qSkora != 'none' && $qJasnyTekst} q-ps--light{/if}{if $qRamka} q-ps--boxed{/if}{if $section.bleed} q-ps--bleed{/if}"
              {if $qSkora != 'none' && $smarty.capture.tlo|trim}style="{$smarty.capture.tlo|strip|escape:'html':'UTF-8'}"{/if}>
         <div class="{if !$section.bleed}q-container {/if}q-ps__in">
 

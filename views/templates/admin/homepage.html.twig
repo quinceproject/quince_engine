@@ -30,6 +30,10 @@
     'displays': displays,
     'tileImages': tileImages,
     'iconColours': iconColours,
+    'tileShades': tileShades,
+    'shadeMin': shadeMin,
+    'shadeDefault': shadeDefault,
+    'photoMin': photoMin,
     'tileDirections': tileDirections,
     'productImages': productImages,
     'percentSteps': percentSteps,
@@ -42,6 +46,7 @@
 <form id="quince-homepage" method="post" action="{{ path('quince_homepage_save') }}" x-data
       data-quince-homepage
       data-siatka="{{ gridColumns }}"
+      data-paleta="{{ palette|json_encode|e('html_attr') }}"
       data-min-procent="{{ minPercent }}"
       data-max-zapewnien="{{ maxExtras }}"
       data-languages="{{ languages|map(l => l.id_lang)|json_encode|e('html_attr') }}"
