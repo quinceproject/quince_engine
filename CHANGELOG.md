@@ -4,6 +4,15 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.11] - 2026-11-26
+
+### Changed
+
+- **Home page sections**: the heading link is set separately for each language, like
+  the heading text and the link text, so the English page can link to English
+  content. A link saved before applies to every language, so nothing changes until
+  you edit it. The link and its text stand side by side in their own row.
+
 ## [0.10.10] - 2026-11-25
 
 ### Fixed

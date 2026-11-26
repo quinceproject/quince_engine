@@ -404,15 +404,18 @@
                             {{ fields.multilang('', 'Heading text'|trans, languages, sekcja.title|default({})) }}
                         </div>
 
-                        <div class="qc-uklad-pole" data-gdy-naglowek{{ sekcja.header|default(false) ? '' : ' hidden' }}>
-                            <span class="qc-label">{{ 'Link'|trans }}</span>
-                            <input type="text" class="qc-field-base qc-focusable" data-pole="link"
-                                   style="inline-size:220px" value="{{ sekcja.link|default('') }}" placeholder="https://">
-                            <span class="qc-hint">{{ 'Leave it empty and the heading gets no link.'|trans }}</span>
-                        </div>
+                        {# Odnośnik i jego napis w osobnym wierszu, obok siebie:
+                           adres należy do napisu „Zobacz wszystkie”. Odnośnik
+                           jest osobny dla każdego języka, jak napis nagłówka,
+                           więc wersja angielska prowadzi na angielską stronę. #}
+                        <div class="qc-uklad-rzad" data-gdy-naglowek{{ sekcja.header|default(false) ? '' : ' hidden' }}>
+                            <div data-pole="link">
+                                {{ fields.multilang('', 'Link'|trans, languages, sekcja.link|default({}), 'https://', 'Leave it empty and the heading gets no link.'|trans) }}
+                            </div>
 
-                        <div data-pole="link_label" data-gdy-odnosnik{{ sekcja.link|default('') ? '' : ' hidden' }}>
-                            {{ fields.multilang('', 'Link text'|trans, languages, sekcja.link_label|default({})) }}
+                            <div data-pole="link_label" data-gdy-odnosnik{{ sekcja.link|default({})|length ? '' : ' hidden' }}>
+                                {{ fields.multilang('', 'Link text'|trans, languages, sekcja.link_label|default({})) }}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -266,7 +266,7 @@ final class HomepageSettings
                 'width' => self::WIDTH_FULL,
                 'header' => false,
                 'title' => [],
-                'link' => '',
+                'link' => [],
                 'link_label' => [],
                 'columns' => [
                     ['type' => self::COLUMN_HOOK, 'hook' => 'displayQuinceHomeSlider'],
@@ -281,7 +281,7 @@ final class HomepageSettings
                 'width' => self::WIDTH_FULL,
                 'header' => true,
                 'title' => [],
-                'link' => '',
+                'link' => [],
                 'link_label' => [],
                 'columns' => [
                     [
@@ -441,7 +441,7 @@ final class HomepageSettings
                 'icon' => preg_replace('/[^a-z0-9-]/', '', strtolower((string) ($wpis['icon'] ?? ''))),
                 'title' => $this->sanitizeI18n($wpis['title'] ?? []),
                 // Adres trafia do `href` nagłówka sekcji: tylko bezpieczne schematy.
-                'link' => SafeUrl::clean((string) ($wpis['link'] ?? '')),
+                'link' => $this->sanitizeLinks($wpis['link'] ?? []),
                 'link_label' => $this->sanitizeI18n($wpis['link_label'] ?? []),
                 'columns' => $kolumny,
             ];
@@ -664,6 +664,48 @@ final class HomepageSettings
         }
 
         return $napisy;
+    }
+
+    /**
+     * Odnośnik nagłówka sekcji, osobny dla każdego języka.
+     *
+     * Do wersji 0.10.10 odnośnik był jeden dla wszystkich języków i zapisywał się
+     * jako napis. Taki napis rozkładamy na wszystkie języki sklepu, żeby po
+     * aktualizacji nagłówek prowadził tam, gdzie prowadził.
+     *
+     * @param mixed $dane
+     *
+     * @return array<int,string>
+     */
+    private function sanitizeLinks($dane): array
+    {
+        if (is_string($dane)) {
+            $adres = SafeUrl::clean($dane);
+
+            if ($adres === '') {
+                return [];
+            }
+
+            $dane = [];
+
+            foreach (\Language::getLanguages(false) as $jezyk) {
+                $dane[(int) $jezyk['id_lang']] = $adres;
+            }
+
+            return $dane;
+        }
+
+        $adresy = [];
+
+        foreach ($this->sanitizeI18n($dane) as $jezyk => $adres) {
+            $adres = SafeUrl::clean($adres);
+
+            if ($adres !== '') {
+                $adresy[$jezyk] = $adres;
+            }
+        }
+
+        return $adresy;
     }
 
     /**

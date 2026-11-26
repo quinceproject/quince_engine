@@ -1939,6 +1939,18 @@ textarea.qc-field-base {
 
 .qc-uklad-pole { display: grid; gap: var(--space-1); justify-items: start; }
 
+/* Wiersz pól, który ma stać pod resztą: `flex-basis: 100%` przenosi go na
+   nową linię, a w środku pola układają się jak w samym `.qc-uklad`. */
+.qc-uklad-rzad {
+    flex: 1 0 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--space-4) var(--space-7);
+}
+
+.qc-uklad-rzad[hidden] { display: none; }
+
 .qc-uklad-pole > span { font-size: var(--text-sm); font-weight: var(--weight-semibold); }
 
 .qc-suwak { display: flex; align-items: center; gap: var(--space-2); }

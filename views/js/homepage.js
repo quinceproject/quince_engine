@@ -311,10 +311,11 @@
 
         sekcja.querySelectorAll('[data-gdy-naglowek]').forEach(function (blok) { blok.hidden = !naglowek; });
 
-        var odnosnik = pole(sekcja, 'link').value.trim();
+        // Napis odnośnika pokazujemy, gdy odnośnik ma którykolwiek język.
+        var odnosnik = Object.keys(napisyPola(pole(sekcja, 'link'))).length > 0;
         var napisOdnosnika = sekcja.querySelector('[data-gdy-odnosnik]');
 
-        napisOdnosnika.hidden = !naglowek || odnosnik === '';
+        napisOdnosnika.hidden = !naglowek || !odnosnik;
 
         sekcja.querySelector('[data-krok-naglowek]').classList.toggle('qc-krok--gotowy', naglowek);
         sekcja.querySelector('[data-naglowek-opis]').textContent = naglowek ? napisy.headerOn : napisy.headerOff;
@@ -817,7 +818,7 @@
                 header: pole(sekcja, 'header').querySelector('input[type="checkbox"]').checked,
                 icon: pole(sekcja, 'icon').querySelector('input[type="hidden"]').value,
                 title: napisyPola(pole(sekcja, 'title')),
-                link: pole(sekcja, 'link').value.trim(),
+                link: napisyPola(pole(sekcja, 'link')),
                 link_label: napisyPola(pole(sekcja, 'link_label')),
                 columns: kolumny
             });

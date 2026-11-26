@@ -38,7 +38,7 @@ class Quince_Engine extends Module
     {
         $this->name = 'quince_engine';
         $this->tab = 'front_office_features';
-        $this->version = '0.10.10';
+        $this->version = '0.10.11';
         $this->author = 'Quince Project';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = ['min' => '9.0.0', 'max' => '9.99.99'];
@@ -1248,6 +1248,9 @@ class Quince_Engine extends Module
         foreach ($sekcje as $i => $sekcja) {
             $sekcje[$i]['title'] = \Quince\Engine\Settings\HomepageSettings::text($sekcja['title'], $jezyk);
             $sekcje[$i]['link_label'] = \Quince\Engine\Settings\HomepageSettings::text($sekcja['link_label'], $jezyk);
+            // Odnośnik jak napisy: w języku odwiedzającego, a gdy w nim pusty,
+            // z pierwszego języka, w którym sprzedawca go wpisał.
+            $sekcje[$i]['link'] = \Quince\Engine\Settings\HomepageSettings::text($sekcja['link'], $jezyk);
 
             // Ikona nagłówka: kod SVG z biblioteki silnika, a nie nazwa;
             // szablon ma go tylko wstawić.
