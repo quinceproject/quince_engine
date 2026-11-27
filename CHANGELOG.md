@@ -4,6 +4,15 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.19] - 2026-11-27
+
+### Added
+
+- **Support**: a new last tab in the System group. It links to the project on Ko-fi and
+  to the project website, and lists the engine, the Quince theme and every installed
+  Quince module, each with a link to report a bug, a suggestion or a remark in its own
+  GitHub repository.
+
 ## [0.10.18] - 2026-11-27
 
 ### Changed

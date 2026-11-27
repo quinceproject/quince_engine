@@ -175,6 +175,10 @@ services:
     arguments:
       - '@Quince\Engine\Ui\IconPackManager'
 
+  # System → Support: wsparcie projektu i zgłoszenia do repozytoriów modułów.
+  Quince\Engine\Controller\Admin\SupportController:
+    class: Quince\Engine\Controller\Admin\SupportController
+
   # Treści i widoczność topbara. Bez zależności: czyta wprost z konfiguracji.
   Quince\Engine\Settings\TopbarSettings:
     class: Quince\Engine\Settings\TopbarSettings

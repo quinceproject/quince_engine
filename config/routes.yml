@@ -267,6 +267,14 @@ quince_card_save:
     _legacy_controller: 'AdminQuinceEngine'
     _legacy_link: 'AdminQuince:save'
 
+quince_support:
+  path: quince/support
+  methods: [GET]
+  defaults:
+    _controller: Quince\Engine\Controller\Admin\SupportController::indexAction
+    _legacy_controller: 'AdminQuinceEngine'
+    _legacy_link: 'AdminQuince'
+
 quince_tools:
   path: quince/tools
   methods: [GET]

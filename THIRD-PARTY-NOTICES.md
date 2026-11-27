@@ -10,7 +10,8 @@ as that licence requires.
 | [Alpine.js](https://alpinejs.dev/) | 3.15.12 | `views/js/vendor/alpine.min.js` | MIT |
 | [Alpine.js Sort plugin](https://alpinejs.dev/plugins/sort) | | `views/js/vendor/alpine-sort.min.js` | MIT |
 | [SortableJS](https://sortablejs.github.io/Sortable/), bundled inside the Sort plugin | 1.15.2 | `views/js/vendor/alpine-sort.min.js` | MIT |
-| [Lucide](https://lucide.dev/), 13 icons (plug, blocks, cookie, webhook, triangle-alert, chart-line, chart-bar, undo-2, history, shopping-cart, bot, book-open, newspaper) | | `views/templates/admin/_macros/icons.html.twig` | ISC |
+| [Lucide](https://lucide.dev/), 15 icons (plug, blocks, cookie, webhook, triangle-alert, chart-line, chart-bar, undo-2, history, shopping-cart, bot, book-open, newspaper, heart, arrow-right) | | `views/templates/admin/_macros/icons.html.twig` | ISC |
+| [Instrument Sans](https://github.com/Instrument/instrument-sans), Copyright 2022 The Instrument Sans Project Authors | | `views/fonts/instrument-sans-*.woff2` | SIL Open Font License 1.1, full text in `views/fonts/OFL-instrument-sans.txt` |
 
 The icon set can be replaced from the back office (**Quince Engine → Tools → Icon
 pack**). A newer Bootstrap Icons release uploaded there stays under the licence of

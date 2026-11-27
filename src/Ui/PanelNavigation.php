@@ -90,6 +90,8 @@ final class PanelNavigation
                     ['label' => 'Quince modules', 'icon' => 'puzzle', 'route' => 'quince_modules'],
                     ['label' => 'Brand & Schema', 'icon' => 'shield', 'route' => 'quince_brand_schema'],
                     ['label' => 'Tools', 'icon' => 'upload', 'route' => 'quince_tools'],
+                    // Ostatnia pozycja menu: wsparcie projektu i zgłoszenia.
+                    ['label' => 'Support', 'icon' => 'heart', 'route' => 'quince_support'],
                 ],
             ],
         ];

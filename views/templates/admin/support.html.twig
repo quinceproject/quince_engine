@@ -1,0 +1,75 @@
+{# System → Support: wsparcie projektu na Ko-fi i zgłoszenia do repozytoriów.
+
+   Ekran mówi do kogoś, kto już ma Quince w sklepie. Nie reklamuje projektu,
+   tylko zachęca do udziału: wsparcia i zgłaszania błędów, propozycji i uwag.
+   Moduły działające w panelu silnika nie mają własnej zakładki, więc lista
+   zgłoszeń obejmuje silnik, motyw i każdy zainstalowany moduł Quince; każda
+   pozycja prowadzi do zgłoszeń w repozytorium swojego modułu.
+
+   Projekt ekranu: `quince/widoki/panel-wsparcie.html`. #}
+{% extends '@Modules/quince_engine/views/templates/admin/layout.html.twig' %}
+{% import '@Modules/quince_engine/views/templates/admin/_macros/icons.html.twig' as icons %}
+
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{% block quince_body %}
+<div class="qc-support">
+
+    <section class="qc-support-kofi">
+        <span class="qc-support-heart">{{ icons.icon('heart', 32) }}</span>
+        <div>
+            <h2>{{ 'Support Quince'|trans }}</h2>
+            <p>{{ 'Quince modules are free. If they are useful to you, support their development on Ko-fi.'|trans }}</p>
+        </div>
+        <a class="qc-support-kofi-btn" href="{{ kofi }}" target="_blank" rel="noopener">
+            {{ 'Support on Ko-fi'|trans }}
+            {{ icons.icon('arrowRight', 16) }}
+        </a>
+    </section>
+
+    <section class="qc-support-hero">
+        <div class="qc-support-wash" aria-hidden="true"></div>
+        <i class="qc-support-beam b1" aria-hidden="true"></i><i class="qc-support-beam b2" aria-hidden="true"></i><i class="qc-support-beam b3" aria-hidden="true"></i><i class="qc-support-beam b4" aria-hidden="true"></i>
+
+        <div class="qc-support-mark">
+            <img src="{{ asset('../modules/quince_engine/views/img/quince-q.png') }}" width="64" height="64" alt="">
+            <p class="qc-support-word">Quince Project</p>
+        </div>
+
+        <p class="qc-support-sub">{{ 'You use Quince in your shop. Help us develop it.'|trans }}</p>
+        <p class="qc-support-text">{{ 'Report a bug, describe what your shop is missing or share a remark. Pick the module the report is about: each has its own list of reports on GitHub.'|trans }}</p>
+
+        <div class="qc-support-ways">
+            <div class="qc-support-way" style="--qs-way: var(--qs-amber)">
+                <b>{{ 'Report a bug'|trans }}</b>
+                <span>{{ 'Say what happened and how to repeat it. Give the versions of PrestaShop and the module.'|trans }}</span>
+            </div>
+            <div class="qc-support-way" style="--qs-way: var(--qs-lilac)">
+                <b>{{ 'Suggest a change'|trans }}</b>
+                <span>{{ 'Describe what you need and in what situation in your shop.'|trans }}</span>
+            </div>
+            <div class="qc-support-way" style="--qs-way: var(--qs-sky)">
+                <b>{{ 'Share a remark'|trans }}</b>
+                <span>{{ 'What is unclear in the panel or in the module description.'|trans }}</span>
+            </div>
+        </div>
+
+        <div class="qc-support-repos">
+            <p class="qc-support-repos-title">{{ 'Report on GitHub'|trans }}</p>
+            <ul class="qc-support-repos-list">
+                {% for repo in core %}
+                    <li><a class="qc-support-repo qc-support-repo--core" href="{{ repo.url }}" target="_blank" rel="noopener">{{ repo.label|trans }}</a></li>
+                {% endfor %}
+                {% for repo in modules %}
+                    <li><a class="qc-support-repo" href="{{ repo.url }}" target="_blank" rel="noopener">{{ repo.label }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="qc-support-actions">
+            <a class="qc-support-btn qc-support-btn--line" href="{{ project }}" target="_blank" rel="noopener">{{ 'Project website'|trans }}</a>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

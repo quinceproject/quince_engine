@@ -4230,6 +4230,62 @@
         <source>Pills</source>
         <target>Pigułki</target>
       </trans-unit>
+      <trans-unit id="quince.support.nav">
+        <source>Support</source>
+        <target>Wsparcie</target>
+      </trans-unit>
+      <trans-unit id="quince.support.kofi_title">
+        <source>Support Quince</source>
+        <target>Wesprzyj Quince</target>
+      </trans-unit>
+      <trans-unit id="quince.support.kofi_text">
+        <source>Quince modules are free. If they are useful to you, support their development on Ko-fi.</source>
+        <target>Moduły Quince są darmowe. Jeśli Ci się przydają, wesprzyj ich rozwój na Ko-fi.</target>
+      </trans-unit>
+      <trans-unit id="quince.support.kofi_button">
+        <source>Support on Ko-fi</source>
+        <target>Wesprzyj na Ko-fi</target>
+      </trans-unit>
+      <trans-unit id="quince.support.engine_sub">
+        <source>You use Quince in your shop. Help us develop it.</source>
+        <target>Korzystasz z Quince w swoim sklepie. Pomóż nam go rozwijać.</target>
+      </trans-unit>
+      <trans-unit id="quince.support.engine_text">
+        <source>Report a bug, describe what your shop is missing or share a remark. Pick the module the report is about: each has its own list of reports on GitHub.</source>
+        <target>Zgłoś błąd, opisz, czego brakuje w Twoim sklepie, albo podziel się uwagą. Wybierz moduł, którego dotyczy zgłoszenie. Każdy ma własną listę zgłoszeń na GitHubie.</target>
+      </trans-unit>
+      <trans-unit id="quince.support.bug">
+        <source>Report a bug</source>
+        <target>Zgłoś błąd</target>
+      </trans-unit>
+      <trans-unit id="quince.support.bug_text">
+        <source>Say what happened and how to repeat it. Give the versions of PrestaShop and the module.</source>
+        <target>Napisz, co się stało i jak to powtórzyć. Podaj wersję PrestaShopa i modułu.</target>
+      </trans-unit>
+      <trans-unit id="quince.support.change">
+        <source>Suggest a change</source>
+        <target>Zaproponuj zmianę</target>
+      </trans-unit>
+      <trans-unit id="quince.support.change_text">
+        <source>Describe what you need and in what situation in your shop.</source>
+        <target>Opisz, czego potrzebujesz i w jakiej sytuacji w sklepie.</target>
+      </trans-unit>
+      <trans-unit id="quince.support.remark">
+        <source>Share a remark</source>
+        <target>Podziel się uwagą</target>
+      </trans-unit>
+      <trans-unit id="quince.support.remark_text">
+        <source>What is unclear in the panel or in the module description.</source>
+        <target>Co jest niejasne w panelu albo w opisie modułu.</target>
+      </trans-unit>
+      <trans-unit id="quince.support.report_github">
+        <source>Report on GitHub</source>
+        <target>Zgłoś na GitHubie</target>
+      </trans-unit>
+      <trans-unit id="quince.support.project_site">
+        <source>Project website</source>
+        <target>Strona projektu</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
