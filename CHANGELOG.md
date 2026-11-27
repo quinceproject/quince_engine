@@ -4,6 +4,15 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.18] - 2026-11-27
+
+### Changed
+
+- **Homepage**: in a section split by percent, the column width is given in units of
+  the row width (`cqi`) instead of percent. The look does not change. Quince theme
+  0.1.36 lays out a row of large product tiles as a grid, where a percent would be
+  counted from the column, not from the row.
+
 ## [0.10.17] - 2026-11-27
 
 ### Added

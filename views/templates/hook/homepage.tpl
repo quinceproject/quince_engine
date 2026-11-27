@@ -116,13 +116,17 @@
                    sumują się do stu procent, a przerwy dochodzą ponad to, więc
                    każda kolumna musi oddać swoją część ich szerokości. *}
                 {assign var=qLuki value=($section.columns|@count - 1)}
+                {* Udział w `cqi`, czyli w szerokości rzędu (rząd jest kontenerem
+                   miary), a nie w procentach: motyw stawia rząd dużych zajawek
+                   jako siatkę, a tam procent liczyłby się od kolumny siatki,
+                   nie od rzędu. W pasie elastycznym oba zapisy dają to samo. *}
 
                 <div class="q-ps__mix">
                     {foreach from=$section.columns item=column name=kol}
                         {assign var=qRail value=($column.type == 'products' && $column.display == 'carousel')}
 
                         <div class="{if $qRail}q-ps__mix-rail{else}q-ps__mix-fixed{/if}"
-                             style="--q-span: {$column.parts|default:1|intval}{if $section.mode == 'percent'};--q-udzial: calc({$column.percent|intval}% - var(--q-space-md) * {$qLuki} * {$column.percent|intval} / 100){/if}">
+                             style="--q-span: {$column.parts|default:1|intval}{if $section.mode == 'percent'};--q-udzial: calc({$column.percent|intval}cqi - var(--q-space-md) * {$qLuki} * {$column.percent|intval} / 100){/if}">
                             {include file='module:quince_engine/views/templates/hook/_home-column.tpl'
                               column=$column section=$section qBohater=false
                               qIndeks=$smarty.foreach.kol.iteration
