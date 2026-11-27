@@ -2782,3 +2782,72 @@ textarea.qc-field-base {
         grid-template-columns: 1fr;
     }
 }
+
+/* Pasek wsparcia pod paskiem zapisu (_support-strip.html.twig): cienki,
+   w pastelu strony projektu, prowadzi do zakładki Support. Nie konkuruje
+   z przyciskiem zapisu. */
+.qc-support-strip {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 12px;
+    padding: 12px 18px;
+    border-radius: var(--radius-lg, 12px);
+    background: #f3f5f8;
+    font-size: 14px;
+    color: #161b28;
+}
+
+.qc-support-strip::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(40% 140% at 0% 50%, rgba(255, 197, 107, .5), transparent 70%),
+        radial-gradient(35% 140% at 55% 0%, rgba(184, 174, 246, .45), transparent 70%),
+        radial-gradient(40% 140% at 100% 50%, rgba(143, 211, 247, .5), transparent 70%);
+}
+
+.qc-support-strip > * {
+    position: relative;
+}
+
+.qc-support-strip-heart {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #1f2533;
+    color: #ffc56b;
+    flex: none;
+}
+
+.qc-support-strip-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.qc-support-strip-text b {
+    font-weight: 600;
+}
+
+.qc-root a.qc-support-strip-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: none;
+    height: 34px;
+    padding: 0 14px;
+    font-weight: 600;
+    background: #1f2533;
+    color: #fff;
+}
+
+.qc-root a.qc-support-strip-link:hover {
+    background: #0b1730;
+    color: #fff;
+}

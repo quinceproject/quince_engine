@@ -4,6 +4,19 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.20] - 2026-11-27
+
+### Added
+
+- **Support strip**: every Quince panel screen shows a thin strip under the save bar
+  ("Support the project with a virtual coffee. Report a bug or your own idea for
+  development.") with a button to the Support tab. Modules with their own panel
+  layout include it from the engine. The Support tab itself does not show it.
+
+### Fixed
+
+- The Support tab is highlighted in the menu when open.
+
 ## [0.10.19] - 2026-11-27
 
 ### Added

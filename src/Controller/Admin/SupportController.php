@@ -43,6 +43,9 @@ class SupportController extends QuinceController
             ],
             'modules' => SupportLinks::installedModules(),
             'layoutTitle' => 'Support',
+            // Podświetla pozycję w menu i gasi pasek wsparcia, który na tej
+            // zakładce prowadziłby do niej samej.
+            'quinceRoute' => 'quince_support',
         ]);
     }
 }

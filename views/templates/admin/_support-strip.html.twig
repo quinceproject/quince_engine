@@ -1,0 +1,22 @@
+{#
+  Pasek wsparcia pod paskiem zapisu: jedno zdanie i przycisk do zakładki
+  System → Support. Wspólny dla wszystkich ekranów Quince.
+
+  Dołącza go layout silnika, a moduły z własnym layoutem (quince_block,
+  quince_events, quince_search_score, quince_withdrawal) przez
+  `include ... ignore missing`, więc ze starszym silnikiem bez tego pliku
+  po prostu go nie pokazują.
+
+  Na samej zakładce Support pasek nie ma sensu, więc tam go nie ma.
+  Wygląd: `.qc-support-strip` w views/css/panel.css.
+#}
+{% trans_default_domain 'Modules.Quinceengine.Admin' %}
+
+{% if quinceRoute|default('') != 'quince_support' %}
+    <div class="qc-support-strip">
+        <span class="qc-support-strip-heart"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></span>
+        <span class="qc-support-strip-text"><b>{{ 'Support the project with a virtual coffee.'|trans }}</b> {{ 'Report a bug or your own idea for development.'|trans }}</span>
+        <a class="qc-support-strip-link" href="{{ path('quince_support') }}">{{ 'Support'|trans }}
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+    </div>
+{% endif %}

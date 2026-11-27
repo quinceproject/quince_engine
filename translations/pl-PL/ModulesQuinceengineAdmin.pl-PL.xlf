@@ -4286,6 +4286,14 @@
         <source>Project website</source>
         <target>Strona projektu</target>
       </trans-unit>
+      <trans-unit id="quince.support.strip_title">
+        <source>Support the project with a virtual coffee.</source>
+        <target>Wesprzyj projekt wirtualną kawą.</target>
+      </trans-unit>
+      <trans-unit id="quince.support.strip_text">
+        <source>Report a bug or your own idea for development.</source>
+        <target>Zgłoś błąd lub własny pomysł na rozwój.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
