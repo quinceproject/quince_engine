@@ -2816,6 +2816,10 @@
         <source>Values in a filter before &quot;Show more&quot; (0: all)</source>
         <target>Wartości w filtrze przed „Pokaż więcej” (0: wszystkie)</target>
       </trans-unit>
+      <trans-unit id="quince.listing.opt_by_count">
+        <source>Values with the most products first</source>
+        <target>Najpierw wartości z największą liczbą produktów</target>
+      </trans-unit>
 
       <!-- Listing: miejsca promocyjne -->
       <trans-unit id="quince.listing.slots">

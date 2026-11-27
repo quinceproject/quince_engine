@@ -4,6 +4,23 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.16] - 2026-11-27
+
+### Added
+
+- **Product lists, Filters**: "Values with the most products first", on by default.
+  Values in a filter group are listed from the one with the most products; equal
+  counts keep the filter module's order (alphabetical or value positions). Switched
+  off, the order is the filter module's, as before. Works with the "Show more"
+  threshold: the most common values stay visible, the rare ones fold under the button.
+  Needs the Quince theme 0.1.34 (Smarty modifier `qfacetorder`).
+
+### Changed
+
+- **Home page, large product teaser**: the photo is chosen by the browser from the
+  shop's thumbnail sizes (`srcset`) instead of always the largest one, so a column a
+  third of the page wide no longer loads a 1600 px file.
+
 ## [0.10.15] - 2026-11-26
 
 ### Added

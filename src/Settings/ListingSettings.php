@@ -231,6 +231,11 @@ final class ListingSettings
             'options' => [
                 // 0: wszystkie wartości od razu, bez przycisku.
                 'show_limit' => 10,
+                // Wartości od tej z największą liczbą produktów. Wyłączone:
+                // kolejność z modułu filtrów (alfabetycznie albo pozycje
+                // wartości cechy). Razem z progiem przed „Pokaż więcej” stają
+                // najczęstsze wartości, a rzadkie chowają się pod przyciskiem.
+                'by_count' => true,
             ],
             'ranges' => ['show_limit' => [0, 100]],
         ],
@@ -330,6 +335,7 @@ final class ListingSettings
         'count' => 'With the number of narrowed-down filters',
         'clear_all' => 'With "Clear all"',
         'show_limit' => 'Values in a filter before "Show more" (0: all)',
+        'by_count' => 'Values with the most products first',
         'desktop' => 'On wide screens',
         'mobile' => 'On phones',
     ];
@@ -750,6 +756,36 @@ final class ListingSettings
     public static function facetLimit(mixed $nieuzywane = null): int
     {
         return (int) ((new self())->options()['facets']['show_limit'] ?? 10);
+    }
+
+    /**
+     * Wartości grupy filtra w kolejności z ekranu Listy produktów → Filtry:
+     * od największej liczby produktów albo bez zmian, jak przyszły z modułu.
+     *
+     * Modyfikator Smarty z tego samego powodu co `facetLimit()`: panel filtrów
+     * powstaje, zanim szablony dostaną `$modules`.
+     *
+     * Klucze zostają, bo szablon składa z nich identyfikatory pól. Przy równej
+     * liczbie produktów zostaje kolejność z modułu (sortowanie w PHP 8 jest
+     * stabilne), więc remisy dalej idą alfabetycznie albo według pozycji.
+     *
+     * @param mixed $filtry `$facet.filters`
+     *
+     * @return array<int|string,mixed>
+     */
+    public static function facetOrder(mixed $filtry): array
+    {
+        if (!is_array($filtry)) {
+            return [];
+        }
+
+        if (!((new self())->options()['facets']['by_count'] ?? true)) {
+            return $filtry;
+        }
+
+        uasort($filtry, static fn ($a, $b): int => (int) ($b['magnitude'] ?? 0) <=> (int) ($a['magnitude'] ?? 0));
+
+        return $filtry;
     }
 
     /**

@@ -136,7 +136,15 @@
         {* Duża zajawka: zdjęcie nad nazwą albo obok niej. *}
         <article class="q-ps__big q-ps__big--{if $column.image == 'beside'}side{else}stack{/if}">
             <div class="q-ps__big-media">
-                <a href="{$qProdukt.url}"><img src="{$qProdukt.cover.bySize.large_default.url}" alt="{$qProdukt.name|escape:'html':'UTF-8'}" loading="lazy"></a>
+                {* Przeglądarka sama dobiera plik do szerokości kolumny. Sam
+                   large_default (1600 px) szedł też do kolumny na jedną trzecią
+                   strony. Szerokości bierzemy z rozmiarów sklepu, nie z liczb
+                   wpisanych tutaj, bo każdy sklep ma je ustawione po swojemu. *}
+                {assign var=qRozmiary value=$qProdukt.cover.bySize}
+                <a href="{$qProdukt.url}"><img src="{$qRozmiary.medium_default.url|default:$qRozmiary.large_default.url}"
+                    srcset="{foreach from=['home_default', 'medium_default', 'large_default'] item=qRozmiar name=qZestaw}{if isset($qRozmiary.$qRozmiar)}{$qRozmiary.$qRozmiar.url} {$qRozmiary.$qRozmiar.width|intval}w{if !$smarty.foreach.qZestaw.last}, {/if}{/if}{/foreach}"
+                    sizes="(min-width: 992px) {if $column.image == 'beside'}25vw{else}40vw{/if}, 100vw"
+                    alt="{$qProdukt.name|escape:'html':'UTF-8'}" loading="lazy"></a>
             </div>
 
             <div class="q-ps__big-body">
