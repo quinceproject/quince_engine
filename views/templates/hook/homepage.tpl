@@ -49,14 +49,14 @@
         {assign var=qBohater value=true}
     {/if}
 
-    {* Bohater „pół na pół”: barwę tła sekcji niesie prawa kolumna z treścią,
-       a pas zostaje na tle strony. Inaczej kolumna zlewałaby się z pasem. *}
-    {* Ramka sekcji (`--boxed`) też odpada: blokiem w ramce jest tu sam
-       układ pół na pół, a wyściółka ramki dokładała nad nim pusty pas. *}
+    {* Tło sekcji maluje zawsze pas. Kolumna z treścią bohatera „pół na pół”
+       ma własne tło (`_home-column.tpl`), tak jak duża zajawka. *}
+    {* Ramka sekcji (`--boxed`) bez tła pasa odpada przy „pół na pół”: blokiem
+       w ramce jest tu sam układ, a wyściółka ramki dokładała nad nim pusty
+       pas. *}
     {assign var=qSkora value=$section.skin}
     {assign var=qRamka value=($section.width == 'boxed')}
-    {if $qBohater && $section.columns[0].image == 'split'}
-        {assign var=qSkora value='none'}
+    {if $qBohater && $section.columns[0].image == 'split' && $section.skin == 'none'}
         {assign var=qRamka value=false}
     {/if}
 

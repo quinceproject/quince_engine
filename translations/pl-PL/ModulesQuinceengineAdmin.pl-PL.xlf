@@ -3386,6 +3386,14 @@
         <source>For a photo that fights with the text.</source>
         <target>Dla zdjęcia, które gryzie się z tekstem.</target>
       </trans-unit>
+      <trans-unit id="quince.home.tile_background">
+        <source>Tile background</source>
+        <target>Tło kafla</target>
+      </trans-unit>
+      <trans-unit id="quince.home.tile_background_hint">
+        <source>Separate from the section background.</source>
+        <target>Niezależne od tła sekcji.</target>
+      </trans-unit>
       <trans-unit id="quince.tree.choose_category">
         <source>Choose a category…</source>
         <target>Wybierz kategorię…</target>

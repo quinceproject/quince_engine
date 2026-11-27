@@ -214,7 +214,7 @@ final class HomepageSettings
      *
      * „Nad nazwą” działa tylko przy kilku kolumnach, „pół na pół” tylko przy
      * produkcie jedynym w sekcji (bohater pasa): dwie równe kolumny, zdjęcie
-     * w jednej, treść w drugiej na barwie tła sekcji. Panel pokazuje te, które
+     * w jednej, treść w drugiej na tle zajawki. Panel pokazuje te, które
      * w danym układzie coś zmieniają.
      */
     public const PRODUCT_IMAGES = [
@@ -445,7 +445,7 @@ final class HomepageSettings
             // rozpoznaje po niej sekcję przy zapisie wyglądu.
             $nazwa = preg_replace('/[^a-z0-9_-]/', '', strtolower((string) ($wpis['id'] ?? '')));
 
-            $sekcje[] = [
+            $sekcje[] = $this->tloDoKolumny([
                 'id' => $nazwa !== '' ? $nazwa : 'section-' . (count($sekcje) + 1),
                 'active' => !empty($wpis['active']),
                 'mode' => $tryb,
@@ -475,7 +475,7 @@ final class HomepageSettings
                 'link' => $this->sanitizeLinks($wpis['link'] ?? []),
                 'link_label' => $this->sanitizeI18n($wpis['link_label'] ?? []),
                 'columns' => $kolumny,
-            ];
+            ], $wpis['columns'] ?? null);
         }
 
         return $sekcje;
@@ -610,7 +610,7 @@ final class HomepageSettings
                     ? (string) $wpis['extra_style']
                     : self::EXTRA_PILLS,
                 'extras' => $zapewnienia,
-            ];
+            ] + $this->tlo($wpis);
         }
 
         if ($rodzaj === self::COLUMN_CATEGORIES) {
@@ -667,6 +667,68 @@ final class HomepageSettings
                 ? array_values(array_filter(array_map('intval', $wpis['manual'])))
                 : [],
         ];
+    }
+
+    /**
+     * Tło: rodzaj z listy skór i pola, których ten rodzaj potrzebuje.
+     *
+     * Ten sam zestaw ma sekcja (tło pasa) i duża zajawka produktu (tło samej
+     * karty). Dzięki temu dwie zajawki w jednej sekcji mogą mieć różne tła,
+     * a pas pod nimi jeszcze inne.
+     *
+     * @param array<string,mixed> $wpis
+     *
+     * @return array<string,mixed>
+     */
+    private function tlo(array $wpis): array
+    {
+        return [
+            'skin' => isset(self::SKINS[$wpis['skin'] ?? '']) ? (string) $wpis['skin'] : 'none',
+            // Każde pole należy do jednego rodzaju tła, więc przy pozostałych
+            // zostaje puste.
+            'skin_from' => $this->barwa((string) ($wpis['skin_from'] ?? '')),
+            'skin_to' => $this->barwa((string) ($wpis['skin_to'] ?? '')),
+            'skin_angle' => max(0, min((int) ($wpis['skin_angle'] ?? 120), 360)),
+            'skin_image' => trim((string) ($wpis['skin_image'] ?? '')),
+        ];
+    }
+
+    /**
+     * Zapis sprzed 0.10.17: tło sekcji z jednym produktem „pół na pół”
+     * przechodzi na kolumnę.
+     *
+     * Do 0.10.16 taka sekcja oddawała swoje tło kolumnie z treścią, a pas
+     * zostawał na tle strony. Teraz kolumna ma własne tło, a tło sekcji
+     * zawsze maluje pas. Bez przeniesienia zapisana strona zmieniłaby wygląd
+     * po aktualizacji: kolumna straciłaby barwę, a pas by ją dostał. Kolumna
+     * z kluczem `skin` jest już zapisana po nowemu i zostaje, jak jest.
+     *
+     * @param array<string,mixed> $sekcja wpis po czyszczeniu
+     * @param mixed $kolumnyZapisu kolumny w postaci z zapisu
+     *
+     * @return array<string,mixed>
+     */
+    private function tloDoKolumny(array $sekcja, $kolumnyZapisu): array
+    {
+        $kolumna = $sekcja['columns'][0] ?? [];
+        $zapis = is_array($kolumnyZapisu) ? (array_values($kolumnyZapisu)[0] ?? null) : null;
+
+        if (count($sekcja['columns']) !== 1
+            || ($kolumna['type'] ?? '') !== self::COLUMN_PRODUCT
+            || ($kolumna['image'] ?? '') !== 'split'
+            || !is_array($zapis)
+            || array_key_exists('skin', $zapis)
+        ) {
+            return $sekcja;
+        }
+
+        foreach (['skin', 'skin_from', 'skin_to', 'skin_angle', 'skin_image'] as $klucz) {
+            $sekcja['columns'][0][$klucz] = $sekcja[$klucz];
+        }
+
+        $sekcja['skin'] = 'none';
+
+        return $sekcja;
     }
 
     /** Barwa z palety sklepu albo kod szesnastkowy; cokolwiek innego odpada. */

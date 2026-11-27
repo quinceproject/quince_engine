@@ -452,6 +452,24 @@
                 });
             }
 
+            /* Tło zajawki: produkt sam na pasie bez „pół na pół” nie ma karty,
+               więc nie ma czego malować. Pola gradientu i zdjęcia tylko przy
+               swoim rodzaju tła, jak w kroku „Oprawa” sekcji. */
+            var bezKarty = jedynaKolumna && segment(zdjecie) !== 'split';
+            var tloKarty = pole(kolumna, 'card_skin').value;
+
+            kolumna.querySelectorAll('[data-tlo-karty]').forEach(function (blok) {
+                blok.hidden = bezKarty
+                    || (blok.dataset.gdyTloKarty !== undefined && blok.dataset.gdyTloKarty !== tloKarty);
+            });
+
+            if (tloKarty === 'gradient') {
+                kolumna.querySelector('[data-gradient-ostrzezenie-karty]').hidden = gradientCzytelny(
+                    pole(kolumna, 'card_from').value.trim() || 'neutral-4',
+                    pole(kolumna, 'card_to').value.trim() || 'neutral-6'
+                );
+            }
+
             var postac = segment(pole(kolumna, 'extraStyle'));
 
             kolumna.querySelectorAll('[data-gdy-postac]').forEach(function (blok) {
@@ -836,7 +854,12 @@
                         product: parseInt(pole(kolumna, 'product').value, 10) || 0,
                         image: segment(pole(kolumna, 'image')),
                         extra_style: segment(pole(kolumna, 'extraStyle')),
-                        extras: zapewnienia
+                        extras: zapewnienia,
+                        skin: pole(kolumna, 'card_skin').value,
+                        skin_from: pole(kolumna, 'card_from').value.trim(),
+                        skin_to: pole(kolumna, 'card_to').value.trim(),
+                        skin_angle: parseInt(pole(kolumna, 'card_angle').value, 10) || 0,
+                        skin_image: pole(kolumna, 'card_image').value.trim()
                     });
 
                     return;

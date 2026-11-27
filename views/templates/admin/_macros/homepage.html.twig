@@ -155,6 +155,58 @@
                 </div>
             </div>
 
+            {# Tło samej zajawki, osobne od tła sekcji: dwie zajawki w jednej
+               sekcji mogą mieć różne tła. Te same rodzaje i pola co tło
+               sekcji w kroku „Oprawa”. Nazwy pól mają przedrostek `card_`,
+               bo skrypt szuka pól sekcji w całym jej znaczniku, razem
+               z kolumnami. Produkt sam na pasie bez „pół na pół” nie ma
+               karty, więc skrypt chowa wtedy całą grupę. #}
+            {% set tloKarty = kolumna.skin|default('none') %}
+            <div class="qc-uklad-pole" data-tlo-karty>
+                <span class="qc-label">{{ 'Tile background'|trans }}</span>
+                <div class="qc-select-wrap">
+                    <select class="qc-field-base qc-select qc-focusable" data-pole="card_skin">
+                        {% for wartosc, etykieta in slowniki.skins %}
+                            <option value="{{ wartosc }}"{{ tloKarty == wartosc ? ' selected' : '' }}>{{ etykieta|trans }}</option>
+                        {% endfor %}
+                    </select>
+                    {{ icons.icon('chevronDown', 14, 'qc-select-chevron') }}
+                </div>
+                <span class="qc-hint">{{ 'Separate from the section background.'|trans }}</span>
+            </div>
+
+            <div class="qc-uklad-pole" data-tlo-karty data-gdy-tlo-karty="gradient"{{ tloKarty == 'gradient' ? '' : ' hidden' }}>
+                <span class="qc-label">{{ 'From'|trans }}</span>
+                <input type="text" class="qc-field-base qc-focusable" data-pole="card_from"
+                       style="inline-size:150px" value="{{ kolumna.skin_from|default('') }}" placeholder="primary-6">
+                <span class="qc-hint">{{ 'A step of the shop palette (neutral, primary, secondary, promo) or a hex code.'|trans }}</span>
+            </div>
+
+            <div class="qc-uklad-pole" data-tlo-karty data-gdy-tlo-karty="gradient"{{ tloKarty == 'gradient' ? '' : ' hidden' }}>
+                <span class="qc-label">{{ 'To'|trans }}</span>
+                <input type="text" class="qc-field-base qc-focusable" data-pole="card_to"
+                       style="inline-size:150px" value="{{ kolumna.skin_to|default('') }}" placeholder="primary-11">
+            </div>
+
+            <div class="qc-uklad-pole" data-tlo-karty data-gdy-tlo-karty="gradient"{{ tloKarty == 'gradient' ? '' : ' hidden' }}>
+                <span class="qc-label">{{ 'Angle'|trans }}</span>
+                <input type="number" class="qc-field-base qc-focusable" data-pole="card_angle"
+                       style="inline-size:88px;text-align:center"
+                       value="{{ kolumna.skin_angle|default(120) }}" min="0" max="360" step="5">
+            </div>
+
+            <div class="qc-uklad-pole" style="flex:1 1 100%" data-tlo-karty data-gdy-tlo-karty="gradient"{{ tloKarty == 'gradient' ? '' : ' hidden' }}>
+                <div class="qc-alert qc-alert-warning" data-gradient-ostrzezenie-karty hidden>
+                    {{ 'The two colours differ so much that neither light nor dark text will read well on the whole gradient. Pick colours closer in brightness.'|trans }}
+                </div>
+            </div>
+
+            <div class="qc-uklad-pole" data-tlo-karty data-gdy-tlo-karty="photo"{{ tloKarty == 'photo' ? '' : ' hidden' }}>
+                <span class="qc-label">{{ 'Photo'|trans }}</span>
+                <input type="text" class="qc-field-base qc-focusable" data-pole="card_image"
+                       style="inline-size:280px" value="{{ kolumna.skin_image|default('') }}" placeholder="/img/cms/band.jpg">
+            </div>
+
             {# Krótkie zapewnienia obok nazwy. Wpisywane, a nie brane z cech:
                cecha przychodzi jako para nazwa i wartość, więc dałaby
                „Gwarancja: 5 lat” zamiast „5 lat gwarancji”, a część tych

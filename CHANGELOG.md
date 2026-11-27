@@ -4,6 +4,26 @@ All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.17] - 2026-11-27
+
+### Added
+
+- **Homepage, Single product tile**: "Tile background", separate from the section
+  background. The same choices as the section (none, light grey, grey, dark, brand
+  colour, gradient, photo). Two tiles in one section can have different
+  backgrounds, and the section band its own. Light text and the hover colour of the
+  name are picked for contrast with the tile background, as for the section. The
+  field is hidden when the product is alone in the section and not in "Half and
+  half", since there is no tile to paint.
+
+### Changed
+
+- The section background always paints the band. Before, a section with one
+  product in "Half and half" gave its background to the content column and left the
+  band on the page background. That column now takes the tile background. Sections
+  saved before this version keep their look: their background moves to the column
+  and the section background becomes "None".
+
 ## [0.10.16] - 2026-11-27
 
 ### Added

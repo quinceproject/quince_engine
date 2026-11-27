@@ -45,6 +45,23 @@
 
     {assign var=qProdukt value=$column.item}
 
+    {* ── tło zajawki ──────────────────────────────────────────────────
+       Własne tło kolumny, niezależne od tła sekcji: te same rodzaje
+       i ta sama zamiana stopnia palety na zmienną, co przy pasie
+       (`homepage.tpl`). Jasny tekst i nazwę pod kursorem policzył silnik. *}
+    {capture name=qTloKarty}
+        {if $column.skin == 'gradient'}
+            {if $column.skin_from}--q-ps-from: {if $column.skin_from|substr:0:1 == '#'}{$column.skin_from}{else}var(--q-{$column.skin_from}){/if};{/if}
+            {if $column.skin_to}--q-ps-to: {if $column.skin_to|substr:0:1 == '#'}{$column.skin_to}{else}var(--q-{$column.skin_to}){/if};{/if}
+            --q-ps-angle: {$column.skin_angle|intval}deg;
+        {elseif $column.skin == 'photo' && $column.skin_image}
+            --q-ps-photo: url('{$column.skin_image|escape:'html':'UTF-8'}');
+        {/if}
+        {if $column.title_hover}--q-ps-title-hover: {$column.title_hover};{/if}
+    {/capture}
+    {capture name=qSkoraKarty}q-ps--{$column.skin|escape:'html':'UTF-8'}{if $column.text_light} q-ps--light{/if}{/capture}
+    {assign var=qSkoraKarty value=$smarty.capture.qSkoraKarty}
+
     {if $qBohater}
 
         {* Bohater pasa: jeden produkt na całej szerokości. Nadpis bierze napis
@@ -92,16 +109,15 @@
         {if $column.image == 'split'}
 
             {* Pół na pół: zdjęcie i treść w dwóch równych kolumnach tej samej
-               wysokości. Kolumna treści bierze barwę tła sekcji (sama sekcja
-               zostaje wtedy na tle strony, patrz homepage.tpl), razem z jej
+               wysokości. Kolumna treści bierze tło zajawki, razem z jej
                gradientem albo zdjęciem. *}
             <div class="q-ps__split">
                 <div class="q-ps__split-media">
                     <a href="{$qProdukt.url}"><img src="{$qProdukt.cover.bySize.large_default.url}" alt="{$qProdukt.name|escape:'html':'UTF-8'}" loading="lazy"></a>
                 </div>
 
-                <div class="q-ps__split-body q-ps--{$section.skin|escape:'html':'UTF-8'}{if isset($section.text_light) && $section.text_light} q-ps--light{/if}"
-                     {if $smarty.capture.tlo|trim}style="{$smarty.capture.tlo|strip|escape:'html':'UTF-8'}"{/if}>
+                <div class="q-ps__split-body {$qSkoraKarty}"
+                     {if $smarty.capture.qTloKarty|trim}style="{$smarty.capture.qTloKarty|strip|escape:'html':'UTF-8'}"{/if}>
                     {$smarty.capture.qTrescBohatera nofilter}
                 </div>
             </div>
@@ -133,8 +149,9 @@
 
     {else}
 
-        {* Duża zajawka: zdjęcie nad nazwą albo obok niej. *}
-        <article class="q-ps__big q-ps__big--{if $column.image == 'beside'}side{else}stack{/if}">
+        {* Duża zajawka: zdjęcie nad nazwą albo obok niej, na tle zajawki. *}
+        <article class="q-ps__big q-ps__big--{if $column.image == 'beside'}side{else}stack{/if} {$qSkoraKarty}"
+                 {if $smarty.capture.qTloKarty|trim}style="{$smarty.capture.qTloKarty|strip|escape:'html':'UTF-8'}"{/if}>
             <div class="q-ps__big-media">
                 {* Przeglądarka sama dobiera plik do szerokości kolumny. Sam
                    large_default (1600 px) szedł też do kolumny na jedną trzecią

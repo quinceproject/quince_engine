@@ -38,7 +38,7 @@ class Quince_Engine extends Module
     {
         $this->name = 'quince_engine';
         $this->tab = 'front_office_features';
-        $this->version = '0.10.16';
+        $this->version = '0.10.17';
         $this->author = 'Quince Project';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = ['min' => '9.0.0', 'max' => '9.99.99'];
@@ -1314,6 +1314,21 @@ class Quince_Engine extends Module
                 } elseif ($rodzaj === 'product') {
                     $sekcje[$i]['columns'][$j]['item'] = $produkty->one((int) ($kolumna['product'] ?? 0));
                     $sekcje[$i]['columns'][$j]['extras'] = $this->zapewnienia($kolumna, $jezyk);
+
+                    // Własne tło zajawki: tekst i nazwa pod kursorem liczone
+                    // tak samo jak dla tła sekcji, tylko z pól kolumny.
+                    $sekcje[$i]['columns'][$j]['text_light'] = false;
+                    $sekcje[$i]['columns'][$j]['title_hover'] = '';
+
+                    if (in_array($kolumna['skin'] ?? 'none', ['ink', 'photo', 'gradient'], true)) {
+                        $paleta ??= (new \Quince\Engine\Settings\AppearanceSettings(
+                            new \Quince\Engine\Appearance\PaletteGenerator(),
+                            new \Quince\Engine\Appearance\MetricsGenerator()
+                        ))->palette();
+                        $ton = \Quince\Engine\Settings\HomepageSettings::sectionTone($kolumna, $paleta);
+                        $sekcje[$i]['columns'][$j]['text_light'] = $ton['light'];
+                        $sekcje[$i]['columns'][$j]['title_hover'] = $ton['hover'];
+                    }
                 } elseif ($rodzaj === 'categories') {
                     $kafle = $produkty->categories($kolumna);
 
